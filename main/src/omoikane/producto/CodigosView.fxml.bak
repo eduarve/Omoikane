@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import jfxtras.labs.scene.control.*?>
+<?import jfxtras.labs.scene.control.BigDecimalField?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.9998779296875" prefWidth="357.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.producto.CodigosController">
+  <children>
+    <Label layoutX="14.0" layoutY="14.0" text="Códigos alternos">
+      <font>
+        <Font size="23.0" />
+      </font>
+    </Label>
+    <ListView fx:id="listCodigos" layoutX="14.0" layoutY="87.0" prefHeight="247.0" prefWidth="329.0" />
+    <TextField fx:id="txtCodigoNuevo" editable="true" layoutX="14.0" layoutY="52.0" prefWidth="249.0" />
+    <Button fx:id="btnAgregarCodigo" defaultButton="true" disable="false" layoutX="270.0" layoutY="53.0" mnemonicParsing="false" onAction="#onAgregar" text="Agregar" />
+    <Button fx:id="btnEliminar" cancelButton="false" layoutX="14.0" layoutY="344.0" mnemonicParsing="false" onAction="#onEliminar" prefWidth="329.0" text="Eliminar seleccionado" />
+  </children>
+</AnchorPane>

@@ -65,11 +65,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         txtIDLinea = new javax.swing.JTextField();
         txtIDLineaDes = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblCodigos = new javax.swing.JTable();
-        btnAddCode = new javax.swing.JButton();
-        btnDelCode = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -144,7 +139,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtIDArticulo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtIDArticulo.setBorder(null);
         txtIDArticulo.setFocusable(false);
-        txtIDArticulo.setOpaque(false);
         jPanel1.add(txtIDArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 300, 30));
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -166,7 +160,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtIDGrupoDes.setForeground(new java.awt.Color(255, 255, 255));
         txtIDGrupoDes.setBorder(null);
         txtIDGrupoDes.setFocusable(false);
-        txtIDGrupoDes.setOpaque(false);
         jPanel1.add(txtIDGrupoDes, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 250, 30));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -195,7 +188,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtPrecio.setText("0.0");
         txtPrecio.setBorder(null);
-        txtPrecio.setOpaque(false);
         jPanel1.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 300, 30));
 
         jLabel12.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -216,7 +208,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtUModificacion.setText("Sin fecha");
         txtUModificacion.setBorder(null);
         txtUModificacion.setFocusable(false);
-        txtUModificacion.setOpaque(false);
         jPanel1.add(txtUModificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 300, 30));
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, -40, -1, 20));
 
@@ -232,7 +223,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtDescuento.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDescuento.setText("0.0");
         txtDescuento.setBorder(null);
-        txtDescuento.setOpaque(false);
         jPanel1.add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 300, 30));
 
         txtIDGrupo.setEditable(false);
@@ -258,33 +248,9 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtIDLineaDes.setForeground(new java.awt.Color(255, 255, 255));
         txtIDLineaDes.setBorder(null);
         txtIDLineaDes.setFocusable(false);
-        txtIDLineaDes.setOpaque(false);
         jPanel1.add(txtIDLineaDes, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 250, 30));
 
         tabbedPane.addTab("<html>General</html>", jPanel1);
-
-        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tblCodigos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "<html>C&oacute;digo</html>"
-            }
-        ));
-        jScrollPane1.setViewportView(tblCodigos);
-
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 320));
-
-        btnAddCode.setText("+");
-        jPanel2.add(btnAddCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 40, 20));
-
-        btnDelCode.setText("-");
-        jPanel2.add(btnDelCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 340, -1, 20));
-
-        tabbedPane.addTab("<html>C&oacute;digos</html>", jPanel2);
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 0));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -341,7 +307,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtImpuestos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtImpuestos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         txtImpuestos.setFocusable(false);
-        txtImpuestos.setOpaque(false);
         jPanel5.add(txtImpuestos, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 110, 30));
 
         txtUtilidad.setEditable(false);
@@ -351,7 +316,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtUtilidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtUtilidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         txtUtilidad.setFocusable(false);
-        txtUtilidad.setOpaque(false);
         jPanel5.add(txtUtilidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 110, 30));
 
         txtDescuento2.setEditable(false);
@@ -361,7 +325,6 @@ public class Articulo extends javax.swing.JInternalFrame {
         txtDescuento2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDescuento2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         txtDescuento2.setFocusable(false);
-        txtDescuento2.setOpaque(false);
         jPanel5.add(txtDescuento2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 110, 30));
 
         jLabel25.setForeground(new java.awt.Color(255, 255, 255));
@@ -508,7 +471,7 @@ public class Articulo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtIDGrupoActionPerformed
 
     public void setEditable(boolean editable) {
-        this.tblCodigos.setEnabled(editable);
+        //this.tblCodigos.setEnabled(editable);
         this.txtCodigo.setEditable(editable);
         this.txtComentarios.setEditable(editable);
         this.txtCosto.setEditable(editable);
@@ -561,9 +524,7 @@ public class Articulo extends javax.swing.JInternalFrame {
         return modo;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddCode;
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnDelCode;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
@@ -591,14 +552,11 @@ public class Articulo extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
     public javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JTable tblCodigos;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtComentarios;
     private javax.swing.JFormattedTextField txtCosto;

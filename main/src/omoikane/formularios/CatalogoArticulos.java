@@ -449,7 +449,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
 
         //Lanzar la ventana de detalles:
         if(IDArticulo != -1) {
-            JInternalFrame wnd = (JInternalFrame)omoikane.principal.Articulos.lanzarModificarArticulo(IDArticulo);
+            JInternalFrame wnd = (JInternalFrame)omoikane.principal.Articulos.lanzarModificarArticulo(this, IDArticulo);
             wnd.addInternalFrameListener(iframeAdapter);
         }
 }//GEN-LAST:event_btnModificarActionPerformed
@@ -460,7 +460,13 @@ public class CatalogoArticulos extends OmJInternalFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        omoikane.principal.Articulos.lanzarFormNuevoArticulo();
+        omoikane.formularios.Articulo articuloForm = omoikane.principal.Articulos.lanzarFormNuevoArticulo(this);
+        articuloForm.addInternalFrameListener( new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                 buscar();
+            }
+        } );
 }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
@@ -468,7 +474,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
         int IDArticulo = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         
         //Lanzar la ventana de detalles:
-        if(IDArticulo != -1) { omoikane.principal.Articulos.lanzarDetallesArticulo(IDArticulo); }
+        if(IDArticulo != -1) { omoikane.principal.Articulos.lanzarDetallesArticulo(this, IDArticulo); }
 }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed

@@ -77,7 +77,7 @@ class PuertoNadesico {
             //println "IDObjeto: "+IDObjeto
             def generatedCode = "class X { def getIt = { "+IDObjeto+"."+name+"} }"
             InputStream inp   = new ByteArrayInputStream(generatedCode.getBytes());
-            GroovyObject obj  = (GroovyObject)new GroovyClassLoader().parseClass(inp, "lala").newInstance();
+            GroovyObject obj  = (GroovyObject)new GroovyClassLoader().parseClass(inp, "groovy code").newInstance();
             def resultado     = obj.getIt()
 
             if(resultado.class.toString() == "class org.hibernate.collection.PersistentSet") {

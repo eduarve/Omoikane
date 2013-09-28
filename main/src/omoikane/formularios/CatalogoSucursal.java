@@ -72,7 +72,7 @@ public class CatalogoSucursal extends javax.swing.JInternalFrame {
         this.jTable1.setModel(modeloTabla);
         setQueryTable("SELECT cs.id_corte AS id, cs.creacion AS fecha " +
                 "FROM cortes_sucursal cs " +
-                "ORDER BY fecha DESC");
+                "ORDER BY creacion DESC");
 
         //Instrucciones para el funcionamiento del fondo semistransparente
         this.setOpaque(false);

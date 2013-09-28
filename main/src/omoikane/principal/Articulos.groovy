@@ -4,12 +4,19 @@ import omoikane.formularios.OmJInternalFrame
 import omoikane.inventarios.Stock
 import omoikane.inventarios.StockLevelsController
 import omoikane.principal.*
+import omoikane.producto.CodigosController
 import omoikane.producto.PaqueteController
+import omoikane.producto.PrecioOmoikaneLogic
 import omoikane.repository.ProductoRepo
 import omoikane.sistema.*
 import groovy.sql.*;
-import groovy.swing.*;
-import javax.swing.*;
+import groovy.swing.*
+import org.springframework.transaction.TransactionStatus
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.swing.*
 import java.awt.event.WindowListener;
 import javax.swing.event.*;
 import groovy.inspect.swingui.*;
@@ -34,6 +41,15 @@ public class Articulos
         def res
         PuertoNadesico.workIn() { res = it.RAMCacheCodigos.executeQuery("select id_articulo from nadesicoi.RAMCacheCodigos as rca WHERE rca like '%"+busqueda+"%'") /*it.RAMCacheCodigos.findAllByCodigoLike("%"+busqueda+"%");*/ }
         //println "resu:"+res.dump()
+    }
+
+    static ProductoRepo productoRepo;
+
+    static ProductoRepo getRepo() {
+        if(productoRepo == null)
+            productoRepo = omoikane.principal.Principal.applicationContext.getBean(ProductoRepo.class);
+        else
+            return productoRepo;
     }
 
     static OmJInternalFrame getCatalogoFrameInstance()
@@ -118,37 +134,25 @@ public class Articulos
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
         */
     }
+    static def onCloseFocus ( JInternalFrame parent, JInternalFrame child ) {
+        child.addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            void internalFrameClosed(InternalFrameEvent e) {
+                super.internalFrameClosed(e)
+                parent.setSelected(true)
+                parent.requestDefaultFocus()
+                parent.requestFocus()
 
-    static def rellenarCodigosAlternos(ID, form) {
-        /*
-        ProductoRepo repo = Principal.applicationContext.getBean(ProductoRepo.class);
-        omoikane.producto.Articulo art = repo.readByPrimaryKey(ID)
-
-        form.tblCodigos.setModel(new ModeloCodigos (0,1))
-        form.tblCodigos.getModel().setColumnIdentifiers("Código")
-        art.get
-        artGorm.get(ID).codigos.each {
-            form.tblCodigos.getModel().addRowHash([codigo:it.codigo,id:it.id])
-        }
-        */
-    }
-
-    static def rellenarPaquetes(ID, form) {
-        PuertoNadesico.workIn() { puerto ->
-            def artGorm = puerto.Articulos.get(ID)
-            form.tblPaquetes.setModel(new ModeloPaquetes (0,3))
-            form.tblPaquetes.getModel().setColumnIdentifiers("Código","Descripcion","Cantidad")
-            artGorm.get(ID).paquetes.each {
-                form.tblPaquetes.getModel().addRowHash([paquetes:[it.codigo,puerto.Articulos.findByCodigo(it.codigo).asMap().descripcion,it.cantidad],id:it.id])
             }
-        }
+        })
     }
 
-
-    static def lanzarDetallesArticulo(ID)
+    static def lanzarDetallesArticulo(JInternalFrame parent, ID)
     {
         if(cerrojo(PMA_DETALLESARTICULO)){
-            def formArticulo = new omoikane.formularios.Articulo()
+            omoikane.formularios.Articulo formArticulo = new omoikane.formularios.Articulo()
+            onCloseFocus(parent, formArticulo);
+
             def formateador = new java.text.DecimalFormat("#.00");
             formArticulo.setVisible(true)
             escritorio.getPanelEscritorio().add(formArticulo)
@@ -156,37 +160,44 @@ public class Articulos
             formArticulo.toFront()
             try { formArticulo.setSelected(true)
             def serv        = Nadesico.conectar()
-            def art         = serv.getArticulo(ID,IDAlmacen)
-            def lin         = serv.getLinea(art.id_linea)
-            def gru         = serv.getGrupo(art.id_grupo)
+
+            //TODO aquí inyectar nuevo comportamiento para obtener artículo, sus subdatos y su precio generado
+            omoikane.producto.Articulo art = getRepo().readByPrimaryKey(ID as Long)
+            PrecioOmoikaneLogic precio = art.getPrecio();
+            //def art         = serv.getArticulo(ID,IDAlmacen)
+            def lin         = serv.getLinea(art.idLinea)
+            def gru         = serv.getGrupo(art.idGrupo)
             def notas       = serv.getAnotacion(IDAlmacen,ID)
             serv.desconectar()
-            formArticulo.setTxtIDArticulo    art.id_articulo           as String
+            formArticulo.setTxtIDArticulo    art.idArticulo           as String
             formArticulo.setTxtCodigo        art.codigo
-            formArticulo.setTxtIDLinea       art.id_linea              as String
-            formArticulo.setTxtIDGrupo       art.id_grupo              as String
+            formArticulo.setTxtIDLinea       art.idLinea              as String
+            formArticulo.setTxtIDGrupo       art.idGrupo              as String
             formArticulo.setTxtIDLineaDes    lin.descripcion           as String
             formArticulo.setTxtIDGrupoDes    gru.descripcion           as String
             formArticulo.setTxtDescripcion   art.descripcion
             formArticulo.setTxtUnidad        art.unidad
-            formArticulo.setTxtImpuestos     art.impuestos             as String
+            formArticulo.setTxtImpuestos     art.porcentajeImpuestos   as String
             formArticulo.setTxtUModificacion art.uModificacion         as String
-            formArticulo.setTxtDescuento     art.precio['descuento$']  as String
-            formArticulo.setTxtCosto         formateador.format( art.costo    )
-            formArticulo.setTxtUtilidadPorc  formateador.format( art.utilidad )
+            formArticulo.setTxtDescuento     precio.descuento  as String
+            formArticulo.setTxtCosto         formateador.format( art.getBaseParaPrecio().costo  )
+            formArticulo.setTxtUtilidadPorc  formateador.format( art.getBaseParaPrecio().porcentajeUtilidad )
             //formArticulo.setTxtExistencias   art.cantidad              as String
-            formArticulo.setTxtPrecio        art.precio.total          as String
+            formArticulo.setTxtPrecio        art.precio          as String
             formArticulo.setTxtComentarios   notas                     as String
-            formArticulo.getTxtDesctoPorcentaje().text = formateador.format( art.precio['descuArt%'] )
-            formArticulo.getTxtDescuento2().text       = (art.precio['PrecioConImpuestos']*art.precio['descuArt%']) as String
-            formArticulo.getTxtPrecioTotal().text          = (art.precio['PrecioConImpuestos']+(art.precio['PrecioConImpuestos']*art.precio['descuArt%']) )as String
-            formArticulo.getTxtImpuestosPorc().text    = formateador.format( art.impuestos )
-            formArticulo.getTxtImpuestos().text        = art.precio['impuestos']  as String
-            formArticulo.getTxtUtilidad().text         = art.precio['utilidad']   as String
+            formArticulo.getTxtDesctoPorcentaje().text = formateador.format( precio.porcentajeDescuentoTotal )
+            formArticulo.getTxtDescuento2().text       = (precio.getDescuento()) as String
+            formArticulo.getTxtPrecioTotal().text      = precio.precio as String
+            formArticulo.getTxtImpuestosPorc().text    = formateador.format( art.getBaseParaPrecio().porcentajeImpuestos )
+            formArticulo.getTxtImpuestos().text        = precio.impuestos  as String
+            formArticulo.getTxtUtilidad().text         = precio.utilidad   as String
             formArticulo.ID                   = ID
             formArticulo.setModoDetalles();
             omoikane.principal.Articulos.recalcularCampos(formArticulo);
+
             Platform.setImplicitExit(false);
+
+            addJFXCodigosPanel(ID, formArticulo);
             addJFXStockPanel(ID, formArticulo);
             addJFXPaquetePanel(ID, formArticulo);
 
@@ -234,9 +245,8 @@ public class Articulos
                     def notasAdd = serv.addAnotacion(IDAlmacen, datAdd.ID, notas )
                     Dialogos.lanzarAlerta(datAdd.mensaje)
                     serv.desconectar()
-                    if( formArticulo.getModo() == formArticulo.Modos.NUEVO) { stockAdd(datAdd.ID) }
+                    //if( formArticulo.getModo() == formArticulo.modo.NUEVO) { stockAdd(datAdd.ID) }
 
-                    PuertoNadesico.workIn() { it.CacheArticulos.actualizar(datAdd.ID) }
                     formArticulo.dispose()
                 } catch(e) { Dialogos.error("Error al enviar a la base de datos. El artículo no se registró verifique que el código no exista", e) }
                 
@@ -244,41 +254,61 @@ public class Articulos
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
     static def addJFXStockPanel(Long idArticulo, omoikane.formularios.Articulo a) {
+
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Stock", panel);
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
+
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("stockLevelsView");
                 ((StockLevelsController)scene.getController()).setProducto(idArticulo);
                 panel.setScene(scene);
-
             }
         });
     }
     static def addJFXPaquetePanel(Long idArticulo, omoikane.formularios.Articulo a) {
+
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Paquete", panel);
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
+
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("paqueteView");
                 ((PaqueteController)scene.getController()).setProducto(idArticulo);
                 panel.setScene(scene);
-
             }
         });
     }
 
-    static def lanzarFormNuevoArticulo()
+    static def addJFXCodigosPanel(Long idArticulo, omoikane.formularios.Articulo a) {
+
+        JFXPanel panel = new JFXPanel();
+        a.tabbedPane.addTab("Códigos", panel);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("codigosView");
+                ((CodigosController)scene.getController()).setProducto(idArticulo);
+                panel.setScene(scene);
+            }
+        });
+    }
+
+    static omoikane.formularios.Articulo lanzarFormNuevoArticulo(JInternalFrame parent)
     {
         if(cerrojo(PMA_MODIFICARARTICULO)){
             try{
             def form = new omoikane.formularios.Articulo()
-            addJFXStockPanel(1l, form);
-            addJFXPaquetePanel(1l, form);
+            onCloseFocus(parent, form);
+
             form.setVisible(true)
             Herramientas.panelFormulario(form)
             escritorio.getPanelEscritorio().add(form)
@@ -291,22 +321,23 @@ public class Articulos
                 form.getCampoGrupo().keyReleased = { if(it.keyCode == it.VK_F1) Thread.start {form.txtIDGrupo= Grupos.lanzarCatalogoDialogo() as String; form.getIDGrupo().requestFocus();form.setTxtIDGrupoDes((serv.getGrupo(form.getIDGrupo().text)).descripcion)}  }
                 serv.desconectar()
             }
-            try { form.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles artículo", Herramientas.getStackTraceString(e)) }
-            form.setEditable(true);
-            form.btnDelCode.actionPerformed    = {
-                Dialogos.lanzarAlerta("Opcion valida solo al modificar primero registre el paquete")
-            }
-            form.btnAddCode.actionPerformed    = {
-                Dialogos.lanzarAlerta("Opcion valida solo al modificar primero registre el paquete")
-            }
-            form.setModoNuevo();
+            try { form.setSelected(true) } catch(Exception e)
+            {
+                Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles artículo", Herramientas.getStackTraceString(e)) }
+                form.setEditable(true);
+
+                form.setModoNuevo();
+                //addJFXStockPanel(1l, form);
+                //addJFXPaquetePanel(1l, form);
+                return form;
             } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario nuevo artículo", Herramientas.getStackTraceString(e)) }
+
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
 
-    static def lanzarModificarArticulo(ID)
+    static def lanzarModificarArticulo(parent, ID)
     {
-        def formArticulo = lanzarDetallesArticulo(ID)
+        def formArticulo = lanzarDetallesArticulo(parent, ID)
         //Dialogos.lanzarAlerta("Eliminar codigo viejo de lanzarModificarArticulo")
         SwingBuilder.build {
                 //Al presionar F1: (lanzarCatalogoDialogo)
@@ -316,86 +347,6 @@ public class Articulos
                 serv.desconectar()
          }
         formArticulo.setModoModificar();
-        formArticulo.btnAddCode.actionPerformed    = {
-            new SimpleForm("omoikane.formularios.CodigoArticulo", {
-
-                def form = it.form;
-
-
-                it.form.visible = true;
-                form.btnCancelar.actionPerformed = { form.dispose() }
-                form.btnAceptar.actionPerformed  = {
-                PuertoNadesico.workIn() { puerto ->
-                        (puerto.Articulos.get(ID)).addToCodigos(puerto.CodigosArticulo.newInstance(codigo:form.txtCodigo.text)).save()
-                        rellenarCodigosAlternos(ID, formArticulo)
-                        Dialogos.lanzarAlerta("Código agregado")
-                        form.dispose()
-                    }
-                }
-            })
-        }
-
-        formArticulo.btnDelCode.actionPerformed    = {
-            def IDC = formArticulo.tblCodigos.getSelectedRow()
-            IDC = formArticulo.tblCodigos.getModel().getId(IDC)
-            print IDC
-            if(JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar éste Codigo:?", "eliminado", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                PuertoNadesico.workIn() { puerto ->
-                    (puerto.CodigosArticulo.get(IDC)).delete()
-                    rellenarCodigosAlternos(ID, formArticulo)
-                    Dialogos.lanzarAlerta("Código Eliminado")
-                }
-            }
-        }
-
-      /*formArticulo.btnAddComp.actionPerformed    = {
-            new SimpleForm("omoikane.formularios.Paquetes") {
-                def form = it.form
-                form.visible = true
-                SwingBuilder.build {
-                //Al presionar F1: (lanzarCatalogoDialogo)
-                form.txtCodigo.keyReleased = { if(it.keyCode == it.VK_F1) Thread.startCapture {form.txtCodigo.setText(Articulos.lanzarDialogoCatalogo() as String); form.txtCodigo.requestFocus()}  }
-                }
-                form.btnBuscar.actionPerformed = {
-                    try{
-                    PuertoNadesico.workIn() { puerto ->
-                       def au = puerto.Articulos.findByCodigo(form.txtCodigo.text)
-                       form.txtDescripcion.setText(au.asMap().descripcion as String)
-                       form.btnAceptar.setEnabled(true);
-                    }
-                    }catch(Exception e) { Dialogos.lanzarAlerta("Codigo invalido use F1 en codigo para buscar en el catalogo");form.btnAceptar.setEnabled(false);}
-
-
-                }
-                form.btnCancelar.actionPerformed = { form.dispose() }
-                form.btnAceptar.actionPerformed  = {
-                def valor = form.txtCantidad.getText()
-                if(valor == ""){valor=0}else{valor=java.lang.Integer.valueOf(valor)}
-                PuertoNadesico.workIn() { puerto ->
-                        (puerto.Articulos.get(ID)).addToPaquetes(puerto.Paquetes.newInstance(id_articulo:ID,codigo:form.txtCodigo.text,cantidad:valor)).save()
-                        rellenarPaquetes(ID, formArticulo)
-                        Dialogos.lanzarAlerta("Código agregado")
-                        form.dispose()
-                    }
-
-                }
-            }
-        }
-
-        formArticulo.btnDelComp.actionPerformed    = {
-            def IDC = formArticulo.tblPaquetes.getSelectedRow()
-            IDC = formArticulo.tblPaquetes.getModel().getId(IDC)
-            print IDC
-            if(JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar éste elemento del paquete:?", "eliminado", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                PuertoNadesico.workIn() { puerto ->
-                    (puerto.Paquetes.get(IDC)).delete()
-                    rellenarPaquetes(ID, formArticulo)
-                    Dialogos.lanzarAlerta("Código Eliminado")
-                }
-            }
-        }*/
-
-
 
         formArticulo
     }
@@ -419,7 +370,7 @@ public class Articulos
                 Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin,c.gru, c.des, c.uni, c.imp, c.cos, c.uti, c.dto))
                 serv.modAnotacion(IDAlmacen, c.art, c.notas)
                 serv.desconectar()
-                PuertoNadesico.workIn() { it.CacheArticulos.actualizar(c.art) }
+                //PuertoNadesico.workIn() { it.CacheArticulos.actualizar(c.art) }
             }
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
@@ -478,42 +429,4 @@ public class Articulos
     }
 
 
-}
-
-
-class ModeloCodigos extends javax.swing.table.DefaultTableModel {
-    def codigos = []
-    Object getValueAt(int row,int col){
-        return dataVector[row].codigo
-    }
-    def getId(row){
-        return dataVector[row].id
-    }
-    def addRowHash(java.util.LinkedHashMap hash){
-        dataVector << hash
-    }
-
-    ModeloCodigos(int r, int c){
-        super(r,c)
-    }
-    //void addRow(Vector data)
-}
-
-
-class ModeloPaquetes extends javax.swing.table.DefaultTableModel {
-    def paquetes = []
-    Object getValueAt(int row,int col){
-        return dataVector[row].paquetes[col]
-    }
-    def getId(row){
-        return dataVector[row].id
-    }
-    def addRowHash(java.util.LinkedHashMap hash){
-        dataVector << hash
-    }
-
-    ModeloPaquetes(int r, int c){
-        super(r,c)
-    }
-    //void addRow(Vector data)
 }

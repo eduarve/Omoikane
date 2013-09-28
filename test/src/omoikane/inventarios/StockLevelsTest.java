@@ -37,7 +37,7 @@ public class StockLevelsTest {
     @Test
     public void stockLevelViewTest() {
         omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-test.xml");
-        HashMap testProperties = (HashMap) Principal.applicationContext.getBean( "testProperties" );
+        HashMap testProperties = (HashMap) Principal.applicationContext.getBean( "properties" );
         testProperties.put("DummyJFXApp.viewBeanToTest", "stockLevelsView");
         Application.launch(DummyJFXApp.class);
     }

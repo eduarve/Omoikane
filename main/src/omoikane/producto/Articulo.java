@@ -213,18 +213,21 @@ public class Articulo implements Serializable, IProductoApreciado {
         return this.baseParaPrecio;
     }
 
-    /*
-    @OneToMany(mappedBy = "codigoProducto")
+
+    @OneToMany(mappedBy = "producto")
     private Collection<CodigoProducto> codigosAlternos;
 
+    @Transactional
     public Collection<CodigoProducto> getCodigosAlternos() {
-        return codigosAlternos;
+        Collection<CodigoProducto> codigosProductos = codigosAlternos;
+        Hibernate.initialize(codigosProductos);
+        return codigosProductos;
     }
 
     public void setCodigosAlternos(Collection<CodigoProducto> codigosAlternos) {
         this.codigosAlternos = codigosAlternos;
     }
-    */
+
 
     @Override
     public boolean equals(Object object) {

@@ -22,21 +22,24 @@ public class LineaDeCapturaFilter {
     }
 
     public void fromString(String lineaDeCapturaString) {
+        codigo   = lineaDeCapturaString;
+        cantidad = new BigDecimal(1);
+
         //Los filtros siguientes llevan un orden secuencial
-        lineaDeCapturaString = filtroEAN13(lineaDeCapturaString);
-        filtroMultiplicidad(lineaDeCapturaString);
+        filtroEAN13();
+        filtroMultiplicidad();
     }
 
     /**
      * Filtra la línea de captura para separar cantidades y códigos de producto.
      * Si no se especifica ningún multiplicador en la línea de captura se considerará automáticamente una venta
      * de una unidad.
-     * @param captura
      */
-    private void filtroMultiplicidad(String captura) {
+    private void filtroMultiplicidad() {
+        String captura = getCodigo();
+
         String[]          partesDeLaCaptura = captura.split("\\*");
         ArrayList<String> partes       = new ArrayList( Arrays.asList(partesDeLaCaptura) );
-        cantidad = new BigDecimal(1);
 
         if(partes.size() > 1) {
             codigo = partes.remove( partes.size() -1);
@@ -53,19 +56,19 @@ public class LineaDeCapturaFilter {
 
     /**
      * Código de barras de báscula electrónica 26[xxxxx=codigo][yyyyy=cantidad][codigo seguridad] (13 dígitos)
-     * @param captura
      * @return
      */
-    private String filtroEAN13(String captura) {
-        if(captura.length() == 13 && captura.substring(0,1) == "26") {
-            BigDecimal cant = new BigDecimal(captura.substring(7, 11) ).divide(new BigDecimal(1000));
+    private void filtroEAN13() {
+        String captura = getCodigo();
+        if(captura.length() == 13 && captura.substring(0,2).equals("26")) {
+            BigDecimal cant = new BigDecimal(captura.substring(7, 12) ).divide(new BigDecimal(1000));
             NumberFormat nf = NumberFormat.getNumberInstance();
             nf.setGroupingUsed(false);
             nf.setMinimumFractionDigits(2);
             nf.setMaximumFractionDigits(2);
-            captura   = nf.format(cant)+"*"+captura.substring(2,6);
+            setCantidad(cant);
+            setCodigo(captura.substring(2,7));
         }
-        return captura;
     }
 
     public BigDecimal getCantidad() {

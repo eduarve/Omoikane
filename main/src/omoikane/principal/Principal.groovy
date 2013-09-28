@@ -5,6 +5,8 @@
 
 package omoikane.principal
 
+import javafx.application.Platform
+import javafx.embed.swing.JFXPanel
 import omoikane.sistema.*
 import omoikane.sistema.Usuarios as SisUsuarios
 
@@ -16,6 +18,9 @@ import omoikane.exceptions.UEHandler
 import omoikane.sistema.huellas.ContextoFPSDK.SDK
 import omoikane.sistema.huellas.HuellasCache
 import omoikane.sistema.seguridad.AuthContext
+
+import javax.swing.SwingUtilities
+import java.util.concurrent.CountDownLatch
 
 /**
  * ////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,11 +95,11 @@ public class Principal {
         public static def                   scanMan
         public static def                   tipoCorte               = ContextoCorte.TIPO_DUAL
         final  static def                   ASEGURADO               = true
-        final  static def                   SHOW_UNHANDLED_EXCEPTIONS = true
+        final  static def                   SHOW_UNHANDLED_EXCEPTIONS = false
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG = false;
-        public static final String          VERSION = "1.4.0 RC 2";
+        public static final String          VERSION = "1.4.0 RC3";
         public static def                   authType                = AuthContext.AuthType.NIP;
 
     public static void main(args)
@@ -126,6 +131,9 @@ public class Principal {
 
             splash.setText("Cargando huellas en caché...")
             applicationContext.getBean(HuellasCache.class).getHuellasBD();
+
+            splash.setText("Inicializando JavaFX")
+            initJavaFx()
 
             splash.setText("Inicializando escritorio...")
             //Herramientas.utilImpresionCortes()
@@ -204,5 +212,17 @@ public class Principal {
             Thread.setDefaultUncaughtExceptionHandler(new UEHandler());
         }
         //Logger.getRootLogger().addAppender(new CEAppender());
+    }
+
+    static def initJavaFx() {
+        final CountDownLatch latch = new CountDownLatch(1);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new JFXPanel(); // initializes JavaFX environment
+                latch.countDown();
+            }
+        });
+        latch.await();
+        Platform.setImplicitExit(false);
     }
 }

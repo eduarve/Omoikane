@@ -13,7 +13,7 @@ import javax.persistence.*;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "codigo_producto")
+@Table(name = "codigo_producto", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo"}))
 public class CodigoProducto {
     private Long id;
 
@@ -30,7 +30,7 @@ public class CodigoProducto {
 
     private String codigo;
 
-    @Column(name = "codigo", nullable = false, insertable = true, updatable = true, length = 255, precision = 0)
+    @Column(name = "codigo", nullable = false, insertable = true, updatable = true, length = 255, precision = 0, unique = true)
     @Basic
     public String getCodigo() {
         return codigo;
@@ -51,5 +51,9 @@ public class CodigoProducto {
 
     public void setProducto(Articulo producto) {
         this.producto = producto;
+    }
+
+    public String toString()  {
+        return codigo;
     }
 }

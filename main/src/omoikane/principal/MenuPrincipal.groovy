@@ -31,7 +31,7 @@ class MenuPrincipal {
             Herramientas.centrarVentana menuPrincipal
 
             menuPrincipal.setVisible(true)
-            Principal.escritorio.getPanelEscritorio().add(menuPrincipal,javax.swing.JLayeredPane.PALETTE_LAYER)
+            Principal.escritorio.getPanelEscritorio().add(menuPrincipal)
             menuPrincipal.toFront()
             menuPrincipal.requestFocusInWindow()
             Herramientas.iconificable(menuPrincipal)

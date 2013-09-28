@@ -8,6 +8,7 @@ import javafx.util.Callback;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.inventarios.StockLevelsController;
 import omoikane.inventarios.TomaInventarioController;
+import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
 import omoikane.proveedores.ProveedoresController;
 import org.apache.log4j.Logger;
@@ -27,6 +28,12 @@ import java.io.IOException;
 @Configuration
 public class SpringAnnotatedConfig {
     public Logger logger = Logger.getLogger(getClass());
+
+    @Bean
+    @Scope("prototype")
+    CodigosController codigosController() {
+        return new CodigosController();
+    }
 
     @Bean
     @Scope("prototype")
@@ -56,6 +63,12 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     ImpresionEtiquetasController impresionEtiquetasController() {
         return new ImpresionEtiquetasController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene codigosView() {
+        return initView("/omoikane/producto/CodigosView.fxml", codigosController());
     }
 
     @Bean

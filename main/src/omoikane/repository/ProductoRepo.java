@@ -24,6 +24,9 @@ public interface ProductoRepo extends GenericDao<Articulo, Long>
     @Query("FROM Articulo a JOIN FETCH a.stock s WHERE a.idArticulo = ?1")
     Articulo findByIdIncludeStock(Long id);
 
+    @Query("FROM Articulo a JOIN FETCH a.codigosAlternos s WHERE a.idArticulo = ?1")
+    Articulo findByIdIncludeCodigos(Long id);
+
     @Query("SELECT cp.producto FROM CodigoProducto cp WHERE cp.codigo = ?1")
     List<Articulo> findByCodigoAlterno(String codigo);
 
