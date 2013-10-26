@@ -155,7 +155,7 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
         getContentPane().add(txtImpuestos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 260, -1));
 
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("total");
+        jLabel10.setText("Total:");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, 20));
 
         txtTotal.setEditable(false);

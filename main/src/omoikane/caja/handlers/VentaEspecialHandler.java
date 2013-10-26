@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
+import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
@@ -46,20 +47,29 @@ public class VentaEspecialHandler extends ICajaEventHandler {
     @Override
     public void handle(Event event) {
         modoEspecial();
-        getController().getVentaTableView().setEditable(true);
     }
 
     public void modoEspecial() {
-        getController().setCapturaPaneDisable(true);
-        getController().setMainToolBarDisable(true);
-        getController().showHud("Ahora puede cambiar los precios\n[Esc] o click aquí para terminar modificaciones");
-        getController().getVentaTableView().requestFocus();
-        getController().getVentaTableView().onKeyReleasedProperty().set(ventaKBHandler);
+        try {
+            if(Usuarios.autentifica(Usuarios.GERENTE)) {
+                getController().getVentaTableView().setEditable(true);
+                getController().setCapturaPaneDisable(true);
+                getController().setMainToolBarDisable(true);
+                getController().showHud("Ahora puede cambiar los precios\n[Esc] para terminar modificaciones");
+                getController().getVentaTableView().requestFocus();
+                getController().getVentaTableView().onKeyReleasedProperty().set(ventaKBHandler);
+            } else {
+                getController().getCapturaTextField().requestFocus();
+            }
+        } catch (Exception e) {
+            logger.error("Error al habilitar venta especial", e);
+        }
+
 
     }
 
     public void modoNormal() {
-
+        getController().getVentaTableView().setEditable(false);
         getController().setCapturaPaneDisable(false);
         getController().setMainToolBarDisable(false);
         getController().hideHud();

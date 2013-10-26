@@ -481,7 +481,13 @@ public class CatalogoCajas extends javax.swing.JInternalFrame {
         {
             Dialogos.lanzarAlerta("Ninguna fila ha sido seleccionada.");
         } else {
-            id = ((Long) this.tablaCajas.getValueAt(sel, 0)).intValue();
+            Object  objid = this.tablaCajas.getValueAt(sel, 0);
+
+            if(objid.getClass().isAssignableFrom(Long.class))
+                id = ((Long) objid).intValue();
+            else
+                id = (Integer) objid;
+
             //Lanzar ventana y agregarle un listener
             omoikane.principal.Caja.lanzarTotalVentasDia(id, true);
         }

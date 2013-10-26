@@ -92,11 +92,12 @@ public class Escritorio extends javax.swing.JFrame {
     private void initComponents() {
 
         PanelEscritorio = new FrostedGlassDesktopPane();
+
         reloj = new javax.swing.JLabel();
         usuario = new javax.swing.JLabel();
-        calculadoraCanvas = new java.awt.Canvas();
-        calendarioCanvas = new java.awt.Canvas();
         lblImagenFondo = new javax.swing.JLabel();
+        calendarioPanel = new javax.swing.JPanel();
+        calculadoraPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Omoikane");
@@ -123,25 +124,6 @@ public class Escritorio extends javax.swing.JFrame {
         usuario.setBounds(10, 10, 90, 50);
         PanelEscritorio.add(usuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        calculadoraCanvas.setBackground(new Color(Color.OPAQUE));
-        calculadoraCanvas.setVisible(false);
-        calculadoraCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                calculadoraCanvas(evt);
-            }
-        });
-        calculadoraCanvas.setBounds(1160, 90, 90, 100);
-        PanelEscritorio.add(calculadoraCanvas, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        calendarioCanvas.setVisible(false);
-        calendarioCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                calendarioCanvasClicked(evt);
-            }
-        });
-        calendarioCanvas.setBounds(1160, 200, 90, 110);
-        PanelEscritorio.add(calendarioCanvas, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         lblImagenFondo.setBackground(new java.awt.Color(0, 0, 0));
         lblImagenFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImagenFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/omoikane/Media2/skin/SkinMadera1280x720.png"))); // NOI18N
@@ -154,9 +136,25 @@ public class Escritorio extends javax.swing.JFrame {
         lblImagenFondo.setBounds(0, 0, 1280, 720);
         PanelEscritorio.add(lblImagenFondo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        calendarioPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                calendarioCanvasClicked(evt);
+            }
+        });
+        calendarioPanel.setBounds(1160, 200, 90, 110);
+        PanelEscritorio.add(calendarioPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        calculadoraPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                calculadoraCanvas(evt);
+            }
+        });
+        calculadoraPanel.setBounds(1160, 80, 90, 110);
+        PanelEscritorio.add(calculadoraPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         getContentPane().add(PanelEscritorio);
 
-        //pack();
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void calendarioCanvasClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_calendarioCanvasClicked
@@ -175,9 +173,9 @@ public class Escritorio extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public JDesktopPane PanelEscritorio;
-    private java.awt.Canvas calculadoraCanvas;
-    private java.awt.Canvas calendarioCanvas;
+    public javax.swing.JDesktopPane PanelEscritorio;
+    private javax.swing.JPanel calculadoraPanel;
+    private javax.swing.JPanel calendarioPanel;
     public javax.swing.JLabel lblImagenFondo;
     public javax.swing.JLabel reloj;
     public javax.swing.JLabel usuario;

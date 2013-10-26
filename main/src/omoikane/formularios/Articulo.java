@@ -406,18 +406,19 @@ public class Articulo extends javax.swing.JInternalFrame {
         tabbedPane.addTab("<html>Precio</html>", jPanel5);
 
         jPanel7.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
         jScrollPane4.setMaximumSize(new java.awt.Dimension(32767, 200));
         jScrollPane4.setPreferredSize(new java.awt.Dimension(406, 383));
+        jScrollPane4.setViewportView(txtComentarios);
 
         txtComentarios.setColumns(25);
         txtComentarios.setRows(20);
         txtComentarios.setMaximumSize(new java.awt.Dimension(2147483647, 200));
-        txtComentarios.setPreferredSize(new java.awt.Dimension(404, 364));
+        txtComentarios.setPreferredSize(null);
         jScrollPane4.setViewportView(txtComentarios);
 
-        jPanel7.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 350));
+        jPanel7.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
         tabbedPane.addTab("<html>Notas</html>", jPanel7);
 

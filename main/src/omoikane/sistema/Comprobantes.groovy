@@ -244,7 +244,7 @@ import groovy.inspect.swingui.*
                 PrintStream ps = new PrintStream(os);
                 ps.println(generado);
                 ps.close();
-            } catch (FileNotFoundException fnf) { Dialogos.lanzarAlerta("Error al imprimir al puerto lpt1"); }
+            } catch (FileNotFoundException fnf) { Dialogos.error("Error al imprimir al puerto $protocolo", fnf); }
             }
             else
             {

@@ -44,7 +44,7 @@ class ArticulosFunciones {
             def articulo = db.firstRow(query, selCampos)
             if(articulo==null) { return null }
             def idArt    = articulo.id_articulo
-            def existencia = db.firstRow("SELECT * FROM stock WHERE idArticulo = " + idArt)
+            def existencia = db.firstRow("SELECT * FROM Stock WHERE idArticulo = " + idArt)
             def precio     = db.firstRow("SELECT * FROM precios     WHERE id_almacen = $IDAlmacen AND id_articulo = " + idArt)
             db.close()
             salida         = articulo + existencia + precio
@@ -96,7 +96,7 @@ class ArticulosFunciones {
                 def IDArticulo = db.executeInsert("INSERT INTO articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ? , impuestos = ?, uModificacion = CURRENT_TIMESTAMP ", [codigo, IDLinea, IDGrupo, descripcion, unidad, impuestos])
                 IDArticulo = IDArticulo[0][0]
                 db.executeInsert("INSERT INTO precios SET id_almacen = ?, id_articulo = ?, costo = ?, descuento = ?, utilidad = ?", [IDAlmacen, IDArticulo, costo, descuento, utilidad])
-                db.executeInsert("INSERT INTO stock SET idarticulo = ?, enTienda = ?, clasificacion = 'C', enBodega = 0, maximo = 1, minimo = 1, ubicacion = '', modificado = CURRENT_TIMESTAMP", [IDArticulo, existencias])
+                db.executeInsert("INSERT INTO Stock SET idarticulo = ?, enTienda = ?, clasificacion = 'C', enBodega = 0, maximo = 1, minimo = 1, ubicacion = '', modificado = CURRENT_TIMESTAMP", [IDArticulo, existencias])
                 db.commit()
                 return [mensaje:"Artículo $descripcion agregado.",ID:IDArticulo]
             } catch(Exception e) {

@@ -425,7 +425,7 @@ public class CatalogoCortesCaja extends javax.swing.JInternalFrame {
 
         tmp = gc.createCompatibleImage(areaDibujo.width, areaDibujo.height,BufferedImage.TRANSLUCENT);
         Graphics2D g2d = (Graphics2D) tmp.getGraphics();
-        g2d.setColor(new Color(55,55,255,165));
+        g2d.setColor(new Color(0,0,0,165));
         g2d.fillRect(0,0,areaDibujo.width,areaDibujo.height);
         fondo = tmp;
     }
@@ -449,7 +449,7 @@ public class CatalogoCortesCaja extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
 }
-class CortesTableModel extends NadesicoTableModel{
+class CortesTableModel extends ScrollableTableModel{
     CortesTableModel(java.util.List ColNames,ArrayList ColClasses){super((ArrayList)ColNames,ColClasses);}
     public Object getValueAt(int row,int col){    if(col==0 || col==2 || col==3)
     {

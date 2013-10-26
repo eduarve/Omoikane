@@ -46,7 +46,7 @@ public class TemplateMap extends EnumMap<DPFPFingerIndex, Template> {
             bis.close();
             ois.close();
         } catch (IOException e) {
-            logger.error("Error al deserializar huellas", e);
+            //logger.error("Error al deserializar huellas", e);
         } catch (ClassNotFoundException e) {
             logger.error("Error en el código de deserialización de mapa de plantillas de huellas (TemplateMap)", e);
         }

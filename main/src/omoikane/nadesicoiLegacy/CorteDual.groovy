@@ -34,6 +34,9 @@ class CorteDual {
             "sum(ventas_detalles.descuento) as descuento,sum(ventas_detalles.total) as total FROM ventas,ventas_detalles,"+
             "lineas_dual WHERE ventas.id_caja = ? AND ventas.fecha_hora >= ? AND ventas.fecha_hora <= ?"+
             "and ventas.id_venta = ventas_detalles.id_venta and ventas.id_caja=ventas_detalles.id_caja and lineas_dual.id_linea=ventas_detalles.id_linea", [IDCaja, desde, hasta])
+            sanitizeVentas(ventas)
+            sanitizeVentas(ventasNoReg)
+
             ventas.total=ventas.total-ventasNoReg.total
             ventas.subtotal=ventas.subtotal-ventasNoReg.subtotal
             ventas.descuento=ventas.descuento-ventasNoReg.descuento
@@ -55,6 +58,17 @@ class CorteDual {
 			
         } catch(e) { println "[Error]"; Consola.error("[Error: ${e.message}]",e); throw new Exception("Error al consultar la suma de ventas")}
         return salida
+    }
+
+    static def sanitizeVentas(ventas) {
+        ventas.total         = ventas.total     ?: 0;
+        ventas.subtotal      = ventas.subtotal  ?: 0;
+        ventas.descuento     = ventas.descuento ?: 0;
+        ventas.impuestos     = ventas.impuestos ?: 0;
+        ventas.totalDual     = ventas.total     ?: 0;
+        ventas.subtotalDual  = ventas.subtotal  ?: 0;
+        ventas.descuentoDual = ventas.descuento ?: 0;
+        ventas.impuestosDual = ventas.impuestos ?: 0;
     }
 
     static def addCorteDual = { IDCaja, IDAlmacen, subtotal,subtotalDual, impuestos,impuestoDual, descuentos,descuentoDual,total, totalDual, nVentas, desde, hasta , depositos , retiros ->

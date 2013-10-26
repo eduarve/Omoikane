@@ -85,7 +85,7 @@ public class PaqueteController
     @FXML
     private void actionAdd() {
         BigDecimal cantidad             = txtCantidad.getNumber();
-        Long       productoContenedorId = 1l;
+        Long       productoContenedorId = productoId;
         Long       productoContenidoId  = Long.parseLong("0" + txtIdProducto.getText());
         Boolean    contenidoExists      = productoRepo.exists(productoContenedorId);
 

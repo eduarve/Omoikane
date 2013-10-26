@@ -2,6 +2,8 @@ package omoikane.caja.business;
 
 import groovy.util.Eval;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.data.IProductosDAO;
 import omoikane.caja.handlers.StockIssuesHandler;
@@ -29,6 +31,7 @@ import org.synyx.hades.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -81,6 +84,7 @@ public class CajaLogicImpl implements ICajaLogic {
                 addProducto(model, capturaFilter);
 
             } catch(IndexOutOfBoundsException e) {
+                Dialog.showInfo("Producto no encontrado", "Producto no encontrado");
                 logger.trace("Producto no encontrado");
             } catch (Exception e) {
                 logger.error("Error durante captura ('evento onCaptura')", e);
@@ -92,13 +96,13 @@ public class CajaLogicImpl implements ICajaLogic {
     public void buscar(CajaModel model) {
 
         Pageable pagina = model.getPaginacionBusqueda();
+        ObservableList<ProductoModel> obsProductos = model.getProductos();
 
         LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(model.getCaptura().get());
         String descripcion = capturaFilter.getCodigo();
-        if(descripcion.isEmpty()) return;
+        if(descripcion.isEmpty()) { obsProductos.clear(); return; }
 
         ArrayList<Producto> productos = (ArrayList<Producto>) productosDAO.findByDescripcionLike( "%"+descripcion+"%", pagina);
-        ObservableList<ProductoModel> obsProductos = model.getProductos();
 
         if (pagina.getPageNumber()==0 )
             obsProductos.clear();
@@ -140,9 +144,9 @@ public class CajaLogicImpl implements ICajaLogic {
             BigDecimal nuevaCantidad = cantidadBase.add(productoModel.cantidadProperty().get());
             productoModel.cantidadProperty().set( nuevaCantidad );
             model.getVenta().remove(productoBase);
-            model.getVenta().add(productoModel);
+            model.getVenta().add(0, productoModel);
         }   else {
-            model.getVenta().add(productoModel);
+            model.getVenta().add(0, productoModel);
         }
         persistirVenta();
     }
@@ -157,6 +161,7 @@ public class CajaLogicImpl implements ICajaLogic {
 
     @Override
     public void persistirVenta() {
+
         CajaModel model = getController().getModel();
         ventaAbiertaBean = guardarVenta(model);
     }
@@ -198,8 +203,21 @@ public class CajaLogicImpl implements ICajaLogic {
         model.getCambio().setValue( cambio );
     }
 
+    public Boolean isCajaOpen() {
+        Boolean cajaAbierta = null;
+        cajaAbierta = (Boolean) Eval.me("cajaAbierta", cajaAbierta,
+                "def serv = omoikane.sistema.Nadesico.conectar();" +
+                        "cajaAbierta = serv.cajaAbierta(omoikane.principal.Principal.IDCaja);" +
+                        "serv.desconectar();" +
+                        "return cajaAbierta;");
+
+        return cajaAbierta;
+    }
+
     @Transactional
     public void terminarVenta(CajaModel model) {
+
+        if(!isCajaOpen()) { Dialog.showInfo("Caja cerrada", "Caja cerrada, no se puede vender."); return; }
 
         BigDecimal ventaTotal = model.getTotal().get();
         if( ventaTotal.compareTo( new BigDecimal("0.10") ) > 0 ) {
@@ -212,10 +230,16 @@ public class CajaLogicImpl implements ICajaLogic {
 
                 imprimirVenta(venta);
 
-                Dialog.showInfo("Venta registrada",
-                        "Venta registrada");
+                Dialog.buildConfirmation("Venta registrada", "Venta registrada")
+                        .addYesButton(new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                nuevaVenta();
+                            }
+                        })
+                        .build()
+                        .show();
 
-                nuevaVenta();
             } catch (Exception e) {
                 logger.error("Error al guardar venta, venta no registrada.", e);
                 throw new RuntimeException("prueba");
@@ -230,7 +254,6 @@ public class CajaLogicImpl implements ICajaLogic {
 
     @Override
     public void nuevaVenta() {
-
         instanciarModeloVenta();
         getController().getCapturaTextField().requestFocus();
     }

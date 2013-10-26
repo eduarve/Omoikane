@@ -51,6 +51,7 @@ public class EstrategiaDual extends EstrategiasCorte {
             def comprobante = new Comprobantes()
             comprobante.Corte(newCorte.IDCorte)                    //imprimir ticket
             comprobante.probar()
+            Thread.sleep(5000);
             comprobante.Corte(newCorte.IDCorteDual, "cortes_dual") //imprimir corte dual
             comprobante.probar()//imprimir ticket
 
