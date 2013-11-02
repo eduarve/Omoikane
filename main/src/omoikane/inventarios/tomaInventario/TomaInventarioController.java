@@ -1,15 +1,14 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,12 +16,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.BigDecimalStringConverter;
 import javafx.util.converter.DefaultStringConverter;
-import net.sf.ehcache.Element;
+import name.antonsmirnov.javafx.dialog.Dialog;
+import omoikane.inventarios.Stock;
+import omoikane.producto.Articulo;
 import omoikane.repository.ConteoInventarioRepo;
+import omoikane.repository.ProductoRepo;
 import omoikane.sistema.TextFieldTableCell;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.TransactionManager;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormatSymbols;
@@ -68,22 +70,41 @@ public class TomaInventarioController implements Initializable {
     @Autowired
     ConteoInventarioRepo repo;
 
+    @Autowired
+    ProductoRepo productoRepo;
+
     @FXML TableView<ItemConteoPropWrapper> itemsTable;
     @FXML TableColumn<ItemConteoPropWrapper, String> codigoCol;
     @FXML TableColumn<ItemConteoPropWrapper, String> nombreProductoCol;
     @FXML TableColumn<ItemConteoPropWrapper, BigDecimal> conteoCol;
+    @FXML TableColumn<ItemConteoPropWrapper, BigDecimal> stockDBCol;
+    @FXML TableColumn<ItemConteoPropWrapper, BigDecimal> diferenciaCol;
     @FXML Label idLabel;
     @FXML Label fechaLabel;
     @FXML TextField codigoTextField;
+    @FXML TextField conteoTextField;
+    @FXML Label descripcionLabel;
+    @FXML Button agregarButton;
+    @FXML Button aplicarInventarioButton;
+    @FXML Button descartarButton;
+    @FXML Button archivarButton;
+    @FXML Button importarButton;
+    @FXML AnchorPane mainPane;
 
-    @FXML public void guardarAction(ActionEvent actionEvent) {
+    private Articulo capturaArticulo;
+    private HashMap<Long, Articulo> indice;
+
+    @FXML public void archivarAction(ActionEvent actionEvent) {
         modelo.setCompletado(true);
         Task<Void> persistTask = persistModel();
         persistTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
-                initModel();
-                logger.info("Captura de conteo guardada");
+                //initModel();
+                archivarButton.setDisable(true);
+                agregarButton.setDisable(true);
+                descartarButton.setDisable(true);
+                logger.info("Captura de conteo de inventario físico archivada");
             }
         });
         new Thread(persistTask).start();
@@ -101,6 +122,114 @@ public class TomaInventarioController implements Initializable {
         new Thread(deleteTask).start();
     }
 
+    @FXML public void onAplicarInventarioAction() {
+
+        Dialog.buildConfirmation("Confirmación", "Al aplicar este inventario, los stocks de los productos en el almacén quedarán actualizados a los números introducidos en este conteo, la operación no es revertible, ¿Está seguro de continuar?")
+                .addYesButton(new EventHandler() {
+                    @Override
+                    public void handle(Event event) {
+                        handleAplicarInventario();
+                    }
+                })
+                .addNoButton(new EventHandler() {
+                    @Override
+                    public void handle(Event event) {
+                    }
+                })
+                .build().show();
+
+
+    }
+
+    private void handleAplicarInventario() {
+        mainPane.setDisable(true);
+        Task aplicarInventarioTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                aplicarInventarioToModel();
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        };
+        aplicarInventarioTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                if(!modelo.getCompletado().get()) archivarButton.fire();
+                aplicarInventarioButton.setDisable(true);
+                mainPane.setDisable(false);
+                logger.info("Inventario aplicado a las existencias correctamente.");
+            }
+        });
+        aplicarInventarioTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                mainPane.setDisable(false);
+            }
+        });
+        new Thread(aplicarInventarioTask).start();
+    }
+
+    @Transactional
+    private void aplicarInventarioToModel() {
+        for (ItemConteoPropWrapper itemConteoPropWrapper : modelo.getItems()) {
+            Articulo a        = itemConteoPropWrapper.articuloProperty().get();
+            Articulo articulo = productoRepo.findByIdIncludeStock(a.getIdArticulo());
+
+            Stock s = articulo.getStock();
+            s.setEnTienda(itemConteoPropWrapper.conteoProperty().get());
+
+            productoRepo.saveAndFlush(articulo);
+
+        }
+    }
+    @FXML public void onImportarAction(ActionEvent actionEvent) {
+        ITerminalHandler terminal = new FreeInventarioTerminalHandler(this);
+        terminal.importData();
+    }
+
+    @FXML public void onExportarAction(ActionEvent actionEvent) {
+        ITerminalHandler terminal = new FreeInventarioTerminalHandler(this);
+        terminal.exportData();
+    }
+
+    @FXML public void onAgregarAction(ActionEvent actionEvent) {
+        if(capturaArticulo == null) return ;
+        if(modelo.getCompletado().get()) return;
+
+        if(indice.containsKey(capturaArticulo.getIdArticulo())) {
+            logger.info("Artículo ya agregado al conteo. No se puede volver a agregar.");
+            codigoTextField.requestFocus();
+            return;
+        }
+
+        addItemConteo(capturaArticulo, new BigDecimal(conteoTextField.getText()));
+
+        conteoTextField.setText("");
+        codigoTextField.setText("");
+        descripcionLabel.setText("");
+        codigoTextField.requestFocus();
+        capturaArticulo = null;
+    }
+
+    public void addItemConteo(Articulo capturaArticulo, BigDecimal conteo) {
+        if(modelo.getCompletado().get()) return;
+
+        if(indice.containsKey(capturaArticulo.getIdArticulo())) return;
+
+        String codigo         = capturaArticulo.getCodigo();
+        String descripcion    = capturaArticulo.getDescripcion();
+        BigDecimal stockBD    = capturaArticulo.getStock().getEnTienda();
+        BigDecimal diferencia = conteo.subtract(stockBD);
+
+        ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo);
+        newItemBean.setArticulo  ( capturaArticulo );
+        newItemBean.setStockDB   ( stockBD         );
+        newItemBean.setDiferencia( diferencia      );
+
+        ItemConteoPropWrapper newItem = new ItemConteoPropWrapper(newItemBean);
+        modelo.addItem(newItem);
+        indice.put(capturaArticulo.getIdArticulo(), capturaArticulo);
+    }
+
     Character decimalSeparator = getDecimalSeparator();
 
     private Character getDecimalSeparator() {
@@ -110,6 +239,17 @@ public class TomaInventarioController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        assert agregarButton != null : "fx:id=\"agregarButton\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert codigoCol != null : "fx:id=\"codigoCol\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert codigoTextField != null : "fx:id=\"codigoTextField\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert conteoCol != null : "fx:id=\"conteoCol\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert conteoTextField != null : "fx:id=\"conteoTextField\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert descripcionLabel != null : "fx:id=\"descripcionLabel\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert fechaLabel != null : "fx:id=\"fechaLabel\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert idLabel != null : "fx:id=\"idLabel\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert itemsTable != null : "fx:id=\"itemsTable\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+        assert nombreProductoCol != null : "fx:id=\"nombreProductoCol\" was not injected: check your FXML file 'TomaInventarioView.fxml'.";
+
         codigoCol        .setCellValueFactory(new PropertyValueFactory<ItemConteoPropWrapper, String>("codigo"));
         codigoCol        .setCellFactory(new ImprovedCellFactory<ItemConteoPropWrapper>(ItemConteoPropWrapper.class));
 
@@ -119,25 +259,90 @@ public class TomaInventarioController implements Initializable {
         conteoCol        .setCellValueFactory(new PropertyValueFactory<ItemConteoPropWrapper, BigDecimal>("conteo"));
         conteoCol        .setCellFactory(new NumericCellFactory<ItemConteoPropWrapper>(ItemConteoPropWrapper.class));
 
+        stockDBCol       .setCellValueFactory(new PropertyValueFactory<ItemConteoPropWrapper, BigDecimal>("stockDB"));
+        stockDBCol       .setCellFactory(new NumericCellFactory<ItemConteoPropWrapper>(ItemConteoPropWrapper.class));
+
+        diferenciaCol    .setCellValueFactory(new PropertyValueFactory<ItemConteoPropWrapper, BigDecimal>("diferencia"));
+        diferenciaCol    .setCellFactory(new NumericCellFactory<ItemConteoPropWrapper>(ItemConteoPropWrapper.class));
+
         initModel();
 
         codigoTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.ENTER) {
-                    ItemConteoInventario newItemBean = new ItemConteoInventario(codigoTextField.getText(), "prueba", new BigDecimal("10"));
-                    ItemConteoPropWrapper newItem = new ItemConteoPropWrapper(newItemBean);
-                    modelo.addItem(newItem);
+                    conteoTextField.requestFocus();
                 }
             }
         });
 
+        conteoTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(keyEvent.getCode() == KeyCode.ENTER) {
+                    agregarButton.fire();
+                }
+            }
+        });
 
+        codigoTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean aBoolean2) {
+                //Solo continuar si se está perdiendo el enfoque
+                if(aBoolean2) return;
+                Task<Void> findArticuloTask = findArticulo();
+                new Thread(findArticuloTask).start();
+            }
+        });
+    }
+
+    private Task<Void> findArticulo() {
+        Task findArticuloTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                String   codigo = codigoTextField.getText();
+                Articulo resultado = null;
+                if(codigo.isEmpty()) return null;
+
+                resultado = getArticulo(codigo);
+
+                final Articulo finalResultado = resultado;
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalResultado == null) {
+                            descripcionLabel.setText("");
+                            logger.info("No se encontró ningún producto con el código proporcionado");
+                            return;
+                        }
+                        descripcionLabel.setText( finalResultado.getDescripcion() );
+                        TomaInventarioController.this.capturaArticulo = finalResultado;
+                    }
+                });
+
+                return null;
+            }
+        };
+        return findArticuloTask;
+    }
+
+    public Articulo getArticulo(String codigo) {
+        Articulo resultado = null;
+        List<Articulo> resultados = productoRepo.findByCodigo(codigo);
+        if(resultados == null || resultados.isEmpty()) resultados = productoRepo.findByCodigoAlterno(codigo);
+        if(resultados != null && !resultados.isEmpty()) resultado = productoRepo.findByIdIncludeStock(resultados.get(0).getIdArticulo());
+        return resultado;
     }
 
     private void initModel() {
         modelo = loadOrCreateModel();
         itemsTable.setItems(modelo.getItems());
+
+        indice = new HashMap<>();
+        for(ItemConteoPropWrapper ci : modelo.getItems()) {
+            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
+        }
+
         fechaLabel.textProperty().bind(Bindings.convert(modelo.getDate()));
         idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
 

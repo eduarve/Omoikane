@@ -34,6 +34,7 @@ import jfxtras.labs.scene.control.BigDecimalField;
 import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.business.LineaDeCapturaFilter;
 import omoikane.caja.handlers.*;
+import omoikane.entities.LegacyVenta;
 import omoikane.principal.Principal;
 import omoikane.sistema.Dialogos;
 import omoikane.sistema.Herramientas;
@@ -143,6 +144,8 @@ public class CajaController
     public AnchorPane getMainAnchorPane() { return mainAnchorPane; }
 
     public void shutdownBasculaHandler() { basculaHandler.close(); }
+
+    public LegacyVenta getVentaAbiertaBean() { return getCajaLogic().getVentaAbiertaBean(); }
 
     @FXML
     private void onCapturaKeyReleased(KeyEvent event) {

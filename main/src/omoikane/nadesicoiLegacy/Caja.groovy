@@ -53,20 +53,21 @@ class Caja {
         db.close()
         resultado
     }
-    static def doRetiro = { IDAlmacen, IDCaja, IDCajero, IDUsuario, importe ->
+    static def
+            doRetiro = { IDAlmacen, IDCaja, IDCajero, IDUsuario, importe, concepto ->
         def db = Db.connect()
-        def resultado = db.executeInsert("""INSERT INTO movimientos_cortes (tipo, id_almacen, id_caja, id_cajero, id_usuario, importe)
-                                            VALUES (?,?,?,?,?,?) """,
-                                          ['retiro', IDAlmacen, IDCaja, IDCajero, IDUsuario, importe]);        
+        def resultado = db.executeInsert("""INSERT INTO movimientos_cortes (tipo, id_almacen, id_caja, id_cajero, id_usuario, importe, concepto)
+                                            VALUES (?,?,?,?,?,?,?) """,
+                                          ['retiro', IDAlmacen, IDCaja, IDCajero, IDUsuario, importe, concepto]);
         resultado = resultado[0][0]
         db.close()
         resultado
     }
-    static def doDeposito = { IDAlmacen, IDCaja, IDCajero, IDUsuario, importe ->
+    static def doDeposito = { IDAlmacen, IDCaja, IDCajero, IDUsuario, importe, concepto ->
         def db = Db.connect()
-        def resultado = db.executeInsert("""INSERT INTO movimientos_cortes (tipo, id_almacen, id_caja, id_cajero, id_usuario, importe)
-                                            VALUES (?,?,?,?,?,?) """,
-                                          ['deposito', IDAlmacen, IDCaja, IDCajero, IDUsuario, importe]);
+        def resultado = db.executeInsert("""INSERT INTO movimientos_cortes (tipo, id_almacen, id_caja, id_cajero, id_usuario, importe, concepto)
+                                            VALUES (?,?,?,?,?,?,?) """,
+                                          ['deposito', IDAlmacen, IDCaja, IDCajero, IDUsuario, importe, concepto]);
         resultado = resultado[0][0]
         db.close()
         resultado

@@ -8,7 +8,10 @@
 
 package omoikane.sistema
 
-import java.io.*;
+ import groovy.sql.Sql
+ import omoikane.nadesicoiLegacy.Db
+
+ import java.io.*;
 import groovy.text.GStringTemplateEngine
 
  import java.text.NumberFormat
@@ -89,15 +92,18 @@ import groovy.inspect.swingui.*
     }
     def Corte(ID, tabla) {
         def serv = new Nadesico().conectar()
+        Sql db = Db.connect();
         try {
             data         = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
+            data.movsCaja  = db.rows("SELECT tipo, concepto, importe FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?",[data.id_caja, data.desde, data.hasta])
             data.caja    = serv.getCaja(data.id_caja)
             data.leyenda= "C O R T E   D E   C A J A"
-            generado     = generarCorte()
+            generado     = generarCorte(ID)
         } catch(e) {
             throw e
         } finally {
-        serv.desconectar()
+            serv.desconectar()
+            db?.close();
         }
     }
 
@@ -162,7 +168,7 @@ import groovy.inspect.swingui.*
         template.toString()
     }
 
-    def generarCorte() {
+    def generarCorte(id) {
         def plantilla = new File("Plantillas/FormatoCorte.txt").getText('UTF-8') as String
         //def plantilla = getClass().getResourceAsStream("/omoikane/reportes/FormatoCorte.txt").getText('UTF-8') as String
         def sdfFecha = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a")
@@ -180,8 +186,8 @@ import groovy.inspect.swingui.*
 		binding.folioInicial = binding.prefijoFolio + "-" + data.folio_inicial
 		binding.folioFinal   = binding.prefijoFolio + "-" + data.folio_final
 		binding.folios       = "Folios desde ${binding.folioInicial} hasta ${binding.folioFinal}"
-                binding.depositos = 0.0f
-                binding.retiros = 0.0f
+        binding.depositos    = binding.depositos ?: 0.0f
+        binding.retiros      = binding.retiros ?: 0.0f
 
         binding.devoluciones = 0.0f
         def engine = new GStringTemplateEngine()

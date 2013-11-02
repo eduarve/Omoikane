@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.inventarios.StockLevelsController;
-import omoikane.inventarios.TomaInventarioController;
+import omoikane.inventarios.tomaInventario.TomaInventarioController;
 import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
 import omoikane.proveedores.ProveedoresController;
@@ -92,7 +92,7 @@ public class SpringAnnotatedConfig {
     @Bean
     @Scope("prototype")
     Scene tomaInventarioView() {
-        return initView("/omoikane/inventarios/TomaInventarioView.fxml", tomaInventarioController());
+        return initView("/omoikane/inventarios/tomaInventario/TomaInventarioView.fxml", tomaInventarioController());
     }
 
     @Bean

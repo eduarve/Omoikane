@@ -1,4 +1,4 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;

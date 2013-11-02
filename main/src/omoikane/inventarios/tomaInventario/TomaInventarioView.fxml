@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="760.9998779296875" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.inventarios.tomaInventario.TomaInventarioController">
+  <children>
+    <Label text="Toma de inventario físico" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
+      <font>
+        <Font size="23.0" />
+      </font>
+    </Label>
+    <TableView fx:id="itemsTable" editable="false" focusTraversable="true" prefHeight="248.0" prefWidth="733.9998779296875" AnchorPane.bottomAnchor="102.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="103.0">
+      <columns>
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" text="Código" fx:id="codigoCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="241.0" text="Producto" fx:id="nombreProductoCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Conteo" fx:id="conteoCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Stock Sistema" fx:id="stockDBCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Diferencia" fx:id="diferenciaCol" />
+      </columns>
+    </TableView>
+    <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" />
+        <Button fx:id="importarButton" mnemonicParsing="false" onAction="#onImportarAction" text="Importar desde terminal" />
+        <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Aplicar inventario" />
+        <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
+        <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />
+      </items>
+    </ToolBar>
+    <Label prefWidth="34.0" text="ID:" visible="false" AnchorPane.rightAnchor="178.0" AnchorPane.topAnchor="48.0" />
+    <Label text="Fecha:" visible="false" AnchorPane.rightAnchor="171.0" AnchorPane.topAnchor="77.0" />
+    <Label fx:id="fechaLabel" prefWidth="133.0" text="" visible="false" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="74.0">
+      <font>
+        <Font name="System Bold" size="13.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Label fx:id="idLabel" font="$x1" prefWidth="133.0" text="" visible="false" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="48.0" />
+    <TextField fx:id="codigoTextField" prefHeight="28.0" prefWidth="141.0" promptText="Código de producto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+    <Label id="descripcionText" fx:id="descripcionLabel" prefHeight="28.0" prefWidth="303.0" style="-fx-background-color: lightgrey;&#10;" text="" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="289.0" />
+    <Label text="Línea de captura" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="14.0">
+      <font>
+        <Font size="18.0" />
+      </font>
+    </Label>
+    <Separator prefWidth="733.9998779296875" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
+    <TextField id="conteoTextfield" fx:id="conteoTextField" prefHeight="28.0" prefWidth="145.0" promptText="Conteo" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="133.0" />
+    <Button fx:id="agregarButton" mnemonicParsing="false" onAction="#onAgregarAction" prefHeight="28.0" prefWidth="105.0" text="Agregar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+  </children>
+</AnchorPane>

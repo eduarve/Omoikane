@@ -1,0 +1,14 @@
+{
+	"ventaXProducto": [
+		{ 
+		"dia": "2013/10/29",
+		"cantidad": 204,
+		"importe": 7810.55
+		}, 	
+		{ 
+		"dia": "2013/10/30",
+		"cantidad": 86,
+		"importe": 893.38
+		}
+	]
+}

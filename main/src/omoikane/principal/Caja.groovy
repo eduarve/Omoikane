@@ -164,9 +164,9 @@ class Caja implements Serializable {
             def mov2Serv = Nadesico.conectar()
             def salida
             if(tipo=="Retiro") {
-               salida = mov2Serv.doRetiro(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text)
+               salida = mov2Serv.doRetiro(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text, panel.txtConcepto.text)
             } else if(tipo == "Deposito") {
-               salida = mov2Serv.doDeposito(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text)
+               salida = mov2Serv.doDeposito(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text, panel.txtConcepto.text)
             } else { throw new Exception("Estado inválido, tipo de movimiento de caja incorrecto") }
             mov2Serv.desconectar()
             Dialogos.lanzarAlerta(tipo+" confirmado")

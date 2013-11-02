@@ -241,6 +241,8 @@ public class Articulos
                 existencias   = existencias as Double
                 try {
                     def serv   = Nadesico.conectar()
+                    if(!serv.getLinea(IDLinea)) throw new Exception("Campo ID Línea inválida")
+                    if(!serv.getGrupo(IDGrupo)) throw new Exception("Campo ID Grupo inválida")
                     def datAdd = serv.addArticulo(IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, impuestos, costo, descuento, utilidad, existencias)
                     def notasAdd = serv.addAnotacion(IDAlmacen, datAdd.ID, notas )
                     Dialogos.lanzarAlerta(datAdd.mensaje)
@@ -248,7 +250,7 @@ public class Articulos
                     //if( formArticulo.getModo() == formArticulo.modo.NUEVO) { stockAdd(datAdd.ID) }
 
                     formArticulo.dispose()
-                } catch(e) { Dialogos.error("Error al enviar a la base de datos. El artículo no se registró verifique que el código no exista", e) }
+                } catch(e) { Dialogos.error("Error, el artículo no se registró: "+e.getMessage(), e) }
                 
             }
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
@@ -318,7 +320,9 @@ public class Articulos
                 //Al presionar F1: (lanzarCatalogoDialogo)
                 def serv        = Nadesico.conectar()
                 form.getCampoID()   .keyReleased = { if(it.keyCode == it.VK_F1) Thread.start {form.txtIDLinea= Lineas.lanzarCatalogoDialogo() as String; form.getIDLinea().requestFocus();form.setTxtIDLineaDes((serv.getLinea(form.getIDLinea().text)).descripcion)}  }
+                form.getCampoID()   .focusLost   = { if(form.getCampoID().text != "") Thread.start { form.setTxtIDLineaDes((serv.getLinea(form.getIDLinea().text))?.descripcion?:"")} }
                 form.getCampoGrupo().keyReleased = { if(it.keyCode == it.VK_F1) Thread.start {form.txtIDGrupo= Grupos.lanzarCatalogoDialogo() as String; form.getIDGrupo().requestFocus();form.setTxtIDGrupoDes((serv.getGrupo(form.getIDGrupo().text)).descripcion)}  }
+                form.getCampoGrupo().focusLost   = { if(form.getIDGrupo().text != "") Thread.start { form.setTxtIDGrupoDes((serv.getGrupo(form.getIDGrupo().text))?.descripcion?:"")}  }
                 serv.desconectar()
             }
             try { form.setSelected(true) } catch(Exception e)
@@ -343,7 +347,9 @@ public class Articulos
                 //Al presionar F1: (lanzarCatalogoDialogo)
                 def serv        = Nadesico.conectar()
                 formArticulo.getCampoID()   .keyReleased = { if(it.keyCode == it.VK_F1) Thread.start {formArticulo.txtIDLinea= Lineas.lanzarCatalogoDialogo() as String; formArticulo.getIDLinea().requestFocus();formArticulo.setTxtIDLineaDes((serv.getLinea(formArticulo.getIDLinea().text)).descripcion)}  }
+                formArticulo.getCampoID()   .focusLost   = { if(formArticulo.getCampoID().text != "") Thread.start { formArticulo.setTxtIDLineaDes((serv.getLinea(formArticulo.getIDLinea().text))?.descripcion?:"")} }
                 formArticulo.getCampoGrupo().keyReleased = { if(it.keyCode == it.VK_F1) Thread.start {formArticulo.txtIDGrupo= Grupos.lanzarCatalogoDialogo() as String; formArticulo.getIDGrupo().requestFocus();formArticulo.setTxtIDGrupoDes((serv.getGrupo(formArticulo.getIDGrupo().text)).descripcion)}  }
+                formArticulo.getCampoGrupo().focusLost   = { if(formArticulo.getIDGrupo().text != "") Thread.start { formArticulo.setTxtIDGrupoDes((serv.getGrupo(formArticulo.getIDGrupo().text))?.descripcion?:"")}  }
                 serv.desconectar()
          }
         formArticulo.setModoModificar();
@@ -366,7 +372,11 @@ public class Articulos
                 Herramientas.verificaCampo(c.cos,Herramientas.numeroReal,"costos"+Herramientas.error3)
                 Herramientas.verificaCampo(c.dto,Herramientas.numeroReal,"descuento"+Herramientas.error3)
                 Herramientas.verificaCampo(c.uti,Herramientas.numeroReal,"utilidad"+Herramientas.error3)
+
                 def serv = Nadesico.conectar()
+                if(!serv.getLinea(c.lin)) throw new Exception("Campo ID Línea inválida")
+                if(!serv.getGrupo(c.gru)) throw new Exception("Campo ID Grupo inválida")
+
                 Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin,c.gru, c.des, c.uni, c.imp, c.cos, c.uti, c.dto))
                 serv.modAnotacion(IDAlmacen, c.art, c.notas)
                 serv.desconectar()

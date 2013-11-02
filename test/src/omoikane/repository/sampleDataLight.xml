@@ -3,7 +3,7 @@
   <articulos id_articulo="1"     codigo="Pr1"           id_linea="1" descripcion="Paquete promocional de pruebas" unidad="KIT" impuestos="0.0" uModificacion="2013-02-16 19:10:36.0" version="0" id_grupo="1" esPaquete="1"/>
   <articulos id_articulo="22941" codigo="7500074009853" id_linea="1" descripcion="RANCHO SAN NICOLAS LECHE 1LT" unidad="PZA" impuestos="0.0" uModificacion="2012-11-14 16:25:36.0" version="0" id_grupo="1"/>
   <articulos id_articulo="22940" codigo="7503017809008" id_linea="1" descripcion="SAMEYRO SALSA HABANERA 160ML" unidad="PZA" impuestos="0.0" uModificacion="2012-11-13 12:38:19.0" version="1" id_grupo="1"/>
-  <articulos id_articulo="22939" codigo="7503017809039" id_linea="1" descripcion="SAMEYRO SALSA ESPECIAL 160ML" unidad="PZA" impuestos="0.0" uModificacion="2012-11-13 12:35:05.0" version="0" id_grupo="1"/>
+  <articulos id_articulo="22939" codigo="3258561060026" id_linea="1" descripcion="Belle France, Chocolat noir" unidad="PZA" impuestos="0.0" uModificacion="2012-11-13 12:35:05.0" version="0" id_grupo="1"/>
   <articulos id_articulo="22938" codigo="7501067725071" id_linea="1" descripcion="MAIZORO CEREAL AZUCARADO 875 GR" unidad="PZA" impuestos="0.0" uModificacion="2012-11-02 11:19:27.0" version="0" id_grupo="1"/>
   <articulos id_articulo="22937" codigo="7501059238305" id_linea="1" descripcion="NESTLE SVELTY FIGURA 0 FRESA 225 GR" unidad="PZA" impuestos="0.0" uModificacion="2012-10-30 12:57:31.0" version="0" id_grupo="1"/>
   <articulos id_articulo="22936" codigo="7501058770110" id_linea="1" descripcion="EASY OFF 238GR" unidad="PZA" impuestos="16.0" uModificacion="2012-10-21 12:15:43.0" version="0" id_grupo="1"/>

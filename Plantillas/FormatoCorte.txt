@@ -37,4 +37,10 @@ ${n_ventas} Tickets
 
 ${folios} 
 
+-------------- Detalles ---------------
+--------- Movimientos de Caja ----------
+<% movsCaja?.each { d -> %>${String.format("%6.6s - %22.22s%,9.02f", d.tipo, d.concepto, d.importe)}
+<% } %>
+
+
 ${""+ (27 as char)+(100 as char)+(8 as char)}

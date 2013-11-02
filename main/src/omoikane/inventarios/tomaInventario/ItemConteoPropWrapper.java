@@ -1,13 +1,12 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.adapter.JavaBeanObjectProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringProperty;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import omoikane.producto.Articulo;
 
 import java.math.BigDecimal;
 
@@ -23,6 +22,9 @@ public class ItemConteoPropWrapper {
     private JavaBeanStringProperty codigo;
     private JavaBeanStringProperty nombre;
     private JavaBeanObjectProperty<BigDecimal> conteo;
+    private JavaBeanObjectProperty<Articulo> articulo;
+    private JavaBeanObjectProperty<BigDecimal> stockDB;
+    private JavaBeanObjectProperty<BigDecimal> diferencia;
 
     private ItemConteoInventario _itemConteo;
     final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ItemConteoPropWrapper.class);
@@ -45,6 +47,21 @@ public class ItemConteoPropWrapper {
             builder1.bean(itemConteo);
             builder1.name("conteo");
             conteo = builder1.build();
+
+            builder1 = JavaBeanObjectPropertyBuilder.create();
+            builder1.bean(itemConteo);
+            builder1.name("stockDB");
+            stockDB = builder1.build();
+
+            builder1 = JavaBeanObjectPropertyBuilder.create();
+            builder1.bean(itemConteo);
+            builder1.name("diferencia");
+            diferencia = builder1.build();
+
+            JavaBeanObjectPropertyBuilder<Articulo> builder2 = JavaBeanObjectPropertyBuilder.create();
+            builder2.bean(itemConteo);
+            builder2.name("articulo");
+            articulo = builder2.build();
         } catch (NoSuchMethodException e) {
             logger.error("Invalid method to wrap", e);
         }
@@ -76,6 +93,30 @@ public class ItemConteoPropWrapper {
 
     public void setConteo(BigDecimal conteo) {
         this.conteo.set(conteo);
+    }
+
+    public ObjectProperty<BigDecimal> stockDBProperty() {
+        return stockDB;
+    }
+
+    public void setStockDB(BigDecimal stockDB) {
+        this.stockDB.set( stockDB );
+    }
+
+    public ObjectProperty<BigDecimal> diferenciaProperty() {
+        return diferencia;
+    }
+
+    public void setDiferencia(BigDecimal diferencia) {
+        this.diferencia.set( diferencia );
+    }
+
+    public ObjectProperty<Articulo> articuloProperty() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo.set(articulo);
     }
 
 }

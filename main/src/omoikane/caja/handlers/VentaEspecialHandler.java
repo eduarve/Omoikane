@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
+import omoikane.nadesicoiLegacy.Ventas;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 
@@ -52,6 +53,10 @@ public class VentaEspecialHandler extends ICajaEventHandler {
     public void modoEspecial() {
         try {
             if(Usuarios.autentifica(Usuarios.GERENTE)) {
+                Integer idVenta       = getController().getVentaAbiertaBean().getId().intValue();
+                Integer idAutorizador = Usuarios.getIDUltimoAutorizado();
+
+                Ventas.addVentaEspecialLegacy(idVenta, idAutorizador);
                 getController().getVentaTableView().setEditable(true);
                 getController().setCapturaPaneDisable(true);
                 getController().setMainToolBarDisable(true);

@@ -1,4 +1,4 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import javafx.beans.property.adapter.*;
 import javafx.collections.FXCollections;
@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import omoikane.entities.Usuario;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

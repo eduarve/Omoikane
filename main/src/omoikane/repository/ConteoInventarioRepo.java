@@ -1,6 +1,6 @@
 package omoikane.repository;
 
-import omoikane.inventarios.ConteoInventario;
+import omoikane.inventarios.tomaInventario.ConteoInventario;
 import org.synyx.hades.dao.GenericDao;
 
 /**

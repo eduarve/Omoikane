@@ -49,11 +49,11 @@ class Reporte {
         }
     }
 
-    Reporte(String reporteJasper,java.util.List matriz)
+    Reporte(String reporteJasper,java.util.List matriz, Map params = [:])
     {
         try {
             def stream = cargarYCompilarJXML(reporteJasper)
-            jp = JasperFillManager.fillReport(stream, new java.util.HashMap(), new JRMapCollectionDataSource(matriz))
+            jp = JasperFillManager.fillReport(stream, params, new JRMapCollectionDataSource(matriz))
         } catch(Exception e) {
             logger.error("Error leyendo plantilla de reporte", e);
         }

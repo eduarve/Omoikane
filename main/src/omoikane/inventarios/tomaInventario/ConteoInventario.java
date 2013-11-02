@@ -1,11 +1,10 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import omoikane.entities.Usuario;
 import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 

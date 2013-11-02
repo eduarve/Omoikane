@@ -26,10 +26,12 @@ public class Error extends javax.swing.JDialog {
     public Error(javax.swing.JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
-        this.getRootPane().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER , 0), "cerrar");
-        this.getRootPane().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cerrar");
-        this.getRootPane().getActionMap().put("cerrar" , new adminAcciones(this));
+        MyKeyAdapter myKeyAdapter = new MyKeyAdapter();
+        this.getRootPane().addKeyListener(myKeyAdapter);
+        this.jButton1.addKeyListener(myKeyAdapter);
+        this.jScrollPane1.addKeyListener(myKeyAdapter);
+        this.jTabbedPane1.addKeyListener(myKeyAdapter);
+        this.txtDetalles.addKeyListener(myKeyAdapter);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension labelSize = this.getPreferredSize();
@@ -38,19 +40,14 @@ public class Error extends javax.swing.JDialog {
         setTitle("Upsss... Error");
     }
 
-    class adminAcciones extends javax.swing.AbstractAction
-    {
-        JDialog dialogo;
-        adminAcciones(JDialog dialogo)
-        {
-            this.dialogo = dialogo;
-        }
-        public void actionPerformed(ActionEvent ae)
-        {
-            this.dialogo.dispose();
+    private class MyKeyAdapter extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if(e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_ESCAPE
+                    || e.getKeyCode() == KeyEvent.VK_SPACE)
+                Error.this.dispose();
         }
     }
-
 
     /** This method is called from within the constructor to
      * initialize the form.

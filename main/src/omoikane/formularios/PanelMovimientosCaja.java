@@ -72,15 +72,18 @@ public class PanelMovimientosCaja extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtImporte = new javax.swing.JTextField();
+        txtConcepto = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
         btnRetiro = new javax.swing.JButton();
         btnDeposito = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        txtImporte = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JSeparator();
 
         jLabel1.setText("jLabel1");
 
         setMinimumSize(new java.awt.Dimension(409, 329));
-        setNextFocusableComponent(txtImporte);
+        setNextFocusableComponent(txtConcepto);
         setOpaque(false);
         setLayout(null);
 
@@ -149,9 +152,39 @@ public class PanelMovimientosCaja extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Importe:");
+        jLabel8.setText("Concepto:");
         add(jLabel8);
-        jLabel8.setBounds(40, 180, 60, 30);
+        jLabel8.setBounds(20, 230, 70, 30);
+
+        txtConcepto.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        txtConcepto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtConceptoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtConceptoFocusLost(evt);
+            }
+        });
+        add(txtConcepto);
+        txtConcepto.setBounds(90, 230, 170, 30);
+        add(jSeparator2);
+        jSeparator2.setBounds(10, 270, 380, 10);
+
+        btnRetiro.setText("Retiro [F6]");
+        btnRetiro.setFocusable(false);
+        add(btnRetiro);
+        btnRetiro.setBounds(260, 230, 130, 30);
+
+        btnDeposito.setText("Depósito [F5]");
+        btnDeposito.setFocusable(false);
+        add(btnDeposito);
+        btnDeposito.setBounds(260, 190, 130, 30);
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Importe:");
+        add(jLabel9);
+        jLabel9.setBounds(20, 190, 60, 30);
 
         txtImporte.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         txtImporte.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -163,29 +196,27 @@ public class PanelMovimientosCaja extends javax.swing.JPanel {
             }
         });
         add(txtImporte);
-        txtImporte.setBounds(40, 210, 170, 30);
-        add(jSeparator2);
-        jSeparator2.setBounds(10, 170, 380, 10);
-
-        btnRetiro.setText("Retiro [F6]");
-        btnRetiro.setFocusable(false);
-        add(btnRetiro);
-        btnRetiro.setBounds(230, 223, 130, 30);
-
-        btnDeposito.setText("Depósito [F5]");
-        btnDeposito.setFocusable(false);
-        add(btnDeposito);
-        btnDeposito.setBounds(230, 183, 130, 30);
+        txtImporte.setBounds(90, 190, 170, 30);
+        add(jSeparator3);
+        jSeparator3.setBounds(10, 170, 380, 10);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtConceptoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConceptoFocusGained
+        // TODO add your handling code here:
+        evt.getComponent().setBackground(new Color(150,150,255));
+    }//GEN-LAST:event_txtConceptoFocusGained
+
+    private void txtConceptoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConceptoFocusLost
+        // TODO add your handling code here:
+        evt.getComponent().setBackground(null);
+    }//GEN-LAST:event_txtConceptoFocusLost
 
     private void txtImporteFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImporteFocusGained
         // TODO add your handling code here:
-        evt.getComponent().setBackground(new Color(150,150,255));
     }//GEN-LAST:event_txtImporteFocusGained
 
     private void txtImporteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImporteFocusLost
         // TODO add your handling code here:
-        evt.getComponent().setBackground(null);
     }//GEN-LAST:event_txtImporteFocusLost
 
 
@@ -201,8 +232,11 @@ public class PanelMovimientosCaja extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField txtConcepto;
     private javax.swing.JTextField txtDepositos;
     private javax.swing.JTextField txtImporte;
     private javax.swing.JTextField txtNVentas;

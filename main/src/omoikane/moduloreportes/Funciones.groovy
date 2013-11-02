@@ -9,6 +9,16 @@ import omoikane.sistema.huellas.UserIdentifierOneTouch;
 
 class Funciones {
     public static Logger logger = Logger.getLogger(Funciones.class);
+
+    static def lanzarVentaXProducto(form) //lanza el formulario de ventas por lineas
+    {
+        form.panelReportes.removeAll();
+        VentasXProductoController controller = new VentasXProductoController();
+        def vxp = controller.getView();
+        form.panelReportes.add(vxp);
+        form.panelReportes.updateUI();
+    }
+
     static def lanzarVentaXLineas(form) //lanza el formulario de ventas por lineas
     {
         form.panelReportes.removeAll();

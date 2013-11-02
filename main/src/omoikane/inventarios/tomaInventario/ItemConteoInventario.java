@@ -1,9 +1,10 @@
-package omoikane.inventarios;
+package omoikane.inventarios.tomaInventario;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import omoikane.producto.Articulo;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,6 +22,10 @@ public class ItemConteoInventario {
     private String codigo;
     private String nombre;
     private BigDecimal conteo;
+    private BigDecimal stockDB;
+    private BigDecimal diferencia;
+
+    private Articulo articulo;
 
     public ItemConteoInventario() {
         this("", "", new BigDecimal("0.00"));
@@ -57,5 +62,32 @@ public class ItemConteoInventario {
 
     public void setConteo(BigDecimal conteo) {
         this.conteo = conteo;
+    }
+
+    @Column
+    public BigDecimal getStockDB() {
+        return stockDB;
+    }
+
+    public void setStockDB(BigDecimal stockDB) {
+        this.stockDB = stockDB;
+    }
+
+    @Column
+    public BigDecimal getDiferencia() {
+        return diferencia;
+    }
+
+    public void setDiferencia(BigDecimal diferencia) {
+        this.diferencia = diferencia;
+    }
+
+    @ManyToOne
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
     }
 }

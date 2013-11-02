@@ -4,8 +4,6 @@
  */
 package omoikane.entities;
 
-import omoikane.inventarios.ItemConteoInventario;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**

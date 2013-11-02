@@ -2,6 +2,10 @@ package omoikane.repository;
 
 import omoikane.entities.LegacyVenta;
 import org.synyx.hades.dao.GenericDao;
+import org.synyx.hades.dao.Query;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,4 +16,7 @@ import org.synyx.hades.dao.GenericDao;
  */
 public interface VentaRepo extends GenericDao<LegacyVenta, Integer> {
     LegacyVenta findByIdCajaAndCompletada(int idCaja, Boolean completada);
+
+    @Query("SELECT new map(V.fechaHora as dia, SUM(VD.cantidad) as cantidad, SUM(VD.total) as importe) FROM LegacyVenta as V, LegacyVentaDetalle VD WHERE date(V.fechaHora) >= ?1 AND date(V.fechaHora) <= ?2 AND VD.idArticulo = ?3 GROUP BY day(V.fechaHora)")
+    List sumVentasOfArticuloByDay(Date desde, Date hasta, Integer idArticulo);
 }

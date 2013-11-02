@@ -72,7 +72,7 @@ class CorteDual {
     }
 
     static def addCorteDual = { IDCaja, IDAlmacen, subtotal,subtotalDual, impuestos,impuestoDual, descuentos,descuentoDual,total, totalDual, nVentas, desde, hasta , depositos , retiros ->
-        def db
+        Sql db;
         try {
             db = Db.connect()
             try {

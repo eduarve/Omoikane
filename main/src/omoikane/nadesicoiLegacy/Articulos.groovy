@@ -103,14 +103,14 @@ class ArticulosFunciones {
                 db.rollback()
                 if(e.message.contains("Duplicate entry")) { return "El artículo que intenta capturar ya exíste o hay un producto con el mismo código" }
                 println "[Excepcion:$e]"
-                Consola.error("Error al enviar a la base de datos. El artículo no se registró", e)
-                throw new Exception("Error al enviar a la base de datos. El artículo no se registró.")
+                //Consola.error("Error al enviar a la base de datos. El artículo no se registró", e)
+                throw new Exception("Error al enviar a la base de datos. El artículo no se registró.", e)
             } finally {
                 db.close()
             }
         } catch(e) {
-            Consola.error("Error en la conexión del servidor con su base de datos", e)
-            throw new Exception("Error en la conexión del servidor con su base de datos")
+            //Consola.error("Error en la conexión del servidor con su base de datos", e)
+            throw new Exception("Error en la conexión del servidor con su base de datos", e)
         }
     }
     static def modArticulo = { IDAlmacen, IDArticulo, codigo, IDLinea, IDGrupo, descripcion, unidad, impuestos, costo, utilidad, descuento ->

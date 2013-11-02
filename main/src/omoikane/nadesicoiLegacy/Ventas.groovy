@@ -42,17 +42,18 @@ class Ventas {
             def db     = Db.connect()
             def ventas = db.firstRow("""SELECT count(id_venta) as nVentas, sum(subtotal) as subtotal, sum(impuestos) as impuestos,
                                     sum(descuento) as descuento, sum(total) as total FROM ventas WHERE id_caja = ?
-                                    AND fecha_hora >= ? AND fecha_hora <= ?""", [IDCaja, desde, hasta])
+                                    AND fecha_hora >= ? AND fecha_hora <= ? AND completada = 1""", [IDCaja, desde, hasta])
             def depos  = db.firstRow("""SELECT sum(importe) as total FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?
                                 AND tipo = 'deposito'""",[IDCaja, desde, hasta])
             def retiros= db.firstRow("""SELECT sum(importe) as total FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?
                                 AND tipo = 'retiro'""",[IDCaja, desde, hasta])
             ventas.depositos = depos.total!=null?depos.total:0.0
             ventas.retiros   = retiros.total!=null?retiros.total:0.0
-            if(ventas.total == null) { ventas = 0 }
+            if(ventas == null) { ventas.total = 0; ventas.nVentas = 0; ventas.impuestos = 0; ventas.subtotal = 0; ventas.descuento = 0; }
+
             salida = ventas
             
-        } catch(e) { Consola.error("[Error: ${e.message}]",e); throw new Exception("Error al consultar la suma de ventas")}
+        } catch(e) { throw new Exception("Error al consultar la suma de ventas", e)}
         salida
     }
     static def getVenta = { ID ,IDAlmacen->
@@ -82,10 +83,13 @@ class Ventas {
             Venta.tabMatriz = tabMatriz
             Venta.detalles  = detalles
             salida = Venta
-        } catch(e) { Consola.error("[Error: ${e.message}]",e); throw new Exception("Error al consultar la venta")}
+        } catch(e) { throw new Exception("Error al consultar la venta", e)}
         salida
     }
-
+    @Deprecated
+    static void addVentaEspecialLegacy(Integer IDVenta, Integer IDAutorizador) {
+        addVentaEspecial(IDVenta, IDAutorizador);
+    }
     static def addVentaEspecial={IDVenta,IDAutorizador->
         def db
         try {
@@ -99,12 +103,12 @@ class Ventas {
             } catch(Exception e) {
                 db.rollback()
                 if(e.message.contains("Duplicate entry")) { return "La Venta Especial que intenta capturar ya exíste" }
-                println "[Excepcion:$e]"
-                throw new Exception("Error al enviar a la base de datos. La Venta Especial no se registró.")
+
+                throw new Exception("Error al enviar a la base de datos. La Venta Especial no se registró.", e)
             } finally {
                 db.close()
             }
-        } catch(e) { throw new Exception("Error al registrar venta especial") }
+        } catch(e) { throw new Exception("Error al registrar venta especial", e) }
 
     }
 
@@ -118,8 +122,8 @@ class Ventas {
           return "datos de facturacion modificados existosamente"
         } catch(Exception e) {
             db.rollback()
-            Consola.error("Excepcion al modificar los datos de facturacion para ventas",e)
-            throw new Exception ("Error al modificar los datos de facturacion para ventas")
+
+            throw new Exception ("Error al modificar los datos de facturacion para ventas", e)
         } finally {
             db.close()
         }
