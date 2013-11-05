@@ -70,7 +70,7 @@ public class CatalogoSucursal extends javax.swing.JInternalFrame {
         //jTable1.enableInputMethods(false);
         this.modelo = modeloTabla;
         this.jTable1.setModel(modeloTabla);
-        setQueryTable("SELECT cs.id_corte AS id, cs.creacion AS fecha " +
+        setQueryTable("SELECT cs.id_corte, cs.id_corte AS id, cs.creacion AS fecha " +
                 "FROM cortes_sucursal cs " +
                 "ORDER BY creacion DESC");
 
@@ -334,7 +334,7 @@ public class CatalogoSucursal extends javax.swing.JInternalFrame {
             Dialogos.lanzarAlerta("Ningúna fila ha sido seleccionada.");
         } else {
             //++++++++++++++++++++++++++++
-            id = (Integer)this.jTable1.getValueAt(sel, -1);
+            id = ((Long)this.jTable1.getValueAt(sel, -1)).intValue();
             //Lanzar ventana y agregarle un listener
             omoikane.principal.Cortes.lanzarDetallesCorteSucursal(IDAlmacen, id);
         }
@@ -461,12 +461,13 @@ public class CatalogoSucursal extends javax.swing.JInternalFrame {
 
 class SucursalTableModel extends ScrollableTableModel {
 SucursalTableModel(java.util.List ColNames,ArrayList ColClasses){super((ArrayList)ColNames,ColClasses);}
-public Object getValueAt(int row,int col){    if(col==0)
+public Object getValueAt(int row,int col){
+    if(col==1)
     {
     SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy '@' hh:mm a");
     return sdf.format((java.util.Date) super.getValueAt(row, col));}
     else
     {
-        return super.getValueAt(row,col-1);
+        return super.getValueAt(row,col);
     }
 }}

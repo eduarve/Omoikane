@@ -71,6 +71,6 @@
         </children>
       </HBox>
     </AnchorPane>
-    <CheckBox id="chkInactivos" fx:id="chkIncluirInactivos" allowIndeterminate="false" indeterminate="false" mnemonicParsing="false" onAction="#mostrarInactivosAction" text="Incluir cuentas liquidadas" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+    <CheckBox id="chkInactivos" fx:id="chkIncluirInactivos" layoutX="14.0" layoutY="480.0" mnemonicParsing="false" onAction="#mostrarInactivosAction" text="Incluir cuentas liquidadas" />
   </children>
 </AnchorPane>

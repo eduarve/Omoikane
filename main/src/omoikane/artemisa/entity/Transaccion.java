@@ -88,4 +88,8 @@ public class Transaccion {
     public void setAbono(BigDecimal abono) {
         this.abono = abono;
     }
+
+    public String getPacienteNombre() {
+        return paciente.getNombre();
+    }
 }

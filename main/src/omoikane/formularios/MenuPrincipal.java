@@ -20,6 +20,7 @@ import java.awt.event.*;
 import omoikane.caja.CajaManager;
 import omoikane.configuracion.ConfiguratorAppManager;
 import omoikane.etiquetas.ImpresionEtiquetasManager;
+import omoikane.inventarios.tomaInventario.ConteoInventarioManager;
 import omoikane.mepro.Mepro;
 import omoikane.moduloreportes.MenuOmoikane;
 import omoikane.proveedores.ProveedoresManager;
@@ -88,13 +89,14 @@ public class MenuPrincipal extends OmJInternalFrame {
         btnMepro = new javax.swing.JButton();
         btnCortes = new javax.swing.JButton();
         btnArticulos = new javax.swing.JButton();
-        btnProveedores = new javax.swing.JButton();
+        btnTomaInventarios = new javax.swing.JButton();
         btnGrupos = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
         btnDetallesVentas = new javax.swing.JButton();
         btnEtiquetas = new javax.swing.JButton();
         lblVersion = new javax.swing.JLabel();
         btnReportes = new javax.swing.JButton();
+        btnProveedores = new javax.swing.JButton();
 
         setIconifiable(true);
         setTitle("Menú Principal");
@@ -144,7 +146,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnCajasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 200, 70));
+        getContentPane().add(btnCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 110, 200, 70));
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 840, 10));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -262,15 +264,15 @@ public class MenuPrincipal extends OmJInternalFrame {
         });
         getContentPane().add(btnArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 210, 70));
 
-        btnProveedores.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnProveedores.setText("Proveedores");
-        btnProveedores.setIconTextGap(-5);
-        btnProveedores.addActionListener(new java.awt.event.ActionListener() {
+        btnTomaInventarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnTomaInventarios.setText("Toma de Inventarios");
+        btnTomaInventarios.setIconTextGap(-5);
+        btnTomaInventarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProveedoresActionPerformed(evt);
+                btnTomaInventariosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 310, 200, 70));
+        getContentPane().add(btnTomaInventarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 200, 70));
 
         btnGrupos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnGrupos.setText("Grupos");
@@ -303,7 +305,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         getContentPane().add(btnEtiquetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 210, 200, 70));
 
         lblVersion.setForeground(new java.awt.Color(255, 255, 255));
-        lblVersion.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 10px; }</style></head> <body> Versi�n </span></body></html>");
+        lblVersion.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 10px; }</style></head> <body> Versión </span></body></html>");
         getContentPane().add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 490, 140, 20));
 
         btnReportes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -316,6 +318,16 @@ public class MenuPrincipal extends OmJInternalFrame {
             }
         });
         getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 410, 200, 70));
+
+        btnProveedores.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnProveedores.setText("Proveedores");
+        btnProveedores.setIconTextGap(-5);
+        btnProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProveedoresActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 310, 200, 70));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -370,11 +382,11 @@ public class MenuPrincipal extends OmJInternalFrame {
         System.out.println(timer.getElapsedTime());
 }//GEN-LAST:event_btnArticulosActionPerformed
 
-    private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
+    private void btnTomaInventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventariosActionPerformed
 
-        ProveedoresManager pm = new ProveedoresManager();
-        JInternalFrame frame = pm.startJFXProveedores();
-}//GEN-LAST:event_btnProveedoresActionPerformed
+        omoikane.inventarios.tomaInventario.ConteoInventarioManager pm = new ConteoInventarioManager();
+        JInternalFrame frame = pm.startJFXTomaInventario();
+}//GEN-LAST:event_btnTomaInventariosActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         omoikane.principal.Usuarios.lanzarCatalogo();
@@ -407,6 +419,11 @@ public class MenuPrincipal extends OmJInternalFrame {
         menuOmoikane.launch();
     }//GEN-LAST:event_btnReportesActionPerformed
 
+    private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
+        ProveedoresManager pm = new ProveedoresManager();
+        JInternalFrame frame = pm.startJFXProveedores();
+    }//GEN-LAST:event_btnProveedoresActionPerformed
+
 
     private void btnEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
@@ -424,22 +441,23 @@ public class MenuPrincipal extends OmJInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlmacenes;
-    private javax.swing.JButton btnArticulos;
-    private javax.swing.JButton btnCajas;
-    private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnCortes;
-    private javax.swing.JButton btnDetallesVentas;
-    private javax.swing.JButton btnEtiquetas;
-    private javax.swing.JButton btnGrupos;
-    private javax.swing.JButton btnLineas;
+    public javax.swing.JButton btnAlmacenes;
+    public javax.swing.JButton btnArticulos;
+    public javax.swing.JButton btnCajas;
+    public javax.swing.JButton btnCerrar;
+    public javax.swing.JButton btnCortes;
+    public javax.swing.JButton btnDetallesVentas;
+    public javax.swing.JButton btnEtiquetas;
+    public javax.swing.JButton btnGrupos;
+    public javax.swing.JButton btnLineas;
     public javax.swing.JButton btnMepro;
-    private javax.swing.JButton btnMovAlmacen;
-    private javax.swing.JButton btnPreferencias;
-    private javax.swing.JButton btnProveedores;
+    public javax.swing.JButton btnMovAlmacen;
+    public javax.swing.JButton btnPreferencias;
+    public javax.swing.JButton btnProveedores;
     public javax.swing.JButton btnReportes;
-    private javax.swing.JButton btnUsuarios;
-    private javax.swing.JButton btnVender;
+    public javax.swing.JButton btnTomaInventarios;
+    public javax.swing.JButton btnUsuarios;
+    public javax.swing.JButton btnVender;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

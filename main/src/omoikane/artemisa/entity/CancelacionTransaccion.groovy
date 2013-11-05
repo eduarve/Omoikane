@@ -45,4 +45,8 @@ class CancelacionTransaccion {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
+    public String getPacienteNombre() {
+        return paciente.getNombre();
+    }
 }

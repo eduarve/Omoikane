@@ -32,6 +32,7 @@
     <bean id="comprobantes" class="omoikane.sistema.Comprobantes"></bean>
     <bean id="paqueteController" class="omoikane.producto.PaqueteController"></bean>
     <bean id="codigoProducto" class="omoikane.entities.CodigoProducto"></bean>
+    <bean id="catalogoArticulosHandler" class="omoikane.moduloreportes.CatalogoArticulosHandler"></bean>
 
     <bean id="/SpringAnnotatedConfig" class="omoikane.sistema.SpringAnnotatedConfig"></bean>
     <bean id="properties" class="java.util.HashMap"></bean>

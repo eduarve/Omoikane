@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -102,6 +103,8 @@ public class CajaClinicaController
     @FXML
     private Label saldoTxt;
 
+    @FXML CheckBox chkIncluirInactivos;
+
     @FXML //  fx:id="panelEstadoDeCuenta"
     private AnchorPane panelEstadoDeCuenta; // Value injected by FXMLLoader
 
@@ -161,11 +164,24 @@ public class CajaClinicaController
 
         tabEdoCuenta.getColumns().add(actionCol);
         //*************************************************************
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                pacientesList.requestFocus();
+            }
+        });
+    }
+
+    @FXML
+    private void mostrarInactivosAction(ActionEvent event) {
+        resetPacienteListData();
     }
 
     private void resetPacienteListData() {
+        Boolean soloActivos = chkIncluirInactivos.isSelected();
         pacientesList.getSelectionModel().clearSelection();
-        List<Paciente> pacienteList = pacienteRepo.findAllActive();
+        List<Paciente> pacienteList = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%%");
         ObservableList<Paciente> pacienteObservableList = FXCollections.observableList(pacienteList);
         pacientesList.setItems(pacienteObservableList);
     }

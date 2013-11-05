@@ -26,8 +26,8 @@
     </TableView>
     <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <Button mnemonicParsing="false" text="Exportar a terminales" />
-        <Button fx:id="importarButton" mnemonicParsing="false" text="Importar desde terminal" />
+        <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" />
+        <Button fx:id="importarButton" mnemonicParsing="false" onAction="#onImportarAction" text="Importar desde terminal" />
         <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Aplicar inventario" />
         <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
         <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />

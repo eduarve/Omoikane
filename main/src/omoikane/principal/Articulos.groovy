@@ -3,6 +3,7 @@ package omoikane.principal
 import omoikane.formularios.OmJInternalFrame
 import omoikane.inventarios.Stock
 import omoikane.inventarios.StockLevelsController
+import omoikane.moduloreportes.CatalogoArticulosHandler
 import omoikane.principal.*
 import omoikane.producto.CodigosController
 import omoikane.producto.PaqueteController
@@ -118,8 +119,10 @@ public class Articulos
 
     static def lanzarImprimir(form)
     {
-        def reporte = new Reporte('omoikane/reportes/ArticulosTodos.jasper',[txtQuery:form.txtQuery]);
-        reporte.lanzarPreview()
+        //def reporte = new Reporte('omoikane/reportes/ArticulosTodos.jasper',[txtQuery:form.txtQuery]);
+        //reporte.lanzarPreview()
+        CatalogoArticulosHandler articulosHandler = Principal.applicationContext.getBean( CatalogoArticulosHandler );
+        articulosHandler.handle();
     }
 
     static def eliminarArticulo(ID)

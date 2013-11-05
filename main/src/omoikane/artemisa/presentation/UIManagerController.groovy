@@ -1,5 +1,6 @@
 package omoikane.artemisa.presentation
 
+import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
 import javafx.event.EventHandler
 import javafx.scene.control.Hyperlink
@@ -102,6 +103,7 @@ public class UIManagerController
         contentPane.getChildren().addAll(parent, dummyButton);
         contentPane.getChildren().remove(dummyButton);
         parent.setVisible(true);
+
     }
 
 }

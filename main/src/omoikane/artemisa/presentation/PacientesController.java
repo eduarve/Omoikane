@@ -1,5 +1,6 @@
 package omoikane.artemisa.presentation;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -88,6 +89,12 @@ public class PacientesController implements Initializable {
 
 
         imprimirButton.disableProperty().bind(txtId.textProperty().isEqualTo(""));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                txtBuscar.requestFocus();
+            }
+        });
     }
 
     public void onImprimir(ActionEvent event) {

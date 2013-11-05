@@ -83,6 +83,13 @@ public class ConsumoController implements Initializable {
         productos = FXCollections.observableArrayList();
         productoList.setItems(productos);
         resetUI();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                pacienteField.requestFocus();
+            }
+        });
     }
 
     @FXML

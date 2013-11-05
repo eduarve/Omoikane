@@ -1,10 +1,12 @@
 package omoikane.artemisa.presentation;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import jfxtras.labs.scene.control.CalendarTextField;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
@@ -18,6 +20,7 @@ import omoikane.sistema.Permisos;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.text.DateFormat;
@@ -53,7 +56,12 @@ public class ReportesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                txDesde.requestFocus();
+            }
+        });
     }
 
     public void onTxGenerar(ActionEvent action) {
@@ -75,36 +83,45 @@ public class ReportesController implements Initializable {
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setFontSize(15);
 
-        try {
-            report()
-                    .columns(
-                            col.column("Fecha / Hora", "fecha", type.dateType()),
-                            col.column("Concepto", "concepto", type.stringType()),
-                            cargoColumn = col.column("Cargo", "cargo", type.bigDecimalType()),
-                            abonoColumn = col.column("Abono", "abono", type.bigDecimalType())
-                    )
-                    .setColumnTitleStyle(columnTitleStyle)
-                    .highlightDetailEvenRows()
-                    .title(
-                            cmp.horizontalList()
-                                    .add(
-                                            cmp.image(getClass().getResourceAsStream("/omoikane/Media2/icons/PNG/512/banknote.png")).setFixedDimension(80, 80),
-                                            cmp.text("Reporte de cargos y abonos").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
-                                            cmp.text("Hospital Ángel").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                                    .newRow()
-                                    .add(
-                                            cmp.text("Desde "+ DateFormat.getDateInstance().format( txDesde.getValue().getTime() ) + ", hasta " + DateFormat.getDateInstance().format( txHasta.getValue().getTime() )).setStyle(titleStyle))
-                                    .newRow()
-                                    .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))
-                    .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))
-                    .subtotalsAtSummary(
-                            sbt.sum(cargoColumn),
-                            sbt.sum(abonoColumn))
-                    .setDataSource(data)
-                    .show(false);
-        } catch (DRException e) {
-            logger.error("Error al imprimir", e);
-        }
+
+        final JasperReportBuilder report = report()
+                .columns(
+                        col.column("Fecha / Hora", "fecha", type.dateType()).setColumns(4),
+                        col.column("Concepto", "concepto", type.stringType()),
+                        col.column("Paciente", "pacienteNombre", type.stringType()),
+                        cargoColumn = col.column("Cargo", "cargo", type.bigDecimalType()).setColumns(4),
+                        abonoColumn = col.column("Abono", "abono", type.bigDecimalType()).setColumns(4)
+                )
+                .setColumnTitleStyle(columnTitleStyle)
+                .highlightDetailEvenRows()
+                .title(
+                        cmp.horizontalList()
+                                .add(
+                                        cmp.image(getClass().getResourceAsStream("/omoikane/Media2/icons/PNG/512/banknote.png")).setFixedDimension(80, 80),
+                                        cmp.text("Reporte de cargos y abonos").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                                        cmp.text("Hospital Ángel").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                                .newRow()
+                                .add(
+                                        cmp.text("Desde " + DateFormat.getDateInstance().format(txDesde.getValue().getTime()) + ", hasta " + DateFormat.getDateInstance().format(txHasta.getValue().getTime())).setStyle(titleStyle))
+                                .newRow()
+                                .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))
+                .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))
+                .subtotalsAtSummary(
+                        sbt.sum(cargoColumn),
+                        sbt.sum(abonoColumn))
+                .setDataSource(data);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    report.show(false);
+                } catch (DRException e) {
+                    logger.error("Error generando vista previa", e);
+                }
+            }
+        });
+
     }
 
     public void onCancGenerar(ActionEvent event) {
@@ -130,6 +147,7 @@ public class ReportesController implements Initializable {
                     .columns(
                             col.column("Fecha / Hora", "fecha", type.dateType()),
                             col.column("Concepto", "concepto", type.stringType()),
+                            col.column("Paciente", "pacienteNombre", type.stringType()),
                             cargoColumn = col.column("Importe", "importe", type.bigDecimalType())
                     )
                     .setColumnTitleStyle(columnTitleStyle)

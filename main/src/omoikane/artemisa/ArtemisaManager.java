@@ -25,13 +25,18 @@ public class ArtemisaManager extends Application {
     final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ArtemisaManager.class);
 
     public static void main(String[] args) throws Exception {
-
+        initAWT(); //Necesario para utilizar swing en mac con javafx y java 1.7_u<45 por algún bug
         omoikane.principal.Principal.configExceptions();
         omoikane.principal.Principal.setConfig( new omoikane.sistema.Config() );
         omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-artemisa.xml");
         //Usuarios.identificaPersona();
 
         Application.launch(ArtemisaManager.class);
+    }
+
+    private static void initAWT() {
+        System.setProperty("javafx.macosx.embedded", "true");
+        java.awt.Toolkit.getDefaultToolkit();
     }
 
     @Override

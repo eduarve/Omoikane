@@ -26,6 +26,7 @@ import omoikane.inventarios.Stock;
 import omoikane.producto.Articulo;
 import omoikane.repository.ConteoInventarioRepo;
 import omoikane.repository.ProductoRepo;
+import omoikane.sistema.Permisos;
 import omoikane.sistema.TextFieldTableCell;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +171,8 @@ public class TomaInventarioController implements Initializable {
 
     @Transactional
     private void aplicarInventarioToModel() {
+        if(!omoikane.sistema.Usuarios.cerrojo(Permisos.getPMA_APLICARINVENTARIO())){ logger.info("Acceso Denegado"); return; }
+
         for (ItemConteoPropWrapper itemConteoPropWrapper : modelo.getItems()) {
             Articulo a        = itemConteoPropWrapper.articuloProperty().get();
             Articulo articulo = productoRepo.findByIdIncludeStock(a.getIdArticulo());
