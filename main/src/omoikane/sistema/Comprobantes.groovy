@@ -94,11 +94,12 @@ import groovy.inspect.swingui.*
         def serv = new Nadesico().conectar()
         Sql db = Db.connect();
         try {
-            data         = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
-            data.movsCaja  = db.rows("SELECT tipo, concepto, importe FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?",[data.id_caja, data.desde, data.hasta])
-            data.caja    = serv.getCaja(data.id_caja)
-            data.leyenda= "C O R T E   D E   C A J A"
-            generado     = generarCorte(ID)
+            data             = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
+            data.movsCaja    = db.rows("SELECT tipo, concepto, importe FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?",[data.id_caja, data.desde, data.hasta])
+            data.caja        = serv.getCaja(data.id_caja)
+            data.leyenda     = "C O R T E   D E   C A J A"
+            data.isCorteCaja = true
+            generado         = generarCorte(ID)
         } catch(e) {
             throw e
         } finally {
@@ -125,7 +126,7 @@ import groovy.inspect.swingui.*
             data.descripcion = "CORTE DEL DIA"
             data.leyenda= "C O R T E   D E   S U C U R S A L"
             this.data = data
-            
+            data.isCorteCaja = false
             generado = generarCorteSucursal()
 
         } catch(Exception e) {

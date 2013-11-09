@@ -36,7 +36,7 @@ WHERE
 				<textElement textAlignment="Center">
 					<font size="26" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Reporte Articulos por Línea]]></text>
+				<text><![CDATA[Reporte Artículos por Línea]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -83,9 +83,7 @@ WHERE
 					<subreportParameterExpression><![CDATA[$F{lineas_id_linea}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-                <subreportExpression class="net.sf.jasperreports.engine.JasperReport">
-                    <![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport($P{SUBREPORT_DIR} + "articulosL.jrxml")]]>
-                </subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport($P{SUBREPORT_DIR} + "articulosL.jrxml")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

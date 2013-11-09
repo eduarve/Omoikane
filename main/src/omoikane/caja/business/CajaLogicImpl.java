@@ -230,15 +230,7 @@ public class CajaLogicImpl implements ICajaLogic {
 
                 imprimirVenta(venta);
 
-                Dialog.buildConfirmation("Venta registrada", "Venta registrada")
-                        .addYesButton(new EventHandler() {
-                            @Override
-                            public void handle(Event event) {
-                                nuevaVenta();
-                            }
-                        })
-                        .build()
-                        .show();
+                JOptionPane.showMessageDialog(Principal.getEscritorio().getFrameEscritorio(), "Venta Registrada");
 
             } catch (Exception e) {
                 logger.error("Error al guardar venta, venta no registrada.", e);
@@ -255,6 +247,7 @@ public class CajaLogicImpl implements ICajaLogic {
     @Override
     public void nuevaVenta() {
         instanciarModeloVenta();
+
         getController().getCapturaTextField().requestFocus();
     }
 

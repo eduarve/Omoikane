@@ -1,0 +1,49 @@
+{
+	"ventaXProducto": [
+	{ 
+		"dia": "01/07/2013",
+		"cantidad": "204",
+		"importe": "7810.55"
+	}, 	{ 
+		"dia": "02/07/2013",
+		"cantidad": "86",
+		"importe": "893.38"
+	}],
+    "ventasXProducto": [
+        {
+        "idProducto": 1,
+        "descripcion": "Salsa Sameyro",
+		"codigo": "12345",
+        "fechaInicial": "01/07/2013",
+        "fechaFinal": "01/10/2013",
+        "venta": 
+			[{ 
+				"dia": "01/07/2013",
+				"cantidad": "204",
+				"importe": "7810.55"
+			}, 	{ 
+				"dia": "02/07/2013",
+				"cantidad": "86",
+				"importe": "893.38"
+			}]
+        },
+        {
+        "idProducto": 8,
+        "descripcion": "Cereal chocokrispis",
+		"codigo": "938122734",
+        "fechaInicial": "08/10/2013",
+        "fechaFinal": "09/10/2013",
+        "venta": 
+			[{ 
+				"dia": "08/10/2013",
+				"cantidad": "34",
+				"importe": "9850.00"
+			}, 	{ 
+				"dia": "09/10/2013",
+				"cantidad": "17",
+				"importe": "4925.00"
+			}]
+        }
+
+    ]
+}

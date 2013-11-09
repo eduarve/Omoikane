@@ -76,7 +76,9 @@ public class VentasXProductoController {
                 ]
         ]
         Articulo articuloReporte = (Articulo)view.listaArticulos.getSelectedValue();
-        def data = getVentas(view.dateDesde.getDate(), view.dateHasta.getDate(), articuloReporte);
+        Date hasta = view.dateHasta.getDate();
+        hasta.setHours(24);
+        def data = getVentas(view.dateDesde.getDate(), hasta, articuloReporte);
 
         Map params = [
                 "FDesde":               view.fechaDesde,

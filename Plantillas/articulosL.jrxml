@@ -10,7 +10,8 @@
 		<![CDATA[SELECT
      articulos.`codigo` AS articulos_codigo,
      articulos.`descripcion` AS articulos_descripcion,
-     articulos.`unidad` AS articulos_unidad
+     articulos.`unidad` AS articulos_unidad,
+     articulos.impuestos AS articulos_impuestos
 FROM
      `articulos` articulos
 WHERE
@@ -19,6 +20,7 @@ WHERE
 	<field name="articulos_codigo" class="java.lang.String"/>
 	<field name="articulos_descripcion" class="java.lang.String"/>
 	<field name="articulos_unidad" class="java.lang.String"/>
+	<field name="articulos_impuestos" class="java.lang.String"/>
 	<columnHeader>
 		<band height="14" splitType="Stretch">
 			<staticText>
@@ -29,32 +31,39 @@ WHERE
 				<text><![CDATA[Codigo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="0" width="310" height="13"/>
+				<reportElement x="122" y="0" width="264" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="432" y="0" width="163" height="13"/>
+				<reportElement x="386" y="0" width="101" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="0" width="101" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Impuestos]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement x="122" y="0" width="310" height="11"/>
+				<reportElement x="122" y="0" width="264" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="432" y="0" width="163" height="11"/>
+				<reportElement x="386" y="0" width="101" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
@@ -66,6 +75,13 @@ WHERE
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="487" y="0" width="101" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_impuestos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

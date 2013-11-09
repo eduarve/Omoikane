@@ -51,7 +51,7 @@ public class EstrategiaDual extends EstrategiasCorte {
             def comprobante = new Comprobantes()
             comprobante.Corte(newCorte.IDCorte)                    //imprimir ticket
             comprobante.probar()
-            Thread.sleep(5000);
+            Thread.sleep(6000);                                   // auch que feo parche >__<
             comprobante.Corte(newCorte.IDCorteDual, "cortes_dual") //imprimir corte dual
             comprobante.probar()//imprimir ticket
 
@@ -96,6 +96,7 @@ public class EstrategiaDual extends EstrategiasCorte {
 
             (comprobante.CorteSucursal(IDAlmacen, IDCorte)) //imprimir ticket
             (comprobante.probar())                          //* Aqui tambien mandar a imprimir*/
+            Thread.sleep(6000);                            // auch que feo parche >__<
 
             (comprobante.CorteSucursalAvanzado(data))       //imprimir ticket
             (comprobante.probar())                          //* Aqui tambien mandar a imprimir*/

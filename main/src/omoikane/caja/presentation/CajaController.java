@@ -17,6 +17,8 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -219,13 +221,37 @@ public class CajaController
 
     @FXML
     private void onTerminarVentaClicked(ActionEvent event) {
-        cajaLogic.terminarVenta(getModel());
+
+        btnCobrar.setDisable(true);
+        Task terminarVentaTask = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                cajaLogic.terminarVenta(getModel());
+                return null;
+            }
+        };
+        terminarVentaTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                btnCobrar.setDisable(false);
+                cajaLogic.nuevaVenta();
+            }
+        });
+        terminarVentaTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                btnCobrar.setDisable(false);
+            }
+        });
+        new Thread(terminarVentaTask).start();
+
     }
 
     public void showHud(String msg) {
         hudText.setDisable(false);
         hudRectangle.setVisible(true);
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), hudRectangle);
+        FadeTransition ft = new FadeTransition(Duration.millis(800), hudRectangle);
         ft.setFromValue(0.0);
         ft.setToValue(0.8);
         ft.setCycleCount(1);
@@ -236,7 +262,7 @@ public class CajaController
     }
 
     public void hideHud() {
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), hudRectangle);
+        FadeTransition ft = new FadeTransition(Duration.millis(800), hudRectangle);
         ft.setFromValue(0.8);
         ft.setToValue(0.0);
         ft.setCycleCount(1);
