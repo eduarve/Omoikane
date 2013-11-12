@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class ImpresionEtiquetasController implements Initializable {
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static Logger logger = Logger.getLogger(ImpresionEtiquetasController.class);
 
     private ImpresionEtiquetasModel model;
 

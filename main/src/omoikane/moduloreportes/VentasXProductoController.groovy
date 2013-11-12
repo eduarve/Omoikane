@@ -22,7 +22,7 @@ public class VentasXProductoController {
     private Integer i;
     private VentasXArticulos view;
     private DefaultListModel<Articulo> listModel;
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(VentasXProductoController.class);
+    final static  org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(VentasXProductoController.class);
 
     public VentasXProductoController() {
         view = new VentasXArticulos();
@@ -64,6 +64,7 @@ public class VentasXProductoController {
     }
 
     private void btnGenerarReporte() {
+        view.panel.removeAll();
         if(view.listaArticulos.getModel().getSize() == 0) { logger.info("Por favor agregue un producto al reporte"); return; }
         if(view.listaArticulos.selectionEmpty) view.listaArticulos.setSelectedIndex(0);
 

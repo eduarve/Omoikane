@@ -32,7 +32,7 @@ import java.util.HashMap;
 @DatabaseSetup("../repository/sampleDataLight.xml")
 public class CodigosTest {
 
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CodigosTest.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CodigosTest.class);
 
     @Test
     public void codigosViewTest() {

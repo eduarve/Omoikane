@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class DummyJFXApp extends Application {
 
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DummyJFXApp.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DummyJFXApp.class);
 
     @Override
     public void start(Stage primaryStage) {

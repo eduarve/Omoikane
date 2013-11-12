@@ -55,7 +55,7 @@ public class CodigosController
     @Autowired
     JpaTransactionManager transactionManager;
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(CodigosController.class);
 
 
     // Handler for Button[fx:id="btnAgregarCodigo"] onAction

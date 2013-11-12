@@ -33,7 +33,7 @@ import java.io.IOException;
 public class CajaManager extends Application {
     CajaModel model;
     CajaController controller;
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CajaManager.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CajaManager.class);
 
     @Override
     public void start(Stage primaryStage) {

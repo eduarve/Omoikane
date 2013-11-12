@@ -4,6 +4,8 @@ import omoikane.entities.Usuario;
 import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,7 @@ public class ConteoInventario {
     public void prePersist() {
         setFecha(new Date());
         setCompletado(false);
+        setAplicado(false);
     }
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -38,6 +41,8 @@ public class ConteoInventario {
     public void setItems(List<ItemConteoInventario> items) { this.items = items; }
 
     private Boolean completado;
+
+    private Boolean aplicado;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,5 +85,19 @@ public class ConteoInventario {
 
     public void setCompletado(Boolean completado) {
         this.completado = completado;
+    }
+
+    @Column
+    public Boolean getAplicado() {
+        return aplicado;
+    }
+
+    public void setAplicado(Boolean aplicado) {
+        this.aplicado = aplicado;
+    }
+
+    public String toString() {
+        DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
+        return  dateFormat.format(getFecha());
     }
 }

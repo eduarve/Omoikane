@@ -46,7 +46,7 @@ import java.util.HashMap;
 @DatabaseSetup("../repository/sampleDataLight.xml")
 public class PaqueteTest {
 
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(PaqueteTest.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(PaqueteTest.class);
 
     @Test
     public void paqueteViewTest() {

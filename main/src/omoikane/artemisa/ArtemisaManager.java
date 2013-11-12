@@ -22,7 +22,7 @@ import java.util.HashMap;
  * To change this template use File | Settings | File Templates.
  */
 public class ArtemisaManager extends Application {
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ArtemisaManager.class);
+    final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ArtemisaManager.class);
 
     public static void main(String[] args) throws Exception {
         initAWT(); //Necesario para utilizar swing en mac con javafx y java 1.7_u<45 por algún bug

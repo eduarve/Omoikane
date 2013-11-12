@@ -43,7 +43,7 @@ import static omoikane.sistema.Usuarios.cerrojo;
 public class PaqueteController
         implements Initializable {
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(PaqueteController.class);
 
     ObservableList<Paquete> paquete;
     Long productoId = 1l;

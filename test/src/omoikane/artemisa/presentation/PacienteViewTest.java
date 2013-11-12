@@ -32,7 +32,7 @@ import java.util.HashMap;
         DbUnitTestExecutionListener.class })
 //@DatabaseSetup("../repository/sampleDataLight.xml")
 public class PacienteViewTest {
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(PacienteViewTest.class);
+    final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(PacienteViewTest.class);
 
     @Test
     public void pacienteViewTest() {

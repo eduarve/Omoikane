@@ -23,7 +23,7 @@ import omoikane.sistema.Permisos;
  * To change this template use File | Settings | File Templates.
  */
 public class ConfiguratorAppManager {
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ConfiguratorApp.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ConfiguratorApp.class);
     private JInternalFrame frame;
 
     public static void main(String args[]) {

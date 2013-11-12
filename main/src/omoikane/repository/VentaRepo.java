@@ -17,6 +17,6 @@ import java.util.List;
 public interface VentaRepo extends GenericDao<LegacyVenta, Integer> {
     LegacyVenta findByIdCajaAndCompletada(int idCaja, Boolean completada);
 
-    @Query("SELECT new map(V.fechaHora as dia, SUM(VD.cantidad) as cantidad, SUM(VD.total) as importe) FROM LegacyVenta as V, LegacyVentaDetalle as VD WHERE V = VD.venta AND V.fechaHora >= ?1 AND V.fechaHora <= ?2 AND VD.idArticulo = ?3 GROUP BY day(V.fechaHora)")
+    @Query("SELECT new map(V.fechaHora as dia, SUM(VD.cantidad) as cantidad, SUM(VD.total) as importe) FROM LegacyVenta as V, LegacyVentaDetalle as VD WHERE V = VD.venta AND V.fechaHora BETWEEN ?1 AND ?2 AND VD.idArticulo = ?3 GROUP BY DATE(V.fechaHora)")
     List sumVentasOfArticuloByDay(Date desde, Date hasta, Integer idArticulo);
 }

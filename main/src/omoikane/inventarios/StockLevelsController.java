@@ -49,7 +49,7 @@ public class StockLevelsController implements Initializable {
 
     //Long idProducto = 1l;
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(StockLevelsController.class);
 
     @FXML BigDecimalField stockTienda;
     @FXML BigDecimalField stockBodega;

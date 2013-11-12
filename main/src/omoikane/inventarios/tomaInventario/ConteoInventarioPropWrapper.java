@@ -19,10 +19,11 @@ public class ConteoInventarioPropWrapper {
     private JavaBeanObjectProperty<Usuario> usuario;
     private ObservableList<ItemConteoPropWrapper> items;
     private JavaBeanBooleanProperty completado;
+    private JavaBeanBooleanProperty aplicado;
     private JavaBeanLongProperty id;
 
     public ConteoInventario _conteoInventario;
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ConteoInventarioPropWrapper.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ConteoInventarioPropWrapper.class);
 
     public ConteoInventarioPropWrapper(ConteoInventario conteoInventario) {
         _conteoInventario = conteoInventario;
@@ -43,6 +44,11 @@ public class ConteoInventarioPropWrapper {
             builder3.bean(conteoInventario);
             builder3.name("completado");
             completado = builder3.build();
+
+            JavaBeanBooleanPropertyBuilder builder5 = new JavaBeanBooleanPropertyBuilder();
+            builder5.bean(conteoInventario);
+            builder5.name("aplicado");
+            aplicado = builder5.build();
 
             JavaBeanLongPropertyBuilder builder4 = new JavaBeanLongPropertyBuilder();
             builder4.bean(conteoInventario);
@@ -81,6 +87,14 @@ public class ConteoInventarioPropWrapper {
 
     public void setCompletado(Boolean completado1) {
         getCompletado().set(completado1);
+    }
+
+    public JavaBeanBooleanProperty getAplicado() {
+        return aplicado;
+    }
+
+    public void setAplicado(Boolean aplicado) {
+        getAplicado().set(aplicado);
     }
 
     public void addItem(ItemConteoPropWrapper itemConteoPropWrapper) {

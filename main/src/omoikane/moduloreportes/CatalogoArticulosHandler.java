@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class CatalogoArticulosHandler {
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(CatalogoArticulosHandler.class);
 
     @Autowired
     ProductoRepo productoRepo;

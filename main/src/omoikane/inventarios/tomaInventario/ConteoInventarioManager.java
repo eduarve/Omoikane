@@ -27,6 +27,15 @@ public class ConteoInventarioManager {
     ImpresionEtiquetasModel model;
     private JInternalFrame frame;
 
+    private Scene initTomaInventarioCRUD() throws IOException {
+        Platform.setImplicitExit(false);
+        ApplicationContext context = Principal.applicationContext;
+
+        Scene scene = (Scene)context.getBean("conteoInventarioCRUDView");
+
+        return scene;
+    }
+
     private Scene initTomaInventario() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
@@ -52,8 +61,8 @@ public class ConteoInventarioManager {
 
         Herramientas.panelCatalogo(frame);
         Principal.getEscritorio().getPanelEscritorio().add(frame);
-        frame.setSize(806, 618);
-        frame.setPreferredSize(new Dimension(806, 618));
+        frame.setSize(1024, 640);
+        frame.setPreferredSize(new Dimension(1024, 640));
         frame.setVisible(true);
         Herramientas.centrarVentana(frame);
         Herramientas.iconificable(frame);
@@ -65,7 +74,7 @@ public class ConteoInventarioManager {
             public void run() {
                 Scene scene = null;
                 try {
-                    scene = initTomaInventario();
+                    scene = initTomaInventarioCRUD();
                     //scene.setFill(null);
                     fxPanel.setScene(scene);
                 } catch (IOException e) {

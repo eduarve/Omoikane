@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, red, black);" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.inventarios.tomaInventario.ConteoInventarioCRUDController">
+  <children>
+    <SplitPane dividerPositions="0.47324414715719065" focusTraversable="true" opacity="1.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, darkgrey, black);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxWidth="280.0" minHeight="100.0" minWidth="280.0" prefHeight="400.0" prefWidth="280.0">
+          <children>
+            <ListView fx:id="lista" prefHeight="312.0" prefWidth="263.0" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="42.0" />
+            <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#onNuevoClic" prefWidth="263.0" text="Nuevo conteo" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Label text="Inventarios" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
+              <effect>
+                <DropShadow height="17.0" radius="8.0" spread="0.07142857142857142" width="17.0" />
+              </effect>
+              <font>
+                <Font name="Roboto Thin" size="30.0" />
+              </font>
+            </Label>
+            <Button contentDisplay="CENTER" defaultButton="false" graphicTextGap="2.0" minHeight="21.0" mnemonicParsing="false" onAction="#onRecargar" prefHeight="30.0" prefWidth="88.0" text=" Recargar" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="6.0">
+              <font>
+                <Font name="FontAwesome" size="10.0" />
+              </font>
+            </Button>
+          </children>
+        </AnchorPane>
+        <AnchorPane fx:id="contenido" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="&#10;" />
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

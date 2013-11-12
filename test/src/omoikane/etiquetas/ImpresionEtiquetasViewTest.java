@@ -32,7 +32,7 @@ import java.util.HashMap;
         DbUnitTestExecutionListener.class })
 @DatabaseSetup("../repository/sampleDataLight.xml")
 public class ImpresionEtiquetasViewTest {
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ImpresionEtiquetasViewTest.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ImpresionEtiquetasViewTest.class);
 
     @Test
     public void impresionEtiquetasViewTest() {

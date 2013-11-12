@@ -123,6 +123,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
             this.setOpaque(false);
 
             this.generarFondo();
+            this.btnEliminar.setVisible(false);
             Herramientas.centrarVentana(this);
             this.btnAceptar.setVisible(false);
        } catch(Exception e) {

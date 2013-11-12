@@ -60,7 +60,7 @@ public class PacientesController implements Initializable {
     @Autowired
     Validator validator;
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(PacientesController.class);
 
     ObservableList<Paciente> pacientes;
 

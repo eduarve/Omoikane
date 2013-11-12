@@ -27,7 +27,7 @@ public class ItemConteoPropWrapper {
     private JavaBeanObjectProperty<BigDecimal> diferencia;
 
     private ItemConteoInventario _itemConteo;
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ItemConteoPropWrapper.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ItemConteoPropWrapper.class);
 
     public ItemConteoPropWrapper(ItemConteoInventario itemConteo) {
         _itemConteo = itemConteo;

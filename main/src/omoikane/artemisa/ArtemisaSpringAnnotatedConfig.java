@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @Configuration
 public class ArtemisaSpringAnnotatedConfig {
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(ArtemisaSpringAnnotatedConfig.class);
 
     @Bean
     @Scope("prototype")

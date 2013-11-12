@@ -32,7 +32,7 @@ import java.util.HashMap;
         DbUnitTestExecutionListener.class })
 @DatabaseSetup("../repository/sampleDataLight.xml")
 public class StockLevelsTest {
-    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(getClass());
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(StockLevelsTest.class);
 
     @Test
     public void stockLevelViewTest() {

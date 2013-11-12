@@ -5,6 +5,7 @@
 
 package omoikane.exceptions;
 
+import javafx.application.Platform;
 import omoikane.principal.Principal;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
@@ -32,14 +33,20 @@ public class CEAppender extends AppenderSkeleton {
     }
 
     @Override
-    protected void append(LoggingEvent event) {
+    protected void append(final LoggingEvent event) {
         if ( event.getLevel().isGreaterOrEqual(Priority.WARN) ) {
             errorWindow(event);
         } else if(event.getLevel().isGreaterOrEqual(Priority.INFO)) {
-            JOptionPane.showMessageDialog(null,
-                    event.getMessage(),
-                    "Información",
-                    JOptionPane.INFORMATION_MESSAGE);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    JOptionPane.showMessageDialog(null,
+                            event.getMessage(),
+                            "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
         } else if(Principal.DEBUG) {
             JOptionPane.showMessageDialog(null,
                     event.getMessage(),

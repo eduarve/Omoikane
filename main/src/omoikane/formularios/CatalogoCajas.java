@@ -70,6 +70,7 @@ public class CatalogoCajas extends javax.swing.JInternalFrame {
         this.getRootPane().setOpaque(false);
         this.generarFondo(this);
         this.btnAceptar.setVisible(false);
+        this.btnImprimir.setVisible(false);
         Herramientas.centrarVentana(this);
 
         //Instrucciones para el funcionamiento de las teclas de navegación
@@ -333,9 +334,9 @@ public class CatalogoCajas extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCorte)
+                        .addComponent(btnImprimir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnImprimir))
+                        .addComponent(btnCorte))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAceptar)

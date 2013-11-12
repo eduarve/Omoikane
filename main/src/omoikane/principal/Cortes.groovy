@@ -15,7 +15,8 @@ import java.awt.event.WindowListener;
 import javax.swing.event.*;
 import groovy.inspect.swingui.*;
 import javax.swing.table.TableColumn
-import java.awt.event.*;
+import java.awt.event.*
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat
 import groovy.swing.*
 import omoikane.sistema.cortes.*;
@@ -117,6 +118,11 @@ class Cortes {
             def form  = lanzarVentanaDetalles()
             def puerto = Nadesico.conectar()
             def mov  = puerto.getCorteWhere(" cortes.id_corte=$IDE")
+            NumberFormat mf = NumberFormat.getCurrencyInstance();
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            nf.setMinimumFractionDigits(2);
+            nf.setMaximumFractionDigits(2);
+            nf.setGroupingUsed(true);
             SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             def fecha = sdf.format(mov.fecha_hora)
             fecha= " fecha_hora = '$fecha' "
@@ -125,20 +131,19 @@ class Cortes {
                 lastMovID2=mov2.id_corte
             }
             form.ID = IDE
-            form.setTxtDescuento     (mov.descuentos as String)
+            form.setTxtDescuento     nf.format ( mov.descuentos )
             form.setTxtDesde         (sdf.format(mov.desde) as String)
-            form.setTxtFecha         (sdf.format(mov.fecha_hora) as String)
             form.setTxtHasta         (sdf.format(mov.hasta) as String)
             form.setTxtIDAlmacen     (mov.id_almacen as String)
             form.setTxtIDCaja        (mov.id_caja as String)
             form.setTxtIDCorte       (mov.id_corte as String)
-            form.setTxtImpuesto      (mov.impuestos as String)
+            form.setTxtImpuesto      nf.format ( mov.impuestos )
             form.setTxtNumeroVenta   (mov.n_ventas as String)
-            form.setTxtSubtotal      (mov.subtotal as String)
-            form.setTxtTotal         (mov.total as String)
-            form.setTxtDeposito     (mov.depositos as String)
-            form.setTxtRetiro       (mov.retiros as String)
-            form.setTxtEfectivo     ("0")
+            form.setTxtSubtotal      nf.format ( mov.subtotal )
+            form.setTxtTotal         mf.format ( mov.total )
+            form.setTxtDeposito      nf.format ( mov.depositos )
+            form.setTxtRetiro        nf.format ( mov.retiros )
+            form.setTxtEfectivo      mf.format ( mov.total + mov.depositos - mov.retiros )
             return form
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }

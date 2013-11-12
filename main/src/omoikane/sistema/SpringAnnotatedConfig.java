@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.inventarios.StockLevelsController;
+import omoikane.inventarios.tomaInventario.ConteoInventarioCRUDController;
 import omoikane.inventarios.tomaInventario.TomaInventarioController;
 import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
@@ -27,7 +28,7 @@ import java.io.IOException;
  */
 @Configuration
 public class SpringAnnotatedConfig {
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(SpringAnnotatedConfig.class);
 
     @Bean
     @Scope("prototype")
@@ -57,6 +58,12 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     TomaInventarioController tomaInventarioController() {
         return new TomaInventarioController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ConteoInventarioCRUDController conteoInventarioCRUDController() {
+        return new ConteoInventarioCRUDController();
     }
 
     @Bean
@@ -93,6 +100,12 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     Scene tomaInventarioView() {
         return initView("/omoikane/inventarios/tomaInventario/TomaInventarioView.fxml", tomaInventarioController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene conteoInventarioCRUDView() {
+        return initView("/omoikane/inventarios/tomaInventario/ConteoInventarioCRUDView.fxml", conteoInventarioCRUDController());
     }
 
     @Bean

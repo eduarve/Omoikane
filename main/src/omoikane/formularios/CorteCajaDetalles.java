@@ -51,10 +51,8 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
         btnCerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         txtIDCorte = new javax.swing.JTextField();
         txtIDCaja = new javax.swing.JTextField();
-        txtFecha = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -79,7 +77,9 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
         txtDeposito = new javax.swing.JTextField();
         txtEfectivo = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
+        setForeground(java.awt.Color.white);
         setTitle("Corte de Caja");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -96,88 +96,151 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
         });
         getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 490, 80, -1));
 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("ID Corte:");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, 20));
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 204, 204));
         jLabel3.setText("ID Caja:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
-
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Fecha Creacion:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, 20));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, 20));
 
         txtIDCorte.setEditable(false);
-        getContentPane().add(txtIDCorte, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 260, -1));
+        txtIDCorte.setBackground(new java.awt.Color(51, 51, 51));
+        txtIDCorte.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtIDCorte.setForeground(new java.awt.Color(255, 255, 255));
+        txtIDCorte.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtIDCorte.setBorder(null);
+        txtIDCorte.setFocusable(false);
+        getContentPane().add(txtIDCorte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 110, 30));
 
         txtIDCaja.setEditable(false);
-        getContentPane().add(txtIDCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 260, -1));
+        txtIDCaja.setBackground(new java.awt.Color(51, 51, 51));
+        txtIDCaja.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtIDCaja.setForeground(new java.awt.Color(255, 255, 255));
+        txtIDCaja.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtIDCaja.setBorder(null);
+        txtIDCaja.setFocusable(false);
+        getContentPane().add(txtIDCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 110, 30));
 
-        txtFecha.setEditable(false);
-        getContentPane().add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 260, -1));
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel5.setText("<html>N&uacute;mero de <br>Ventas:</html>");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Numero de Ventas:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, 20));
-
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Subtotal:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, 20));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, 20));
 
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(204, 204, 204));
         jLabel7.setText("Hasta:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, -1, 20));
 
         txtNumeroVenta.setEditable(false);
-        getContentPane().add(txtNumeroVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 260, -1));
+        txtNumeroVenta.setBackground(new java.awt.Color(51, 51, 51));
+        txtNumeroVenta.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtNumeroVenta.setForeground(new java.awt.Color(255, 255, 255));
+        txtNumeroVenta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNumeroVenta.setBorder(null);
+        txtNumeroVenta.setFocusable(false);
+        getContentPane().add(txtNumeroVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 250, 30));
 
         txtHasta.setEditable(false);
-        getContentPane().add(txtHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, 260, 20));
+        txtHasta.setBackground(new java.awt.Color(51, 51, 51));
+        txtHasta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtHasta.setForeground(new java.awt.Color(255, 255, 255));
+        txtHasta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtHasta.setBorder(null);
+        txtHasta.setFocusable(false);
+        getContentPane().add(txtHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 420, 160, 30));
 
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(204, 204, 204));
         jLabel8.setText("ID Almacen:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 20));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, 20));
 
         txtIDAlmacen.setEditable(false);
+        txtIDAlmacen.setBackground(new java.awt.Color(51, 51, 51));
+        txtIDAlmacen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtIDAlmacen.setForeground(new java.awt.Color(255, 255, 255));
+        txtIDAlmacen.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtIDAlmacen.setBorder(null);
+        txtIDAlmacen.setFocusable(false);
         txtIDAlmacen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDAlmacenActionPerformed(evt);
             }
         });
-        getContentPane().add(txtIDAlmacen, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 260, -1));
+        getContentPane().add(txtIDAlmacen, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 110, 30));
 
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(204, 204, 204));
         jLabel9.setText("Impuesto:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, 20));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, 20));
 
         txtImpuestos.setEditable(false);
-        getContentPane().add(txtImpuestos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 260, -1));
+        txtImpuestos.setBackground(new java.awt.Color(51, 51, 51));
+        txtImpuestos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtImpuestos.setForeground(new java.awt.Color(255, 255, 255));
+        txtImpuestos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtImpuestos.setBorder(null);
+        txtImpuestos.setFocusable(false);
+        getContentPane().add(txtImpuestos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 250, 30));
 
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Total:");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, 20));
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel10.setText("Venta Total:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, -1, 20));
 
         txtTotal.setEditable(false);
-        getContentPane().add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, 260, -1));
+        txtTotal.setBackground(new java.awt.Color(51, 51, 51));
+        txtTotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtTotal.setForeground(new java.awt.Color(255, 255, 255));
+        txtTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtTotal.setBorder(null);
+        txtTotal.setFocusable(false);
+        getContentPane().add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 250, 30));
 
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(204, 204, 204));
         jLabel11.setText("Descuento:");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, 20));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, 20));
 
         txtDescuento.setEditable(false);
-        getContentPane().add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 260, -1));
+        txtDescuento.setBackground(new java.awt.Color(51, 51, 51));
+        txtDescuento.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtDescuento.setForeground(new java.awt.Color(255, 255, 255));
+        txtDescuento.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDescuento.setBorder(null);
+        txtDescuento.setFocusable(false);
+        getContentPane().add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 250, 30));
 
         txtDesde.setEditable(false);
-        getContentPane().add(txtDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 400, 260, -1));
+        txtDesde.setBackground(new java.awt.Color(51, 51, 51));
+        txtDesde.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtDesde.setForeground(new java.awt.Color(255, 255, 255));
+        txtDesde.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDesde.setBorder(null);
+        txtDesde.setFocusable(false);
+        getContentPane().add(txtDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 160, 30));
 
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(204, 204, 204));
         jLabel12.setText("Desde:");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, -1, 20));
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 510, 10, 10));
 
         txtSubtotal.setEditable(false);
-        getContentPane().add(txtSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 260, -1));
+        txtSubtotal.setBackground(new java.awt.Color(51, 51, 51));
+        txtSubtotal.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtSubtotal.setForeground(new java.awt.Color(255, 255, 255));
+        txtSubtotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtSubtotal.setBorder(null);
+        txtSubtotal.setFocusable(false);
+        getContentPane().add(txtSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 250, 30));
 
         btnImprimir.setText("Imprimir");
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -187,26 +250,51 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
         });
         getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 490, -1, -1));
 
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("Retiro:");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, 20));
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel14.setText("Retiros:");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, 20));
 
         txtRetiro.setEditable(false);
-        getContentPane().add(txtRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 260, -1));
+        txtRetiro.setBackground(new java.awt.Color(51, 51, 51));
+        txtRetiro.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtRetiro.setForeground(new java.awt.Color(255, 255, 255));
+        txtRetiro.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtRetiro.setBorder(null);
+        txtRetiro.setFocusable(false);
+        getContentPane().add(txtRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 250, 30));
 
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setText("Deposito:");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, 20));
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel15.setText("Depositos:");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, 20));
 
         txtDeposito.setEditable(false);
-        getContentPane().add(txtDeposito, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 260, -1));
+        txtDeposito.setBackground(new java.awt.Color(51, 51, 51));
+        txtDeposito.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtDeposito.setForeground(new java.awt.Color(255, 255, 255));
+        txtDeposito.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDeposito.setBorder(null);
+        txtDeposito.setFocusable(false);
+        getContentPane().add(txtDeposito, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, 250, 30));
 
         txtEfectivo.setEditable(false);
-        getContentPane().add(txtEfectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 260, -1));
+        txtEfectivo.setBackground(new java.awt.Color(51, 51, 51));
+        txtEfectivo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtEfectivo.setForeground(new java.awt.Color(255, 255, 255));
+        txtEfectivo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtEfectivo.setBorder(null);
+        txtEfectivo.setFocusable(false);
+        getContentPane().add(txtEfectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 250, 30));
 
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("Efectivo en caja:");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, -1, 20));
+        jLabel16.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel16.setText("<html>Efectivo<br> en caja:</html>");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 90, 30));
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setFocusable(false);
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 350, 430));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -237,17 +325,16 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtDeposito;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtDesde;
     private javax.swing.JTextField txtEfectivo;
-    private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtHasta;
     public javax.swing.JTextField txtIDAlmacen;
     private javax.swing.JTextField txtIDCaja;
@@ -262,7 +349,6 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
 
     public String getTxtDescuento()   { return this.txtDescuento.getText(); }
     public String getTxtDesde()   { return this.txtDesde.getText(); }
-    public String getTxtFecha()   { return this.txtFecha.getText(); }
     public String getTxthasta()   { return this.txtHasta.getText(); }
     public String getTxtIDAlmacen()   { return this.txtIDAlmacen.getText(); }
     public String getTxtIDCaja()   { return this.txtIDCaja.getText(); }
@@ -277,7 +363,6 @@ public class CorteCajaDetalles extends javax.swing.JInternalFrame {
 
     public void setTxtDescuento     (String txt)     { txtDescuento.setText(txt); }
     public void setTxtDesde         (String txt)     { txtDesde.setText(txt); }
-    public void setTxtFecha         (String txt)     { txtFecha.setText(txt); }
     public void setTxtHasta         (String txt)     { txtHasta.setText(txt); }
     public void setTxtIDAlmacen     (String txt)     { txtIDAlmacen.setText(txt); }
     public void setTxtIDCaja        (String txt)     { txtIDCaja.setText(txt); }

@@ -52,7 +52,7 @@ public class ProveedoresController implements Initializable {
     @Autowired
     Validator validator;
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(ProveedoresController.class);
 
     ObservableList<Proveedor> proveedores;
 

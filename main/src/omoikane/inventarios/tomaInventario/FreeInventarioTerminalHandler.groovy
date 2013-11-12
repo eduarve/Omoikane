@@ -18,7 +18,7 @@ import java.text.NumberFormat
  */
 class FreeInventarioTerminalHandler implements ITerminalHandler {
     private TomaInventarioController controller;
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(FreeInventarioTerminalHandler.class);
 
     public FreeInventarioTerminalHandler(TomaInventarioController c) {
         setController(c);
@@ -76,7 +76,7 @@ class FreeInventarioTerminalHandler implements ITerminalHandler {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleccione la carpeta Aplicaciones/FreeInventario en dropbox");
-        Stage stage = this.getController().mainPane.getScene().getWindow();
+        com.sun.javafx.stage.EmbeddedWindow stage = this.getController().mainPane.getScene().getWindow();
 
         final File selectedDirectory =
             directoryChooser.showDialog(stage);
@@ -86,15 +86,22 @@ class FreeInventarioTerminalHandler implements ITerminalHandler {
 
         String origen = selectedDirectory.absolutePath + '/inventario.csv';
         ConteoInventarioPropWrapper modelo = getController().modelo;
+        def encontrados = 0, noEncontrados = 0;
 
         new File(origen).eachLine{
             def(String idString, String codigo, String descripcion, String cantidadString, String precioString) = it.split("\t");
-            BigDecimal precio   = new BigDecimal(precioString);
-            Long       id       = new Long(idString);
+            //BigDecimal precio   = new BigDecimal(precioString);
+            //Long       id       = new Long(idString);
             BigDecimal cantidad = new BigDecimal(cantidadString);
 
             Articulo a = getController().getArticulo(codigo);
-            getController().addItemConteo(a, cantidad);
+            if(a == null)
+                noEncontrados++;
+            else {
+                encontrados++;
+                getController().addItemConteo(a, cantidad);
+            }
         }
+        logger.info("Importación finalizada, renglones importados: ${encontrados}, productos no encontrado: ${noEncontrados}");
     }
 }

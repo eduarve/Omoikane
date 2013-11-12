@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
  */
 public class TomaInventarioController implements Initializable {
 
-    public Logger logger = Logger.getLogger(getClass());
+    public static final Logger logger = Logger.getLogger(TomaInventarioController.class);
 
     ConteoInventarioPropWrapper modelo;
 
@@ -101,10 +101,6 @@ public class TomaInventarioController implements Initializable {
         persistTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
-                //initModel();
-                archivarButton.setDisable(true);
-                agregarButton.setDisable(true);
-                descartarButton.setDisable(true);
                 logger.info("Captura de conteo de inventario físico archivada");
             }
         });
@@ -155,7 +151,6 @@ public class TomaInventarioController implements Initializable {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
                 if(!modelo.getCompletado().get()) archivarButton.fire();
-                aplicarInventarioButton.setDisable(true);
                 mainPane.setDisable(false);
                 logger.info("Inventario aplicado a las existencias correctamente.");
             }
@@ -182,11 +177,18 @@ public class TomaInventarioController implements Initializable {
 
             productoRepo.saveAndFlush(articulo);
 
+            modelo.setAplicado(true);
+            repo.saveAndFlush(modelo._conteoInventario);
+
         }
     }
     @FXML public void onImportarAction(ActionEvent actionEvent) {
-        ITerminalHandler terminal = new FreeInventarioTerminalHandler(this);
-        terminal.importData();
+        try {
+            ITerminalHandler terminal = new FreeInventarioTerminalHandler(this);
+            terminal.importData();
+        } catch (Exception e) {
+            logger.error("Error al importar", e);
+        }
     }
 
     @FXML public void onExportarAction(ActionEvent actionEvent) {
@@ -337,8 +339,20 @@ public class TomaInventarioController implements Initializable {
         return resultado;
     }
 
-    private void initModel() {
-        modelo = loadOrCreateModel();
+    public void initModel() {
+        initModel(null);
+    }
+
+    public void initModel(ConteoInventario conteoInventario) {
+        archivarButton.disableProperty().unbind();
+        descartarButton.disableProperty().unbind();
+        aplicarInventarioButton.disableProperty().unbind();
+
+        archivarButton.setDisable(false);
+        descartarButton.setDisable(false);
+        aplicarInventarioButton.setDisable(false);
+
+        modelo = loadOrCreateModel(conteoInventario);
         itemsTable.setItems(modelo.getItems());
 
         indice = new HashMap<>();
@@ -346,25 +360,39 @@ public class TomaInventarioController implements Initializable {
             indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
         }
 
+        archivarButton.disableProperty().bind(modelo.getCompletado());
+        descartarButton.disableProperty().bind(modelo.getCompletado());
+        aplicarInventarioButton.disableProperty().bind(modelo.getAplicado());
         fechaLabel.textProperty().bind(Bindings.convert(modelo.getDate()));
         idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
 
         modelo.getItems().addListener(new MyListChangeListener());
     }
 
+    /**
+     * Éste método inicializa el modelo del formulario, de una de las siguientes 3 maneras:
+     * - Si le es dado un bean lo carga
+     * - Si le es dado un bean nulo busca el último inventario incompleto y lo carga
+     * - Si le es dado un bean nulo y no existe un inventario incompleto crea uno nuevo
+     * */
     @Transactional
-    private ConteoInventarioPropWrapper loadOrCreateModel() {
-        ConteoInventario conteoInventario = repo.findByCompletado(false);
+    private ConteoInventarioPropWrapper loadOrCreateModel(ConteoInventario conteoInventario) {
 
-        if(conteoInventario != null) {
+        if(conteoInventario == null)
             conteoInventario = repo.findByCompletado(false);
-        } else {
+        if(conteoInventario == null) {
             conteoInventario = new ConteoInventario();
             conteoInventario.setFecha( new Date() );
             conteoInventario = repo.saveAndFlush(conteoInventario);
         }
 
         ConteoInventarioPropWrapper conteoInventarioPropWrapper = new ConteoInventarioPropWrapper(conteoInventario);
+
+        return conteoInventarioPropWrapper;
+    }
+
+    private ConteoInventarioPropWrapper loadOrCreateModel() {
+        ConteoInventarioPropWrapper conteoInventarioPropWrapper = loadOrCreateModel(null);
 
         return conteoInventarioPropWrapper;
     }
