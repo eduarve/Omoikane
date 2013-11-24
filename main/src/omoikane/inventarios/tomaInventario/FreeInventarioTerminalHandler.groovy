@@ -25,6 +25,11 @@ class FreeInventarioTerminalHandler implements ITerminalHandler {
     }
 
     @Override
+    public String toString() {
+        return "FreeInventario by iGes";
+    }
+
+    @Override
     void setController(TomaInventarioController controller) {
         this.controller = controller
     }

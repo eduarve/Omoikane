@@ -2,8 +2,6 @@ package omoikane.caja.business;
 
 import groovy.util.Eval;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.data.IProductosDAO;
 import omoikane.caja.handlers.StockIssuesHandler;
@@ -15,30 +13,28 @@ import omoikane.entities.Caja;
 import omoikane.entities.LegacyVenta;
 import omoikane.entities.LegacyVentaDetalle;
 import omoikane.principal.Principal;
-import omoikane.principal.Sucursales;
 import omoikane.producto.Producto;
 import omoikane.repository.CajaRepo;
 import omoikane.repository.VentaRepo;
 import omoikane.sistema.Comprobantes;
-import omoikane.sistema.Dialogos;
-import omoikane.sistema.Nadesico;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.synyx.hades.domain.PageRequest;
 import org.synyx.hades.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -69,6 +65,9 @@ public class CajaLogicImpl implements ICajaLogic {
     @PersistenceContext
     EntityManager entityManager;
     private CajaController controller;
+
+    @Autowired
+    JpaTransactionManager transactionManager;
 
     /**
      * Pseudo evento gatillado cuando se intenta capturar un producto en la "línea de captura".
@@ -133,6 +132,8 @@ public class CajaLogicImpl implements ICajaLogic {
         productoModel.cantidadProperty().set( capturaFilter.getCantidad() );
         reglasDeCantidad(productoModel);
 
+        LegacyVentaDetalle lvd = null;
+
         //Agrupar o agregar
         Boolean       agrupar = false;
         ProductoModel productoBase = null;
@@ -145,10 +146,25 @@ public class CajaLogicImpl implements ICajaLogic {
             productoModel.cantidadProperty().set( nuevaCantidad );
             model.getVenta().remove(productoBase);
             model.getVenta().add(0, productoModel);
+            for(LegacyVentaDetalle item : ventaAbiertaBean.getItems()) {
+                if(item.getIdArticulo().equals(productoModel.getLongId().intValue())) {
+                    lvd = item; break;
+                }
+            }
+
         }   else {
             model.getVenta().add(0, productoModel);
+            lvd = new LegacyVentaDetalle();
         }
-        persistirVenta();
+
+        buildLegacyVentaDetalle(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
+
+        lvd.setVenta(ventaAbiertaBean);
+
+        LegacyVentaDetalle l = persistirItemVenta(lvd);
+        ventaAbiertaBean.addItem(l);
+
+        //persistirVenta();
     }
 
     @Override
@@ -164,6 +180,23 @@ public class CajaLogicImpl implements ICajaLogic {
 
         CajaModel model = getController().getModel();
         ventaAbiertaBean = guardarVenta(model);
+    }
+
+    @Override
+    public LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd) {
+        return transactionalPersistItemVenta(lvd);
+    }
+
+    public LegacyVentaDetalle transactionalPersistItemVenta(final LegacyVentaDetalle lvd) {
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        LegacyVentaDetalle result = transactionTemplate.execute(new TransactionCallback<LegacyVentaDetalle>() {
+
+            @Override
+            public LegacyVentaDetalle doInTransaction(TransactionStatus status) {
+                return entityManager.merge(lvd);
+            }
+        });
+        return result;
     }
 
     private void reglasDeCantidad(ProductoModel productoModel) throws Exception {
@@ -215,9 +248,9 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     @Transactional
-    public void terminarVenta(CajaModel model) {
+    public LegacyVenta terminarVenta(CajaModel model) throws RuntimeException {
 
-        if(!isCajaOpen()) { Dialog.showInfo("Caja cerrada", "Caja cerrada, no se puede vender."); return; }
+        if(!isCajaOpen()) { Dialog.showInfo("Caja cerrada", "Caja cerrada, no se puede vender."); return null; }
 
         BigDecimal ventaTotal = model.getTotal().get();
         if( ventaTotal.compareTo( new BigDecimal("0.10") ) > 0 ) {
@@ -227,17 +260,13 @@ public class CajaLogicImpl implements ICajaLogic {
 
                 //Hace las salidas de inventario / Make inventory issues
                 new StockIssuesHandler(getController()).handle();
-
-                imprimirVenta(venta);
-
-                JOptionPane.showMessageDialog(Principal.getEscritorio().getFrameEscritorio(), "Venta Registrada");
+                return venta;
 
             } catch (Exception e) {
-                logger.error("Error al guardar venta, venta no registrada.", e);
-                throw new RuntimeException("prueba");
+                throw new RuntimeException("Excepción persistiendo venta o aplicando cambios al stock");
             }
         }
-
+        return null;
     }
 
     private LegacyVenta ventaAbiertaBean;
@@ -281,7 +310,7 @@ public class CajaLogicImpl implements ICajaLogic {
         }
     }
 
-    private void imprimirVenta(LegacyVenta venta) {
+    public void imprimirVenta(LegacyVenta venta) {
         comprobantes.ticketVenta(venta.getId()); //imprimir ticket
         comprobantes.imprimir();
     }
@@ -330,17 +359,7 @@ public class CajaLogicImpl implements ICajaLogic {
                 else
                     lvd = itemsTmp.get(i);
 
-            lvd.setIdAlmacen ( idAlmacen );
-            lvd.setIdArticulo( producto.getLongId().intValue() );
-            lvd.setIdCaja    ( idCaja );
-            lvd.setIdLinea   ( producto.getProductoData().getLineaByLineaId().getId() );
-            lvd.setCantidad  ( producto.cantidadProperty().get().doubleValue() );
-            lvd.setPrecio    ( producto.precioProperty().get().doubleValue() );
-            lvd.setDescuento ( producto.getDescuentos().doubleValue() );
-            lvd.setImpuestos ( producto.getImpuestos().doubleValue() );
-            lvd.setSubtotal  ( producto.getSubtotal().doubleValue() );
-            lvd.setTotal     ( producto.getImporte().doubleValue() );
-            lvd.setTipoSalida( "" );
+            buildLegacyVentaDetalle(idCaja, idAlmacen, producto, lvd);
 
             venta.addItem(lvd);
             i++;
@@ -354,6 +373,20 @@ public class CajaLogicImpl implements ICajaLogic {
         return venta;
     }
 
+    private void buildLegacyVentaDetalle(Integer idCaja, Integer idAlmacen, ProductoModel producto, LegacyVentaDetalle lvd) {
+        lvd.setIdAlmacen ( idAlmacen );
+        lvd.setIdArticulo( producto.getLongId().intValue() );
+        lvd.setIdCaja    ( idCaja );
+        lvd.setIdLinea   ( producto.getProductoData().getLineaByLineaId().getId() );
+        lvd.setCantidad  ( producto.cantidadProperty().get().doubleValue() );
+        lvd.setPrecio    ( producto.precioProperty().get().doubleValue() );
+        lvd.setDescuento ( producto.getDescuentos().doubleValue() );
+        lvd.setImpuestos ( producto.getImpuestos().doubleValue() );
+        lvd.setSubtotal  ( producto.getSubtotal().doubleValue() );
+        lvd.setTotal     ( producto.getImporte().doubleValue() );
+        lvd.setTipoSalida( "" );
+    }
+
     public Integer asignarFolio(Integer idCaja) {
         //Query q = entityManager.createQuery("SELECT Caja.uFolio where id_caja = ?" );
         Caja caja = entityManager.find(Caja.class, idCaja);
@@ -361,6 +394,8 @@ public class CajaLogicImpl implements ICajaLogic {
         Integer folioActual = caja.getUFolio();
         folioActual++;
         caja.setUFolio( folioActual );
+        cajaRepo.save(caja);
+
         return folioActual;
     }
 

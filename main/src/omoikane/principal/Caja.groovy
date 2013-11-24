@@ -581,6 +581,12 @@ class Caja implements Serializable {
                 if(!serv.cajaAbierta(IDCaja)) {Dialogos.lanzarAlerta("La caja ya estaba cerrada")}
                 else{
                 def horas      = serv.getCaja(IDCaja)
+
+                NumberFormat mf = NumberFormat.getCurrencyInstance();
+                NumberFormat nf = NumberFormat.getNumberInstance();
+                nf.setMinimumFractionDigits(2);
+                nf.setMaximumFractionDigits(2);
+                nf.setGroupingUsed(true);
                 SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy @ hh:mm:ss a ");
                 Calendar         fecha= Calendar.getInstance()
@@ -596,27 +602,27 @@ class Caja implements Serializable {
                     def caja  = serv.getCaja(IDCaja)
                     def desde = horas.horaAbierta
                     def hasta = horas.horaCerrada
-                    form.setTxtDescuento     (ventas.descuento as String)
+                    form.setTxtDescuento     nf.format ( ventas.descuento )
                     form.setTxtDesde         (sdf2.format(desde) as String)
-                    form.setTxtFecha         (sdf2.format(fecha.getTime()) as String)
+                    //form.setTxtFecha         (sdf2.format(fecha.getTime()) as String)
                     form.setTxtHasta         (sdf2.format(hasta) as String)
                     form.setTxtIDAlmacen     (caja.id_almacen as String)
                     form.setTxtIDCaja        (IDCaja as String)
-                    //form.setTxtIDCorte       (ventas.id_corte as String)
-                    form.setTxtImpuesto      (ventas.impuestos as String)
+                    form.setTxtImpuesto      nf.format ( ventas.impuestos )
                     form.setTxtNumeroVenta   (ventas.nVentas as String)
-                    form.setTxtSubtotal      (ventas.subtotal as String)
-                    form.setTxtDeposito      (ventas.depositos as String)
-                    form.setTxtRetiro        (ventas.retiros as String)
-                    form.setTxtTotal         (ventas.total as String)
+                    form.setTxtSubtotal      nf.format ( ventas.subtotal  )
+                    form.setTxtDeposito      nf.format ( ventas.depositos )
+                    form.setTxtRetiro        nf.format ( ventas.retiros   )
+                    form.setTxtTotal         mf.format ( ventas.total     )
                     def dinero = ventas['total']-ventas.retiros+ventas.depositos
-                    form.setTxtEfectivo      (dinero as String)
+                    form.setTxtEfectivo      mf.format ( dinero )
 
                     if(cortar) {
  
                         newCorte     = instanciaCortes.hacerCorteCaja(IDCaja, caja.id_almacen, ventas.subtotal, ventas.impuestos, ventas.descuento, ventas.total, ventas.nVentas, desde, hasta,ventas.depositos,ventas.retiros)
 
                         form.ID=newCorte.IDCorte
+                        form.setTxtIDCorte ( newCorte.IDCorte as String )
                     }
                 }
             }}

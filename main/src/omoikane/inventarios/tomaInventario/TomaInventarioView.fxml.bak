@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="760.9998779296875" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.inventarios.tomaInventario.TomaInventarioController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="732.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.inventarios.tomaInventario.TomaInventarioController">
   <children>
     <Label text="Toma de inventario físico" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
       <font>
@@ -26,11 +26,12 @@
     </TableView>
     <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" />
         <Button fx:id="importarButton" mnemonicParsing="false" onAction="#onImportarAction" text="Importar desde terminal" />
+        <Button mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" />
         <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Aplicar inventario" />
         <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
         <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />
+        <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" visible="false" />
       </items>
     </ToolBar>
     <Label prefWidth="34.0" text="ID:" visible="false" AnchorPane.rightAnchor="178.0" AnchorPane.topAnchor="48.0" />

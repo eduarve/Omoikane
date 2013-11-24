@@ -4,6 +4,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 import jfxtras.labs.internal.scene.control.skin.BigDecimalFieldSkin;
 import omoikane.caja.handlers.*;
@@ -77,5 +78,7 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
                 new CancelarProducto(cc).handle(event);
             if (keyCode.equals(KeyCode.F12))
                 new CancelarVenta(cc).handle(event);
+            if (new KeyCodeCombination(KeyCode.P, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
+                new PlmHandler(cc).handle(event);
         }
     }

@@ -16,23 +16,20 @@
 
 <AnchorPane id="AnchorPane" fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.9998847412135" prefWidth="1099.99977792969" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.caja.presentation.CajaController">
   <children>
-    <ToolBar fx:id="mainToolBar" disable="false" minHeight="29.0001220703125" prefHeight="31.99999986419425" prefWidth="957.9999000000025" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0">
+    <ToolBar fx:id="mainToolBar" disable="false" minHeight="29.0001220703125" prefHeight="43.0" prefWidth="1099.99977792969" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0">
       <items>
-        <Button fx:id="ventaEspecialButton" mnemonicParsing="false" text="Venta Especial [F4]">
-          <font>
-            <Font size="15.0" fx:id="x3" />
-          </font>
-        </Button>
-        <Button fx:id="movimientosButton" font="$x3" mnemonicParsing="false" text="Movimientos de Caja [F5]" />
-        <Button id="buscar" fx:id="abrirCajonButton" font="$x3" mnemonicParsing="false" prefHeight="21.0" prefWidth="147.0" text="Abrir Cajón [F6]" />
-        <Button id="cancelarArticuloButton" fx:id="btnCancelarProducto" font="$x3" mnemonicParsing="false" text="Cancelar Artículo [F7]" />
-        <Button fx:id="cancelarVentaButton" font="$x3" mnemonicParsing="false" text="Cancelar Venta [F12]" />
-        <Button fx:id="cerrarButton" font="$x3" mnemonicParsing="false" text="Cerrar [ESC]" />
-        <Button fx:id="pausarButton" font="$x3" mnemonicParsing="false" prefWidth="70.0" text="Pausar [Pause]" visible="false" />
-        <Button id="buscar" fx:id="buscarProductoButton" font="$x3" mnemonicParsing="false" prefHeight="23.0" prefWidth="97.0" text="Catálogo... [F1]" visible="false" />
+        <Button id="fontX3" fx:id="abrirCatalogoButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="122.0" text="Búsqueda [F1]" visible="true" />
+        <Button id="fontX3" fx:id="ventaEspecialButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="152.0" text="Venta Especial [F4]" />
+        <Button id="fontX3" fx:id="movimientosButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="177.0" text="Movimientos Caja [F5]" />
+        <Button id="fontX3" fx:id="abrirCajonButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="137.0" text="Abrir Cajón [F6]" />
+        <Button id="fontX3" fx:id="btnCancelarProducto" mnemonicParsing="false" prefHeight="33.0" text="Cancelar Artículo [F7]" />
+        <Button id="fontX3" fx:id="cerrarButton" mnemonicParsing="false" prefHeight="33.0" text="Cerrar [F8]" />
+        <Button id="fontX3" fx:id="plmButton" mnemonicParsing="false" prefHeight="33.0" text="PLM [Alt+A]" />
+        <Button id="fontX3" fx:id="cancelarVentaButton" mnemonicParsing="false" prefHeight="33.0" text="Cancelar Venta [F12]" />
+        <Button id="fontX3" fx:id="pausarButton" mnemonicParsing="false" prefWidth="70.0" text="Pausar [Pause]" visible="false" />
       </items>
     </ToolBar>
-    <SplitPane dividerPositions="0.6466303675750511" focusTraversable="true" prefHeight="506.99988474121346" prefWidth="957.9999000000025" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.6475411145716358" focusTraversable="true" prefHeight="506.99988474121346" prefWidth="957.9999000000025" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
@@ -105,10 +102,13 @@
                 <Bloom threshold="0.4580152671755725" />
               </effect>
             </Rectangle>
-            <Text fx:id="hudText" disable="false" fill="WHITE" font="$x3" scaleX="1.0" scaleY="1.0" smooth="true" strokeType="OUTSIDE" strokeWidth="0.0" text="[Enter] para cancelar un producto&#10;[Esc] para no cancelar" textAlignment="LEFT" textOrigin="CENTER" AnchorPane.leftAnchor="43.0" AnchorPane.topAnchor="226.0">
+            <Text fx:id="hudText" disable="false" fill="WHITE" scaleX="1.0" scaleY="1.0" smooth="true" strokeType="OUTSIDE" strokeWidth="0.0" text="[Enter] para cancelar un producto&#10;[Esc] para no cancelar" textAlignment="LEFT" textOrigin="CENTER" AnchorPane.leftAnchor="43.0" AnchorPane.topAnchor="226.0">
               <effect>
                 <Bloom threshold="0.732824427480916" />
               </effect>
+              <font>
+                <Font size="13.0" />
+              </font>
             </Text>
           </children>
         </AnchorPane>

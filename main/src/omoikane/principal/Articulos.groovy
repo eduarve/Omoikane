@@ -119,10 +119,15 @@ public class Articulos
 
     static def lanzarImprimir(form)
     {
-        //def reporte = new Reporte('omoikane/reportes/ArticulosTodos.jasper',[txtQuery:form.txtQuery]);
-        //reporte.lanzarPreview()
-        CatalogoArticulosHandler articulosHandler = Principal.applicationContext.getBean( CatalogoArticulosHandler );
-        articulosHandler.handle();
+        int confirm = JOptionPane.showConfirmDialog(Principal.getEscritorio().getFrameEscritorio(), "¿Imprimir el catálogo filtrado?", "Impresión de catálogo de artículos", JOptionPane.YES_NO_CANCEL_OPTION);
+        if(confirm == JOptionPane.YES_OPTION) {
+            def reporte = new Reporte('omoikane/reportes/ArticulosTodos.jasper',[txtQuery:form.txtQuery]);
+            reporte.lanzarPreview()
+        } else if(confirm == JOptionPane.NO_OPTION) {
+            CatalogoArticulosHandler articulosHandler = Principal.applicationContext.getBean( CatalogoArticulosHandler );
+            articulosHandler.handle();
+        }
+
     }
 
     static def eliminarArticulo(ID)

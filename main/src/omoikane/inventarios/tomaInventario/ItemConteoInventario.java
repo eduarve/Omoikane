@@ -24,17 +24,19 @@ public class ItemConteoInventario {
     private BigDecimal conteo;
     private BigDecimal stockDB;
     private BigDecimal diferencia;
+    private BigDecimal costoUnitario;
 
     private Articulo articulo;
 
     public ItemConteoInventario() {
-        this("", "", new BigDecimal("0.00"));
+        this("", "", new BigDecimal("0.00"), new BigDecimal("0.00"));
     }
 
-    public ItemConteoInventario(String codigo, String nombre, BigDecimal conteo) {
+    public ItemConteoInventario(String codigo, String nombre, BigDecimal conteo, BigDecimal costoUnitario) {
             setCodigo( codigo );
             setNombre( nombre );
             setConteo( conteo );
+            setCostoUnitario( costoUnitario );
     }
 
     @Column
@@ -89,5 +91,14 @@ public class ItemConteoInventario {
 
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
+    }
+
+    @Column
+    public BigDecimal getCostoUnitario() {
+        return costoUnitario;
+    }
+
+    public void setCostoUnitario(BigDecimal costoUnitario) {
+        this.costoUnitario = costoUnitario;
     }
 }

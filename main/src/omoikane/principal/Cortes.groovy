@@ -172,6 +172,11 @@ class Cortes {
 
     static def lanzarVentanaCorteSucursal(resultadoCorte,IDAlmacen, IDCorte) {
         if(cerrojo(PMA_TOTALVENTASUCURSAL)) {
+            NumberFormat mf = NumberFormat.getCurrencyInstance();
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            nf.setMinimumFractionDigits(2);
+            nf.setMaximumFractionDigits(2);
+            nf.setGroupingUsed(true);
             
             def form = (new omoikane.formularios.CorteSucursalDetalles())
             def rc   = resultadoCorte
@@ -182,12 +187,12 @@ class Cortes {
             form.toFront()
             try { form.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario nuevo movimiento de almacén", Herramientas.getStackTraceString(e)) }
             form.txtNVentas.text   = rc.n_ventas
-            form.txtImpuestos.text = rc.impuestos
-            form.txtDescuentos.text= rc.descuentos
-            form.txtSubtotal.text  = rc.subtotal
-            form.txtTotal.text     = rc.total
-            form.txtRetiros.text     = rc.retiros
-            form.txtDepositos.text     = rc.depositos
+            form.txtImpuestos.text = nf.format ( rc.impuestos  )
+            form.txtDescuentos.text= nf.format ( rc.descuentos )
+            form.txtSubtotal.text  = nf.format ( rc.subtotal   )
+            form.txtTotal.text     = mf.format ( rc.total      )
+            form.txtRetiros.text             = nf.format ( rc.retiros   )
+            form.txtDepositos.text           = nf.format ( rc.depositos )
             form.btnAceptar.actionPerformed  = { form.dispose() }
             form.btnImprimir.actionPerformed = {
 

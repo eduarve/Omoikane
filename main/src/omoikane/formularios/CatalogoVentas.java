@@ -168,8 +168,8 @@ public class CatalogoVentas extends javax.swing.JInternalFrame {
                 setQueryTable("SELECT ventas.id_venta,ventas.fecha_hora,ventas.id_venta,ventas.id_caja,almacenes.descripcion,clientes.razonSocial,ventas.total FROM ventas,clientes,almacenes WHERE ventas.id_almacen="+IDAlmacen+" AND ventas.id_cliente=clientes.id_cliente"+whereFecha);
                 jTable1.setModel(modeloTabla);
 
-                Herramientas.setColumnsWidth(jTable1, anchoCols);
                 jProgressBar1.setIndeterminate(false);
+                Herramientas.setColumnsWidth(jTable1, 960, anchoCols);
             }
         }.start();
 
@@ -484,7 +484,12 @@ public class CatalogoVentas extends javax.swing.JInternalFrame {
             Dialogos.lanzarAlerta("Ningúna fila ha sido seleccionada.");
         } else {
             //++++++++++++++++++++++++++++
-            id = (Integer)this.jTable1.getValueAt(sel, -1);
+            Object oid = this.jTable1.getValueAt(sel, -1);
+            if(oid instanceof Long)
+                id = ((Long) this.jTable1.getValueAt(sel, -1)).intValue();
+            else
+                id = (Integer)this.jTable1.getValueAt(sel, -1);
+
             //Lanzar ventana y agregarle un listener
             omoikane.principal.Ventas.lanzarDetalles(id);
         }

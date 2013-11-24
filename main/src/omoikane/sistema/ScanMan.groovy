@@ -102,23 +102,22 @@ public class ScanMan implements SerialPortEventListener
 
             try
             {
-                println "comienza try de recopilar letras de escáner"
+
                 int len = 0;
                 while ( ( data = in7.read()) > -1 )
                 {
-                    println "comienza while de recopilar letras de escáner"
-                    //println "a "+data
+
                     if ( data == (13 as char) ) {
-                        println "salto de líneo, termina la recolección de letras del escáner"
+
                         break;
                     }
-                    println "se va a agregar una letra a la recolección"
+
                     buffer[len++] = (byte) data;
-                    println "se agregó una letra a la recolección"
+
                 }
-                println "se llamará al handler de la cadena completa del escáner"
+
                 handleScan(new String(buffer,0,len))
-                println "terminó la llamada al handler"
+
             }
             catch ( Exception e )
             {

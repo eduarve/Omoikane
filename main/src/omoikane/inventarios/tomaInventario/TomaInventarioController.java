@@ -13,6 +13,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,12 +25,18 @@ import javafx.util.StringConverter;
 import javafx.util.converter.BigDecimalStringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import name.antonsmirnov.javafx.dialog.Dialog;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.exception.DRException;
+import omoikane.entities.Usuario;
 import omoikane.inventarios.Stock;
 import omoikane.producto.Articulo;
 import omoikane.repository.ConteoInventarioRepo;
 import omoikane.repository.ProductoRepo;
 import omoikane.sistema.Permisos;
 import omoikane.sistema.TextFieldTableCell;
+import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
@@ -39,12 +48,18 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -90,6 +105,7 @@ public class TomaInventarioController implements Initializable {
     @FXML Button descartarButton;
     @FXML Button archivarButton;
     @FXML Button importarButton;
+    @FXML Button imprimirButton;
     @FXML AnchorPane mainPane;
 
     private Articulo capturaArticulo;
@@ -138,6 +154,59 @@ public class TomaInventarioController implements Initializable {
 
     }
 
+    @FXML public void onImprimir(ActionEvent actionEvent) {
+        List<Map<String, Object>> model = new ArrayList<>();
+        try {
+            for (ItemConteoInventario itemConteoInventario : modelo._conteoInventario.getItems()) {
+                HashMap<String, Object> mapa = new HashMap<>();
+                mapa.put("codigo", itemConteoInventario.getCodigo());
+                mapa.put("descripcion", itemConteoInventario.getNombre());
+                mapa.put("conteo", itemConteoInventario.getConteo());
+                mapa.put("existencia", itemConteoInventario.getStockDB());
+                mapa.put("diferencia", itemConteoInventario.getDiferencia());
+                mapa.put("costoUnitario", itemConteoInventario.getCostoUnitario());
+                model.add(mapa);
+            }
+            StyleBuilder boldStyle         = stl.style().bold();
+
+            StyleBuilder boldCenteredStyle = stl.style(boldStyle)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            StyleBuilder boldCenteredStyle2 = stl.style(boldStyle)
+                    .setHorizontalAlignment(HorizontalAlignment.LEFT).setFontSize(18);
+
+            StyleBuilder columnTitleStyle  = stl.style(boldCenteredStyle)
+                    .setBorder(stl.pen1Point())
+                    .setBackgroundColor(Color.LIGHT_GRAY);
+
+            TextColumnBuilder<BigDecimal> conteoCol = col.column("Conteo", "conteo", type.bigDecimalType());
+            TextColumnBuilder<BigDecimal> existenciaCol = col.column("Stock Sistema", "existencia", type.bigDecimalType());
+            TextColumnBuilder<BigDecimal> costoUnitarioCol = col.column("Costo U.", "costoUnitario", type.bigDecimalType());
+            TextColumnBuilder<BigDecimal> costoCol = costoUnitarioCol.multiply(conteoCol);
+            report()
+                    .columns(
+                            col.column("Código", "codigo", type.stringType()).setMinColumns(4),
+                            col.column("Descripción", "descripcion", type.stringType()),
+                            conteoCol.setMinColumns(2),
+                            existenciaCol.setMinColumns(2),
+                            col.column("Diferencia", "diferencia", type.bigDecimalType()).setMinColumns(2),
+                            costoUnitarioCol.setMinColumns(2),
+                            costoCol.setTitle("Costo de inventario").setMinColumns(3)
+
+                    )
+                    .setColumnTitleStyle(columnTitleStyle)
+                    .highlightDetailEvenRows()
+                    .setDataSource(model)
+                    .title(cmp.text("Conteo de inventario").setStyle(boldCenteredStyle2))
+                    .subtotalsAtSummary(sbt.sum(costoCol))
+                    .setSubtotalStyle(boldCenteredStyle2)
+                    .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))
+                    .show(false);
+        } catch (DRException e) {
+            logger.error("Problema al generar reporte de conteo de inventario" ,e);
+        }
+    }
+
     private void handleAplicarInventario() {
         mainPane.setDisable(true);
         Task aplicarInventarioTask = new Task<Void>() {
@@ -178,13 +247,37 @@ public class TomaInventarioController implements Initializable {
             productoRepo.saveAndFlush(articulo);
 
             modelo.setAplicado(true);
+            modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
             repo.saveAndFlush(modelo._conteoInventario);
 
         }
     }
     @FXML public void onImportarAction(ActionEvent actionEvent) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                importar();
+            }
+        });
+    }
+
+    public void importar() {
+        ITerminalHandler[] handlers = {
+                new ScanPetTerminalHandler(this),
+                new FreeInventarioTerminalHandler(this)  };
+        ITerminalHandler handler =
+                (ITerminalHandler) JOptionPane.showInputDialog(
+                        null,
+                        "¿Con que app se realizó el inventario?",
+                        "Seleccione formato",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        handlers,
+                        handlers[0]);
+        if(handler == null) return;
         try {
-            ITerminalHandler terminal = new FreeInventarioTerminalHandler(this);
+            ITerminalHandler terminal = handler;
             terminal.importData();
         } catch (Exception e) {
             logger.error("Error al importar", e);
@@ -220,12 +313,13 @@ public class TomaInventarioController implements Initializable {
 
         if(indice.containsKey(capturaArticulo.getIdArticulo())) return;
 
-        String codigo         = capturaArticulo.getCodigo();
-        String descripcion    = capturaArticulo.getDescripcion();
-        BigDecimal stockBD    = capturaArticulo.getStock().getEnTienda();
-        BigDecimal diferencia = conteo.subtract(stockBD);
+        String codigo            = capturaArticulo.getCodigo();
+        String descripcion       = capturaArticulo.getDescripcion();
+        BigDecimal stockBD       = capturaArticulo.getStock().getEnTienda();
+        BigDecimal diferencia    = conteo.subtract(stockBD);
+        BigDecimal costoUnitario = new BigDecimal( capturaArticulo.getBaseParaPrecio().getCosto() );
 
-        ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo);
+        ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo, costoUnitario);
         newItemBean.setArticulo  ( capturaArticulo );
         newItemBean.setStockDB   ( stockBD         );
         newItemBean.setDiferencia( diferencia      );
@@ -344,10 +438,12 @@ public class TomaInventarioController implements Initializable {
     }
 
     public void initModel(ConteoInventario conteoInventario) {
+        imprimirButton.disableProperty().unbind();
         archivarButton.disableProperty().unbind();
         descartarButton.disableProperty().unbind();
         aplicarInventarioButton.disableProperty().unbind();
 
+        imprimirButton.setDisable(false);
         archivarButton.setDisable(false);
         descartarButton.setDisable(false);
         aplicarInventarioButton.setDisable(false);
@@ -360,6 +456,7 @@ public class TomaInventarioController implements Initializable {
             indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
         }
 
+        imprimirButton.disableProperty().bind(modelo.getCompletado().not());
         archivarButton.disableProperty().bind(modelo.getCompletado());
         descartarButton.disableProperty().bind(modelo.getCompletado());
         aplicarInventarioButton.disableProperty().bind(modelo.getAplicado());

@@ -89,6 +89,7 @@ public class ConteoInventario {
 
     @Column
     public Boolean getAplicado() {
+        if(aplicado == null) aplicado = false;
         return aplicado;
     }
 

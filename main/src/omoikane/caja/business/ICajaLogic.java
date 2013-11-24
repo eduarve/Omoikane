@@ -3,6 +3,7 @@ package omoikane.caja.business;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.CajaModel;
 import omoikane.entities.LegacyVenta;
+import omoikane.entities.LegacyVentaDetalle;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,8 @@ public interface ICajaLogic {
     public void        onCaptura(CajaModel model);
     public void        buscar(CajaModel model);
     public void        calcularCambio(CajaModel model);
-    public void        terminarVenta(CajaModel model);
+    public LegacyVenta terminarVenta(CajaModel model);
+    public void        imprimirVenta(LegacyVenta venta);
     public void onVentaListChanged(CajaModel model);
 
     void setController(CajaController cajaController);
@@ -29,4 +31,5 @@ public interface ICajaLogic {
 
     void persistirVenta();
 
+    LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd);
 }

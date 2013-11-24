@@ -97,6 +97,14 @@ public class ConteoInventarioPropWrapper {
         getAplicado().set(aplicado);
     }
 
+    public JavaBeanObjectProperty<Usuario> getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario u) {
+        getUsuario().set(u);
+    }
+
     public void addItem(ItemConteoPropWrapper itemConteoPropWrapper) {
         items.add(itemConteoPropWrapper);
         _conteoInventario.getItems().add(itemConteoPropWrapper.getBean());

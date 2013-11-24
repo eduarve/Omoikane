@@ -13,4 +13,6 @@ public interface ITerminalHandler {
 
     public void exportData();
     public void importData();
+
+    public String toString();
 }

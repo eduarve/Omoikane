@@ -21,6 +21,8 @@ import java.awt.event.*;
 import omoikane.sistema.*;
 import javax.swing.event.*;
 import java.text.*;
+import java.util.List;
+
 import omoikane.principal.*;
 
 
@@ -56,6 +58,10 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
     public VentasDetalles() {
         initComponents();
                
+        aFacturar.setVisible(false);
+        lblFacturar.setVisible(false);
+        chkFacturado.setVisible(false);
+        btnFacturado.setVisible(false);
         //Instrucciones para el funcionamiento del fondo semistransparente
         this.setOpaque(false);
         ((JPanel)this.getContentPane()).setOpaque(false);
@@ -80,7 +86,7 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
         btnImprimir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        lblFacturar = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -99,6 +105,8 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         aFacturar = new javax.swing.JTextField();
         txtIDVenta = new javax.swing.JLabel();
+
+        setPreferredSize(new java.awt.Dimension(928, 632));
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -145,11 +153,11 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
         jTable1.setShowHorizontalLines(false);
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("<html>Cliente a <br>facturar [F1]:<html>");
+        lblFacturar.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblFacturar.setForeground(new java.awt.Color(255, 255, 255));
+        lblFacturar.setText("<html>Cliente a <br>facturar [F1]:<html>");
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Almacen :");
 
@@ -157,40 +165,45 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Total :");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Subtotal :");
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Impuesto :");
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Descuento :");
 
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Fecha :");
 
         txtCliente.setEditable(false);
-        txtCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCliente.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtCliente.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         txtSubtotal.setEditable(false);
-        txtSubtotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtSubtotal.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtSubtotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         txtAlmacen.setEditable(false);
-        txtAlmacen.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtAlmacen.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtAlmacen.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         txtDescuento.setEditable(false);
-        txtDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDescuento.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtDescuento.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescuentoActionPerformed(evt);
+            }
+        });
 
         txtImpuesto.setEditable(false);
-        txtImpuesto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtImpuesto.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtImpuesto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtImpuesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,7 +217,7 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
 
         txtFecha.setEditable(false);
         txtFecha.setFocusable(false);
-        txtFecha.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtFecha.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtFecha.setFormats(java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM));
 
         chkFacturado.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -222,12 +235,12 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Cliente :");
 
         aFacturar.setEditable(false);
-        aFacturar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        aFacturar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         aFacturar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         aFacturar.setFocusable(false);
 
@@ -249,24 +262,21 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(aFacturar))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGap(32, 32, 32)
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSubtotal))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel8)
                                             .addComponent(jLabel4)
                                             .addComponent(jLabel7)
-                                            .addComponent(chkFacturado))
+                                            .addComponent(chkFacturado)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel6))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btnFacturado, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                                            .addComponent(txtSubtotal)
+                                            .addComponent(btnFacturado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(txtDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                                             .addComponent(txtImpuesto)
                                             .addComponent(txtTotal))))
@@ -294,8 +304,8 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(537, 537, 537)
+                        .addComponent(btnImprimir)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -315,32 +325,33 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
                     .addComponent(jLabel9)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(aFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblFacturar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnFacturado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chkFacturado))
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtImpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtImpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTotal)
-                            .addComponent(jLabel4)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 85, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -372,9 +383,13 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtImpuestoActionPerformed
 
+    private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDescuentoActionPerformed
+
    public javax.swing.JTextField getFactura() { return this.aFacturar;    }
    public SimpleDateFormat sdf          = new SimpleDateFormat("yyyy-MM-dd");
-   public void setFacturar    (String  val) { aFacturar.setText(val);this.chkFacturado.setSelected(true);this.aFacturar.setVisible(false);this.jLabel1.setVisible(false);this.hacer=false;}
+   public void setFacturar    (String  val) { aFacturar.setText(val);this.chkFacturado.setSelected(true);this.aFacturar.setVisible(false);this.lblFacturar.setVisible(false);this.hacer=false;}
    public void setIDVenta     (String  val) { txtIDVenta.setText(val);  }
    public void setCliente     (String  val) { txtCliente.setText(val);  }
    public void setDescuento   (String  val) { txtDescuento.setText(val);}
@@ -387,10 +402,18 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
 
    
     public void setTablaPrincipal(java.util.List val) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        nf.setGroupingUsed(true);
+
         DefaultTableModel modelo = ((DefaultTableModel)this.jTable1.getModel());
         for(int i = 0; i < val.size(); i++)
         {
-            modelo.addRow(((java.util.ArrayList) val.get(i)).toArray());
+            final List renglon = ((java.util.ArrayList) val.get(i));
+            renglon.set(2, nf.format(renglon.get(2)));
+            renglon.set(4, nf.format(renglon.get(4)));
+            modelo.addRow(renglon.toArray());
         }
      }
 
@@ -409,7 +432,7 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
 
       tmp = gc.createCompatibleImage(areaDibujo.width, areaDibujo.height,BufferedImage.TRANSLUCENT);
       Graphics2D g2d = (Graphics2D) tmp.getGraphics();
-      g2d.setColor(new Color(0,0,0,165));
+      g2d.setColor(new Color(0,0,0,220));
       g2d.fillRect(0,0,areaDibujo.width,areaDibujo.height);
       fondo = tmp;
     }
@@ -420,7 +443,6 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnFacturado;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JCheckBox chkFacturado;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -431,6 +453,7 @@ public class VentasDetalles extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblFacturar;
     private javax.swing.JTextField txtAlmacen;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDescuento;

@@ -33,6 +33,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import jfxtras.labs.scene.control.BigDecimalField;
+import omoikane.caja.business.CajaLogicImpl;
 import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.business.LineaDeCapturaFilter;
 import omoikane.caja.handlers.*;
@@ -43,6 +44,7 @@ import omoikane.sistema.Herramientas;
 import org.apache.log4j.Logger;
 import org.synyx.hades.domain.PageRequest;
 
+import javax.swing.*;
 import javax.xml.ws.spi.http.HttpHandler;
 
 
@@ -107,6 +109,9 @@ public class CajaController
 
     @FXML
     private Button ventaEspecialButton;
+
+    @FXML
+    private Button plmButton;
 
     @FXML
     private TableView<ProductoModel> ventaTableView;
@@ -227,7 +232,16 @@ public class CajaController
 
             @Override
             protected Void call() throws Exception {
-                cajaLogic.terminarVenta(getModel());
+                try {
+                    LegacyVenta venta = cajaLogic.terminarVenta(getModel());
+                    cajaLogic.imprimirVenta(venta);
+
+                    if(venta != null) JOptionPane.showMessageDialog(Principal.getEscritorio().getFrameEscritorio(), "Venta Registrada");
+                } catch (Exception e) {
+                    logger.error("Error al guardar venta, venta no registrada.", e);
+                    failed();
+                }
+
                 return null;
             }
         };
@@ -293,7 +307,8 @@ public class CajaController
 
     @FXML
     private void onCapturaKeyTyped(KeyEvent event) {
-        if ( modelo.getCaptura().get() != null && !modelo.getCaptura().get().isEmpty() ) {
+        if ( modelo.getCaptura().get() != null
+                && !modelo.getCaptura().get().isEmpty() ) {
             if(timerBusqueda != null && timerBusqueda.isAlive()) { timerBusqueda.cancelar(); }
             this.timerBusqueda = new TimerBusqueda(this);
             timerBusqueda.start();
@@ -392,6 +407,8 @@ public class CajaController
                 getCerrarCajaSwingHandler().handle(event);
             if (event.getTarget() == abrirCatalogoButton)
                 new MostrarCatalogoHandler(controller).handle(event);
+            if (event.getTarget() == plmButton)
+                new PlmHandler(controller).handle(event);
         }
     }
 
@@ -534,7 +551,7 @@ public class CajaController
             synchronized(this)
             {
                 busquedaActiva = true;
-                try { this.wait(500); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
+                try { this.wait(1000); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
                 if(busquedaActiva && cc.modelo != null) {
                     getModel().setPaginacionBusqueda(new PageRequest(0,10));
                     cc.getCajaLogic().buscar(cc.getModel());

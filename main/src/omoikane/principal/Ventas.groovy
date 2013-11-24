@@ -18,7 +18,10 @@ import groovy.inspect.swingui.*;
 import javax.swing.table.TableColumn
 import java.awt.event.*;
 import groovy.swing.*
-import static omoikane.sistema.Usuarios.*;
+
+ import java.text.NumberFormat
+
+ import static omoikane.sistema.Usuarios.*;
 import static omoikane.sistema.Permisos.*;
 import omoikane.sistema.n2t.*;
 
@@ -78,13 +81,20 @@ class Ventas {
             def serv    = Nadesico.conectar()
             def mov     = serv.getVenta(ID,IDAlmacen)
             serv.desconectar()
+
+            NumberFormat mf = NumberFormat.getCurrencyInstance();
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            nf.setMinimumFractionDigits(2);
+            nf.setMaximumFractionDigits(2);
+            nf.setGroupingUsed(true);
+
             form.setIDVenta(mov.id_venta as String)
             form.setCliente(mov.nombreCliente as String)
-            form.setDescuento(mov.descuento as String)
-            form.setImpuesto(mov.impuestos as String)
+            form.setDescuento( nf.format( mov.descuento ) )
+            form.setImpuesto ( nf.format( mov.impuestos ) )
             if (mov.facturada as Boolean){form.setFacturar(mov.id_cliente as String)}
-            form.setSubtotal(mov.subtotal as String)
-            form.setTotal(mov.total as String)
+            form.setSubtotal( nf.format ( mov.subtotal ) )
+            form.setTotal( mf.format( mov.total ) )
             form.setAlmacen(mov.nombreAlmacen as String)
             form.setFecha(mov.fecha_hora as String)
             form.setTablaPrincipal(mov.tabMatriz as List)

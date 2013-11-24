@@ -25,6 +25,7 @@ public class ItemConteoPropWrapper {
     private JavaBeanObjectProperty<Articulo> articulo;
     private JavaBeanObjectProperty<BigDecimal> stockDB;
     private JavaBeanObjectProperty<BigDecimal> diferencia;
+    private JavaBeanObjectProperty<BigDecimal> costoUnitario;
 
     private ItemConteoInventario _itemConteo;
     static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ItemConteoPropWrapper.class);
@@ -52,6 +53,11 @@ public class ItemConteoPropWrapper {
             builder1.bean(itemConteo);
             builder1.name("stockDB");
             stockDB = builder1.build();
+
+            builder1 = JavaBeanObjectPropertyBuilder.create();
+            builder1.bean(itemConteo);
+            builder1.name("costoUnitario");
+            costoUnitario = builder1.build();
 
             builder1 = JavaBeanObjectPropertyBuilder.create();
             builder1.bean(itemConteo);
@@ -117,6 +123,14 @@ public class ItemConteoPropWrapper {
 
     public void setArticulo(Articulo articulo) {
         this.articulo.set(articulo);
+    }
+
+    public ObjectProperty<BigDecimal> costoUnitarioProperty() {
+        return costoUnitario;
+    }
+
+    public void setCostoUnitario(BigDecimal costoUnitario) {
+        this.costoUnitario.set( costoUnitario );
     }
 
 }

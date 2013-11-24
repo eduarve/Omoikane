@@ -11,6 +11,8 @@
 
 package omoikane.formularios;
 
+import omoikane.sistema.Herramientas;
+
 import java.awt.image.BufferedImage;
 import java.awt.*;
 
@@ -18,12 +20,20 @@ import java.awt.*;
  *
  * @author SYSTEM
  */
-public class Reporte extends javax.swing.JInternalFrame {
+public class Reporte extends OmJInternalFrame {
 
     public BufferedImage fondo;
     /** Creates new form CodigoArticulo */
     public Reporte() {
         initComponents();
+
+        this.setOpaque(false);
+
+        this.generarFondo();
+        Herramientas.centrarVentana(this);
+        this.setResizable(true);
+        this.setClosable(true);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /** This method is called from within the constructor to
@@ -38,8 +48,8 @@ public class Reporte extends javax.swing.JInternalFrame {
         Panel = new javax.swing.JPanel();
 
         setTitle("Reporte");
-        setMinimumSize(new java.awt.Dimension(600, 400));
-        setPreferredSize(new java.awt.Dimension(600, 400));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         Panel.setLayout(new javax.swing.BoxLayout(Panel, javax.swing.BoxLayout.LINE_AXIS));
@@ -47,11 +57,6 @@ public class Reporte extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    public void paintComponent(java.awt.Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(fondo, 0, 0, null);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel;
