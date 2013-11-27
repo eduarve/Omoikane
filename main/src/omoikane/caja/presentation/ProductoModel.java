@@ -3,6 +3,7 @@ package omoikane.caja.presentation;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import omoikane.entities.LegacyVentaDetalle;
 import omoikane.producto.Producto;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class ProductoModel {
     private ObjectProperty<BigDecimal> descuentosBase;
     private StringProperty importeString;
     private Producto productoData;
+    private LegacyVentaDetalle ventaDetalleEntity;
 
     public ProductoModel() {
         id         = new SimpleLongProperty(0l);
@@ -38,7 +40,7 @@ public class ProductoModel {
         impuestosBase = new SimpleObjectProperty<BigDecimal>(new BigDecimal(0));
         descuentosBase = new SimpleObjectProperty<BigDecimal>(new BigDecimal(0));
         importeString = new SimpleStringProperty("");
-
+        ventaDetalleEntity = new LegacyVentaDetalle();
     }
 
     /**
@@ -226,5 +228,13 @@ public class ProductoModel {
 
     public void setProductoData(Producto productoData) {
         this.productoData = productoData;
+    }
+
+    public void setVentaDetalleEntity(LegacyVentaDetalle lvd) {
+        ventaDetalleEntity = lvd;
+    }
+
+    public LegacyVentaDetalle getVentaDetalleEntity() {
+        return ventaDetalleEntity;
     }
 }

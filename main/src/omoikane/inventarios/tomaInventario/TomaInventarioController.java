@@ -137,7 +137,7 @@ public class TomaInventarioController implements Initializable {
 
     @FXML public void onAplicarInventarioAction() {
 
-        Dialog.buildConfirmation("Confirmación", "Al aplicar este inventario, los stocks de los productos en el almacén quedarán actualizados a los números introducidos en este conteo, la operación no es revertible, ¿Está seguro de continuar?")
+        Dialog.buildConfirmation("Confirmación", "Al aplicar este inventario, los stocks de los productos en el almacén quedarán actualizados a los números introducidos en este conteo, la operación no es reversible, ¿Está seguro de continuar?")
                 .addYesButton(new EventHandler() {
                     @Override
                     public void handle(Event event) {

@@ -74,7 +74,7 @@ public class LegacyVenta implements Serializable {
     private double centecimosredondeados;
     @Basic(optional = false)
     @Column(name = "folio")
-    private long folio;
+    private Long folio;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "venta")
     List<LegacyVentaDetalle> items;
@@ -228,11 +228,11 @@ public class LegacyVenta implements Serializable {
         this.centecimosredondeados = centecimosredondeados;
     }
 
-    public long getFolio() {
+    public Long getFolio() {
         return folio;
     }
 
-    public void setFolio(long folio) {
+    public void setFolio(Long folio) {
         this.folio = folio;
     }
 

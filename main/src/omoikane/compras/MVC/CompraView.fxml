@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="732.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.compras.MVC.CompraController">
+  <children>
+    <Label text="Compra" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
+      <font>
+        <Font size="23.0" />
+      </font>
+    </Label>
+    <TableView fx:id="itemsTable" editable="false" focusTraversable="true" prefHeight="275.0" prefWidth="705.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="78.0">
+      <columns>
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" text="Código" fx:id="codigoCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="241.0" text="Producto" fx:id="nombreProductoCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Cantidad" fx:id="cantidadCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Costo unitario" fx:id="costoCol" />
+        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Importe" fx:id="importeCol" />
+      </columns>
+    </TableView>
+    <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
+        <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar y aplicar" />
+        <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" visible="false" />
+      </items>
+    </ToolBar>
+    <Label prefWidth="34.0" text="ID:" visible="false" AnchorPane.rightAnchor="178.0" AnchorPane.topAnchor="48.0" />
+    <Label text="Fecha:" visible="false" AnchorPane.rightAnchor="171.0" AnchorPane.topAnchor="77.0" />
+    <Label fx:id="fechaLabel" prefWidth="133.0" text="" visible="false" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="74.0">
+      <font>
+        <Font name="System Bold" size="13.0" fx:id="x1" />
+      </font>
+    </Label>
+    <TextField fx:id="txtIdProveedor" layoutX="206.0" layoutY="42.0" prefHeight="28.0" prefWidth="41.0" promptText="ID" />
+    <TextField fx:id="txtFolioOrigen" layoutX="605.0" layoutY="42.0" prefHeight="28.0" prefWidth="110.0" />
+    <Label fx:id="lblProveedor" layoutX="259.0" layoutY="42.0" prefHeight="28.0" prefWidth="210.0" text="">
+      <font>
+        <Font size="13.0" />
+      </font>
+    </Label>
+    <Label fx:id="idLabel" font="$x1" prefWidth="133.0" text="" visible="false" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="48.0" />
+    <TextField fx:id="codigoTextField" prefHeight="28.0" prefWidth="141.0" promptText="Código de producto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+    <Label id="descripcionText" fx:id="descripcionLabel" prefHeight="28.0" prefWidth="232.0" style="-fx-background-color: lightgrey;&#10;" text="" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="333.0" />
+    <Label text="Línea de captura" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="15.0">
+      <font>
+        <Font size="18.0" />
+      </font>
+    </Label>
+    <Separator prefWidth="733.9998779296875" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="12.0" />
+    <TextField id="cantidadTextfield" fx:id="cantidadTextField" prefHeight="28.0" prefWidth="89.0" promptText="Cantidad" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="230.0" />
+    <TextField id="costoTextfield" fx:id="costoTextField" prefHeight="28.0" prefWidth="109.0" promptText="Costo unitario" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="113.0" />
+    <Button fx:id="agregarButton" mnemonicParsing="false" onAction="#onAgregarAction" prefHeight="28.0" prefWidth="89.0" text="Agregar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="13.0" />
+    <Label layoutX="121.0" layoutY="45.0" prefHeight="21.0" text="Proveedor">
+      <font>
+        <Font size="16.0" fx:id="x2" />
+      </font>
+      <textFill>
+        <Color blue="0.625" green="0.625" red="0.625" fx:id="x3" />
+      </textFill>
+    </Label>
+    <Label font="$x2" layoutX="479.0" layoutY="45.0" prefHeight="21.0" prefWidth="126.00009999999747" text="Folio de origen" textFill="GREY" />
+    <Label font="$x2" text="Subtotal" AnchorPane.bottomAnchor="81.0" AnchorPane.rightAnchor="185.0" />
+    <Label fx:id="subtotalLabel" alignment="CENTER_RIGHT" prefWidth="141.0" text="\$0.00" textAlignment="RIGHT" AnchorPane.bottomAnchor="77.0" AnchorPane.rightAnchor="30.0">
+      <font>
+        <Font name="System Bold" size="18.0" />
+      </font>
+    </Label>
+    <Label prefWidth="232.0" text="Importe total sin incluir impuestos" textFill="$x3" AnchorPane.bottomAnchor="61.0" AnchorPane.rightAnchor="17.0" />
+  </children>
+</AnchorPane>

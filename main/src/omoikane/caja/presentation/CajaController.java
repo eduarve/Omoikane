@@ -551,7 +551,7 @@ public class CajaController
             synchronized(this)
             {
                 busquedaActiva = true;
-                try { this.wait(1000); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
+                try { this.wait(2000); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
                 if(busquedaActiva && cc.modelo != null) {
                     getModel().setPaginacionBusqueda(new PageRequest(0,10));
                     cc.getCajaLogic().buscar(cc.getModel());

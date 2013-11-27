@@ -5,6 +5,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import omoikane.compras.MVC.CompraController;
+import omoikane.compras.MVC.ComprasCRUDController;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.inventarios.StockLevelsController;
 import omoikane.inventarios.tomaInventario.ConteoInventarioCRUDController;
@@ -62,8 +64,20 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    CompraController compraController() {
+        return new CompraController();
+    }
+
+    @Bean
+    @Scope("prototype")
     ConteoInventarioCRUDController conteoInventarioCRUDController() {
         return new ConteoInventarioCRUDController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ComprasCRUDController comprasCRUDController() {
+        return new ComprasCRUDController();
     }
 
     @Bean
@@ -104,8 +118,20 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    Scene compraView() {
+        return initView("/omoikane/compras/MVC/CompraView.fxml", compraController());
+    }
+
+    @Bean
+    @Scope("prototype")
     Scene conteoInventarioCRUDView() {
         return initView("/omoikane/inventarios/tomaInventario/ConteoInventarioCRUDView.fxml", conteoInventarioCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene comprasCRUDView() {
+        return initView("/omoikane/compras/MVC/ComprasCRUDView.fxml", comprasCRUDController());
     }
 
     @Bean

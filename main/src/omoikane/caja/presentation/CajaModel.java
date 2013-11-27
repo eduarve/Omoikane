@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import omoikane.entities.LegacyVenta;
 import org.synyx.hades.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class CajaModel {
     private Pageable paginacionBusqueda;
     private ObjectProperty<BigDecimal> efectivo;
     private ObjectProperty<BigDecimal> cambio;
+    private LegacyVenta ventaEntity;
 
     /**
      * Instancía todos los atributos
@@ -52,6 +54,7 @@ public class CajaModel {
         setVenta(list);
         ObservableList<ProductoModel> productos = FXCollections.observableArrayList();
         setProductos(productos);
+        setVentaEntity(new LegacyVenta());
     }
 
     public StringProperty getCaptura() {
@@ -133,5 +136,13 @@ public class CajaModel {
 
     public void setCambio( BigDecimal cambio ) {
         this.efectivo.set( cambio );
+    }
+
+    public LegacyVenta getVentaEntity() {
+        return ventaEntity;
+    }
+
+    public void setVentaEntity(LegacyVenta legacyVenta) {
+        ventaEntity = legacyVenta;
     }
 }

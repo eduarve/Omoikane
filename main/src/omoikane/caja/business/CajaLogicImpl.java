@@ -138,7 +138,11 @@ public class CajaLogicImpl implements ICajaLogic {
         Boolean       agrupar = false;
         ProductoModel productoBase = null;
         for ( ProductoModel p : model.getVenta() ) {
-            if(p.getId().get() == productoModel.getId().get()) { agrupar = true; productoBase = p; break; }
+            if(p.getId().get() == productoModel.getId().get()) {
+                agrupar = true;
+                productoBase = p;
+                break;
+            }
         }
         if(agrupar) {
             BigDecimal cantidadBase  = productoBase.cantidadProperty().get();
@@ -146,40 +150,36 @@ public class CajaLogicImpl implements ICajaLogic {
             productoModel.cantidadProperty().set( nuevaCantidad );
             model.getVenta().remove(productoBase);
             model.getVenta().add(0, productoModel);
-            for(LegacyVentaDetalle item : ventaAbiertaBean.getItems()) {
-                if(item.getIdArticulo().equals(productoModel.getLongId().intValue())) {
-                    lvd = item; break;
-                }
-            }
+
+            lvd = productoBase.getVentaDetalleEntity();
 
         }   else {
             model.getVenta().add(0, productoModel);
+
             lvd = new LegacyVentaDetalle();
         }
 
-        buildLegacyVentaDetalle(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
+        syncLegacyVentaDetalleWithModel(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
 
-        lvd.setVenta(ventaAbiertaBean);
+        lvd.setVenta(model.getVentaEntity());
 
         LegacyVentaDetalle l = persistirItemVenta(lvd);
-        ventaAbiertaBean.addItem(l);
+        productoModel.setVentaDetalleEntity( l );
 
-        //persistirVenta();
     }
 
     @Override
     public void deleteRowFromVenta(int row) {
 
         getController().getModel().getVenta().remove(row);
-        getVentaAbiertaBean().getItems().remove(row);
-        persistirVenta();
+
     }
 
     @Override
     public void persistirVenta() {
 
         CajaModel model = getController().getModel();
-        ventaAbiertaBean = guardarVenta(model);
+        model.setVentaEntity(  guardarVenta(model) );
     }
 
     @Override
@@ -255,7 +255,7 @@ public class CajaLogicImpl implements ICajaLogic {
         BigDecimal ventaTotal = model.getTotal().get();
         if( ventaTotal.compareTo( new BigDecimal("0.10") ) > 0 ) {
             try {
-                ventaAbiertaBean.setCompletada(true);
+                model.getVentaEntity().setCompletada(true);
                 LegacyVenta venta = guardarVenta(model);
 
                 //Hace las salidas de inventario / Make inventory issues
@@ -269,9 +269,6 @@ public class CajaLogicImpl implements ICajaLogic {
         return null;
     }
 
-    private LegacyVenta ventaAbiertaBean;
-    @Override
-    public LegacyVenta getVentaAbiertaBean() { return ventaAbiertaBean; }
 
     @Override
     public void nuevaVenta() {
@@ -280,17 +277,23 @@ public class CajaLogicImpl implements ICajaLogic {
         getController().getCapturaTextField().requestFocus();
     }
 
+    @Override
+    public LegacyVenta getVentaAbiertaBean() {
+        return getController().getModel().getVentaEntity();
+    }
+
 
     private void instanciarModeloVenta() {
         LegacyVenta ventaIncompleta = buscarVentaIncompleta();
-        getController().setModel( new CajaModel() );
+
+        CajaModel model = new CajaModel();
+        getController().setModel( model );
 
         if(ventaIncompleta == null) {
-            ventaAbiertaBean = null;
             persistirVenta();
         } else {
             cargarVentaIncompleta(ventaIncompleta);
-            ventaAbiertaBean = ventaIncompleta;
+            model.setVentaEntity( ventaIncompleta );
         }
     }
 
@@ -324,14 +327,12 @@ public class CajaLogicImpl implements ICajaLogic {
         Double  cambio    = model.getCambio().get().doubleValue();
         Date    fechaHora = (Date) entityManager.createNativeQuery("SELECT current_timestamp").getSingleResult();
 
-        LegacyVenta venta;
-        if(ventaAbiertaBean == null) {
+        LegacyVenta venta = model.getVentaEntity();
+
+        if(model.getVentaEntity().getFolio() == null) {
             Integer folio     = asignarFolio(idCaja);
-            venta = new LegacyVenta();
             venta.setCompletada(false);
-            venta.setFolio(folio);
-        } else {
-            venta = ventaAbiertaBean;
+            venta.setFolio(Long.valueOf(folio));
         }
 
         venta.setIdCliente ( 1 );
@@ -359,7 +360,7 @@ public class CajaLogicImpl implements ICajaLogic {
                 else
                     lvd = itemsTmp.get(i);
 
-            buildLegacyVentaDetalle(idCaja, idAlmacen, producto, lvd);
+            syncLegacyVentaDetalleWithModel(idCaja, idAlmacen, producto, lvd);
 
             venta.addItem(lvd);
             i++;
@@ -373,7 +374,7 @@ public class CajaLogicImpl implements ICajaLogic {
         return venta;
     }
 
-    private void buildLegacyVentaDetalle(Integer idCaja, Integer idAlmacen, ProductoModel producto, LegacyVentaDetalle lvd) {
+    private void syncLegacyVentaDetalleWithModel(Integer idCaja, Integer idAlmacen, ProductoModel producto, LegacyVentaDetalle lvd) {
         lvd.setIdAlmacen ( idAlmacen );
         lvd.setIdArticulo( producto.getLongId().intValue() );
         lvd.setIdCaja    ( idCaja );

@@ -53,7 +53,7 @@ public class VentaRepoTest {
         venta.setDescuento(0d);
         venta.setEfectivo(0d);
         venta.setFacturada(0);
-        venta.setFolio(0);
+        venta.setFolio(0l);
         venta.setIdCliente(1);
         venta.setIdUsuario(1);
         venta.setImpuestos(0d);

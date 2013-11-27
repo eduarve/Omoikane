@@ -55,7 +55,7 @@ public class PlmHandler extends ICajaEventHandler {
 
         frame.pack();
         frame.setVisible(true);
-        frame.setBounds(0,0, 800, 600);
+        frame.setBounds(0,0, 1000, 650);
 
         fxPanel.setVisible(true);
 
@@ -68,7 +68,8 @@ public class PlmHandler extends ICajaEventHandler {
     }
 
     private void initFX(final JFXPanel fxPanel) {
-        Scene scene = new Scene(new Browser(),750,500, Color.web("#666970"));
+        Browser browser = new Browser();
+        Scene scene = new Scene(browser,750,500, Color.web("#666970"));
         fxPanel.setScene(scene);
 
     }
@@ -99,6 +100,7 @@ public class PlmHandler extends ICajaEventHandler {
         public Browser() {
             for (int i = 0; i < captions.length; i++) {
                 final Hyperlink hpl = hpls[i] = new Hyperlink(captions[i]);
+                hpl.setStyle("-fx-font-size: 28; -fx-text-fill: white;");
                 //Image image = images[i] =
                 //        new Image(getClass().getResourceAsStream(imageFiles[i]));
                 //hpl.setGraphic(new ImageView (image));
@@ -114,6 +116,7 @@ public class PlmHandler extends ICajaEventHandler {
 
             // load the home page
             webEngine.load("http://www.medicamentosplm.com/labs/a.htm");
+            browser.impl_setScale(1.5);
 
             // create the toolbar
             toolBar = new HBox();

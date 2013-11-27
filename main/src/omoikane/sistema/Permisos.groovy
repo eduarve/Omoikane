@@ -71,6 +71,9 @@ class Permisos {
     static def PMA_APLICARINVENTARIO     = ADMINISTRADOR
     static def PMA_CREARINVENTARIO       = SUPERVISOR
 
+    static def PMA_REGISTRARCOMPRA       = SUPERVISOR
+    static def PMA_APLICARCOMPRA_A_STOCK = SUPERVISOR
+
     static def PMA_TOTALVENTA            = SUPERVISOR
     static def PMA_TOTALVENTASUCURSAL    = SUPERVISOR
     static def PMA_LANZARCAJA            = CAJERO
