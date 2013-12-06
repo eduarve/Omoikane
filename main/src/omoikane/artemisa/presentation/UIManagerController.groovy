@@ -80,29 +80,36 @@ public class UIManagerController
 
                 @Override
                 void handle(ActionEvent t) {
-                    if(elemento.permiso != null)
-                        if(!omoikane.sistema.Usuarios.cerrojo((Object) elemento.permiso)) return ;
-                    if(elemento.vista != null)
-                        cargarVista(elemento.vista);
-                    if(elemento.comando != null)
-                        elemento.comando()
+                    Thread.start {
+                        if(elemento.permiso != null)
+                            if(!omoikane.sistema.Usuarios.cerrojo((Object) elemento.permiso)) return ;
+                        if(elemento.vista != null)
+                            cargarVista(elemento.vista);
+                        if(elemento.comando != null)
+                            elemento.comando()
+                    }
                 }
             })
         }
     }
 
     public void cargarVista(String vista) {
-        Scene cajaClinicaView = (Scene) Principal.applicationContext.getBean( vista );
-        Parent parent = cajaClinicaView.getRoot();
-        AnchorPane.setBottomAnchor(parent, 0d);
-        AnchorPane.setLeftAnchor(parent, 0d);
-        AnchorPane.setRightAnchor(parent, 0d);
-        AnchorPane.setTopAnchor(parent, 0d);
-        Button dummyButton = new Button("");
-        contentPane.getChildren().removeAll();
-        contentPane.getChildren().addAll(parent, dummyButton);
-        contentPane.getChildren().remove(dummyButton);
-        parent.setVisible(true);
+        Platform.runLater(new Runnable() {
+            @Override
+            void run() {
+                Scene cajaClinicaView = (Scene) Principal.applicationContext.getBean( vista );
+                Parent parent = cajaClinicaView.getRoot();
+                AnchorPane.setBottomAnchor(parent, 0d);
+                AnchorPane.setLeftAnchor(parent, 0d);
+                AnchorPane.setRightAnchor(parent, 0d);
+                AnchorPane.setTopAnchor(parent, 0d);
+                Button dummyButton = new Button("");
+                contentPane.getChildren().removeAll();
+                contentPane.getChildren().addAll(parent, dummyButton);
+                contentPane.getChildren().remove(dummyButton);
+                parent.setVisible(true);
+            }
+        })
 
     }
 

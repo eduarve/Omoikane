@@ -78,6 +78,7 @@ package omoikane.sistema;
                 Usuario usuario;
 
                 usuario = AuthContext.instanciar().authenticate();
+                if(usuario == null) return false;
 
                 def serv          = Nadesico.conectar()
                 if(usuario == null) {

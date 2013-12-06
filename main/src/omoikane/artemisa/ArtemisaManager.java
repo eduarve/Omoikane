@@ -12,6 +12,7 @@ import omoikane.sistema.Permisos;
 import omoikane.sistema.Usuarios;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 /**
@@ -26,12 +27,15 @@ public class ArtemisaManager extends Application {
 
     public static void main(String[] args) throws Exception {
         initAWT(); //Necesario para utilizar swing en mac con javafx y java 1.7_u<45 por algún bug
+        Principal.initJavaFx();
         omoikane.principal.Principal.configExceptions();
         omoikane.principal.Principal.setConfig( new omoikane.sistema.Config() );
         omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-artemisa.xml");
         //Usuarios.identificaPersona();
 
+        if(Usuarios.login() == false) return;
         Application.launch(ArtemisaManager.class);
+
     }
 
     private static void initAWT() {
