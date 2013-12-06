@@ -226,10 +226,10 @@ public class CajaClinicaController
         try {
             report()
                     .columns(
-                            col.column("Fecha / Hora", "fecha", type.dateType()),
-                            col.column("Concepto", "concepto", type.stringType()),
-                            cargoColumn = col.column("Cargo", "cargo", type.bigDecimalType()),
-                            abonoColumn = col.column("Abono", "abono", type.bigDecimalType())
+                            col.column("Fecha / Hora", "fecha", type.dateType()).setWidth(1).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                            col.column("Concepto", "concepto", type.stringType()).setWidth(4),
+                            cargoColumn = col.column("Cargo", "cargo", type.bigDecimalType()).setWidth(1),
+                            abonoColumn = col.column("Abono", "abono", type.bigDecimalType()).setWidth(1)
                     )
                     .setColumnTitleStyle(columnTitleStyle)
                     .highlightDetailEvenRows()
