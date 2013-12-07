@@ -27,9 +27,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.MarginBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.PageOrientation;
+import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import omoikane.artemisa.CancelacionTransaccionDAO;
@@ -225,6 +229,8 @@ public class CajaClinicaController
 
         try {
             report()
+                    .setPageFormat(PageType.LETTER, PageOrientation.PORTRAIT)
+                    .setPageMargin(DynamicReports.margin().setRight(25).setLeft(25).setTop(25).setBottom(10))
                     .columns(
                             col.column("Fecha / Hora", "fecha", type.dateType()).setWidth(1).setHorizontalAlignment(HorizontalAlignment.LEFT),
                             col.column("Concepto", "concepto", type.stringType()).setWidth(4),
@@ -236,9 +242,9 @@ public class CajaClinicaController
                     .title(
                             cmp.horizontalList()
                                     .add(
-                                            cmp.image(getClass().getResourceAsStream("/omoikane/Media2/icons/PNG/512/banknote.png")).setFixedDimension(80, 80),
-                                            cmp.text("Estado de cuenta").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
-                                            cmp.text("Hospital Ángel").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                                            cmp.image(getClass().getResourceAsStream("/omoikane/artemisa/images/LogoHA.png")).setFixedDimension(150, 70),
+                                            //cmp.text("Estado de cuenta").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                                            cmp.text("Estado de cuenta").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                                     .newRow()
                                     .add(
                                             cmp.text("Paciente: "+pacienteLbl.getText()).setStyle(titleStyle))
