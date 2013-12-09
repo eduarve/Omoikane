@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="artemisa_reciboAbono" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2e41bc81-7b16-49c5-9b71-238c48b5c6b2">
+	<property name="template.type" value="columnar"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Artemisa 3"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="JSON">
+		<![CDATA[recibos]]>
+	</queryString>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="paciente" class="java.lang.String">
+		<fieldDescription><![CDATA[paciente]]></fieldDescription>
+	</field>
+	<field name="cargo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[cargo]]></fieldDescription>
+	</field>
+	<field name="abono" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[abono]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="105" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" mode="Opaque" x="176" y="16" width="377" height="86" uuid="b39f2146-9e62-4d9b-aac5-211e77e0d4f0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado de cuenta]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="10" width="176" height="93" uuid="4a6f9017-04aa-4802-8a85-ffe0c09b884c"/>
+				<imageExpression><![CDATA["C:\\Users\\XPS17\\Documents\\GitHub\\Omoikane\\out\\production\\Omoikane\\omoikane\\artemisa\\images\\LogoHA.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="103" width="555" height="1" uuid="b4981cc3-fbab-4c98-a13f-fe37397984c9"/>
+				<graphicElement>
+					<pen lineWidth="2.25"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="248" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="237" y="0" width="318" height="31" uuid="77eae1c6-88b6-4a0a-acc1-9606f8b07d4c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="22" isBold="false" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="4" y="61" width="132" height="30" forecolor="#000000" uuid="44894f5f-5d05-4cd0-b168-6ef48617c76d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Paciente: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="136" y="61" width="419" height="30" uuid="4efd18d3-f9a8-4c1d-ab46-cd98d0e6dfc4"/>
+				<textElement>
+					<font fontName="Arial" size="24" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{paciente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="200" y="124" width="132" height="30" forecolor="#000000" uuid="89ae8db7-78f4-4581-bf5b-ab0373eb991f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cargo:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="334" y="124" width="221" height="30" uuid="71790acb-6f14-464e-a656-c1a216dadb31"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="200" y="154" width="132" height="30" forecolor="#000000" uuid="ed46b860-03d8-43ba-a0ae-e68c1f07b5b0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false"/>
+				</textElement>
+				<text><![CDATA[- Abono:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="¤#,##0.00#;¤(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="334" y="154" width="221" height="30" uuid="90f57a05-0c59-4879-9ebe-d3f1a8a91a76"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{abono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="200" y="187" width="132" height="30" forecolor="#000000" uuid="3a8bcc70-0b22-4900-b647-d88f16b1618b"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Saldo:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="¤#,##0.00#;¤(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="334" y="187" width="221" height="30" uuid="63c78312-9a27-4e9e-95c5-433e6aa681a4"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="24" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="200" y="186" width="353" height="1" uuid="c58590e5-ff9c-465b-8407-9714ba7a4ca6"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

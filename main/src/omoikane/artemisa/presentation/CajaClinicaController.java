@@ -5,6 +5,7 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,14 +28,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
+import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.MarginBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
+import net.sf.dynamicreports.report.definition.ReportParameters;
 import net.sf.dynamicreports.report.exception.DRException;
 import omoikane.artemisa.CancelacionTransaccionDAO;
 import omoikane.artemisa.PacienteRepo;
@@ -43,6 +47,7 @@ import omoikane.artemisa.entity.CancelacionTransaccion;
 import omoikane.artemisa.entity.Paciente;
 import omoikane.artemisa.entity.Transaccion;
 import omoikane.artemisa.reports.AbonoPrint;
+import omoikane.artemisa.reports.CuentaSimplificadaPrint;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.entities.Cancelacion;
 import omoikane.entities.Usuario;
@@ -52,6 +57,7 @@ import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.number.CurrencyFormatter;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -59,6 +65,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.transform.Templates;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
@@ -111,6 +118,8 @@ public class CajaClinicaController
 
     @FXML //  fx:id="panelEstadoDeCuenta"
     private AnchorPane panelEstadoDeCuenta; // Value injected by FXMLLoader
+
+
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -190,10 +199,15 @@ public class CajaClinicaController
         pacientesList.setItems(pacienteObservableList);
     }
 
+    List<Transaccion> transacciones;
+
+    Paciente paciente;
+
     private void selectPaciente(final Paciente paciente) {
 
+        this.paciente=paciente;
         pacienteLbl.setText(paciente.getNombre());
-        List<Transaccion> transacciones = pacienteRepo.findTransaccionesOf(paciente);
+        transacciones = pacienteRepo.findTransaccionesOf(paciente);
         ObservableList<Transaccion> transaccions = FXCollections.observableArrayList( transacciones );
         tabEdoCuenta.setItems(transaccions);
         BigDecimal saldoPaciente = pacienteRepo.getSaldo(paciente);
@@ -212,7 +226,8 @@ public class CajaClinicaController
         });
     }
 
-    public void onImprimir() {
+
+    public void onImprimirX() {
 
         TextColumnBuilder cargoColumn, abonoColumn;
 
@@ -225,6 +240,11 @@ public class CajaClinicaController
         StyleBuilder titleStyle = stl.style(boldCenteredStyle)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setFontSize(15);
+        StyleBuilder subTitleStyle = stl.style()
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setFontSize(15);
+        AggregationSubtotalBuilder<BigDecimal> sumaA,sumaB;
+
 
 
         try {
@@ -247,19 +267,25 @@ public class CajaClinicaController
                                             cmp.text("Estado de cuenta").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                                     .newRow()
                                     .add(
-                                            cmp.text("Paciente: "+pacienteLbl.getText()).setStyle(titleStyle))
+                                            cmp.text("Paciente: " + pacienteLbl.getText()).setStyle(subTitleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                                            cmp.text(Calendar.getInstance().getTime()).setStyle(subTitleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                                     .newRow()
                                     .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))
                     .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))
                     .subtotalsAtSummary(
-                            sbt.sum(cargoColumn),
-                            sbt.sum(abonoColumn))
+                            sumaA = sbt.sum(cargoColumn),
+                            sumaB = sbt.sum(abonoColumn))
+                    .summary(
+                            cmp.horizontalList().add(cmp.text(new TotalPaymentExpression(sumaA, sumaB)).setHorizontalAlignment(HorizontalAlignment.RIGHT).setStyle(titleStyle))
+
+                    )
                     .setDataSource(tabEdoCuenta.getItems())
                     .show(false);
         } catch (DRException e) {
             logger.error("Error al imprimir", e);
         }
     }
+
 
     private void abonar() {
         Abono nvoAbono = new Abono();
@@ -276,6 +302,12 @@ public class CajaClinicaController
         logger.info("Abono registrado");
         abonoTxt.setText("");
         selectPaciente(paciente);
+    }
+
+    public void onImprimir() {
+
+        CuentaSimplificadaPrint cuentaSimplificadaPrint = new CuentaSimplificadaPrint(transacciones,paciente);
+        cuentaSimplificadaPrint.show();
     }
 
     private class ActionsCell extends TableCell<Transaccion, Boolean> {
@@ -347,5 +379,25 @@ public class CajaClinicaController
         logger.info("Cuenta liquidada.");
         resetPacienteListData();
     }
+
+    private class TotalPaymentExpression extends AbstractSimpleExpression<String> {
+        private static final long serialVersionUID = 1L;
+        private AggregationSubtotalBuilder<BigDecimal> sumaA,sumaB;
+
+        public TotalPaymentExpression(AggregationSubtotalBuilder sumaA ,AggregationSubtotalBuilder sumaB){
+            this.sumaA=sumaA;
+            this.sumaB=sumaB;
+        }
+        @Override
+        public String evaluate(ReportParameters reportParameters) {
+            NumberFormat formater = NumberFormat.getCurrencyInstance();
+            BigDecimal sa = reportParameters.getValue(sumaA);
+            BigDecimal sb = reportParameters.getValue(sumaB);
+            BigDecimal sc = sa.subtract(sb);
+            return "Saldo: "+ formater.format(sc.doubleValue());
+        }
+    }
+
 }
+
 

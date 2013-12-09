@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="888.0" style="" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.artemisa.presentation.CajaClinicaController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="888.0" style="" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="omoikane.artemisa.presentation.CajaClinicaController">
   <children>
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefHeight="45.0" prefWidth="805.0" style="-fx-background-color: dodgerblue;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
@@ -43,7 +43,7 @@
           <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="277.0" text="Concepto" fx:id="conceptoCol" />
         </columns>
       </TableView>
-      <HBox prefHeight="30.0" prefWidth="575.0" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="13.0">
+      <HBox prefHeight="30.0" prefWidth="658.9998779296875" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="13.0">
         <children>
           <Label prefHeight="30.0" prefWidth="66.0" text="Abonar" textAlignment="CENTER">
             <font>
@@ -52,22 +52,24 @@
           </Label>
           <Separator prefWidth="200.0" visible="false" HBox.hgrow="ALWAYS" />
           <TextField fx:id="abonoTxt" prefHeight="30.0" prefWidth="200.0" promptText="Cantidad a abonar" />
-          <Button mnemonicParsing="false" onAction="#onAbonar" prefHeight="30.0" prefWidth="109.0" text="Realizar abono" />
+          <Button mnemonicParsing="false" onAction="#onAbonar" prefHeight="30.0" prefWidth="136.0" text="Realizar abono" />
         </children>
       </HBox>
-      <HBox prefHeight="30.0" prefWidth="575.0" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="13.0">
+      <HBox prefHeight="30.0" prefWidth="658.0" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="14.0">
         <children>
           <Label font="$x1" prefHeight="30.0" prefWidth="75.0" text="Liquidar" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
           <Separator prefWidth="200.0" visible="false" HBox.hgrow="ALWAYS" />
           <Button mnemonicParsing="false" onAction="#onLiquidar" prefHeight="30.0" prefWidth="108.0" text="Liquidar" HBox.hgrow="SOMETIMES" />
         </children>
       </HBox>
-      <HBox prefHeight="30.0" prefWidth="575.0" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="13.0">
+      <HBox prefHeight="30.0" prefWidth="658.0" style="-fx-border-width: 0 0 0 5;&#10;-fx-border-color: dodgerblue;&#10;-fx-background-color: lightcyan;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="14.0">
         <children>
           <Label font="$x1" prefHeight="30.0" prefWidth="166.0" text="Saldo de la cuenta:" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
-          <Label id="condicionLiquidacionLbl" fx:id="saldoTxt" font="$x2" prefHeight="30.0" prefWidth="227.0" text="{ Saldo }" HBox.hgrow="SOMETIMES" />
-          <Separator prefWidth="65.0" visible="false" HBox.hgrow="ALWAYS" />
-          <Button id="onImprimir" mnemonicParsing="false" onAction="#onImprimir" prefHeight="30.0" prefWidth="199.0" text="Imprimir Estado de Cuenta" />
+          <Label id="condicionLiquidacionLbl" fx:id="saldoTxt" font="$x2" prefHeight="30.0" prefWidth="216.0" text="{ Saldo }" HBox.hgrow="SOMETIMES" />
+          <Separator minHeight="0.0" prefHeight="30.0" prefWidth="16.0" visible="false" HBox.hgrow="ALWAYS" />
+          <Button id="onImprimir" mnemonicParsing="false" onAction="#onImprimirX" prefHeight="30.0" prefWidth="137.0" text="Edo. de Cuenta" />
+          <Separator prefHeight="30.0" prefWidth="8.0" />
+          <Button mnemonicParsing="false" onAction="#onImprimir" prefHeight="30.0" prefWidth="118.0" text="Edo. Simple" />
         </children>
       </HBox>
     </AnchorPane>
