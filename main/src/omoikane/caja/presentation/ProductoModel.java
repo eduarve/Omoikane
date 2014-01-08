@@ -172,6 +172,10 @@ public class ProductoModel {
         this.impuestosBase = impuestosBase;
     }
 
+    public BigDecimal getImpuestosBase() {
+        return impuestosBase.get();
+    }
+
     public String getSubtotalString() {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         return nf.format(getSubtotal());
@@ -199,6 +203,10 @@ public class ProductoModel {
     private void setDescuentosBase(ObjectProperty<BigDecimal> descuentosBase) {
         descuentosBase.get().setScale(2, BigDecimal.ROUND_HALF_UP);
         this.descuentosBase = descuentosBase;
+    }
+
+    public BigDecimal getDescuentosBase() {
+        return descuentosBase.get();
     }
 
     public String getDescuentosString() {
