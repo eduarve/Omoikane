@@ -50,7 +50,7 @@ class CuentaSimplificadaPrint {
         viewer.setOpaque(true);
         viewer.setVisible(true);
 
-        frame.setTitle("Recibo de abono");
+        frame.setTitle("Cuenta");
         frame.add(viewer);
         frame.setSize(960,600);
         frame.setVisible(true);
