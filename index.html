@@ -7,41 +7,42 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/Phesus/Omoikane">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/Phesus/Omoikane/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/Phesus/Omoikane/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+
+      <header>
+        <h1>Omoikane</h1>
+        <p>Punto de venta opensource de vanguardia, ¡especializado en negocios problemáticos!.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/Phesus/Omoikane" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/Phesus/Omoikane/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/Phesus/Omoikane/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
 
     <div class="wrapper">
-
+      <nav>
+        <ul></ul>
+      </nav>
       <section>
-        <div id="title">
-          <h1>Omoikane</h1>
-          <p>Punto de venta en español, grauito y opensource. Para cualquier tipo de negocio, moderno y con instrumentación avanzada.</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/Phesus">Phesus</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
         <h1>
 <a name="omoikane" class="anchor" href="#omoikane"><span class="octicon octicon-link"></span></a>Omoikane</h1>
 
-<p>Punto de venta grauito y opensource. Para cualquier tipo de negocio, moderno y con instrumentación avanzada.</p>
+<p>Punto de venta opensource de tecnología de vanguardia. Solución sencilla para cualquier tipo de negocio, especializado en negocios, que por sus características complejas no pueden ser tratados con puntos de venta básicos. (la mayoría en el mercado). Puede manejar desde 1 producto hasta cientos de miles sin problemas. Tiene características de inventario y almacén sencillas de uso, pero avanzadas en características que superan la media del mercado.</p>
 
 <p><img src="http://i.imgur.com/JHh7C0f.png" alt="Caja"></p>
 
@@ -53,8 +54,6 @@
 <ul>
 <li>
 <strong>Opensource</strong>. Cualquiera puede extender nuestro código para implementar o modificar funciones en sus negocios, puede ser un excelente punto de partida para negocios que por su tamaño o especialización requiern una solución propia. Ésto siempre que respeten los términos de nuestra licencia :).</li>
-<li>
-<strong>Gratuito</strong>. Excelente para pequeños, medianos y grandes negocios que requieran un ahorro en su infraestructura TI. Además las actualizaciones seguirá siendo gratuitas para siempre.</li>
 <li>
 <strong>Diseño</strong> moderno que da una buena presentación a los clientes y oscuro que reduce el cansancio visual de los usuarios</li>
 <li>
@@ -72,8 +71,6 @@
 <li>
 <strong>Paquetes</strong> de productos. Es posible agrupar distintos productos y en distintas cantidades bajo un mismo nombre y código de producto. Además esa agrupación de productos puede tener un precio especial que no necesariamente es la suma de sus componentes.</li>
 <li>
-<strong>Impuestos</strong>. Omoikane es agnóstico en cuanto a impuestos, siempre que los impuestos se calculen como una proporcion del valor del producto. Por ejemplo en México se puede cargar un 0%, 11% o 16% del valor del producto como impuesto.</li>
-<li>
 <strong>Categorización</strong> de productos. Es posible categorizar un producto por línea y por grupo. </li>
 <li>
 <strong>Descuentos</strong> por producto, por grupo y por línea. </li>
@@ -81,6 +78,10 @@
 <strong>Robusta y confiable</strong> base de datos libre y gratuita MySQL. </li>
 <li>
 <strong>Rendimiento, Escalabilidad y capacidad</strong> comprobados: El rendimiento no depende del tamaño del negocio, nuestra aplicación funciona en negocios con más de dos millones de registros y consideramos que puede soportar decenas de millones sin afectar nunca el rendimiento.</li>
+<li>
+<strong>Multi-impuesto</strong> Es posible agregar cualquier cantidad de impuestos a cualquier producto. Por ejemplo IVA 0%, IVA 16%, IEPS 8%, IEPS 25%, etc. Es posible agregar cualquier impuesto que sea una proporción del valor del producto.</li>
+<li>
+<strong>Facturación y notas de crédito CFDI</strong> La facturación electrónica se puede realizar mediante diversos proveedores de timbres, desde 30 centavos por timbre aún comprando un solo timbre.</li>
 </ul><h2>
 <a name="caracter%C3%ADsticas-agendadas" class="anchor" href="#caracter%C3%ADsticas-agendadas"><span class="octicon octicon-link"></span></a>Características agendadas:</h2>
 
@@ -100,10 +101,30 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 <li>Windows XP y superiores: Si bien la mayor parte del programa es multiplataforma, exíste un componente que solo funciona con windows, estoy trabajando en quitar ese componente (OneTouch SDK).</li>
 <li>Java JRE 7u6</li>
 <li>Lector de huella DigitalPersona u.are.u 4000 o 4500</li>
+</ul><h2>
+<a name="contacto" class="anchor" href="#contacto"><span class="octicon octicon-link"></span></a>Contacto</h2>
+
+<ul>
+<li><a href="http://phesus.com">Página de Phesus</a></li>
 </ul><h3>
 <a name="instalaci%C3%B3n-de-la-base-de-datos" class="anchor" href="#instalaci%C3%B3n-de-la-base-de-datos"><span class="octicon octicon-link"></span></a>Instalación de la base de datos</h3>
 
-<h3>
+<ol>
+<li>Descargar MySQL Server, desde la página oficial. <a href="http://dev.mysql.com/downloads/mysql/">Página oficial de MySQL Server</a>
+</li>
+<li><a href="http://dev.mysql.com/downloads/tools/workbench/">Descargar MySQL Workbench</a></li>
+<li>Instalar MySQL con los parámetros deseados, para un negocio pequeño los parámetros que vienen por default en el instalador serán más que suficientes. Es importante recordar el password que pongamos durante la instalación.</li>
+<li>Instalar MySQL Workbench, éste software facilita las operaciones con la base de datos y será de gran utilidad para administrarla.</li>
+<li>Abrir workbench, la interfaz está dividida en 3 columnas: "SQL Development", "Data Modeling" y "Server Administration".</li>
+<li>Cargar la base de datos de Omoikane, en la columna "Server Administration", después haga doble click en "mysql@localhost", ahora vaya a "Data export and restore", seleccione la pestaña "Import from disk", seleccione "Import from self-contained file", haga click en "..." y busque el archivo "schema.sql" en la carpeta de instalación de Omoikane. Por último haga click en "Select all tables" y "Start import".</li>
+<li>¡Felicidades! Si los pasos anteriores se han seguido con éxito, la base de datos estará lista para ser utilizada.</li>
+</ol><h4>
+<a name="notas" class="anchor" href="#notas"><span class="octicon octicon-link"></span></a>Notas</h4>
+
+<ul>
+<li>Es posible conectarse a cualquier otro tipo de instalación de MySQL y resultaría útil para configuraciones excentricas, por ejemplo usando LAMP, TurnKey Linux, WAMP, etc.</li>
+<li>Para un negocio grande, digamos más de 4 cajas de cobro, simplemente utilicen la configuración "Para producción" del instalador</li>
+</ul><h3>
 <a name="instalaci%C3%B3n-del-cliente" class="anchor" href="#instalaci%C3%B3n-del-cliente"><span class="octicon octicon-link"></span></a>Instalación del cliente</h3>
 
 <ol>
@@ -150,7 +171,10 @@ java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
 
 <p>Licenciado bajo GNUv2. Para más detalles ver el archivo LICENSE adjunto al código en éste repositorio.</p>
       </section>
-
+      <footer>
+        <p>Project maintained by <a href="https://github.com/Phesus">Phesus</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
               <script type="text/javascript">
