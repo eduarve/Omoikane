@@ -73,11 +73,11 @@ java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
 
 4. Utilizar el configurador para establecer los principales parámetros del sistema. La parte más importante de la configuración es establecer los parámetros de conexión a la base de datos, estos parámetros tienen que ser consistentes con los que se introdujeron cuando se configuró la base de datos:
 
-### Configuración
+## Configuración
 
 [Leer acerca de la configuración en nuestro wiki/manual](https://github.com/Phesus/Omoikane/wiki/Configuraci%C3%B3n)
 
-### Licencia
+## Licencia
 
 Licenciado bajo GNUv2. Para más detalles ver el archivo LICENSE adjunto al código en éste repositorio.
 
