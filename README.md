@@ -42,9 +42,6 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 - Conexión a internet
 - Para el uso de huella dactilar: Windows XP o superior y lector de huellas DigitalPersona u.are.u 4000 o 4500
 
-## Contacto
-- [Página de Phesus](http://phesus.com)
-
 ### Instalación de la base de datos
 1. Descargar MySQL Server, desde la página oficial. [Página oficial de MySQL Server](http://dev.mysql.com/downloads/mysql/)
 2. [Descargar MySQL Workbench](http://dev.mysql.com/downloads/tools/workbench/)
@@ -80,6 +77,15 @@ java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
 
 [Leer acerca de la configuración en nuestro wiki/manual](https://github.com/Phesus/Omoikane/wiki/Configuraci%C3%B3n)
 
+### Licencia
+
+Licenciado bajo GNUv2. Para más detalles ver el archivo LICENSE adjunto al código en éste repositorio.
+
+
+Contacto
+========
+- [Página de Phesus](http://phesus.com)
+
 Instrumentación
 ===============
 Para los preocupados por el lado técnico, Omoikane utiliza las siguientes tecnologías libres:
@@ -94,8 +100,3 @@ Descargas
 =========
 
 [Área de descargas](https://github.com/Phesus/Omoikane/releases)
-
-Licencia
-========
-
-Licenciado bajo GNUv2. Para más detalles ver el archivo LICENSE adjunto al código en éste repositorio.
