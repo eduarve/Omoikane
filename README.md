@@ -33,9 +33,14 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 
 ## Instalación
 ### Requisitos mínimos
-- Windows XP y superiores: Si bien la mayor parte del programa es multiplataforma, exíste un componente que solo funciona con windows, estoy trabajando en quitar ese componente (OneTouch SDK).
-- Java JRE 7u6
-- Lector de huella DigitalPersona u.are.u 4000 o 4500
+- Windows XP y superiores, MAC OSX 10.6 o superiores, Linux con Java 7 o superior.
+- Java JRE 7u21
+- Al menos 2 GB de RAM
+- Procesador de 1 GHz o superior
+### Características recomendadas del sistema
+- Procesador de doble núcleo de 2 GHz o superior
+- Conexión a internet
+- Para el uso de huella dactilar: Windows XP o superior y lector de huellas DigitalPersona u.are.u 4000 o 4500
 
 ## Contacto
 - [Página de Phesus](http://phesus.com)
