@@ -2,10 +2,8 @@ package omoikane.compras.entities;
 
 import omoikane.producto.Articulo;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -63,7 +61,8 @@ public class ItemCompra {
         this.cantidad = cantidad;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
+    @NotNull
     public Articulo getArticulo() {
         return articulo;
     }

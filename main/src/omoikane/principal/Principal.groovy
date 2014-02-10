@@ -26,44 +26,6 @@ import java.util.concurrent.CountDownLatch
  * ////////////////////////////////////////////////////////////////////////////////////////////
  * ////////////////////////////////////////////////////////////////////////////////////////////
  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- *  * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
- * ////////////////////////////////////////////////////////////////////////////////////////////
  *
  * 
  *  * @author Octavio
@@ -99,7 +61,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG = false;
-        public static final String          VERSION = "1.4.0 RC6.94";
+        public static final String          VERSION = "1.4.1";
         public static def                   authType                = AuthContext.AuthType.NIP;
 
     public static void main(args)
@@ -114,71 +76,57 @@ public class Principal {
         {
             try {
 
-            logger.trace("Iniciando sistema. Versión " + VERSION);
-            configExceptions()
-            def splash = new Splash()
-            splash.iniciar()
-            Locale.setDefault(Locale.US);
+                logger.trace("Iniciando sistema. Versión " + VERSION);
+                configExceptions()
 
-            shutdownHandler = new ShutdownHandler()
-            Runtime.getRuntime().addShutdownHook(shutdownHandler);
+                //Inicializa el hilo que muestra el splash
+                def splash;
+                Thread.start {
+                    splash = new Splash()
+                    splash.iniciar()
+                }
 
-            splash.setText("Cargando configuración...")
-            config = new omoikane.sistema.Config()
+                Locale.setDefault(Locale.US);
 
-            splash.setText("Cargando ApplicationContext...")
-            applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+                shutdownHandler = new ShutdownHandler()
+                Runtime.getRuntime().addShutdownHook(shutdownHandler);
 
-            splash.setText("Cargando huellas en caché...")
-            applicationContext.getBean(HuellasCache.class).getHuellasBD();
+                logger.trace("Cargando configuración...")
+                config = new omoikane.sistema.Config()
 
-            splash.setText("Inicializando JavaFX")
-            initJavaFx()
+                logger.trace("Cargando ApplicationContext...")
+                applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-            splash.setText("Inicializando escritorio...")
-            //Herramientas.utilImpresionCortes()
-            //System.exit(0)
-            escritorio = new Escritorio()
-            escritorio.iniciar()
-            println "iniciando menús"
-            splash.setText("Inicializando menú principal...")
-            menuPrincipal = new MenuPrincipal()
+                logger.trace("Cargando huellas en caché...")
+                applicationContext.getBean(HuellasCache.class).getHuellasBD();
 
-            splash.detener()
-            iniciarSesion()
-            menuPrincipal.iniciar()
+                logger.trace("Inicializando JavaFX")
+                initJavaFx()
 
-            if(scannerActivo){
-                scanMan = new DefaultScanMan()
-                try {
-                    println "comienza intento de conexi?n"
-                    scanMan.connect(Principal.scannerPort, Principal.scannerBaudRate)
-                    println "fin intento de conexi?n"
-                } catch(Exception ex2) { Dialogos.error(ex2.getMessage(), ex2) }
+                logger.trace("Inicializando escritorio...");
+                //Herramientas.utilImpresionCortes()
+                //System.exit(0)
+                escritorio = new Escritorio()
+                escritorio.iniciar()
+                logger.trace("Inicializando menú principal...")
+                menuPrincipal = new MenuPrincipal()
+                splash.detener()
 
-                toFinalizeTracker.put("scanMan", "")
+                iniciarSesion()
+                menuPrincipal.iniciar()
 
-            }
-           
-            //
-            //new SimpleForm() {
-            //        it.form.visible = true
-            //}
-            /*
-            def puerto = new PuertoNadesico()
-            println puerto.dump()
-            
-            def objPrueba = puerto.ObjPrueba.newInstance()
-            objPrueba.metodo1()
-            objPrueba.metodo2("hola desde invocaci?n rara")
-            println "resultado metodo 3: "+objPrueba.metodo3()
-            println "resultado de la propiedad1 : " +objPrueba.prop1
-            println "resultado de la propiedad2 : " +objPrueba.prop2
-            println puerto.Articulos.get(145594).descripcion
-            //puerto.(new Articulos(descripcion:"?ltimo objeto8")).addToCodigos(new CodigosArticulo(codigo:"lalalauiiuiui")).save()
-            def art = (puerto.Articulos.newInstance(descripcion:"otro m?s")).addToCodigos(puerto.CodigosArticulo.newInstance(codigo:"?l c?digo")).save()
-            //art.save()
-            */
+                if(scannerActivo){
+                    scanMan = new DefaultScanMan()
+                    try {
+                        println "comienza intento de conexi?n"
+                        scanMan.connect(Principal.scannerPort, Principal.scannerBaudRate)
+                        println "fin intento de conexi?n"
+                    } catch(Exception ex2) { Dialogos.error(ex2.getMessage(), ex2) }
+
+                    toFinalizeTracker.put("scanMan", "")
+
+                }
+
             } catch(e) {
                 Dialogos.lanzarDialogoError(null, "Al iniciar aplicación: ${e.message}", Herramientas.getStackTraceString(e))
                 logger.error("Al iniciar aplicación: ${e.message}".toString(), e)

@@ -13,6 +13,7 @@ import javafx.util.Callback;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.nadesicoiLegacy.Ventas;
+import omoikane.producto.Impuesto;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 
@@ -92,6 +93,8 @@ public class VentaEspecialHandler extends ICajaEventHandler {
     /** Cambia el precio de un producto en un solo renglón (fila) y solo durante la venta actual, el usuario captura el precio que
      *  desea que tenga el producto, esto incluye impuestos y descuentos, por lo que es necesario recalcular el precioBase, impuestos y descuentos.
      *
+     *  Aún no soporta más de un impuesto en cada producto
+     *
      */
     public class PrecioCellEditHandler implements EventHandler<TableColumn.CellEditEvent<ProductoModel, String>> {
         public void handle(TableColumn.CellEditEvent<ProductoModel, String> t) {
@@ -103,7 +106,18 @@ public class VentaEspecialHandler extends ICajaEventHandler {
             try {
                 nuevoPrecio = (BigDecimal) df.parse(t.getNewValue());
                 ProductoModel pm = t.getTableView().getSelectionModel().getSelectedItem();
-                BigDecimal impuestosPorc = pm.getProductoData().getImpuestos();
+
+                //Determina el porcentaje de impuestos, aún no soporta más de un impuesto en cada producto
+                BigDecimal impuestosPorc;
+                switch( pm.getProductoData().getImpuestos().size() ) {
+                    case 0:
+                        impuestosPorc = new BigDecimal(0d); break;
+                    case 1:
+                        impuestosPorc = pm.getProductoData().getImpuestos().iterator().next().getPorcentaje(); break;
+                    default:
+                        throw new UnsupportedOperationException("No está soportado modificar el precio de artículos con más de un impuesto");
+                }
+
                 BigDecimal descuentoPorc = pm.getProductoData().getDescuento();
                 BigDecimal cien         = new BigDecimal("100");
                 BigDecimal uno          = new BigDecimal("1");
@@ -112,14 +126,16 @@ public class VentaEspecialHandler extends ICajaEventHandler {
                 BigDecimal nuevoDescuentoBase = nuevoPrecioBase.multiply ( descuentoPorc.divide( cien, 4, BigDecimal.ROUND_HALF_EVEN ) );
                 BigDecimal nuevoImpuestoBase  = nuevoPrecioBase.subtract(nuevoDescuentoBase).multiply ( impuestosPorc.divide( cien, 4, BigDecimal.ROUND_HALF_EVEN ) );
 
-                pm.impuestosBaseProperty() .set( nuevoImpuestoBase );
+                if(pm.impuestosProperty().size() > 0) pm.impuestosProperty().get(0).setImpuestoBase( nuevoImpuestoBase );
                 pm.descuentosBaseProperty().set( nuevoDescuentoBase );
                 pm.precioBaseProperty()    .set( nuevoPrecioBase );
                 pm.precioProperty()        .set( nuevoPrecio );
 
                 getController().getCajaLogic().onVentaListChanged(getController().getModel());
+            } catch (UnsupportedOperationException e) {
+                logger.info(e.getMessage());
             } catch (ParseException e) {
-                logger.error("Precio mal escrito");
+                logger.error("Precio mal escrito", e);
             }
 
         }
@@ -137,7 +153,8 @@ public class VentaEspecialHandler extends ICajaEventHandler {
         private BigDecimal calcularNuevoPrecioBase(BigDecimal nuevoPrecio, ProductoModel producto) {
             BigDecimal cien         = new BigDecimal("100");
             BigDecimal uno          = new BigDecimal("1");
-            BigDecimal factorX_A       = producto.getImpuestosBase().subtract(producto.getDescuentosBase());
+            BigDecimal impuestoBase = producto.impuestosProperty().size() > 0 ? producto.impuestosProperty().get(0).getImpuestoBase() : new BigDecimal("0") ;
+            BigDecimal factorX_A       = impuestoBase.subtract(producto.getDescuentosBase());
             BigDecimal factorX_B       = cien.divide(producto.precioProperty().get(), 4, BigDecimal.ROUND_HALF_EVEN);
             BigDecimal factorX         = factorX_A .multiply( factorX_B );
             factorX                    = factorX.divide(cien, 4, BigDecimal.ROUND_HALF_EVEN);

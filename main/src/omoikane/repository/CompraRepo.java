@@ -2,6 +2,10 @@ package omoikane.repository;
 
 import omoikane.compras.entities.Compra;
 import org.synyx.hades.dao.GenericDao;
+import org.synyx.hades.dao.Param;
+import org.synyx.hades.dao.Query;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,4 +16,5 @@ import org.synyx.hades.dao.GenericDao;
  */
 public interface CompraRepo extends GenericDao<Compra, Long> {
     Compra findByCompletado(Boolean completado);
+
 }

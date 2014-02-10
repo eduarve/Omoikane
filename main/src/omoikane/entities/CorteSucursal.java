@@ -34,7 +34,6 @@ public class CorteSucursal  {
 
     private Date umodificacion;
 
-    @NotNull
     private boolean abierto;
 
     @PrePersist
@@ -154,6 +153,10 @@ public class CorteSucursal  {
         return true;
     }
 
+    /*
+    *** Desconectado temporalmente por compatibilidad con código legado
+    *** Los avances a un código completamente conectado mediante JPA son progresivos
+
     private Collection<Corte> cortesById;
 
     @OneToMany(mappedBy = "corteSucursalByCorteSucursalId")
@@ -163,5 +166,5 @@ public class CorteSucursal  {
     public void setCortesById(Collection<Corte> cortesById) {
         this.cortesById = cortesById;
     }
-
+    */
 }

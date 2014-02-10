@@ -33,6 +33,10 @@
     <bean id="comprobantes" class="omoikane.sistema.Comprobantes"></bean>
     <bean id="paqueteController" class="omoikane.producto.PaqueteController"></bean>
     <bean id="codigoProducto" class="omoikane.entities.CodigoProducto"></bean>
+    <bean id="impuesto" class="omoikane.producto.Impuesto"></bean>
+    <bean id="ventaDetalleImpuesto" class="omoikane.entities.VentaDetalleImpuesto"></bean>
+    <bean id="corte" class="omoikane.entities.Corte"></bean>
+    <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
 
     <bean id="/SpringAnnotatedConfig" class="omoikane.sistema.SpringAnnotatedConfig"></bean>
     <bean id="properties" class="java.util.HashMap"></bean>
@@ -77,7 +81,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="generateDdl" value="true"/>
+                <!--<property name="generateDdl" value="true"/>-->
                 <property name="database" value="MYSQL"/>
             </bean>
         </property>

@@ -9,8 +9,12 @@
 package omoikane.sistema
 
  import groovy.sql.Sql
+ import omoikane.entities.Corte
+ import omoikane.entities.VentaDetalleImpuesto
  import omoikane.nadesicoiLegacy.Db
+ import omoikane.principal.Principal
 
+ import javax.persistence.EntityManagerFactory
  import java.io.*;
 import groovy.text.GStringTemplateEngine
 
@@ -34,7 +38,7 @@ import groovy.inspect.swingui.*
     def generado
     def impresora = omoikane.principal.Principal.impresoraActiva
     def protocolo = omoikane.principal.Principal.puertoImpresion
-    public static Logger logger = Logger.getLogger(Comprobantes.class);
+    public Logger logger = Logger.getLogger(Comprobantes.class);
 
      @PersistenceContext
      EntityManager entityManager;
@@ -45,8 +49,8 @@ import groovy.inspect.swingui.*
     /**
      * Método que utiliza hibernate para acceder a los datos de la venta en lugar de nadesico (versión antigua ticket())
      */
-    public void ticketVenta( Long idVenta ) {
-        LegacyVenta venta = entityManager.find(LegacyVenta.class, idVenta);
+    public void ticketVenta( LegacyVenta lv, Long idVenta ) {
+        LegacyVenta venta = lv;
         data              = venta.properties;
         data.date         = data.fechaHora
         data.caja         = entityManager.find(Caja.class, data.idCaja as Integer).properties;
@@ -59,17 +63,20 @@ import groovy.inspect.swingui.*
         data.id_caja    = data.idCaja;
         data.id_venta   = venta.getId();
 
-        TypedQuery<LegacyVentaDetalle> query = entityManager.createQuery("SELECT lvd FROM LegacyVentaDetalle lvd WHERE id_venta = ?", LegacyVentaDetalle.class);
-        query.setParameter(1, venta.getId());
-        List<LegacyVentaDetalle> detalles = query.getResultList();
+        List<LegacyVentaDetalle> detalles = venta.getItems();
+        def impuestosMap = [:]
         for( LegacyVentaDetalle lvd : detalles) {
             final temp = [:];
             omoikane.producto.Articulo art = productoRepo.readByPrimaryKey( lvd.idArticulo as Long );
             temp             = lvd.properties;
             temp.descripcion = art.getDescripcion();
+            for(VentaDetalleImpuesto vim : lvd.getVentaDetalleImpuestos()) {
+                if(impuestosMap[vim.getDescripcion()]==null) impuestosMap[vim.getDescripcion()] = [importe:0d];
+                impuestosMap[vim.getDescripcion()].importe += vim.total.doubleValue();
+            }
             data.detalles << temp;
         }
-
+        data.impuestosMap = impuestosMap;
         generado          = generarTicket()
     }
 
@@ -94,7 +101,34 @@ import groovy.inspect.swingui.*
         def serv = new Nadesico().conectar()
         Sql db = Db.connect();
         try {
-            data             = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
+            //TODO ********* Sustituir getCorteWhereFrom por una consulta con JPA de la entidad corte **********
+            //Cargar mediante JPA
+            EntityManagerFactory emf = (EntityManagerFactory) Principal.applicationContext.getBean("entityManagerFactory");
+            EntityManager em = emf.createEntityManager();
+            Corte corte        = (Corte)em.find(Corte.class, ID)
+            data = [:]
+
+            //<-- Mapeo de atributos para compatibilidad con código legado
+            data.id_caja       = corte.idCaja;
+            data.id_almacen    = corte.sucursalId;
+            data.id_corte      = corte.id;
+            data.n_ventas      = corte.nVentas;
+            data.folio_inicial = corte.folioInicial;
+            data.folio_final   = corte.folioFinal;
+            data.abierto       = corte.abierto;
+            data.impuestoList  = corte.corteImpuestoList;
+            data.desde         = corte.desde
+            data.hasta         = corte.hasta
+            data.depositos     = corte.depositos
+            data.descuentos    = corte.descuentos
+            data.impuestos     = corte.impuestos
+            data.retiros       = corte.retiros
+            data.subtotal      = corte.subtotal
+            data.total         = corte.total
+            data.fecha_hora    = corte.fechaHora
+            //Fin mapeo -->
+
+            //data             = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
             data.movsCaja    = db.rows("SELECT tipo, concepto, importe FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?",[data.id_caja, data.desde, data.hasta])
             data.caja        = serv.getCaja(data.id_caja)
             data.leyenda     = "C O R T E   D E   C A J A"
@@ -107,6 +141,25 @@ import groovy.inspect.swingui.*
             db?.close();
         }
     }
+
+    def CorteLegacy(ID, tabla) {
+         def serv = new Nadesico().conectar()
+         Sql db = Db.connect();
+         try {
+             data             = serv.getCorteWhereFrom(" cortes.id_corte=$ID", tabla)
+             data.movsCaja    = db.rows("SELECT tipo, concepto, importe FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?",[data.id_caja, data.desde, data.hasta])
+             data.caja        = serv.getCaja(data.id_caja)
+             data.leyenda     = "C O R T E   D E   C A J A"
+             data.isCorteCaja = true
+             data.impuestoList= []
+             generado         = generarCorte(ID)
+         } catch(e) {
+             throw e
+         } finally {
+             serv.desconectar()
+             db?.close();
+         }
+     }
 
     def CorteSucursal(IDAlmacen, IDCorte) {
         def serv = new Nadesico().conectar()
@@ -256,8 +309,9 @@ import groovy.inspect.swingui.*
             else
             {
                 try {
-                    logger.debug(generado)
-                } catch (e) { Dialogos.lanzarAlerta("Error al mandar a al consola"); }
+                    //logger.debug(generado)
+                    println generado
+                } catch (e) { logger.info("Error al mandar a la consola"); }
             }
         }
     }

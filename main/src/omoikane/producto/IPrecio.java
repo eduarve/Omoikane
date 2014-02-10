@@ -1,6 +1,7 @@
 package omoikane.producto;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,4 +17,6 @@ public interface IPrecio {
     public BigDecimal getImpuestos();
     public BigDecimal getPrecio();
     public BigDecimal getPrecioBase();
+
+    Collection<Impuesto> getListaImpuestos();
 }

@@ -3,11 +3,16 @@ package omoikane.caja.presentation;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import omoikane.entities.LegacyVentaDetalle;
+import omoikane.producto.Impuesto;
 import omoikane.producto.Producto;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,8 +28,7 @@ public class ProductoModel {
     private ObjectProperty<BigDecimal> cantidad;
     private ObjectProperty<BigDecimal> precio;
     private ObjectProperty<BigDecimal> precioBase;
-    private ObjectProperty<BigDecimal> impuestosBase;
-    private ObjectProperty<BigDecimal> impuestos;
+    private ListProperty<ImpuestoModel> impuestos;
     private ObjectProperty<BigDecimal> descuentosBase;
     private StringProperty importeString;
     private Producto productoData;
@@ -34,11 +38,11 @@ public class ProductoModel {
         id         = new SimpleLongProperty(0l);
         concepto   = new SimpleStringProperty("Concepto vacío");
         setCodigo   ( new SimpleStringProperty(null) );
-        setCantidad ( new SimpleObjectProperty<BigDecimal>(new BigDecimal(0)) );
-        setPrecio   ( new SimpleObjectProperty<BigDecimal>(new BigDecimal(0)) );
-        precioBase = new SimpleObjectProperty<BigDecimal>(new BigDecimal(0));
-        impuestosBase = new SimpleObjectProperty<BigDecimal>(new BigDecimal(0));
-        descuentosBase = new SimpleObjectProperty<BigDecimal>(new BigDecimal(0));
+        setCantidad(new SimpleObjectProperty<>(new BigDecimal(0)));
+        setPrecio(new SimpleObjectProperty<>(new BigDecimal(0)));
+        precioBase = new SimpleObjectProperty<>(new BigDecimal(0));
+        impuestos      = new SimpleListProperty<>(FXCollections.<ImpuestoModel>observableArrayList());
+        descuentosBase = new SimpleObjectProperty<>(new BigDecimal(0));
         importeString = new SimpleStringProperty("");
         ventaDetalleEntity = new LegacyVentaDetalle();
     }
@@ -159,21 +163,25 @@ public class ProductoModel {
 
     }
 
-    public BigDecimal getImpuestos() {
-        return impuestosBase.get().multiply(cantidad.get());
+    public ListProperty<ImpuestoModel> getImpuestos() {
+
+        for(ImpuestoModel imp : impuestos) {
+            imp.setImpuesto( imp.getImpuestoBase().multiply(cantidad.get()) );
+        }
+        return impuestos;
     }
 
-    public ObjectProperty<BigDecimal> impuestosBaseProperty() {
-        return impuestosBase;
+    public ListProperty<ImpuestoModel> impuestosProperty() {
+        return getImpuestos();
     }
 
-    private void setImpuestosBase(ObjectProperty<BigDecimal> impuestosBase) {
-        impuestosBase.get().setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.impuestosBase = impuestosBase;
-    }
+    public void setImpuestos(Collection<ImpuestoModel> impuestosArg) {
+        impuestos.clear();
+        impuestos.addAll(impuestosArg);
+        for(ImpuestoModel imp : impuestosArg) {
+            imp.getImpuestoBase().setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
 
-    public BigDecimal getImpuestosBase() {
-        return impuestosBase.get();
     }
 
     public String getSubtotalString() {
@@ -187,9 +195,13 @@ public class ProductoModel {
     }
 
 
-    public String getImpuestosString() {
-        NumberFormat nf = NumberFormat.getCurrencyInstance();
-        return nf.format(getImpuestos());
+    public List<String> getImpuestosString() {
+        List<String> imps = new ArrayList<>();
+        for(ImpuestoModel imp : getImpuestos()) {
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
+            imps.add(nf.format(imp.getImpuesto()));
+        }
+        return imps;
     }
 
     public BigDecimal getDescuentos() {
@@ -244,5 +256,14 @@ public class ProductoModel {
 
     public LegacyVentaDetalle getVentaDetalleEntity() {
         return ventaDetalleEntity;
+    }
+
+    public BigDecimal getSumaImpuestos() {
+        BigDecimal sumaImpuestos = new BigDecimal(0d);
+        for(ImpuestoModel im : impuestosProperty()) {
+            sumaImpuestos = sumaImpuestos.add( im.getImpuesto() );
+        }
+
+        return sumaImpuestos;
     }
 }

@@ -3,6 +3,7 @@ package omoikane.entities;
 import omoikane.producto.Producto;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -168,4 +169,5 @@ public class VentaDetalle {
     public void setVentaByVentaId(Venta ventaByVentaId) {
         this.ventaByVentaId = ventaByVentaId;
     }
+
 }

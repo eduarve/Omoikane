@@ -5,7 +5,14 @@
 
 package omoikane.nadesicoiLegacy
 
-import groovy.sql.*;
+import groovy.sql.*
+import omoikane.entities.Corte
+import omoikane.entities.CorteImpuesto
+import omoikane.principal.Principal
+
+import javax.persistence.EntityManager
+import javax.persistence.EntityManagerFactory
+import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -15,36 +22,10 @@ class Cortes {
     static def asignarA(serv) {
         serv.getCorteWhere        = getCorteWhere
         serv.getCorte             = getCorte
-        serv.addCorte             = addCorte
         serv.getSumaCorteSucursal = getSumaCorteSucursal
         serv.getCorteSucursal     = getCorteSucursal
     }
-    static def addCorte = { IDCaja, IDAlmacen, subtotal, impuestos, descuentos, total, nVentas, desde, hasta , depositos , retiros->
-        def db
-        try {
-            db = Db.connect()
-            try {
-				def folios  = [ini:0,fin:0]  
-				folios.ini  = db.firstRow('SELECT min(folio) as fol FROM ventas WHERE fecha_hora >= ? and fecha_hora <= ? and id_caja = ? and id_almacen = ?', [desde, hasta, IDCaja, IDAlmacen]).fol
-				folios.fin  = db.firstRow('SELECT max(folio) as fol FROM ventas WHERE fecha_hora >= ? and fecha_hora <= ? and id_caja = ? and id_almacen = ?', [desde, hasta, IDCaja, IDAlmacen]).fol
-				
-                db.connection.autoCommit = false
-                def IDCorte = db.executeInsert("INSERT INTO cortes SET subtotal = ?, impuestos = ?, descuentos = ?, total = ? "+
-                                              ", n_ventas = ?, desde = ?, hasta = ?, id_caja = ?, id_almacen = ?, depositos = ?, retiros = ?, folio_inicial = ?, folio_final = ?"
-                							  , [subtotal, impuestos, descuentos, total, nVentas, desde, hasta, IDCaja, IDAlmacen , depositos , retiros, folios.ini, folios.fin])
-                IDCorte = IDCorte[0][0]
-                db.commit()
-                return [IDCorte:IDCorte,mensaje:"Corte hecho."]
-            } catch(Exception e) {
-                //db.rollback()
-                if(e.message.contains("Duplicate entry")) { return "Corte que intenta capturar ya exíste" }
-                Consola.error("[Excepcion al addCorte:${e.message}]", e)
-                throw new Exception("Error al enviar a la base de datos. Corte no se registró.")
-            } finally {
-                db.close()
-            }
-        } catch(e) { Consola.error("[Err addCorte:${e.message}]", e); throw new Exception("Error en la conexión del servidor con su base de datos") }
-    }
+
     static def getCorteWhere = { where ->
         def salida = ""
         try {
@@ -83,6 +64,12 @@ class Cortes {
 
             salida       = db.firstRow("SELECT sum(subtotal) as subtotal, sum(impuestos) as impuestos, sum(descuentos) as descuentos, sum(total) as total, sum(depositos) as depositos, sum(retiros) as retiros, sum(n_ventas) as n_ventas FROM cortes "+
                                        "WHERE id_almacen = ? AND desde >= ? AND hasta <= ?", [IDAlmacen, corteSuc.desde, corteSuc.hasta])
+            salida.impuestoList = db.rows("""
+                    SELECT ci.descripcion, sum(ci.importe) as importe
+                    FROM cortes c JOIN corte_impuesto ci ON c.id_corte = ci.id_corte
+                    WHERE
+                        desde >= ? AND hasta <= ?
+                    GROUP BY ci.descripcion""", [corteSuc.desde, corteSuc.hasta])
 
             db.close()
         } catch(e) { Consola.error("Error al consultar corte de sucursal", e); throw new Exception("Error al consultar corte de sucursal") }

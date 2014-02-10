@@ -238,7 +238,7 @@ public class CajaController
 
                     if(venta != null) JOptionPane.showMessageDialog(Principal.getEscritorio().getFrameEscritorio(), "Venta Registrada");
                 } catch (Exception e) {
-                    logger.error("Error al guardar venta, venta no registrada.", e);
+                    logger.error("Error al guardar venta.", e);
                     failed();
                 }
 

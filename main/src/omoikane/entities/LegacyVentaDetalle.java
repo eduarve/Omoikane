@@ -4,7 +4,12 @@
  */
 package omoikane.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -51,8 +56,16 @@ public class LegacyVentaDetalle implements Serializable {
     private Double total;
     @Column(name = "id_linea")
     private Integer idLinea;
+    @ElementCollection()
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @CollectionTable(
+            name="ventas_detalles_impuestos",
+            joinColumns=@JoinColumn(name="id_renglon")
+    )
+    private List<VentaDetalleImpuesto> ventaDetalleImpuestos;
 
     public LegacyVentaDetalle() {
+
     }
 
     public Integer getIdArticulo() {
@@ -127,14 +140,6 @@ public class LegacyVentaDetalle implements Serializable {
         this.subtotal = subtotal;
     }
 
-    public Double getImpuestos() {
-        return impuestos;
-    }
-
-    public void setImpuestos(Double impuestos) {
-        this.impuestos = impuestos;
-    }
-
     public Double getDescuento() {
         return descuento;
     }
@@ -158,5 +163,20 @@ public class LegacyVentaDetalle implements Serializable {
     public void setIdLinea(Integer idLinea) {
         this.idLinea = idLinea;
     }
-    
+
+    public void setVentaDetalleImpuestos(List<VentaDetalleImpuesto> ventaDetalleImpuestos) {
+        this.ventaDetalleImpuestos = ventaDetalleImpuestos;
+    }
+
+    public List<VentaDetalleImpuesto> getVentaDetalleImpuestos() {
+        return ventaDetalleImpuestos;
+    }
+
+    public Double getImpuestos() {
+        return impuestos;
+    }
+
+    public void setImpuestos(Double impuestos) {
+        this.impuestos = impuestos;
+    }
 }

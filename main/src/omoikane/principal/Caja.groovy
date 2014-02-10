@@ -619,7 +619,7 @@ class Caja implements Serializable {
 
                     if(cortar) {
  
-                        newCorte     = instanciaCortes.hacerCorteCaja(IDCaja, caja.id_almacen, ventas.subtotal, ventas.impuestos, ventas.descuento, ventas.total, ventas.nVentas, desde, hasta,ventas.depositos,ventas.retiros)
+                        newCorte     = instanciaCortes.hacerCorteCaja(IDCaja, caja.id_almacen, ventas.subtotal, ventas.impuestos, ventas.descuento, ventas.total, ventas.nVentas, desde, hasta,ventas.depositos,ventas.retiros, ventas.impuestosList)
 
                         form.ID=newCorte.IDCorte
                         form.setTxtIDCorte ( newCorte.IDCorte as String )

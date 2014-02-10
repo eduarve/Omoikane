@@ -5,15 +5,14 @@ import javafx.collections.ObservableList;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.data.IProductosDAO;
 import omoikane.caja.handlers.StockIssuesHandler;
-import omoikane.caja.presentation.BuscarMasDummyProducto;
-import omoikane.caja.presentation.CajaController;
-import omoikane.caja.presentation.CajaModel;
-import omoikane.caja.presentation.ProductoModel;
+import omoikane.caja.presentation.*;
 import omoikane.entities.Caja;
 import omoikane.entities.LegacyVenta;
 import omoikane.entities.LegacyVentaDetalle;
 import omoikane.principal.Principal;
+import omoikane.producto.Impuesto;
 import omoikane.producto.Producto;
+import omoikane.entities.VentaDetalleImpuesto;
 import omoikane.repository.CajaRepo;
 import omoikane.repository.VentaRepo;
 import omoikane.sistema.Comprobantes;
@@ -33,6 +32,7 @@ import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -218,13 +218,29 @@ public class CajaLogicImpl implements ICajaLogic {
 
     private void productoToProductoModel(Producto producto, ProductoModel productoModel) {
         productoModel.getId()                 .set( producto.getId() );
-        productoModel.codigoProperty()        .set( producto.getCodigo() );
-        productoModel.precioBaseProperty()    .set( producto.getPrecio().getPrecioBase() );
-        productoModel.conceptoProperty()      .set( producto.getDescripcion() );
-        productoModel.descuentosBaseProperty().set( producto.getPrecio().getDescuento() );
-        productoModel.impuestosBaseProperty() .set( producto.getPrecio().getImpuestos() );
+        productoModel.codigoProperty()        .set(producto.getCodigo());
+        productoModel.precioBaseProperty()    .set(producto.getPrecio().getPrecioBase());
+        productoModel.conceptoProperty()      .set(producto.getDescripcion());
+        productoModel.descuentosBaseProperty().set(producto.getPrecio().getDescuento());
+        Collection<ImpuestoModel> impuestos = impuestosToImpuestosModel(producto.getPrecio().getListaImpuestos());
+        productoModel.setImpuestos( impuestos );
         productoModel.precioProperty()        .set( producto.getPrecio().getPrecio() );
         productoModel.setProductoData(producto);
+    }
+
+    private Collection<ImpuestoModel> impuestosToImpuestosModel(Collection<Impuesto> impuestos ) {
+
+        Collection<ImpuestoModel> impuestoModels = new ArrayList<>();
+        for(Impuesto impuesto : impuestos) {
+            ImpuestoModel impuestoModel = new ImpuestoModel();
+            impuestoModel.setDescripcion( impuesto.getDescripcion() );
+            impuestoModel.setPorcentaje(impuesto.getPorcentaje());
+            impuestoModel.setImpuestoBase(impuesto.getImpuesto());
+            impuestoModel.setImpuestoEntity(impuesto);
+            impuestoModels.add(impuestoModel);
+        }
+
+        return impuestoModels;
     }
 
 
@@ -263,7 +279,7 @@ public class CajaLogicImpl implements ICajaLogic {
                 return venta;
 
             } catch (Exception e) {
-                throw new RuntimeException("Excepción persistiendo venta o aplicando cambios al stock");
+                throw new RuntimeException("Excepción persistiendo venta o aplicando cambios al stock", e);
             }
         }
         return null;
@@ -314,7 +330,7 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     public void imprimirVenta(LegacyVenta venta) {
-        comprobantes.ticketVenta(venta.getId()); //imprimir ticket
+        comprobantes.ticketVenta(venta, venta.getId()); //imprimir ticket
         comprobantes.imprimir();
     }
 
@@ -382,7 +398,19 @@ public class CajaLogicImpl implements ICajaLogic {
         lvd.setCantidad  ( producto.cantidadProperty().get().doubleValue() );
         lvd.setPrecio    ( producto.precioProperty().get().doubleValue() );
         lvd.setDescuento ( producto.getDescuentos().doubleValue() );
-        lvd.setImpuestos ( producto.getImpuestos().doubleValue() );
+        lvd.setImpuestos(producto.getSumaImpuestos().doubleValue());
+        //Convertir ImpuestoModel a VentaDetalleImpuesto
+        List<VentaDetalleImpuesto> vdis = new ArrayList<>();
+        for(ImpuestoModel im : producto.getImpuestos().get()) {
+            VentaDetalleImpuesto vdi = new VentaDetalleImpuesto();
+            vdi.setBase( im.getImpuestoBase() );
+            vdi.setDescripcion(im.getDescripcion());
+            vdi.setPorcentaje(im.getPorcentaje());
+            vdi.setTotal(im.getImpuesto());
+            vdi.setImpuestoId(im.getImpuestoEntity().getId());
+            vdis.add(vdi);
+        }
+        lvd.setVentaDetalleImpuestos( vdis );
         lvd.setSubtotal  ( producto.getSubtotal().doubleValue() );
         lvd.setTotal     ( producto.getImporte().doubleValue() );
         lvd.setTipoSalida( "" );
@@ -416,7 +444,7 @@ public class CajaLogicImpl implements ICajaLogic {
         for ( ProductoModel producto : model.getVenta() ) {
             subtotal   = subtotal  .add( producto.getSubtotal() );
             descuentos = descuentos.add( producto.getDescuentos() );
-            impuestos  = impuestos .add( producto.getImpuestos() );
+            impuestos  = impuestos .add( producto.getSumaImpuestos() );
         }
 
         total = total.add( subtotal );

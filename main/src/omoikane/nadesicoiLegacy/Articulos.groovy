@@ -87,13 +87,13 @@ class ArticulosFunciones {
         } finally { if(db!=null) { db.close() } }
 
     }
-    static def addArticulo = { IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, impuestos, costo, descuento, utilidad, existencias ->
+    static def addArticulo = { IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, costo, descuento, utilidad, existencias ->
         def db
         try {
             db = Db.connect()
             try {
                 db.connection.autoCommit = false
-                def IDArticulo = db.executeInsert("INSERT INTO articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ? , impuestos = ?, uModificacion = CURRENT_TIMESTAMP ", [codigo, IDLinea, IDGrupo, descripcion, unidad, impuestos])
+                def IDArticulo = db.executeInsert("INSERT INTO articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ? , uModificacion = CURRENT_TIMESTAMP ", [codigo, IDLinea, IDGrupo, descripcion, unidad])
                 IDArticulo = IDArticulo[0][0]
                 db.executeInsert("INSERT INTO precios SET id_almacen = ?, id_articulo = ?, costo = ?, descuento = ?, utilidad = ?", [IDAlmacen, IDArticulo, costo, descuento, utilidad])
                 db.executeInsert("INSERT INTO Stock SET idarticulo = ?, enTienda = ?, clasificacion = 'C', enBodega = 0, maximo = 1, minimo = 1, ubicacion = '', modificado = CURRENT_TIMESTAMP", [IDArticulo, existencias])
@@ -113,12 +113,12 @@ class ArticulosFunciones {
             throw new Exception("Error en la conexión del servidor con su base de datos", e)
         }
     }
-    static def modArticulo = { IDAlmacen, IDArticulo, codigo, IDLinea, IDGrupo, descripcion, unidad, impuestos, costo, utilidad, descuento ->
+    static def modArticulo = { IDAlmacen, IDArticulo, codigo, IDLinea, IDGrupo, descripcion, unidad, costo, utilidad, descuento ->
         def db   = Db.connect()
         try {
           db.connection.autoCommit = false
-          db.executeUpdate("UPDATE articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ?, impuestos = ? WHERE id_articulo = ?"
-                           , [codigo, IDLinea, IDGrupo, descripcion, unidad, impuestos, IDArticulo])
+          db.executeUpdate("UPDATE articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ? WHERE id_articulo = ?"
+                           , [codigo, IDLinea, IDGrupo, descripcion, unidad, IDArticulo])
 
           ArticulosFunciones.modPrecio(IDAlmacen, IDArticulo, costo:costo as Double, utilidad:utilidad  as Double, descuento:descuento as Double)
           db.commit()

@@ -11,7 +11,7 @@ package omoikane.sistema.cortes;
  */
 public abstract class EstrategiasCorte {
     abstract def hacerCorteCaja(IDCaja, IDAlmacen, subtotal, impuestos, descuento, total,
-                                     nVentas, desde, hasta, depositos, retiros);
+                                     nVentas, desde, hasta, depositos, retiros, impuestoList);
     abstract def obtenerSumaCaja(IDCaja, horaAbierta, horaCerrada);
     abstract def hacerCorteSucursal(IDAlmacen);
     abstract def obtenerSumaSucursal(IDAlmacen, IDCorte);

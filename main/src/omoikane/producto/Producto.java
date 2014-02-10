@@ -31,7 +31,7 @@ public class Producto implements IProductoApreciado {
 
     @NotEmpty   private String unidad;
 
-    @Min(0)     private BigDecimal impuestos;
+                private Collection<Impuesto> impuestos;
 
     @NotNull    private Timestamp modificado;
 
@@ -97,13 +97,12 @@ public class Producto implements IProductoApreciado {
         this.unidad = unidad;
     }
 
-    @Column(name = "impuestos")
-    @Basic
-    public BigDecimal getImpuestos() {
+    @OneToMany
+    public Collection<Impuesto> getImpuestos() {
         return impuestos;
     }
 
-    public void setImpuestos(BigDecimal impuestos) {
+    public void setImpuestos(Collection<Impuesto> impuestos) {
         this.impuestos = impuestos;
     }
 
@@ -178,7 +177,7 @@ public class Producto implements IProductoApreciado {
         if (producto.descuento.compareTo(descuento) != 0) return false;
         if (producto.existencia.compareTo(existencia) != 0) return false;
         if (id != producto.id) return false;
-        if (producto.impuestos.compareTo(impuestos) != 0) return false;
+        if (producto.impuestos != impuestos) return false;
         if (producto.utilidad.compareTo(utilidad) != 0) return false;
         if (codigo != null ? !codigo.equals(producto.codigo) : producto.codigo != null) return false;
         if (descripcion != null ? !descripcion.equals(producto.descripcion) : producto.descripcion != null)

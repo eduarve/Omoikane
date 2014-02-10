@@ -6,6 +6,7 @@ import omoikane.proveedores.Proveedor;
 import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,6 +110,7 @@ public class Compra {
 
     public String toString() {
         DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
-        return  dateFormat.format(getFecha());
+        String proveedor = getProveedor() == null ? "Sin proveedor" : getProveedor().getNombre() ;
+        return proveedor+" - "+dateFormat.format(getFecha());
     }
 }

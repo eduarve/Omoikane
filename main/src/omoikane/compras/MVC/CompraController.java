@@ -111,6 +111,11 @@ public class CompraController implements Initializable {
     private HashMap<Long, Articulo> indice;
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
+        //Mini validación
+        if(modelo.getProveedor().get() == null) { logger.info("Falta introducir proveedor"); return; }
+        if(modelo.getFolioOrigen().get() == null || modelo.getFolioOrigen().get().equals("")) { logger.info("Falta introducir folio de origen"); return; }
+
+        //Ahora archivar
         Dialog.buildConfirmation("Confirmación", "Al aplicar esta compra, los stocks de los productos quedarán actualizados y no se podrá editar este documento, la operación no es reversible, ¿Está seguro de continuar?")
                 .addYesButton(new EventHandler() {
                     @Override
@@ -403,6 +408,10 @@ public class CompraController implements Initializable {
         initModel(null);
     }
 
+    /**
+     * @see ComprasCRUDController
+     * @param compra
+     */
     public void initModel(Compra compra) {
         subtotalLabel.textProperty().unbind();
         imprimirButton.disableProperty().unbind();
@@ -422,11 +431,6 @@ public class CompraController implements Initializable {
 
         modelo = loadOrCreateModel(compra);
         itemsTable.setItems(modelo.getItems());
-
-        indice = new HashMap<>();
-        for(ItemCompraEntityWrapper ci : modelo.getItems()) {
-            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
-        }
 
         subtotalLabel.textProperty().bind( Bindings.format("$ %,.2f", modelo.subtotalProperty()) );
         imprimirButton.disableProperty().bind(modelo.getCompletado().not());
@@ -449,6 +453,14 @@ public class CompraController implements Initializable {
                 }
             }
         });
+
+        /**
+         * Generación del hashmap llamado índice. Sirve para rechazar artículos repetidos
+         */
+        indice = new HashMap<>();
+        for(ItemCompraEntityWrapper ci : modelo.getItems()) {
+            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
+        }
     }
 
     class SetProveedorTask extends Task<Void> {

@@ -51,9 +51,6 @@ public class Articulo implements Serializable, IProductoApreciado {
     private String descripcion;
     @Column(name = "unidad")
     private String unidad;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "impuestos")
-    private Double porcentajeImpuestos;
     @Basic(optional = false)
     @Column(name = "uModificacion")
     @Temporal(TemporalType.TIMESTAMP)
@@ -125,16 +122,6 @@ public class Articulo implements Serializable, IProductoApreciado {
         this.unidad = unidad;
     }
 
-
-
-    public Double getPorcentajeImpuestos() {
-        return porcentajeImpuestos;
-    }
-
-    public void setPorcentajeImpuestos(Double porcentajeImpuestos) {
-        this.porcentajeImpuestos = porcentajeImpuestos;
-    }
-
     public Date getUModificacion() {
         return uModificacion;
     }
@@ -162,6 +149,12 @@ public class Articulo implements Serializable, IProductoApreciado {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_articulo")
     private BaseParaPrecio baseParaPrecio;
+
+
+    @Override
+    public BaseParaPrecio getBaseParaPrecio() {
+        return this.baseParaPrecio;
+    }
 
     @OneToMany(mappedBy = "productoContenedor")
     public List<Paquete> renglonesPaquete;
@@ -199,18 +192,13 @@ public class Articulo implements Serializable, IProductoApreciado {
 
     @Transient
     public PrecioOmoikaneLogic getPrecio() {
-        if(precio == null) { precio = new PrecioOmoikaneLogic( getBaseParaPrecio() ); }
+        if(precio == null) { precio = new PrecioOmoikaneLogic( getBaseParaPrecio(), getImpuestos() ); }
         return precio;
     }
 
     @Override
     public void setPrecio(IPrecio precio) {
         this.precio = (PrecioOmoikaneLogic) precio;
-    }
-
-    @Override
-    public BaseParaPrecio getBaseParaPrecio() {
-        return this.baseParaPrecio;
     }
 
 
@@ -226,6 +214,21 @@ public class Articulo implements Serializable, IProductoApreciado {
 
     public void setCodigosAlternos(Collection<CodigoProducto> codigosAlternos) {
         this.codigosAlternos = codigosAlternos;
+    }
+
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    private Collection<Impuesto> impuestos;
+
+    @Transactional
+    public Collection<Impuesto> getImpuestos() {
+        Collection<Impuesto> i = impuestos;
+        Hibernate.initialize(i);
+        return i;
+    }
+
+    public void setImpuestos(Collection<Impuesto> impuestos) {
+        this.impuestos = impuestos;
     }
 
 

@@ -1,4 +1,4 @@
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd" updateCheck="false">
 
     <!--
     The ehcache.xml is a default configuration for ehcache, if an ehcache.xml is not configured.
@@ -264,7 +264,6 @@
       chunks. The default chunk size is 5000000 (5MB).
 
     -->
-
 
     <!--
     Mandatory Default Cache configuration. These settings will be applied to caches

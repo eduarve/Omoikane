@@ -2,6 +2,9 @@ package omoikane.producto;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Lógica concreta para determinar el precio al público de un producto.
@@ -12,9 +15,11 @@ import java.math.BigDecimal;
 public class PrecioOmoikaneLogic implements IPrecio {
 
     BaseParaPrecio baseParaPrecio;
+    Collection<Impuesto> impuestos;
 
-    public PrecioOmoikaneLogic(BaseParaPrecio baseParaPrecio) {
+    public PrecioOmoikaneLogic(BaseParaPrecio baseParaPrecio, Collection<Impuesto> impuestos) {
         this.baseParaPrecio = baseParaPrecio;
+        this.impuestos = impuestos;
     }
 
     /** Obtiene el descuento en conjunto de todos los factores que generan descuento
@@ -83,22 +88,46 @@ public class PrecioOmoikaneLogic implements IPrecio {
 
     }
 
-    /** Obtiene los impuestos
-     * impuestos = ( precioBase - descuento ) * ( porcentajeDeImpuestos / 100 )
-     * @return
+    /** Obtiene la suma de los impuestos
+     *  Para cada impuesto:
+     *      impuestos += impuesto
+     *  Retornar impuestos
      */
     @Override
     public BigDecimal getImpuestos() {
+        BigDecimal sumaImpuestos = new BigDecimal(0);
+        Collection<Impuesto> listaImpuestos = getListaImpuestos();
 
-        BigDecimal cien = new BigDecimal( 100 );
-        BigDecimal a    = getPrecioBase();
-        BigDecimal b    = getDescuento();
-        BigDecimal c    = a.subtract(b);
-        BigDecimal x    = new BigDecimal( baseParaPrecio.getPorcentajeImpuestos() ).divide( cien );
-
-        return x.multiply( c );
+        for(Impuesto imp : listaImpuestos) {
+            sumaImpuestos = sumaImpuestos.add( imp.getImpuesto() );
+        }
+        return sumaImpuestos;
     }
 
+    /** Obtiene los impuestos
+     * Para cada impuesto hacer:
+     *      impuesto = ( precioBase - descuento ) * ( porcentajeDeImpuesto / 100 )
+     *      add impuesto to impuestos
+     * Retornar impuestos
+     *
+     * @return Lista de impuestos
+     */
+    @Override
+    public Collection<Impuesto> getListaImpuestos() {
+        Collection<Impuesto> listaImpuestos = this.impuestos;
+
+        for(Impuesto imp : this.impuestos) {
+            BigDecimal cien = new BigDecimal( 100 );
+            BigDecimal a    = getPrecioBase();
+            BigDecimal b    = getDescuento();
+            BigDecimal c    = a.subtract(b);
+            BigDecimal x    = imp.getPorcentaje().divide( cien );
+
+            imp.setImpuesto( x.multiply( c ) );
+        }
+
+        return listaImpuestos;
+    }
 
 
     /**

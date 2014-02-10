@@ -1,5 +1,8 @@
 package omoikane.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,6 +12,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,46 +21,74 @@ import java.util.Collection;
  * Time: 04:04
  * To change this template use File | Settings | File Templates.
  */
-//@IdClass(omoikane.entities.CortePK.class)
-//@Entity
+
+@Entity
+@Table(name = "cortes")
 public class Corte {
+
+    @Column(name = "id_corte")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "id_caja")
     private int idCaja;
 
-    private int corteSucursalId;
+    @Column(name = "id_almacen")
+    private int sucursalId;
 
-    @Min(0) private BigDecimal subtotal;
+    @Column
+    @Min(0) private Double subtotal;
 
-    @Min(0) private BigDecimal impuestos;
+    @Column
+    @Min(0) private Double impuestos;
 
-    @Min(0) private BigDecimal descuentos;
+    @Column
+    @Min(0) private Double descuentos;
 
-    @Min(0) private BigDecimal total;
+    @Column
+    @Min(0) private Double total;
 
+    @Column(name = "n_ventas")
     @Min(0) private int nVentas;
 
-    @NotNull private Timestamp desde;
+    @Column
+    @Min(0) private Double depositos;
 
+    @Column
+    @Min(0) private Double retiros;
+
+    @Column(name = "fecha_hora")
+    private Timestamp fechaHora;
+
+    @Column
+    private Timestamp desde;
+
+    @Column
     private Timestamp hasta;
 
-    @Min(0) private BigDecimal depositos;
-
-    @Min(0) private BigDecimal retiros;
-
-    private Date fecha;
-
-    private Time hora;
-
+    @Column
     @NotNull private boolean abierto;
+
+    @Column(name = "folio_inicial")
+    private Long folioInicial;
+
+    @Column(name = "folio_final")
+    private Long folioFinal;
+
+    @ElementCollection()
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @CollectionTable(
+            name="corte_impuesto",
+            joinColumns=@JoinColumn(name="id_corte")
+    )
+    private List<CorteImpuesto> corteImpuestoList;
 
     @PrePersist
     protected void onCreate() {
-
-        fecha = (Date) Calendar.getInstance().getTime();
-        hora  = (Time) Calendar.getInstance().getTime();
+        fechaHora = new Timestamp( Calendar.getInstance().getTime().getTime() );
     }
 
-    @Column(name = "id_caja")
-    @Id
     public int getIdCaja() {
         return idCaja;
     }
@@ -65,58 +97,38 @@ public class Corte {
         this.idCaja = idCaja;
     }
 
-    @Column(name = "corte_sucursal_id")
-    @Id
-    public int getCorteSucursalId() {
-        return corteSucursalId;
-    }
-
-    public void setCorteSucursalId(int corteSucursalId) {
-        this.corteSucursalId = corteSucursalId;
-    }
-
-    @Column(name = "subtotal")
-    @Basic
-    public BigDecimal getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
 
-    @Column(name = "impuestos")
-    @Basic
-    public BigDecimal getImpuestos() {
+    public Double getImpuestos() {
         return impuestos;
     }
 
-    public void setImpuestos(BigDecimal impuestos) {
+    public void setImpuestos(Double impuestos) {
         this.impuestos = impuestos;
     }
 
-    @Column(name = "descuentos")
-    @Basic
-    public BigDecimal getDescuentos() {
+    public Double getDescuentos() {
         return descuentos;
     }
 
-    public void setDescuentos(BigDecimal descuentos) {
+    public void setDescuentos(Double descuentos) {
         this.descuentos = descuentos;
     }
 
-    @Column(name = "total")
-    @Basic
-    public BigDecimal getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
-    @Column(name = "n_ventas")
-    @Basic
     public int getnVentas() {
         return nVentas;
     }
@@ -125,8 +137,6 @@ public class Corte {
         this.nVentas = nVentas;
     }
 
-    @Column(name = "desde")
-    @Basic
     public Timestamp getDesde() {
         return desde;
     }
@@ -135,8 +145,6 @@ public class Corte {
         this.desde = desde;
     }
 
-    @Column(name = "hasta")
-    @Basic
     public Timestamp getHasta() {
         return hasta;
     }
@@ -145,48 +153,22 @@ public class Corte {
         this.hasta = hasta;
     }
 
-    @Column(name = "depositos")
-    @Basic
-    public BigDecimal getDepositos() {
+    public Double getDepositos() {
         return depositos;
     }
 
-    public void setDepositos(BigDecimal depositos) {
+    public void setDepositos(Double depositos) {
         this.depositos = depositos;
     }
 
-    @Column(name = "retiros")
-    @Basic
-    public BigDecimal getRetiros() {
+    public Double getRetiros() {
         return retiros;
     }
 
-    public void setRetiros(BigDecimal retiros) {
+    public void setRetiros(Double retiros) {
         this.retiros = retiros;
     }
 
-    @Column(name = "fecha")
-    @Basic
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    @Column(name = "hora")
-    @Basic
-    public Time getHora() {
-        return hora;
-    }
-
-    public void setHora(Time hora) {
-        this.hora = hora;
-    }
-
-    @Column(name = "abierto")
-    @Basic
     public boolean isAbierto() {
         return abierto;
     }
@@ -203,7 +185,6 @@ public class Corte {
         Corte corte = (Corte) o;
 
         if (abierto != corte.abierto) return false;
-        if (corteSucursalId != corte.corteSucursalId) return false;
         if (corte.depositos.compareTo(depositos) != 0) return false;
         if (corte.descuentos.compareTo(descuentos) != 0) return false;
         if (idCaja != corte.idCaja) return false;
@@ -213,29 +194,64 @@ public class Corte {
         if (corte.subtotal.compareTo(subtotal) != 0) return false;
         if (corte.total.compareTo(total) != 0) return false;
         if (desde != null ? !desde.equals(corte.desde) : corte.desde != null) return false;
-        if (fecha != null ? !fecha.equals(corte.fecha) : corte.fecha != null) return false;
         if (hasta != null ? !hasta.equals(corte.hasta) : corte.hasta != null) return false;
-        if (hora != null ? !hora.equals(corte.hora) : corte.hora != null) return false;
 
         return true;
     }
 
-    private Collection<Caja> cajas;
-
-    @OneToMany(mappedBy = "corte")
-    public Collection<Caja> getCajas() {
-        return cajas;
+    public Long getId() {
+        return id;
     }
 
-    public void setCajas(Collection<Caja> cajas) {
-        this.cajas = cajas;
+    public void setId(Long id) {
+        this.id = id;
     }
 
+    public int getSucursalId() {
+        return sucursalId;
+    }
+
+    public void setSucursalId(int sucursalId) {
+        this.sucursalId = sucursalId;
+    }
+
+    public Long getFolioInicial() {
+        return folioInicial;
+    }
+
+    public void setFolioInicial(Long folioInicial) {
+        this.folioInicial = folioInicial;
+    }
+
+    public Long getFolioFinal() {
+        return folioFinal;
+    }
+
+    public void setFolioFinal(Long folioFinal) {
+        this.folioFinal = folioFinal;
+    }
+
+    public List<CorteImpuesto> getCorteImpuestoList() {
+        return corteImpuestoList;
+    }
+
+    public void setCorteImpuestoList(List<CorteImpuesto> corteImpuestoList) {
+        this.corteImpuestoList = corteImpuestoList;
+    }
+
+    public Timestamp getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Timestamp fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+    //El siguiente bloque queda comentado a la espera de implementar las entidades que se relacionan (CorteSucursal, MovimientoCorte, Venta)
+    /*
+    @ManyToOne
+    @JoinColumn(name = "corte_sucursal_id", referencedColumnName = "id", insertable=false, updatable=false)
     private CorteSucursal corteSucursalByCorteSucursalId;
 
-    @ManyToOne
-    public
-    @JoinColumn(name = "corte_sucursal_id", referencedColumnName = "id", insertable=false, updatable=false)
     CorteSucursal getCorteSucursalByCorteSucursalId() {
         return corteSucursalByCorteSucursalId;
     }
@@ -244,20 +260,20 @@ public class Corte {
         this.corteSucursalByCorteSucursalId = corteSucursalByCorteSucursalId;
     }
 
-    private MovimientoCorte movimientoCorte;
+    @OneToMany(mappedBy = "corte")
+    private List<MovimientoCorte> movimientoCorte;
 
-    @OneToOne(mappedBy = "corte")
-    public MovimientoCorte getMovimientoCorte() {
+    public List<MovimientoCorte> getMovimientoCorte() {
         return movimientoCorte;
     }
 
-    public void setMovimientoCorte(MovimientoCorte movimientoCorte) {
+    public void setMovimientoCorte(List<MovimientoCorte> movimientoCorte) {
         this.movimientoCorte = movimientoCorte;
     }
 
+    @OneToMany(mappedBy = "corte")
     private Collection<Venta> ventas;
 
-    @OneToMany(mappedBy = "corte")
     public Collection<Venta> getVentas() {
         return ventas;
     }
@@ -265,5 +281,5 @@ public class Corte {
     public void setVentas(Collection<Venta> ventas) {
         this.ventas = ventas;
     }
-
+    */
 }

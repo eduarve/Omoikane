@@ -88,12 +88,12 @@ public class ProductosNadesicoAdapter implements IProductosDAO {
         producto.setCodigo     ( articulo.getCodigo()                );
         producto.setDescripcion( articulo.getDescripcion()           );
         producto.setUnidad     ( articulo.getUnidad()                );
-        producto.setImpuestos  ( new BigDecimal(articulo.getPorcentajeImpuestos()) );
+        producto.setImpuestos  ( articulo.getImpuestos() );
         producto.setCosto      ( new BigDecimal(articulo.getBaseParaPrecio().getCosto()) );
         producto.setDescuento  ( new BigDecimal(articulo.getBaseParaPrecio().getPorcentajeDescuentoProducto()) );
         producto.setUtilidad   ( new BigDecimal(articulo.getBaseParaPrecio().getPorcentajeUtilidad()) );
         producto.setExistencia ( new BigDecimal( -1 ) );
-        producto.setPrecio( new PrecioOmoikaneLogic(articulo.getBaseParaPrecio()) );
+        producto.setPrecio( new PrecioOmoikaneLogic(articulo.getBaseParaPrecio(), articulo.getImpuestos()));
 
         Linea linea = new Linea();
         linea.setId( articulo.getIdLinea() );

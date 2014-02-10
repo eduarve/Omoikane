@@ -26,8 +26,12 @@ import omoikane.sistema.SceneOverloaded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.synyx.hades.domain.Order;
+import org.synyx.hades.domain.PageRequest;
 import org.synyx.hades.domain.Sort;
+import org.synyx.hades.domain.Specification;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -51,6 +55,9 @@ public class ComprasCRUDController
 
     @Autowired
     CompraRepo compraRepo;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     CompraController compraController;
 
@@ -78,7 +85,7 @@ public class ComprasCRUDController
         AnchorPane.setRightAnchor(view.getRoot(), 0d);
         contenido.getChildren().setAll(view.getRoot());
 
-        List<Compra> compraList = compraRepo.readAll( new Sort(Order.DESCENDING, "fecha") );
+        List<Compra> compraList = compraRepo.readAll( new PageRequest(0, 25, new Sort(Order.DESCENDING, "fecha")) ).asList();
         lista.setItems(FXCollections.observableArrayList( compraList ));
 
         compraController = (CompraController) ((SceneOverloaded)view).getController();

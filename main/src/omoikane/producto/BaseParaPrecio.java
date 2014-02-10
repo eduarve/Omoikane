@@ -30,9 +30,6 @@ public class BaseParaPrecio implements Serializable {
     @Column(name = "costo")
     private double costo;
     @Basic(optional = false)
-    @Column(name = "porcentajeImpuestos")
-    private double porcentajeImpuestos;
-    @Basic(optional = false)
     @Column(name = "porcentajeDescuentoLinea")
     private double porcentajeDescuentoLinea;
     @Basic(optional = false)
@@ -70,14 +67,6 @@ public class BaseParaPrecio implements Serializable {
 
     public void setCosto(double costo) {
         this.costo = costo;
-    }
-
-    public double getPorcentajeImpuestos() {
-        return porcentajeImpuestos;
-    }
-
-    public void setPorcentajeImpuestos(double porcentajeImpuestos) {
-        this.porcentajeImpuestos = porcentajeImpuestos;
     }
 
     public double getPorcentajeDescuentoLinea() {

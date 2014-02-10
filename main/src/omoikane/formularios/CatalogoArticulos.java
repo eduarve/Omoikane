@@ -25,6 +25,7 @@ import java.awt.event.*;
 import com.jhlabs.image.*;
 import omoikane.principal.Principal;
 import omoikane.producto.BaseParaPrecio;
+import omoikane.producto.Impuesto;
 import omoikane.producto.PrecioOmoikaneLogic;
 import omoikane.sistema.*;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -97,14 +98,17 @@ public class CatalogoArticulos extends OmJInternalFrame {
                     //(1) Favor de no alterar el orden  de los campos, añadir nuevos campos al final. Por defecto ArticulosTableModel depende de éste orden
                     //(2) Por defecto select, distinct y from deben estár escritos con minúsculas. Ver omoikane.sistema.ScrollableTableModel.getRowCount(ScrollableTableModel.groovy).
                     setMainQuery("select a.id_articulo as xID, a.codigo as xCodigo, l.descripcion as xLinea, g.descripcion as xGrupo, a.descripcion as xDescripcion, a.unidad as xUnidad, 0 as xPrecio, 0 as xExistencias, " +
-                            "bp.costo as xCosto, bp.porcentajeImpuestos, bp.porcentajeDescuentoLinea, bp.porcentajeDescuentoGrupo, bp.porcentajeDescuentoProducto, bp.porcentajeUtilidad, " +
-                            "s.enTienda + s.enBodega " +
+                            "bp.costo as xCosto, IFNULL(bp.porcentajeImpuestos, 0), bp.porcentajeDescuentoLinea, bp.porcentajeDescuentoGrupo, bp.porcentajeDescuentoProducto, bp.porcentajeUtilidad, " +
+                            "s.enTienda + s.enBodega, IFNULL(sum(i.porcentaje), 0) as totalImpuestos " +
                             "from articulos a " +
                             "JOIN base_para_precios bp ON a.id_articulo = bp.id_articulo " +
                             "JOIN Stock s ON s.idArticulo = a.id_articulo " +
                             "JOIN lineas l ON l.id_linea = a.id_linea " +
-                            "JOIN grupos g ON g.id_grupo = a.id_grupo ");
-                    setQueryTable(getMainQuery());
+                            "JOIN grupos g ON g.id_grupo = a.id_grupo " +
+                            "LEFT JOIN articulos_impuesto ai ON a.id_articulo = ai.articulos_id_articulo " +
+                            "LEFT JOIN impuesto i ON ai.impuestos_id = i.id ");
+                    String query = getMainQuery() + "GROUP BY a.id_articulo";
+                    setQueryTable( query );
                     
                     jTable1.setModel(modeloTabla);
                     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -456,18 +460,15 @@ public class CatalogoArticulos extends OmJInternalFrame {
 }//GEN-LAST:event_btnModificarActionPerformed
 
     public InternalFrameAdapter iframeAdapter = new InternalFrameAdapter() {
-        public void internalFrameClosed(InternalFrameEvent e) { ((ScrollableTableModel)jTable1.getModel()).refrescar(); }
+        public void internalFrameClosed(InternalFrameEvent e) {
+            ((ScrollableTableModel)jTable1.getModel()).refrescar();
+        }
     };
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
         omoikane.formularios.Articulo articuloForm = omoikane.principal.Articulos.lanzarFormNuevoArticulo(this);
-        articuloForm.addInternalFrameListener( new InternalFrameAdapter() {
-            @Override
-            public void internalFrameClosed(InternalFrameEvent e) {
-                 buscar();
-            }
-        } );
+        articuloForm.addInternalFrameListener(iframeAdapter);
 }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
@@ -475,7 +476,10 @@ public class CatalogoArticulos extends OmJInternalFrame {
         int IDArticulo = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         
         //Lanzar la ventana de detalles:
-        if(IDArticulo != -1) { omoikane.principal.Articulos.lanzarDetallesArticulo(this, IDArticulo); }
+        if(IDArticulo != -1) {
+            JInternalFrame wnd = (JInternalFrame)omoikane.principal.Articulos.lanzarDetallesArticulo(this, IDArticulo);
+            wnd.addInternalFrameListener(iframeAdapter);
+        }
 }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
@@ -694,13 +698,19 @@ class ArticulosTableModel extends ScrollableTableModel {
         if(col==5) {
             BaseParaPrecio bp = new BaseParaPrecio();
             bp.setCosto((Double) super.getValueAt(row, 7));
-            bp.setPorcentajeImpuestos((Double) super.getValueAt(row, 8));
             bp.setPorcentajeDescuentoLinea((Double) super.getValueAt(row, 9));
             bp.setPorcentajeDescuentoGrupo((Double) super.getValueAt(row, 10));
             bp.setPorcentajeDescuentoProducto((Double) super.getValueAt(row, 11));
             bp.setPorcentajeUtilidad((Double) super.getValueAt(row, 12));
 
-            PrecioOmoikaneLogic precioOmoikaneLogic = new PrecioOmoikaneLogic(bp);
+            //Agrupo todos los impuestos en uno mismo, dado que la sumatoria de los impuestos es equivalente a calcular los impuestos por separado,
+            // ésta facilidad proviene de la regla en México de que un impuesto no pueda estár gravado por otro
+            Collection<Impuesto> impuestos = new ArrayList<>();
+            Impuesto impuesto = new Impuesto();
+            impuesto.setPorcentaje((BigDecimal) super.getValueAt(row, 14));
+            impuestos.add(impuesto);
+
+            PrecioOmoikaneLogic precioOmoikaneLogic = new PrecioOmoikaneLogic(bp, impuestos);
 
             return numberFormat.format(precioOmoikaneLogic.getPrecio());
         } else if(col == 6) {

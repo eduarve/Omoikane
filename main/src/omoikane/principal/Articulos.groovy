@@ -1,11 +1,13 @@
 package omoikane.principal
 
+import omoikane.formularios.ImpuestosTableModel
 import omoikane.formularios.OmJInternalFrame
 import omoikane.inventarios.Stock
 import omoikane.inventarios.StockLevelsController
 import omoikane.moduloreportes.CatalogoArticulosHandler
 import omoikane.principal.*
 import omoikane.producto.CodigosController
+import omoikane.producto.Impuesto
 import omoikane.producto.PaqueteController
 import omoikane.producto.PrecioOmoikaneLogic
 import omoikane.repository.ProductoRepo
@@ -15,9 +17,13 @@ import groovy.swing.*
 import org.springframework.transaction.TransactionStatus
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.support.TransactionTemplate
 
+import javax.persistence.EntityManager
+import javax.persistence.EntityManagerFactory
+import javax.persistence.EntityTransaction;
 import javax.swing.*
+import javax.swing.table.DefaultTableModel
 import java.awt.event.WindowListener;
 import javax.swing.event.*;
 import groovy.inspect.swingui.*;
@@ -185,7 +191,7 @@ public class Articulos
             formArticulo.setTxtIDGrupoDes    gru.descripcion           as String
             formArticulo.setTxtDescripcion   art.descripcion
             formArticulo.setTxtUnidad        art.unidad
-            formArticulo.setTxtImpuestos     art.porcentajeImpuestos   as String
+            formArticulo.setTxtImpuestos     art.precio.impuestos   as String
             formArticulo.setTxtUModificacion art.uModificacion         as String
             formArticulo.setTxtDescuento     precio.descuento  as String
             formArticulo.setTxtCosto         formateador.format( art.getBaseParaPrecio().costo  )
@@ -193,11 +199,18 @@ public class Articulos
             //formArticulo.setTxtExistencias   art.cantidad              as String
             formArticulo.setTxtPrecio        art.precio          as String
             formArticulo.setTxtComentarios   notas                     as String
-            formArticulo.getTxtDesctoPorcentaje().text = formateador.format( precio.porcentajeDescuentoTotal )
+            formArticulo.getTxtDesctoPorcentaje().text = formateador.format( art.getBaseParaPrecio().getPorcentajeDescuentoProducto() )
             formArticulo.getTxtDescuento2().text       = (precio.getDescuento()) as String
             formArticulo.getTxtPrecioTotal().text      = precio.precio as String
-            formArticulo.getTxtImpuestosPorc().text    = formateador.format( art.getBaseParaPrecio().porcentajeImpuestos )
-            formArticulo.getTxtImpuestos().text        = precio.impuestos  as String
+            //formArticulo.getTxtImpuestosPorc().text    = formateador.format( precio.impuestos )
+            //formArticulo.getTxtImpuestos().text        = precio.impuestos  as String
+
+            precio.listaImpuestos.each { Impuesto im ->
+                ((DefaultTableModel)formArticulo.getImpuestosTable().getModel()).addRow([
+                                im
+                ].toArray());
+            }
+
             formArticulo.getTxtUtilidad().text         = precio.utilidad   as String
             formArticulo.ID                   = ID
             formArticulo.setModoDetalles();
@@ -224,7 +237,6 @@ public class Articulos
                 def IDGrupo       = formArticulo.getTxtIDGrupo()
                 def descripcion   = formArticulo.getTxtDescripcion()
                 def unidad        = formArticulo.getTxtUnidad()
-                def impuestos     = formArticulo.getTxtImpuestosPorc().text
                 def costo         = formArticulo.getTxtCosto()
                 def descuento     = formArticulo.getTxtDesctoPorcentaje().text
                 def utilidad      = formArticulo.getTxtUtilidadPorc().text
@@ -235,14 +247,12 @@ public class Articulos
                 Herramientas.verificaCampo(IDLinea,Herramientas.numero,"ID linea"+Herramientas.error2)
                 Herramientas.verificaCampo(IDGrupo,Herramientas.numero,"ID Grupo"+Herramientas.error2)
                 Herramientas.verificaCampo(descripcion,Herramientas.texto,"descripcion"+Herramientas.error1)
-                Herramientas.verificaCampo(impuestos,Herramientas.numeroReal,"impuestos"+Herramientas.error3)
                 Herramientas.verificaCampo(costo,Herramientas.numeroReal,"costos"+Herramientas.error3)
                 Herramientas.verificaCampo(descuento,Herramientas.numeroReal,"descuento"+Herramientas.error3)
                 Herramientas.verificaCampo(utilidad,Herramientas.numeroReal,"utilidad"+Herramientas.error3)
 
                 IDLinea       = java.lang.Integer.valueOf(IDLinea)
                 IDGrupo       = java.lang.Integer.valueOf(IDGrupo)
-                impuestos     = impuestos as Double
                 costo         = costo as Double
                 descuento     = descuento as Double
                 utilidad      = utilidad as Double
@@ -251,10 +261,11 @@ public class Articulos
                     def serv   = Nadesico.conectar()
                     if(!serv.getLinea(IDLinea)) throw new Exception("Campo ID Línea inválida")
                     if(!serv.getGrupo(IDGrupo)) throw new Exception("Campo ID Grupo inválida")
-                    def datAdd = serv.addArticulo(IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, impuestos, costo, descuento, utilidad, existencias)
+                    def datAdd = serv.addArticulo(IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, costo, descuento, utilidad, existencias)
                     def notasAdd = serv.addAnotacion(IDAlmacen, datAdd.ID, notas )
                     Dialogos.lanzarAlerta(datAdd.mensaje)
                     serv.desconectar()
+                    guardarImpuestos(datAdd.ID, ((ImpuestosTableModel)formArticulo.getImpuestosTable().getModel()).getImpuestoList());
                     //if( formArticulo.getModo() == formArticulo.modo.NUEVO) { stockAdd(datAdd.ID) }
 
                     formArticulo.dispose()
@@ -271,7 +282,6 @@ public class Articulos
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
 
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("stockLevelsView");
                 ((StockLevelsController)scene.getController()).setProducto(idArticulo);
@@ -365,18 +375,17 @@ public class Articulos
         formArticulo
     }
 
-    static def modificar(formArticulo)
+    static def modificar(omoikane.formularios.Articulo formArticulo)
     {
         if(cerrojo(PMA_MODIFICARARTICULO)){
             def f = formArticulo
-            def c = [cod:f.getTxtCodigo(), lin:f.getTxtIDLinea(),gru:f.getTxtIDGrupo(), des:f.getTxtDescripcion(), imp:f.getTxtImpuestosPorc().text, cos:f.getTxtCosto(),
+            def c = [cod:f.getTxtCodigo(), lin:f.getTxtIDLinea(),gru:f.getTxtIDGrupo(), des:f.getTxtDescripcion(), cos:f.getTxtCosto(),
             dto:f.getTxtDesctoPorcentaje().text, uti:f.getTxtUtilidadPorc().text, art:f.getTxtIDArticulo(), uni:f.getTxtUnidad(), notas:f.getTxtComentarios()]
             Herramientas.verificaCampos {
                 Herramientas.verificaCampo(c.cod,Herramientas.texto,"codigo"+Herramientas.error1)
                 Herramientas.verificaCampo(c.lin,Herramientas.numero,"ID linea"+Herramientas.error2)
                 Herramientas.verificaCampo(c.gru,Herramientas.numero,"ID Grupo"+Herramientas.error2)
                 Herramientas.verificaCampo(c.des,Herramientas.texto,"descripcion"+Herramientas.error1)
-                Herramientas.verificaCampo(c.imp,Herramientas.numeroReal,"impuestos"+Herramientas.error3)
                 Herramientas.verificaCampo(c.cos,Herramientas.numeroReal,"costos"+Herramientas.error3)
                 Herramientas.verificaCampo(c.dto,Herramientas.numeroReal,"descuento"+Herramientas.error3)
                 Herramientas.verificaCampo(c.uti,Herramientas.numeroReal,"utilidad"+Herramientas.error3)
@@ -385,20 +394,40 @@ public class Articulos
                 if(!serv.getLinea(c.lin)) throw new Exception("Campo ID Línea inválida")
                 if(!serv.getGrupo(c.gru)) throw new Exception("Campo ID Grupo inválida")
 
-                Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin,c.gru, c.des, c.uni, c.imp, c.cos, c.uti, c.dto))
+                Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin,c.gru, c.des, c.uni, c.cos, c.uti, c.dto))
                 serv.modAnotacion(IDAlmacen, c.art, c.notas)
                 serv.desconectar()
+                guardarImpuestos(Long.parseLong( c.art ), ((ImpuestosTableModel)formArticulo.getImpuestosTable().getModel()).getImpuestoList());
                 //PuertoNadesico.workIn() { it.CacheArticulos.actualizar(c.art) }
             }
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
 
-    static def recalcularCampos(formArticulo) {
-        def f = formArticulo
+    static void guardarImpuestos(Long idArticulo, List<Impuesto> impuestos) {
+
+        EntityManagerFactory emf = (EntityManagerFactory) Principal.applicationContext.getBean("entityManagerFactory");
+        EntityManager em = emf.createEntityManager();
+
+        omoikane.producto.Articulo articulo = (omoikane.producto.Articulo) em.find(omoikane.producto.Articulo.class, idArticulo);
+
+        articulo.setImpuestos(impuestos);
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(articulo);
+        tx.commit();
+
+    }
+
+    static def recalcularCampos(omoikane.formularios.Articulo formArticulo) {
+        omoikane.formularios.Articulo f = formArticulo
         //def c = [ imp:Double.parseDouble(f.getTxtImpuestosPorc().text), cos:Double.parseDouble(f.getTxtCosto()),
         //        dto:Double.parseDouble(f.getTxtDesctoPorcentaje().text), uti:Double.parseDouble(f.getTxtUtilidadPorc().text)]
         def c =[imp:0,cos:0,dto:0,uti:0]
-        if(f.getTxtImpuestosPorc().text==""){c.imp=0}else{c.imp=Double.parseDouble(f.getTxtImpuestosPorc().text)}
+        for(Vector renglon : ((DefaultTableModel)f.getImpuestosTable().getModel()).getDataVector()) {
+            c.imp += ((Impuesto)renglon.get(0)).getPorcentaje().doubleValue();
+        }
+
         if(f.getTxtCosto()==""){c.cos=0}else{c.cos=Double.parseDouble(f.getTxtCosto())}
         if(f.getTxtDesctoPorcentaje().text==""){c.dto=0}else{c.dto=Double.parseDouble(f.getTxtDesctoPorcentaje().text)}
         if(f.getTxtUtilidadPorc().text==""){c.uti=0}else{c.uti=Double.parseDouble(f.getTxtUtilidadPorc().text)}
@@ -406,16 +435,20 @@ public class Articulos
 
         def utilidad = c.uti * c.cos * 0.01;
         def descuento = (utilidad + c.cos) * c.dto * 0.01;
+        for(Vector renglon : ((DefaultTableModel)f.getImpuestosTable().getModel()).getDataVector()) {
+            def porcImpRenglon = ((Impuesto)renglon.get(0)).getPorcentaje().doubleValue();
+            ((Impuesto)renglon.get(0)).setImpuesto( ( c.cos + utilidad - descuento ) * porcImpRenglon * 0.01 )
+        }
         def impuesto = ( c.cos + utilidad - descuento ) * c.imp * 0.01;
         def precio = (c.cos + utilidad - descuento + impuesto);
         def formateador = new java.text.DecimalFormat("#0.00");
 
-        f.setTxtImpuestos4(formateador.format(impuesto));
         f.setTxtDescuento3(formateador.format(descuento));
         f.setTxtDescuento(formateador.format(c.dto));
         f.setTxtUtilidad2(formateador.format(utilidad));
         f.setTxtPrecio(formateador.format(precio));
         f.setTxtPrecioTotal(formateador.format(precio))
+        ((DefaultTableModel)f.getImpuestosTable().getModel()).fireTableDataChanged();
 
     }
 
@@ -425,7 +458,9 @@ public class Articulos
         //         poi:(f.getTxtImpuestosPorc().text) as Double     ,pod:(f.getTxtDesctoPorcentaje().text) as Double]
         def c =[cos:0,poi:0,pod:0,pre:0]
         if (f.getTxtCosto()==""){c.cos=0}else{c.cos=(f.getTxtCosto()) as Double}
-        if(f.getTxtImpuestosPorc().text==""){c.poi=0}else{c.poi=(f.getTxtImpuestosPorc().text) as Double}
+        for(Vector renglon : ((DefaultTableModel)f.getImpuestosTable().getModel()).getDataVector()) {
+            c.poi += ((Impuesto)renglon.get(0)).getPorcentaje().doubleValue();
+        }
         if(f.getTxtDesctoPorcentaje().text==""){c.pod=0}else{c.pod=(f.getTxtDesctoPorcentaje().text) as Double}
         if(f.getTxtPrecioTotal().text==""){c.pre=0}else{c.pre=(f.getTxtPrecioTotal().text) as Double}
         def formateador = new java.text.DecimalFormat("#0.00");
@@ -435,14 +470,18 @@ public class Articulos
         def porcentajeUtilidad  =   (c.pre/(c.cos*(1+c.poi)*(1-c.pod)))-1
         def utilidad            =   c.cos*porcentajeUtilidad
         def descuento           =   (c.cos+utilidad)*c.pod
+        for(Vector renglon : ((DefaultTableModel)f.getImpuestosTable().getModel()).getDataVector()) {
+            def porcImpRenglon = ((Impuesto)renglon.get(0)).getPorcentaje().doubleValue();
+            ((Impuesto)renglon.get(0)).setImpuesto( (c.cos+utilidad-descuento) * porcImpRenglon * 0.01 );
+        }
         def impuesto            =   (c.cos+utilidad-descuento)*c.poi
         porcentajeUtilidad      =   porcentajeUtilidad*100
 
         f.setTxtDescuento3(formateador.format(descuento));
-        f.setTxtImpuestos4(formateador.format(impuesto));
         f.setTxtUtilidad2(formateador.format(utilidad))
         f.setTxtUtilidadPorcText(formateador.format(porcentajeUtilidad))
         f.setTxtPrecio(formateador.format(c.pre))
+        ((DefaultTableModel)f.getImpuestosTable().getModel()).fireTableDataChanged();
 
     }
 

@@ -15,7 +15,6 @@ class Ventas {
     static def asignarA(serv) {
         serv.getVenta  = getVenta
         serv.modVenta  = modVenta
-        serv.sumaVentas= sumaVentas
         serv.addVentaEspecial=addVentaEspecial
     }
 	/**
@@ -36,26 +35,7 @@ class Ventas {
 		db.executeUpdate "UPDATE cajas SET uFolio = ? where id_caja = ?", [folioActual.uFolio, IDCaja]
 		return folioActual.uFolio
 	}
-    static def sumaVentas = { IDCaja, desde, hasta ->
-        def salida = ""
-        try {
-            def db     = Db.connect()
-            def ventas = db.firstRow("""SELECT count(id_venta) as nVentas, sum(subtotal) as subtotal, sum(impuestos) as impuestos,
-                                    sum(descuento) as descuento, sum(total) as total FROM ventas WHERE id_caja = ?
-                                    AND fecha_hora >= ? AND fecha_hora <= ? AND completada = 1""", [IDCaja, desde, hasta])
-            def depos  = db.firstRow("""SELECT sum(importe) as total FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?
-                                AND tipo = 'deposito'""",[IDCaja, desde, hasta])
-            def retiros= db.firstRow("""SELECT sum(importe) as total FROM movimientos_cortes WHERE id_caja = ? AND momento >= ? AND momento <= ?
-                                AND tipo = 'retiro'""",[IDCaja, desde, hasta])
-            ventas.depositos = depos.total!=null?depos.total:0.0
-            ventas.retiros   = retiros.total!=null?retiros.total:0.0
-            if(ventas == null) { ventas.total = 0; ventas.nVentas = 0; ventas.impuestos = 0; ventas.subtotal = 0; ventas.descuento = 0; }
 
-            salida = ventas
-            
-        } catch(e) { throw new Exception("Error al consultar la suma de ventas", e)}
-        salida
-    }
     static def getVenta = { ID ,IDAlmacen->
         def salida = ""
         try {
