@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '1.4.1'
+version = '4.1.0'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -14,13 +14,12 @@ innoSetupCompiler   = 'c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe'
 wyUpdateCompiler    = 'c:\\Program Files (x86)\\wyBuild\\wybuild.cmd.exe'
 versionNotes        = 
     """
-		Versión 1.4.1
+		Versión 4.1.0
 		Novedades:
 			- Soporte multi-impuesto
 			- Componente CRUD de compras
-			- [Pendiente] Componente CxP, cuentas por pagar
-			- [Pendiente] Catalogo de productos offline, funciona sin conexión
-        Versión 1.4
+			- Catalogo de productos offline, funciona sin conexión
+        Versión 4.0.0
         Novedades:
             - Cambio de skin
 			- Registro de máximos y mínimos
@@ -110,7 +109,6 @@ dependencies {
 			[group: 'org.hibernate'         , name: 'hibernate-entitymanager', version: '3.6.5.Final'],
         	[group: 'org.hibernate'         , name: 'hibernate-validator'    , version: '4.2.0.Final'],
 		/* Varios */
-   			[group: 'org.jumpmind.symmetric', name: 'symmetric-jdbc'       , version. '3.5.14'],
 			[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],
         	[group: 'org.apache.poi'        , name: 'poi-ooxml'              , version: '3.9'],
         	'org.dbunit:dbunit:2.4.8',
@@ -166,7 +164,6 @@ dependencies {
 				 	[group: 'org.hibernate'         , name: 'hibernate-entitymanager', version: '3.6.5.Final'],
                  	[group: 'org.hibernate'         , name: 'hibernate-validator'    , version: '4.2.0.Final'],
 				 /* Varios */
-   				 	[group: 'org.jumpmind.symmetric', name: 'symmetric-jdbc'         , version. "3.5.14"],
 				 	[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],                 
                  	'org.dbunit:dbunit:2.4.8',
                  	'com.github.springtestdbunit:spring-test-dbunit:1.0.0',

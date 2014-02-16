@@ -32,7 +32,11 @@ public class ConfiguratorAppManager {
 
     public JInternalFrame startJFXConfigurator() {
         JInternalFrame frame = null;
-        if(omoikane.sistema.Usuarios.cerrojo(Permisos.PMA_CONFIGURACION)) frame = _startJFXConfigurator();
+        try {
+            if(omoikane.sistema.Usuarios.cerrojo(Permisos.PMA_CONFIGURACION)) frame = _startJFXConfigurator();
+        } catch (Exception e) {
+            frame = _startJFXConfigurator();
+        }
         return frame;
     }
 
@@ -44,15 +48,19 @@ public class ConfiguratorAppManager {
         frame.add(fxPanel);
         frame.setVisible(true);
 
-        Herramientas.panelCatalogo(frame);
-        omoikane.principal.Principal.getEscritorio().getPanelEscritorio().add(frame);
-        frame.setSize(499, 595);
-        frame.setPreferredSize(new Dimension(499, 595));
+        if(omoikane.principal.Principal.getEscritorio() != null) {
+            Herramientas.panelCatalogo(frame);
+            omoikane.principal.Principal.getEscritorio().getPanelEscritorio().add(frame);
+            frame.setSize(499, 595);
+            frame.setPreferredSize(new Dimension(499, 595));
 
-        frame.setVisible(true);
-        Herramientas.centrarVentana(frame);
-        Herramientas.iconificable(frame);
-        frame.toFront();
+            frame.setVisible(true);
+            Herramientas.centrarVentana(frame);
+            Herramientas.iconificable(frame);
+            frame.toFront();
+        } else {
+            frame.setVisible(true);
+        }
 
         Platform.runLater(new Runnable() {
             @Override

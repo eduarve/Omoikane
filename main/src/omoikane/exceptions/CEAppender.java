@@ -7,6 +7,7 @@ package omoikane.exceptions;
 
 import javafx.application.Platform;
 import omoikane.principal.Principal;
+import omoikane.sistema.Dialogos;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Priority;
@@ -57,14 +58,8 @@ public class CEAppender extends AppenderSkeleton {
 
 
     private void errorWindow(LoggingEvent event) {
-        ExceptionWindow ew = new ExceptionWindow();
-        ew.getLblTituloError().setText((String) event.getMessage());
-
-        if(event.getThrowableInformation() != null) {
-            event.getThrowableInformation().getThrowable().printStackTrace();
-            ew.getTxtExcepcion().setText(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
-        }
-        ew.setVisible(true);
+        JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
+        Dialogos.lanzarDialogoError(mainJFrame, "Al iniciar aplicación: " + event.getMessage(), Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
     }
 
 }

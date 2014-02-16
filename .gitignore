@@ -1,6 +1,7 @@
 .DS_STORE
 out/**
 archive/**
+symmetric-client/**
 .gradle/**
 config.xml
 cache/**

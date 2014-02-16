@@ -109,7 +109,7 @@ public class TomaInventarioController implements Initializable {
     @FXML AnchorPane mainPane;
 
     private Articulo capturaArticulo;
-    private HashMap<Long, Articulo> indice;
+    private HashMap<Long, ItemConteoPropWrapper> indice;
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
         modelo.setCompletado(true);
@@ -245,12 +245,11 @@ public class TomaInventarioController implements Initializable {
             s.setEnTienda(itemConteoPropWrapper.conteoProperty().get());
 
             productoRepo.saveAndFlush(articulo);
-
-            modelo.setAplicado(true);
-            modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
-            repo.saveAndFlush(modelo._conteoInventario);
-
         }
+
+        modelo.setAplicado(true);
+        modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
+        repo.saveAndFlush(modelo._conteoInventario);
     }
     @FXML public void onImportarAction(ActionEvent actionEvent) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -293,13 +292,8 @@ public class TomaInventarioController implements Initializable {
         if(capturaArticulo == null) return ;
         if(modelo.getCompletado().get()) return;
 
-        if(indice.containsKey(capturaArticulo.getIdArticulo())) {
-            logger.info("Artículo ya agregado al conteo. No se puede volver a agregar.");
-            codigoTextField.requestFocus();
-            return;
-        }
-
-        addItemConteo(capturaArticulo, new BigDecimal(conteoTextField.getText()));
+        BigDecimal conteo = new BigDecimal(conteoTextField.getText());
+        addItemConteo(capturaArticulo, conteo);
 
         conteoTextField.setText("");
         codigoTextField.setText("");
@@ -308,10 +302,13 @@ public class TomaInventarioController implements Initializable {
         capturaArticulo = null;
     }
 
+    /**
+     * Intenta agregar un item a la lista, si ya exíste lo suma y lo persiste.
+     * @param capturaArticulo
+     * @param conteo
+     */
     public void addItemConteo(Articulo capturaArticulo, BigDecimal conteo) {
         if(modelo.getCompletado().get()) return;
-
-        if(indice.containsKey(capturaArticulo.getIdArticulo())) return;
 
         String codigo            = capturaArticulo.getCodigo();
         String descripcion       = capturaArticulo.getDescripcion();
@@ -319,14 +316,28 @@ public class TomaInventarioController implements Initializable {
         BigDecimal diferencia    = conteo.subtract(stockBD);
         BigDecimal costoUnitario = new BigDecimal( capturaArticulo.getBaseParaPrecio().getCosto() );
 
-        ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo, costoUnitario);
-        newItemBean.setArticulo  ( capturaArticulo );
-        newItemBean.setStockDB   ( stockBD         );
-        newItemBean.setDiferencia( diferencia      );
+        if(indice.containsKey(capturaArticulo.getIdArticulo())) {
 
-        ItemConteoPropWrapper newItem = new ItemConteoPropWrapper(newItemBean);
-        modelo.addItem(newItem);
-        indice.put(capturaArticulo.getIdArticulo(), capturaArticulo);
+            ItemConteoPropWrapper itemConteoPropWrapper = indice.get(capturaArticulo.getIdArticulo());
+            conteo = conteo.add( itemConteoPropWrapper.getBean().getConteo() );
+            itemConteoPropWrapper.setConteo    ( conteo     );
+            itemConteoPropWrapper.setDiferencia( diferencia );
+            new Thread(
+                    persistModel()
+            ).start();
+
+        } else {
+
+            ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo, costoUnitario);
+            newItemBean.setArticulo  ( capturaArticulo );
+            newItemBean.setStockDB   ( stockBD         );
+            newItemBean.setDiferencia( diferencia      );
+
+            ItemConteoPropWrapper newItem = new ItemConteoPropWrapper(newItemBean);
+            modelo.addItem(newItem);
+            indice.put(capturaArticulo.getIdArticulo(), newItem);
+
+        }
     }
 
     Character decimalSeparator = getDecimalSeparator();
@@ -453,7 +464,7 @@ public class TomaInventarioController implements Initializable {
 
         indice = new HashMap<>();
         for(ItemConteoPropWrapper ci : modelo.getItems()) {
-            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
+            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci);
         }
 
         imprimirButton.disableProperty().bind(modelo.getCompletado().not());

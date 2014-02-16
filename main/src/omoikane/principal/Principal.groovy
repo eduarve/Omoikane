@@ -5,8 +5,14 @@
 
 package omoikane.principal
 
+import javafx.application.Application
 import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
+import omoikane.configuracion.ConfiguratorAppManager
+import omoikane.formularios.CatalogoArticulos
+import omoikane.ha.DisconnectionHandler
+import omoikane.repository.CajaRepo
+import omoikane.repository.UsuarioRepo
 import omoikane.sistema.*
 import omoikane.sistema.Usuarios as SisUsuarios
 
@@ -18,8 +24,18 @@ import omoikane.exceptions.UEHandler
 import omoikane.sistema.huellas.ContextoFPSDK.SDK
 import omoikane.sistema.huellas.HuellasCache
 import omoikane.sistema.seguridad.AuthContext
+import phesus.configuratron.ConfiguratorApp
 
+import javax.persistence.EntityManager
+import javax.persistence.EntityManagerFactory
+import javax.swing.Action
+import javax.swing.JFrame
+import javax.swing.JInternalFrame
+import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import java.beans.PropertyChangeListener
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -34,6 +50,7 @@ public class Principal {
         static Escritorio escritorio
         static MenuPrincipal        menuPrincipal;
         static def        config
+        private static def splash;
         public static int                   IDAlmacen
         public static int                   IDCaja
         public static int                   sysAncho
@@ -60,8 +77,9 @@ public class Principal {
         final  static def                   SHOW_UNHANDLED_EXCEPTIONS = false
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
-        public static final Boolean         DEBUG = false;
-        public static final String          VERSION = "1.4.1";
+        public static final Boolean         DEBUG                   = false;
+        public static final String          VERSION                 = "4.1.0";
+        public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
 
     public static void main(args)
@@ -80,7 +98,7 @@ public class Principal {
                 configExceptions()
 
                 //Inicializa el hilo que muestra el splash
-                def splash;
+
                 Thread.start {
                     splash = new Splash()
                     splash.iniciar()
@@ -96,6 +114,17 @@ public class Principal {
 
                 logger.trace("Cargando ApplicationContext...")
                 applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+                /*
+                    Verifico la conexión a la base de datos, si no hay se procede al comportamiento para casos sin conexión
+                 */
+                logger.trace("Verificando conexión con BD...")
+                try {
+                    checkDatabaseAvailability();
+                } catch( Exception e ) {
+                    disconnectedBehavior();
+                    return;
+                }
 
                 logger.trace("Cargando huellas en caché...")
                 applicationContext.getBean(HuellasCache.class).getHuellasBD();
@@ -128,13 +157,75 @@ public class Principal {
                 }
 
             } catch(e) {
-                Dialogos.lanzarDialogoError(null, "Al iniciar aplicación: ${e.message}", Herramientas.getStackTraceString(e))
+                //Dialogos.lanzarDialogoError(null, "Al iniciar aplicación: ${e.message}", Herramientas.getStackTraceString(e))
                 logger.error("Al iniciar aplicación: ${e.message}".toString(), e)
                 System.exit(1);
             }
             ///////////////////////
 
         }
+
+    /**
+     * Éste método desribe el comportamiento a seguir para el arranque del programa sin conexión a la BD.
+     */
+    static void disconnectedBehavior() {
+        splash.detener();
+
+        String[] options = [ "Abrir catálogo para emergencias", "Abrir configuración", "Cerrar aplicación" ];
+        int decision = JOptionPane.showOptionDialog(null, "Servidor caído ¿Que hacer?", "Servidor caído",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+
+        switch(decision) {
+            case 0:
+                iniciarSistemaOffline()
+                break;
+            case 1:
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        omoikane.principal.Principal.setConfig(new omoikane.sistema.Config());
+                        omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-test.xml");
+
+                        ConfiguratorAppManager manager = new ConfiguratorAppManager();
+                        JInternalFrame frame = manager.startJFXConfigurator();
+                        JFrame jFrame = new JFrame("Configurator");
+                        jFrame.setContentPane(frame);
+                        jFrame.setVisible(true);
+                        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    }
+                });
+
+                break;
+            case 2:
+                System.exit(0);
+                break;
+        }
+
+    }
+
+    static void iniciarSistemaOffline() {
+
+        escritorio = new Escritorio()
+        escritorio.iniciar()
+
+        CatalogoArticulos cat = new DisconnectionHandler().handle();
+        cat.getBtnCerrar().removeAll();
+
+        cat.getBtnCerrar().addActionListener(new ActionListener() {
+
+            @Override
+            void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        })
+    }
+
+    static void checkDatabaseAvailability() throws Exception {
+
+        applicationContext.getBean(CajaRepo.class).count();
+
+    }
 
     static def iniciarSesion() throws Exception {
         try{

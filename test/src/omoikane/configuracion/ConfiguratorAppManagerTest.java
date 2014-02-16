@@ -51,7 +51,7 @@ public class ConfiguratorAppManagerTest {
         });
 
         while(true) {
-            Thread.sleep(10000);
+            Thread.sleep(1000000);
         }
     }
 }

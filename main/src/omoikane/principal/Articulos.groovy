@@ -77,24 +77,35 @@ public class Articulos
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
 
-    static def lanzarCatalogo()
+    static def lanzarCatalogo() {
+        try {
+            if(cerrojo(PMA_ABRIRARTICULO)) {
+                _lanzarCatalogo()
+            } else {
+                Dialogos.lanzarAlerta("Acceso Denegado")
+            }
+        } catch (Exception e) {
+            _lanzarCatalogo();
+        }
+    }
+
+    private static def _lanzarCatalogo()
     {
-        if(cerrojo(PMA_ABRIRARTICULO)){
-            StopWatch timer = new StopWatch().start();
-            def cat = (new omoikane.formularios.CatalogoArticulos());
 
-            cat.setVisible(true);
-            escritorio.getPanelEscritorio().add(cat)
+        def cat = (new omoikane.formularios.CatalogoArticulos());
 
-            cat.txtBusqueda.keyReleased = { if(it.keyCode == it.VK_ESCAPE) cat.btnCerrar.doClick() }
-            //Herramientas.iconificable(cat)
-            cat.toFront()
+        cat.setVisible(true);
+        escritorio.getPanelEscritorio().add(cat)
 
-            try { cat.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario catálogo de artículos", Herramientas.getStackTraceString(e)) }
-            cat.txtBusqueda.requestFocus()
+        cat.txtBusqueda.keyReleased = { if(it.keyCode == it.VK_ESCAPE) cat.btnCerrar.doClick() }
+        //Herramientas.iconificable(cat)
+        cat.toFront()
 
-            return cat
-        }else{Dialogos.lanzarAlerta("Acceso Denegado")}
+        try { cat.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario catálogo de artículos", Herramientas.getStackTraceString(e)) }
+        cat.txtBusqueda.requestFocus()
+
+        return cat
+
     }
 
     public static String lanzarDialogoCatalogo()

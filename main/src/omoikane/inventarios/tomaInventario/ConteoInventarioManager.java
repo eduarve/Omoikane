@@ -51,7 +51,7 @@ public class ConteoInventarioManager {
         return frame;
     }
 
-    public JInternalFrame _startJFXTomaInventario() {
+    private JInternalFrame _startJFXTomaInventario() {
         frame = new JInternalFrame("Toma de inventarios");
         final JFXPanel fxPanel = new JFXPanel();
 

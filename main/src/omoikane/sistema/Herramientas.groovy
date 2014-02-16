@@ -78,7 +78,7 @@ import java.text.SimpleDateFormat
 		idsSuc.each {
                         def comprobante = new Comprobantes()
                         comprobante.CorteSucursal(omoikane.principal.Principal.IDAlmacen, it.id_corte) //imprimir ticket
-                        comprobante.probar()                          //* Aqui tambien mandar a imprimir*/
+                        comprobante.probar()                          //* Aqui tambien manda a imprimir*/
                         desde = sdfFecha.format( it.desde)
                         hasta = sdfFecha.format( it.hasta)
                         q="select id_corte from cortes where fecha_hora >= '${desde}' and fecha_hora <= '${hasta}'"

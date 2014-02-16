@@ -26,21 +26,24 @@ public class ScrollableTableModel extends AbstractTableModel {
         Connection		conn
         Statement 		control
         ResultSet 		rs
+        String          jdbc_url;
         java.util.Hashtable<String,java.util.List> cacheFila = new Hashtable();
 
     public ScrollableTableModel(java.util.List colNames, ArrayList colClases)
     {
         this.colNames   = new ArrayList(colNames);
         this.colClasses = colClases;
-        conectarDB();
-    }
-
-    public void conectarDB() {
         def protocol = omoikane.principal.Principal.URLMySQL +
                 "?user="     + omoikane.principal.Principal.loginJasper +
                 "&password=" + omoikane.principal.Principal.passJasper  +
                 "&useOldAliasMetadataBehavior=true&useCompression=true";
-        conn = DriverManager.getConnection(protocol);
+        setJdbc_url(protocol);
+        conectarDB();
+    }
+
+    public void conectarDB() {
+
+        conn = DriverManager.getConnection(getJdbc_url());
         conn.setAutoCommit(false);
 
         control   = conn.createStatement();

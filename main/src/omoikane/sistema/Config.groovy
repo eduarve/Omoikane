@@ -61,6 +61,7 @@ import groovy.inspect.swingui.*
             Principal.basculaActiva           = Boolean.valueOf(config.bascula.@activa[0])
             Principal.tipoCorte               = Integer.valueOf(config.tipoCorte[0].text())
             Principal.authType                = AuthContext.valueOf(String.valueOf(config.authType[0].text()))
+            Principal.HA                      = Boolean.valueOf(config.HA[0].text())
             if(Principal.basculaActiva) {
                 String cmd = ""
                 String.valueOf(config.bascula.@weightCommand[0]).split(",").each { cmd += (it as Integer) as char }

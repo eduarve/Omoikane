@@ -678,6 +678,9 @@ public class CatalogoArticulos extends OmJInternalFrame {
     public javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
 
+    public JButton getBtnCerrar() {
+        return btnCerrar;
+    }
 }
 
 class ArticulosTableModel extends ScrollableTableModel {
@@ -691,8 +694,17 @@ class ArticulosTableModel extends ScrollableTableModel {
         numberFormat.setMaximumFractionDigits(2);
         numberFormat.setMinimumFractionDigits(2);
         numberFormat.setGroupingUsed(false);
+
     }
 
+    @Override
+    public String getJdbc_url() {
+        if(Principal.HA) {
+            return "jdbc:mysql://localhost/store001?user=root&password=";
+        } else {
+            return super.getJdbc_url();
+        }
+    }
 
     public Object getValueAt(int row,int col){
         if(col==5) {

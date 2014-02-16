@@ -97,6 +97,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         lblVersion = new javax.swing.JLabel();
         btnReportes = new javax.swing.JButton();
         btnProveedores = new javax.swing.JButton();
+        btnTomaInventarios1 = new javax.swing.JButton();
 
         setIconifiable(true);
         setTitle("Menú Principal");
@@ -181,7 +182,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         getContentPane().add(btnMovAlmacen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, 200, 70));
 
         btnPreferencias.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPreferencias.setText("Preferencias");
+        btnPreferencias.setText("Config.");
         btnPreferencias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPreferencias.setIconTextGap(-12);
         btnPreferencias.addActionListener(new java.awt.event.ActionListener() {
@@ -189,7 +190,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnConfigActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPreferencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, 200, 70));
+        getContentPane().add(btnPreferencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 410, 90, 70));
 
         btnUsuarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnUsuarios.setText("Usuarios");
@@ -213,12 +214,12 @@ public class MenuPrincipal extends OmJInternalFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 30, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 40, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 480, 30, 40));
@@ -242,7 +243,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnMeproActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMepro, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 410, 200, 70));
+        getContentPane().add(btnMepro, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 410, 100, 70));
 
         btnCortes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnCortes.setText("Cortes");
@@ -265,14 +266,14 @@ public class MenuPrincipal extends OmJInternalFrame {
         getContentPane().add(btnArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 210, 70));
 
         btnTomaInventarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnTomaInventarios.setText("Toma de Inventarios");
+        btnTomaInventarios.setText("Compras");
         btnTomaInventarios.setIconTextGap(-5);
         btnTomaInventarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTomaInventariosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTomaInventarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 200, 70));
+        getContentPane().add(btnTomaInventarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, 200, 70));
 
         btnGrupos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnGrupos.setText("Grupos");
@@ -329,6 +330,16 @@ public class MenuPrincipal extends OmJInternalFrame {
         });
         getContentPane().add(btnProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 310, 200, 70));
 
+        btnTomaInventarios1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnTomaInventarios1.setText("Toma de Inventarios");
+        btnTomaInventarios1.setIconTextGap(-5);
+        btnTomaInventarios1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTomaInventarios1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnTomaInventarios1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 200, 70));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -383,9 +394,8 @@ public class MenuPrincipal extends OmJInternalFrame {
 }//GEN-LAST:event_btnArticulosActionPerformed
 
     private void btnTomaInventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventariosActionPerformed
-
-        omoikane.inventarios.tomaInventario.ConteoInventarioManager pm = new ConteoInventarioManager();
-        JInternalFrame frame = pm.startJFXTomaInventario();
+        omoikane.compras.CompraManager cm = new omoikane.compras.CompraManager();
+        JInternalFrame frame = cm.startJFXCompra();
 }//GEN-LAST:event_btnTomaInventariosActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
@@ -424,6 +434,11 @@ public class MenuPrincipal extends OmJInternalFrame {
         JInternalFrame frame = pm.startJFXProveedores();
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
+    private void btnTomaInventarios1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventarios1ActionPerformed
+        ConteoInventarioManager im = new ConteoInventarioManager();
+        JInternalFrame frame = im.startJFXTomaInventario();
+    }//GEN-LAST:event_btnTomaInventarios1ActionPerformed
+
 
     private void btnEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
@@ -441,23 +456,24 @@ public class MenuPrincipal extends OmJInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton btnAlmacenes;
-    public javax.swing.JButton btnArticulos;
-    public javax.swing.JButton btnCajas;
-    public javax.swing.JButton btnCerrar;
-    public javax.swing.JButton btnCortes;
-    public javax.swing.JButton btnDetallesVentas;
-    public javax.swing.JButton btnEtiquetas;
-    public javax.swing.JButton btnGrupos;
-    public javax.swing.JButton btnLineas;
+    private javax.swing.JButton btnAlmacenes;
+    private javax.swing.JButton btnArticulos;
+    private javax.swing.JButton btnCajas;
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnCortes;
+    private javax.swing.JButton btnDetallesVentas;
+    private javax.swing.JButton btnEtiquetas;
+    private javax.swing.JButton btnGrupos;
+    private javax.swing.JButton btnLineas;
     public javax.swing.JButton btnMepro;
-    public javax.swing.JButton btnMovAlmacen;
-    public javax.swing.JButton btnPreferencias;
-    public javax.swing.JButton btnProveedores;
+    private javax.swing.JButton btnMovAlmacen;
+    private javax.swing.JButton btnPreferencias;
+    private javax.swing.JButton btnProveedores;
     public javax.swing.JButton btnReportes;
-    public javax.swing.JButton btnTomaInventarios;
-    public javax.swing.JButton btnUsuarios;
-    public javax.swing.JButton btnVender;
+    private javax.swing.JButton btnTomaInventarios;
+    private javax.swing.JButton btnTomaInventarios1;
+    private javax.swing.JButton btnUsuarios;
+    private javax.swing.JButton btnVender;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -14,7 +14,8 @@ ID: ${idFolio}
 
                      Subtotal: ${String.format("%,9.02f", subtotal)}
                   - Descuento: ${String.format("%,9.02f", descuento)}
-                        + IVA: ${String.format("%,9.02f", impuestos)}
+<% impuestosMap.each { imdesc, im -> %>${String.format("%29s: %,9.02f", imdesc, im.importe)}
+<% } %>
                         Total: ${String.format("%,9.02f", total)}
 
                      Efectivo: ${String.format("%,9.02f", efectivo)}
