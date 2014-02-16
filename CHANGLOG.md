@@ -1,4 +1,4 @@
-Versión 4.1.0 (2014-02-16) Catálogo de productos modo HA
+## Versión 4.1.0 (2014-02-16) Catálogo de productos modo HA
 
 - Cambie nomenclatura de versión, se elimina el intervalo de la
 izquierda que siempre es 1, las versiones 1.4.x.x pasan a ser 4.x.x.
