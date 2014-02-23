@@ -1,7 +1,7 @@
 Omoikane
 ========
 
-Punto de venta opensource de tecnología de vanguardia. Solución sencilla para cualquier tipo de negocio, especializado en negocios, que por sus características complejas no pueden ser tratados con puntos de venta básicos. (la mayoría en el mercado). Puede manejar desde 1 producto hasta cientos de miles sin problemas. Tiene características de inventario y almacén sencillas de uso, pero avanzadas en características que superan la media del mercado.
+Poderoso punto de venta opensource de tecnología de vanguardia. Solución sencilla para cualquier tipo de negocio, especializado en negocios, que por sus características complejas no pueden ser tratados con puntos de venta básicos. (la mayoría en el mercado). Puede manejar desde 1 producto hasta cientos de miles sin problemas. Tiene características de inventario y almacén sencillas de uso, pero avanzadas en características que superan la media del mercado.
 
 ![Caja](http://i.imgur.com/JHh7C0f.png)
 
@@ -23,6 +23,7 @@ Punto de venta opensource de tecnología de vanguardia. Solución sencilla para 
 - __Rendimiento, Escalabilidad y capacidad__ comprobados: El rendimiento no depende del tamaño del negocio, nuestra aplicación funciona en negocios con más de dos millones de registros y consideramos que puede soportar decenas de millones sin afectar nunca el rendimiento.
 - __Multi-impuesto__ Es posible agregar cualquier cantidad de impuestos a cualquier producto. Por ejemplo IVA 0%, IVA 16%, IEPS 8%, IEPS 25%, etc. Es posible agregar cualquier impuesto que sea una proporción del valor del producto.
 - __Facturación y notas de crédito CFDI__ La facturación electrónica se puede realizar mediante diversos proveedores de timbres, desde 30 centavos por timbre aún comprando un solo timbre.
+- __Catálogo offline__ Consulte su catálogo de artículos aún sin conexión. Útil en caso de caídas del servidor o para llevar consigo la información.
 
 ## Características agendadas:
 - Agrupación por departamento. Actualmente se puede usar la agrupación por líneas como suplemento.
