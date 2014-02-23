@@ -1,5 +1,7 @@
 
-package omoikane.nadesicoiLegacy;
+package omoikane.nadesicoiLegacy
+
+import org.apache.log4j.Logger;
 
 /**
  * //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,9 +15,10 @@ public class NadesicoLegacy {
     def storage = [:]
     def propertyMissing(String name, value) { storage[name] = value }
     def propertyMissing(String name) { storage[name] }
+    public Logger logger = Logger.getLogger(NadesicoLegacy.class);
 
-    Object methodMissing(String name, Object args) {
-            return this."${name}".call( * args)
+    Object methodMissing(String name, Object args) throws Exception {
+        return this."${name}".call( * args)
     }
     /**
      * @param args the command line arguments
@@ -41,7 +44,7 @@ public class NadesicoLegacy {
               Sucursales.asignarA               this
               PuertoNadesico.asignarA           this
 
-        } catch(e) { Consola.error("Error al iniciar servicio", e) }
+        } catch(e) { logger.error("Error al iniciar servicio de nadesicoLegacy", e); }
     }
 
 }

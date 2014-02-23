@@ -8,7 +8,9 @@
 package omoikane.principal
 
 import omoikane.sistema.*
-import javax.swing.table.*
+ import org.apache.log4j.Logger
+
+ import javax.swing.table.*
 import groovy.inspect.swingui.*
 import java.text.*
 import groovy.sql.*
@@ -37,6 +39,7 @@ class Caja implements Serializable {
     static def comMan     = new ComMan()
     static def basculaActiva = omoikane.principal.Principal.basculaActiva
     static def miniDriver = omoikane.principal.Principal.driverBascula
+    static Logger logger = Logger.getLogger(Caja.class);
 
     static def abrirCaja(ID = -1)
     {
@@ -192,9 +195,10 @@ class Caja implements Serializable {
                     def movServ = Nadesico.conectar()
                     SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     def horas = movServ.getCaja(IDCaja)
-
-                    def ventas= movServ.sumaVentas(IDCaja, sdf.format(horas.horaAbierta), 'CURRENT_TIMESTAMP')
                     movServ.desconectar()
+
+                    def contexto = ContextoCorte.instanciar();
+                    def ventas= contexto.obtenerSumaCaja(IDCaja, sdf.format(horas.horaAbierta), 'CURRENT_TIMESTAMP')
 
                     panel.txtNVentas.text   = ventas.nVentas
                     panel.txtVentas.text    = ventas.total
@@ -229,7 +233,7 @@ class Caja implements Serializable {
                     dialog.setActivo(true)
                     panel.txtImporte.requestFocusInWindow()
                 } catch(exce) {
-                    Dialogos.error("Error en movimientos caja: ${exce.getMessage()}", exce)
+                    logger.error("Error en movimientos caja: ${exce.getMessage()}", exce)
                 }} else {
                 javax.swing.JOptionPane.showMessageDialog(panel, "Acceso denegado")
             }
