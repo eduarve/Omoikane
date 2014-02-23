@@ -9,6 +9,7 @@ import omoikane.nadesicoiLegacy.Db
 import omoikane.principal.Principal;
 import omoikane.sistema.Nadesico;
 import omoikane.sistema.Comprobantes
+import org.apache.log4j.Logger
 
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
@@ -22,6 +23,8 @@ public class EstrategiaDual extends EstrategiasCorte {
 
     public def yaSumado = false
     public def laSuma   = null
+    public Logger                logger                  = Logger.getLogger(EstrategiaDual.class);
+
     public def obtenerSumaCaja(IDCaja, horaAbierta, horaCerrada) {
         try {
 
@@ -180,10 +183,13 @@ public class EstrategiaDual extends EstrategiasCorte {
 
     def addCorteDual ( IDCaja, IDAlmacen, subtotal,subtotalDual, impuestos,impuestoDual, descuentos,descuentoDual,total, totalDual, nVentas, desde, hasta , depositos , retiros, impuestosList ) {
         Sql db;
+        EntityTransaction tx;
         try {
             db = Db.connect()
+            db.connection.autoCommit = false
             try {
                 def folios  = [ini:0,fin:0]
+
                 folios.ini  = db.firstRow('SELECT min(folio) as fol FROM ventas WHERE fecha_hora >= ? and fecha_hora <= ? and id_caja = ? and id_almacen = ?', [desde, hasta, IDCaja, IDAlmacen]).fol
                 folios.fin  = db.firstRow('SELECT max(folio) as fol FROM ventas WHERE fecha_hora >= ? and fecha_hora <= ? and id_caja = ? and id_almacen = ?', [desde, hasta, IDCaja, IDAlmacen]).fol
 
@@ -200,11 +206,11 @@ public class EstrategiaDual extends EstrategiasCorte {
                 corte.setDesde( desde );
                 corte.setHasta( hasta );
                 corte.setIdCaja( IDCaja );
-                corte.setSucursalId( IDAlmacen );
+                corte.setSucursalId( IDAlmacen as int );
                 corte.setDepositos( depositos );
                 corte.setRetiros( retiros );
-                corte.setFolioInicial( folios.ini );
-                corte.setFolioFinal( folios.fin );
+                corte.setFolioInicial( folios.ini as Long);
+                corte.setFolioFinal( folios.fin as Long);
                 corte.setAbierto(false);
 
                 List<CorteImpuesto> corteImpuestoList = []
@@ -216,12 +222,11 @@ public class EstrategiaDual extends EstrategiasCorte {
                 }
                 corte.setCorteImpuestoList( corteImpuestoList )
 
-                EntityTransaction tx = em.getTransaction();
+                tx = em.getTransaction();
                 tx.begin();
                 em.persist(corte);
-                tx.commit();
 
-                db.connection.autoCommit = false
+
                 /*
                 def IDCorte = db.executeInsert("INSERT INTO cortes SET subtotal = ?, impuestos = ?, descuentos = ?, total = ? "+
                         ", n_ventas = ?, desde = ?, hasta = ?, id_caja = ?, id_almacen = ?, depositos = ?, retiros = ?, folio_inicial = ?, folio_final = ?"
@@ -233,17 +238,21 @@ public class EstrategiaDual extends EstrategiasCorte {
                         , [subtotalDual, impuestoDual, descuentoDual,totalDual,i,desde,hasta,IDCaja, IDAlmacen,i,i, folios.ini, folios.fin])
                 def IDCorte = corte.id
                 IDCorteDual = IDCorteDual[0][0]
-                db.commit()
+                db.commit();
+                tx.commit();
                 return [IDCorte:IDCorte,IDCorteDual:IDCorteDual,mensaje:"Corte hecho."]
             } catch(Exception e) {
+                logger.error("Error generando corte.", e);
                 db.rollback()
-                if(e.message.contains("Duplicate entry")) { return "Corte que intenta capturar ya exíste" }
-                Consola.error("[Excepcion al addCorte:${e.message}]", e)
-                throw new Exception("Error al enviar a la base de datos. Corte no se registró.")
+                tx.rollback();
+                logger.info("Corte no se registró");
             } finally {
                 db.close()
             }
-        } catch(e) { Consola.error("[Error addCorte:${e.message}]", e); throw new Exception("Error en la conexión del servidor con su base de datos") }
+        } catch(e) {
+            Consola.error("[Error addCorte:${e.message}]", e);
+            throw new Exception("Error en la conexión del servidor con su base de datos", e)
+        }
     }
 
 }

@@ -14,6 +14,10 @@
         puerto serial a usb  linux : /dev/ttyUSBX   windows: COMX
         X es el valor del puerto en el que se encuentra
 
+	15/02/2014
+	- Agregué nodo HA. Activa y desactiva las características de alta disponibilidad, tales como catálogo de
+    productos sin conexión.
+
     04/08/2013
     - Se agrega el nodo authType, sus opciones:
         - "NIP": Los usuarios se identifican mediante nips
@@ -57,6 +61,7 @@
     <ScannerBaudRate>9600</ScannerBaudRate>
     <fingerPrintSDK>ONETOUCH</fingerPrintSDK>
     <authType>NIP</authType>
+    <HA>false</HA>
     
     <bascula activa="false" baud="9600" bits="8" parity="None" port="COM2" stopBits="1" stopChar="3" weightCommand=""/>
     <fondoBlur>true</fondoBlur>

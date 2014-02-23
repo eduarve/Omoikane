@@ -105,8 +105,8 @@ public class CatalogoArticulos extends OmJInternalFrame {
                             "JOIN Stock s ON s.idArticulo = a.id_articulo " +
                             "JOIN lineas l ON l.id_linea = a.id_linea " +
                             "JOIN grupos g ON g.id_grupo = a.id_grupo " +
-                            "LEFT JOIN articulos_impuesto ai ON a.id_articulo = ai.articulos_id_articulo " +
-                            "LEFT JOIN impuesto i ON ai.impuestos_id = i.id ");
+                            "LEFT JOIN articulos_Impuesto ai ON a.id_articulo = ai.articulos_id_articulo " +
+                            "LEFT JOIN Impuesto i ON ai.impuestos_id = i.id ");
                     String query = getMainQuery() + "GROUP BY a.id_articulo";
                     setQueryTable( query );
                     
