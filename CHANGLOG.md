@@ -13,3 +13,8 @@ mensaje default de error es el de la catarina y ahora el stacktrace se
 muestra completo (incluyendo causas).
 - Incluyo un ejemplo de caceso a datos usando MePro. La herramienta
 para extender funcionalidad dinámicamente en tiempo de ejecución.
+- Tiempo de arranque reducido, gracias a la eliminación de las
+revisiones que hacía hibernate al comenzar la aplicación
+- Reducción del código legado de Nadesico, varios métodos se migraron a
+código nuevo.
+- Ajustes al componente de compras
