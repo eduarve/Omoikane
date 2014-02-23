@@ -45,11 +45,12 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 ### Instalación de la base de datos
 1. Descargar MySQL Server, desde la página oficial. [Página oficial de MySQL Server](http://dev.mysql.com/downloads/mysql/)
 2. [Descargar MySQL Workbench](http://dev.mysql.com/downloads/tools/workbench/)
-3. Instalar MySQL con los parámetros deseados, para un negocio pequeño los parámetros que vienen por default en el instalador serán más que suficientes. Es importante recordar el password que pongamos durante la instalación.
-4. Instalar MySQL Workbench, éste software facilita las operaciones con la base de datos y será de gran utilidad para administrarla.
-5. Abrir workbench, la interfaz está dividida en 3 columnas: "SQL Development", "Data Modeling" y "Server Administration".
-6. Cargar la base de datos de Omoikane, en la columna "Server Administration", después haga doble click en "mysql@localhost", ahora vaya a "Data export and restore", seleccione la pestaña "Import from disk", seleccione "Import from self-contained file", haga click en "..." y busque el archivo "schema.sql" en la carpeta de instalación de Omoikane. Por último haga click en "Select all tables" y "Start import".
-7. ¡Felicidades! Si los pasos anteriores se han seguido con éxito, la base de datos estará lista para ser utilizada.
+3. [Descargar el esquema de la base de datos](https://github.com/Phesus/Omoikane/releases/download/4.1.0/schemadb.sql)
+4. Instalar MySQL con los parámetros deseados, para un negocio pequeño los parámetros que vienen por default en el instalador serán más que suficientes. Es importante recordar el password que pongamos durante la instalación.
+5. Instalar MySQL Workbench, éste software facilita las operaciones con la base de datos y será de gran utilidad para administrarla.
+6. Abrir workbench, tome en cuenta que la interfaz está dividida en 3 columnas: "SQL Development", "Data Modeling" y "Server Administration".
+7. Cargar la base de datos de Omoikane, para ésto: haga doble click en "mysql@localhost" en la columna "Server Administration", ahora vaya a "Data export and restore", seleccione la pestaña "Import from disk", seleccione "Import from self-contained file", haga click en "..." y busque el archivo "schemadb.sql" (del paso 3). Por último haga click en "Select all tables" y "Start import".
+8. ¡Felicidades! Si los pasos anteriores se han seguido con éxito, la base de datos estará lista para ser utilizada.
 
 #### Notas
 - Es posible conectarse a cualquier otro tipo de instalación de MySQL y resultaría útil para configuraciones excentricas, por ejemplo usando LAMP, TurnKey Linux, WAMP, etc.
