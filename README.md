@@ -72,6 +72,7 @@ c:
 cd c:\phesus\omoikane
 java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
 ```
+
 4. En éste punto el sistema inicia y es completamente funcional, sin embargo aún está usando el usuario "Instalador", que es el usuario default. Agregue un usuario con privilegios de `Propietario`, esto es muy importante porqué al agregarse el primer usuario ya no será posible iniciar sesión como `Instalador`.
  
 5. Utilizar el configurador para establecer los principales parámetros del sistema. La parte más importante de la configuración es establecer los parámetros de conexión a la base de datos, estos parámetros tienen que ser consistentes con los que se introdujeron cuando se configuró la base de datos:
