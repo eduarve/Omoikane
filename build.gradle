@@ -1,4 +1,4 @@
-import org.apache.tools.ant.filters.ReplaceTokens 
+ import org.apache.tools.ant.filters.ReplaceTokens 
 
 apply plugin: 'groovy'
 apply plugin: 'application'
@@ -10,8 +10,8 @@ version = '4.1.0'
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
     title               = 'Omoikane'
-innoSetupCompiler   = 'c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe'
-wyUpdateCompiler    = 'c:\\Program Files (x86)\\wyBuild\\wybuild.cmd.exe'
+// innoSetupCompiler   = 'c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe'
+// wyUpdateCompiler    = 'c:\\Program Files (x86)\\wyBuild\\wybuild.cmd.exe'
 versionNotes        = 
     """
 		Versión 4.1.0
@@ -275,6 +275,7 @@ task distribuir(dependsOn: 'installApp') {
 }
 
 /** El instalador requiere incluir la �ltima versi�n del actualizador */
+/** Cancelado por cambio de software para instalaciones y actualizaciones 
 task makeInstaller(type:Exec, dependsOn: 'makeUpdate') {
     miDistArchiveDir = "archive/dist-${version}"
     commandLine innoSetupCompiler, 'InstallerScript.iss', "/DAppVersion=$version"
@@ -314,3 +315,4 @@ task makeUpdate(type:Exec) {
 task uploadUpdate(type:Exec, dependsOn: 'makeUpdate') {
     commandLine wyUpdateCompiler, "\"updater.wyp\"", "/upload"
 }
+*/
