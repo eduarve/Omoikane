@@ -79,7 +79,11 @@ java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
 
 ## Configuración
 
-[Leer acerca de la configuración en nuestro wiki/manual](https://github.com/Phesus/Omoikane/wiki/Configuraci%C3%B3n)
+[Leer acerca de la configuración en nuestro wiki/manual](https://github.com/Phesus/Omoikane/wiki/04_configuracion)
+
+## Manual
+
+[Documentación](https://github.com/Phesus/Omoikane/wiki)
 
 ## Licencia
 
