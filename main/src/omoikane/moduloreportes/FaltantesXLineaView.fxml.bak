@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="438.0" style="" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.moduloreportes.CatalogoArticulosHandler">
+  <children>
+    <SplitPane disable="false" dividerPositions="0.10433070866141732" focusTraversable="true" orientation="VERTICAL" prefHeight="510.0" prefWidth="438.0" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxHeight="50.0" minHeight="50.0" minWidth="0.0" prefHeight="50.0" prefWidth="160.0">
+          <children>
+            <Button fx:id="btnReporte" mnemonicParsing="false" text="Generar reporte" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <Label layoutX="14.0" layoutY="17.0" text="Reporte de faltantes por línea">
+              <font>
+                <Font name="System Bold" size="16.0" />
+              </font>
+            </Label>
+          </children>
+        </AnchorPane>
+        <AnchorPane fx:id="pnlReporte" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

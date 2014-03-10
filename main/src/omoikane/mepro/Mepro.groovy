@@ -57,19 +57,18 @@ public class Mepro {
     }
     def refrescaLista() {
         mainMenu.pnlScripts.removeAll()
-        def dir = new File('./'), nombre, archivos = [:], archivo
+        def dir = new File('./')
 
         dir.eachFileMatch(~/(.*\.groovy)/) {
-            nombre  = it.name
-            archivos[nombre] = it
-            archivo = it;
+            def nombre  = it.name
+            def archivo = it;
 
             mainMenu.pnlScripts.add(
                 swing.panel() {
-                    swing.button(text: nombre, actionCommand:it, actionPerformed: { ejecutarScript(archivos[it.actionCommand]) }, preferredSize:[130,35])
-                    swing.button(text: "GC", actionCommand:archivo, actionPerformed: { lanzarGC(archivo) })
-                    swing.button(icon: imageIcon("/omoikane/mepro/media/blog_post_edit.png"), actionCommand:archivo, actionPerformed: { modificarScript(archivo) })
-                    swing.button(icon: imageIcon("/omoikane/mepro/media/remove.png"), actionCommand:archivo, actionPerformed: { eliminarScript(archivo) } )
+                    swing.button(text: nombre, actionCommand:it, actionPerformed: { ejecutarScript(archivo) }, preferredSize:[130,35])
+                    swing.button(text: "GC", actionCommand:it, actionPerformed: { lanzarGC(archivo) })
+                    swing.button(icon: imageIcon("/omoikane/mepro/media/blog_post_edit.png"), actionCommand:it, actionPerformed: { modificarScript(archivo) })
+                    swing.button(icon: imageIcon("/omoikane/mepro/media/remove.png"), actionCommand:it, actionPerformed: { eliminarScript(archivo) } )
                 }
             )
         }
@@ -82,7 +81,7 @@ public class Mepro {
 
     def lanzarGC(archivo) {
         Console console = new Console();
-        console.set
+
         console.run();
         console.loadScriptFile(archivo);
     }

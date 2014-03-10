@@ -414,7 +414,7 @@ public class CatalogoSucursal extends javax.swing.JInternalFrame {
         }
         String whereFecha = " AND cs.creacion >= '"+Desde+"' AND cs.creacion < '"+Hasta+"' ";
         System.out.println(whereFecha);
-        String query    = "SELECT cs.id_corte AS id, cs.creacion AS fecha FROM cortes_sucursal cs WHERE cs.id_corte like '%"+txtBusqueda.getText()+"%'"+whereFecha;
+        String query    = "SELECT cs.id_corte, cs.id_corte AS id, cs.creacion AS fecha FROM cortes_sucursal cs WHERE cs.id_corte like '%"+txtBusqueda.getText()+"%'"+whereFecha;
         System.out.println(query);
         setQueryTable(query);
     }

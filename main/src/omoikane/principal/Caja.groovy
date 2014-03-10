@@ -197,7 +197,7 @@ class Caja implements Serializable {
                     def horas = movServ.getCaja(IDCaja)
                     movServ.desconectar()
 
-                    def contexto = ContextoCorte.instanciar();
+                    def contexto = new EstrategiaEstandar();
                     def ventas= contexto.obtenerSumaCaja(IDCaja, sdf.format(horas.horaAbierta), 'CURRENT_TIMESTAMP')
 
                     panel.txtNVentas.text   = ventas.nVentas

@@ -150,11 +150,11 @@ public class EstrategiaEstandar extends EstrategiasCorte {
                 corte.setDesde( desde );
                 corte.setHasta( hasta );
                 corte.setIdCaja( IDCaja );
-                corte.setSucursalId( IDAlmacen );
+                corte.setSucursalId( IDAlmacen as int );
                 corte.setDepositos( depositos );
                 corte.setRetiros( retiros );
-                corte.setFolioInicial( folios.ini );
-                corte.setFolioFinal( folios.fin );
+                corte.setFolioInicial( folios.ini as Long);
+                corte.setFolioFinal( folios.fin as Long);
                 corte.setAbierto(false);
 
                 List<CorteImpuesto> corteImpuestoList = []

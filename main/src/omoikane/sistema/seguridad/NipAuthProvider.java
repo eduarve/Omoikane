@@ -7,7 +7,14 @@ import omoikane.repository.UsuarioRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,8 +36,10 @@ public class NipAuthProvider implements AuthProvider {
         for(int i = 0; i < intentosPermitidos; i++) {
 
             if(i>0) JOptionPane.showMessageDialog(null, "Clave errónea. "+(intentosPermitidos-i)+" intentos disponibles.");
+            String nip = String.valueOf(
+                    new DialogPIN(null).showPlease()
+            );
 
-            String nip = nipDialog();
             if(nip == null || nip.isEmpty()) continue;
 
             Integer nipInt;
@@ -46,21 +55,33 @@ public class NipAuthProvider implements AuthProvider {
 
     }
 
-    public String nipDialog() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Digite su NIP");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK"};
-        int option = JOptionPane.showOptionDialog(null, panel, "NIP",
-                JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, pass);
-        if(option == 0) // pressing OK button
-        {
-            char[] password = pass.getPassword();
-            return new String(password);
+    class DialogPIN extends JDialog implements ActionListener
+    {
+        JPasswordField tf2;
+        public DialogPIN(Frame f1) {
+            super(f1, "NIP", true);
+            setLayout(new FlowLayout());
+            JButton btn1 = new JButton("OK");
+            tf2 = new JPasswordField(10);
+            btn1.addActionListener(this);
+            add(new JLabel("Introduce tu NIP"));
+            add(tf2);
+            add(btn1);
+            setSize(155,125);
+            setLocationRelativeTo(null);
+            getRootPane().setDefaultButton(btn1);
         }
-        return "";
+
+        public void actionPerformed(ActionEvent e) {
+
+            setVisible(false);
+        }
+
+        public char[] showPlease() {
+
+            setVisible(true);
+            return tf2.getPassword();
+        }
     }
+
 }

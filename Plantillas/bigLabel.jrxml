@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bigLabel" language="groovy" pageWidth="752" pageHeight="572" orientation="Landscape" columnWidth="752" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
-	<property name="ireport.zoom" value="0.5"/>
+	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="descripcion" class="java.lang.String"/>
@@ -21,26 +21,45 @@
 	<detail>
 		<band height="572" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="16" y="46" width="720" height="100"/>
-				<textElement textAlignment="Center">
-					<font size="60" isBold="true"/>
+				<reportElement x="16" y="64" width="720" height="118"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="50" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement positionType="Float" x="0" y="198" width="752" height="82"/>
-				<textElement textAlignment="Center">
+				<reportElement positionType="Float" x="16" y="182" width="720" height="303"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="65" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{precio}.getPrecio()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="471" width="752" height="50"/>
-				<textElement textAlignment="Center">
+				<reportElement x="16" y="485" width="556" height="75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="25"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement positionType="Float" x="572" y="485" width="164" height="75"/>
+				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
+				</jr:Code39>
+			</componentElement>
+			<textField>
+				<reportElement x="16" y="13" width="720" height="51"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="38" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[Super Farmacias Medina]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="139" y="63" width="468" height="1"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
