@@ -21,30 +21,30 @@
 	<detail>
 		<band height="70" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="43" width="130" height="27"/>
+				<reportElement x="0" y="43" width="105" height="27"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-				<reportElement x="0" y="15" width="62" height="28"/>
+				<reportElement x="0" y="15" width="105" height="28"/>
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{precio}.getPrecio()]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement positionType="Float" x="62" y="15" width="68" height="46"/>
-				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
-				</jr:Code39>
-			</componentElement>
 			<textField>
-				<reportElement x="0" y="0" width="130" height="15"/>
+				<reportElement x="0" y="0" width="105" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="true" isUnderline="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[Medina]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Medina"]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="105" y="0" width="25" height="70"/>
+				<jr:EAN13 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" orientation="90" moduleWidth="0.6" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
+				</jr:EAN13>
+			</componentElement>
 		</band>
 	</detail>
 	<columnFooter>

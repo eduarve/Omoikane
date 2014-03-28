@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generaciÃ³n: 16-09-2013 a las 19:21:40
--- VersiÃ³n del servidor: 5.1.66
--- VersiÃ³n de PHP: 5.3.3-7+squeeze15
+-- Tiempo de generación: 16-09-2013 a las 19:21:40
+-- Versión del servidor: 5.1.66
+-- Versión de PHP: 5.3.3-7+squeeze15
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -13,13 +13,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES latin1 */;
 
 --
 -- Base de datos: `omoikane`
 --
--- CREATE DATABASE `omoikane` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
--- USE `omoikane`;
+CREATE DATABASE IF NOT EXISTS `omoikane` DEFAULT CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+USE `omoikane`;
 
 -- --------------------------------------------------------
 
@@ -29,10 +29,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `articulos` (
   `id_articulo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(64) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
   `id_linea` int(11) DEFAULT '0',
-  `descripcion` varchar(64) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `unidad` varchar(8) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `descripcion` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `unidad` varchar(8) COLLATE latin1_spanish_ci DEFAULT NULL,
   `impuestos` double DEFAULT NULL,
   `uModificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `version` int(11) DEFAULT '0',
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `articulos` (
   `baseParaPrecio_id_articulo` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_articulo`) USING BTREE,
   UNIQUE KEY `codigo` (`codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `Cancelacion` (
   KEY `FK5D0F64CBC58D3F9` (`autorizador_id_usuario`),
   KEY `FK5D0F64C2A677CBD` (`cajero_id_usuario`),
   KEY `FK5D0F64CB3E87FB` (`articulo_id_articulo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -70,13 +70,13 @@ CREATE TABLE IF NOT EXISTS `Cancelacion` (
 
 CREATE TABLE IF NOT EXISTS `CancelacionTransaccion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `concepto` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `concepto` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `importe` decimal(19,2) DEFAULT NULL,
   `paciente_id` int(11) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK18D922A31F43DE4C` (`paciente_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `ConteoInventario` (
   PRIMARY KEY (`id`),
   KEY `FK997A080D61D916F4` (`id_usuario`),
   KEY `completadoIndex` (`completado`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `ConteoInventario` (
 -- Estructura de tabla para la tabla `ConteoInventario_items`
 --
 
- CREATE TABLE `ConteoInventario_items` (
+ CREATE TABLE IF NOT EXISTS `ConteoInventario_items` (
   `ConteoInventario_id` bigint(20) NOT NULL,
   `codigo` varchar(255) DEFAULT NULL,
   `conteo` decimal(19,2) DEFAULT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `ConteoInventario` (
   KEY `FK9F9F550EB3E87FB` (`articulo_id_articulo`),
   CONSTRAINT `FK9F9F550EB3E87FB` FOREIGN KEY (`articulo_id_articulo`) REFERENCES `articulos` (`id_articulo`),
   CONSTRAINT `FK9F9F550ECBC7D7AF` FOREIGN KEY (`ConteoInventario_id`) REFERENCES `ConteoInventario` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -126,14 +126,14 @@ CREATE TABLE IF NOT EXISTS `ConteoInventario` (
 CREATE TABLE IF NOT EXISTS `Paciente` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `edad` int(11) DEFAULT NULL,
-  `habitacion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `habitacion` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `liquidado` bit(1) DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `responsable` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `anotacion` text COLLATE utf8_spanish_ci,
+  `nombre` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `responsable` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `anotacion` text COLLATE latin1_spanish_ci,
   `entrada` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `Paquete` (
   PRIMARY KEY (`id`),
   KEY `FK33E7B1813F08A1D` (`productoContenedor_id_articulo`),
   KEY `FK33E7B1813C323E39` (`productoContenido_id_articulo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -159,10 +159,10 @@ CREATE TABLE IF NOT EXISTS `Paquete` (
 
 CREATE TABLE IF NOT EXISTS `Preferencia` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `clave` longtext COLLATE utf8_spanish_ci NOT NULL,
-  `valor` longtext COLLATE utf8_spanish_ci NOT NULL,
+  `clave` longtext COLLATE latin1_spanish_ci NOT NULL,
+  `valor` longtext COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -186,16 +186,16 @@ CREATE TABLE IF NOT EXISTS `Proveedor` (
 
 CREATE TABLE IF NOT EXISTS `Stock` (
   `idArticulo` int(11) NOT NULL,
-  `clasificacion` char(1) COLLATE utf8_spanish_ci NOT NULL,
+  `clasificacion` char(1) COLLATE latin1_spanish_ci NOT NULL,
   `enBodega` decimal(19,2) NOT NULL,
   `enTienda` decimal(19,2) NOT NULL,
   `maximo` decimal(19,2) NOT NULL,
   `minimo` decimal(19,2) NOT NULL,
   `modificado` datetime NOT NULL,
-  `ubicacion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `ubicacion` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`idArticulo`),
   KEY `FK4C806F64640B4D6` (`idArticulo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -204,11 +204,11 @@ CREATE TABLE IF NOT EXISTS `Stock` (
 --
 
 CREATE TABLE IF NOT EXISTS `Transaccion` (
-  `DTYPE` varchar(31) COLLATE utf8_spanish_ci NOT NULL,
+  `DTYPE` varchar(31) COLLATE latin1_spanish_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `abono` decimal(19,2) DEFAULT NULL,
   `cargo` decimal(19,2) DEFAULT NULL,
-  `concepto` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `concepto` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
   `cantidad` decimal(19,2) DEFAULT NULL,
   `paciente_id` int(11) DEFAULT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `Transaccion` (
   PRIMARY KEY (`id`),
   KEY `FKE302C06FCD51C500` (`producto_id_articulo`),
   KEY `FKE302C06F1F43DE4C` (`paciente_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -226,10 +226,10 @@ CREATE TABLE IF NOT EXISTS `Transaccion` (
 
 CREATE TABLE IF NOT EXISTS `almacenes` (
   `id_almacen` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(64) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `descripcion` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
   `uModificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_almacen`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -272,18 +272,18 @@ CREATE TABLE IF NOT EXISTS `cajas` (
 
 CREATE TABLE IF NOT EXISTS `clientes` (
   `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
-  `RFC` text COLLATE utf8_spanish_ci,
-  `razonSocial` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `direccion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `telefono` varchar(64) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `cp` varchar(64) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `RFC` text COLLATE latin1_spanish_ci,
+  `razonSocial` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `direccion` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `telefono` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `cp` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
   `descuento` double DEFAULT '0',
   `saldo` double DEFAULT '0',
   `uModificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `version` int(11) DEFAULT '0',
-  `razon_social` varchar(255) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+  `razon_social` varchar(255) COLLATE latin1_spanish_ci NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_cliente`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -485,8 +485,9 @@ CREATE TABLE IF NOT EXISTS `movimientos_cortes` (
   `momento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `importe` double NOT NULL DEFAULT '0',
   `id_usuario` int(10) unsigned NOT NULL,
+  `concepto` varchar(45),
   PRIMARY KEY (`tipo`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quiÃ©n lo autorizÃ³';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quién lo autorizó';
 
 -- --------------------------------------------------------
 
@@ -504,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `movimientoscortes` (
   `cantidad` double NOT NULL,
   `id_usuario` int(10) unsigned NOT NULL,
   PRIMARY KEY (`tipo`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quiÃ©n lo autorizÃ³';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quién lo autorizó';
 
 -- --------------------------------------------------------
 
@@ -524,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `precios` (
   PRIMARY KEY (`id_precio`),
   KEY `FKED0041EDBA11A89C` (`id_articulo`,`id_almacen`) USING BTREE,
   KEY `Index_3` (`id_articulo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -553,7 +554,7 @@ CREATE TABLE IF NOT EXISTS `sucursales` (
   `uModificacion` timestamp NOT NULL DEFAULT '1999-12-31 23:00:00',
   `abierta` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_almacen`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -567,7 +568,7 @@ CREATE TABLE IF NOT EXISTS `usr_sucursal` (
   `perfil` float DEFAULT '0',
   `uModificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_usuario`,`id_almacen`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -615,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   KEY `Index_2` (`fecha_hora`),
   KEY `Index_3` (`id_venta`,`id_caja`,`id_almacen`,`fecha_hora`),
   KEY `ParaVentasPersistentes` (`completada`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=FIXED;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=FIXED;
 
 -- --------------------------------------------------------
 
@@ -631,7 +632,7 @@ CREATE TABLE IF NOT EXISTS `ventas_detalles` (
   `id_articulo` int(11) DEFAULT NULL,
   `precio` double NOT NULL DEFAULT '0',
   `cantidad` double DEFAULT '0',
-  `tipo_salida` varchar(3) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `tipo_salida` varchar(3) COLLATE latin1_spanish_ci DEFAULT NULL,
   `subtotal` double DEFAULT NULL,
   `impuestos` double DEFAULT NULL,
   `descuento` double DEFAULT NULL,
@@ -641,7 +642,7 @@ CREATE TABLE IF NOT EXISTS `ventas_detalles` (
   KEY `Index_2` (`id_venta`) USING BTREE,
   KEY `Index_3` (`id_articulo`) USING BTREE,
   KEY `FKEBC0AF7470B65FE7` (`id_venta`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -673,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `ventasprecioespecial` (
 -- Estructura para la vista `base_para_precios`
 --
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `base_para_precios` AS select `a`.`id_articulo` AS `id_articulo`,`a`.`descripcion` AS `descripcion`,`p`.`costo` AS `costo`,`a`.`impuestos` AS `porcentajeImpuestos`,`l`.`descuento` AS `porcentajeDescuentoLinea`,`g`.`descuento` AS `porcentajeDescuentoGrupo`,`p`.`descuento` AS `porcentajeDescuentoProducto`,`p`.`utilidad` AS `porcentajeUtilidad` from (((`articulos` `a` join `precios` `p`) join `lineas` `l`) join `grupos` `g`) where ((`a`.`id_articulo` = `p`.`id_articulo`) and (`a`.`id_linea` = `l`.`id_linea`) and (`a`.`id_grupo` = `g`.`id_grupo`));
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `base_para_precios` AS select `a`.`id_articulo` AS `id_articulo`,`a`.`descripcion` AS `descripcion`,`p`.`costo` AS `costo`,`a`.`impuestos` AS `porcentajeImpuestos`,`l`.`descuento` AS `porcentajeDescuentoLinea`,`g`.`descuento` AS `porcentajeDescuentoGrupo`,`p`.`descuento` AS `porcentajeDescuentoProducto`,`p`.`utilidad` AS `porcentajeUtilidad` from (((`articulos` `a` join `precios` `p`) join `lineas` `l`) join `grupos` `g`) where ((`a`.`id_articulo` = `p`.`id_articulo`) and (`a`.`id_linea` = `l`.`id_linea`) and (`a`.`id_grupo` = `g`.`id_grupo`));
 
 --
 -- Filtros para las tablas descargadas (dump)
@@ -737,7 +738,7 @@ CREATE TABLE `Impuesto` (
 
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Tabla articulos_Impuesto
@@ -759,7 +760,7 @@ CREATE TABLE `articulos_Impuesto` (
 
   CONSTRAINT `FK4E2412D98B37F698` FOREIGN KEY (`articulos_id_articulo`) REFERENCES `articulos` (`id_articulo`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 ALTER TABLE grupos MODIFY descripcion VARCHAR(80);
 
@@ -771,7 +772,7 @@ CREATE TABLE `ventas_detalles_impuestos` (
 
   `base` decimal(19,2) DEFAULT NULL,
 
-  `descripcion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `descripcion` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
 
   `impuestoId` bigint(20) DEFAULT NULL,
 
@@ -783,22 +784,22 @@ CREATE TABLE `ventas_detalles_impuestos` (
 
   CONSTRAINT `FKADEBC6567BA3C33` FOREIGN KEY (`id_renglon`) REFERENCES `ventas_detalles` (`id_renglon`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 CREATE TABLE `corte_impuesto` (
 
   `id_corte` bigint(20) NOT NULL,
 
-  `descripcion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `descripcion` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
 
   `importe` decimal(19,2) DEFAULT NULL
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 CREATE TABLE `Compra` ( `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `completado` bit(1) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
-  `folioOrigen` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `folioOrigen` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `proveedor_id` bigint(20) DEFAULT NULL,
   `id_usuario` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -808,22 +809,22 @@ CREATE TABLE `Compra` ( `id` bigint(20) NOT NULL AUTO_INCREMENT,
   CONSTRAINT `FK78A4219E61D916F4` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
   CONSTRAINT `FK78A4219E89429E0F` FOREIGN KEY (`proveedor_id`) REFERENCES `Proveedor` (`id`)) 
 
-ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 CREATE TABLE `Compra_items` (
   `Compra_id` bigint(20) NOT NULL,
   `articulo_id_articulo` int(11) DEFAULT NULL,
   `cantidad` decimal(19,2) DEFAULT NULL,
-  `codigo` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `codigo` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `costoUnitario` decimal(19,2) DEFAULT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `nombre` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `items_ORDER` int(11) NOT NULL,
   PRIMARY KEY (`Compra_id`,`items_ORDER`),
   KEY `FK697A3DDF8EF37185` (`Compra_id`),
   KEY `FK697A3DDFB3E87FB` (`articulo_id_articulo`),
   CONSTRAINT `FK697A3DDF8EF37185` FOREIGN KEY (`Compra_id`) REFERENCES `Compra` (`id`),
   CONSTRAINT `FK697A3DDFB3E87FB` FOREIGN KEY (`articulo_id_articulo`) REFERENCES `articulos` (`id_articulo`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 ALTER TABLE `cortes` ADD `abierto` BIT( 1 ) NOT NULL;
 
@@ -835,14 +836,20 @@ ALTER TABLE `cortes` ADD `abierto` BIT( 1 ) NOT NULL;
 
 INSERT INTO `Proveedor` (`activo`, `nombre`, `notas`) VALUES (1, 'Sin proveedor', '');
 
-INSERT INTO `lineas` (`descripcion`, `descuento`, `uModificacion`, `version`) VALUES ('Sin lÃ­nea', 0, CURRENT_TIMESTAMP(), 0);
+INSERT INTO `lineas` (`descripcion`, `descuento`, `uModificacion`, `version`) VALUES ('Sin línea', 0, CURRENT_TIMESTAMP(), 0);
 
 INSERT INTO `grupos` (`descripcion`, `descuento`, `uModificacion`, `version`, `u_modificacion`) VALUES ('Sin grupo', 0, CURRENT_TIMESTAMP(), 0, '2000-01-01 00:00:00');
 
 INSERT INTO `sucursales` (`id_almacen`, `creacion`, `hAbierta`, `hCerrada`, `uModificacion`, `abierta`) VALUES (1, CURRENT_TIMESTAMP(), '2000-01-01 00:00:00', '2000-01-01 00:00:00', '2000-01-01 00:00:00', 0);
 
-INSERT INTO `almacenes` (`descripcion`, `uModificacion`) VALUES ('AlmacÃ©n 1', CURRENT_TIMESTAMP());
+INSERT INTO `almacenes` (`descripcion`, `uModificacion`) VALUES ('Almacén 1', CURRENT_TIMESTAMP());
 
 INSERT INTO `cajas` (`id_almacen`, `descripcion`, `creado`, `uModificacion`, `horaAbierta`, `horaCerrada`, `abierta`, `uFolio`) VALUES (1, 'Caja 1', CURRENT_TIMESTAMP(), '2000-01-01 00:00:00', '2000-01-01 00:00:00', '2000-01-01 00:00:00', 0, 0);
 
+INSERT INTO  `clientes` (`id_cliente` , `RFC` , `razonSocial`, `direccion`, `telefono`, `cp` , `descuento`, `saldo`, `uModificacion`, `version`, `razon_social`) VALUES ('1', 'XAXX010101000', 'Público en general', ' ', ' ', ' ', '0', '0', CURRENT_TIMESTAMP , '0', 'Público en general');
 
+INSERT INTO `Impuesto` (`id`, `descripcion`, `porcentaje`) VALUES
+(1, 'IVA (16%)', 16.00),
+(2, 'IVA (0%)', 0.00),
+(3, 'IEPS (8%)', 8.00),
+(4, 'IEPS (25%)', 25.00);

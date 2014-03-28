@@ -26,8 +26,11 @@ public class ScrollableTableModel extends AbstractTableModel {
         Connection		conn
         Statement 		control
         ResultSet 		rs
-        String          jdbc_url;
+        String          jdbcUrl;
         java.util.Hashtable<String,java.util.List> cacheFila = new Hashtable();
+
+    public String getJdbcUrl() { return jdbcUrl }
+    public void setJdbcUrl(String url) { jdbcUrl = url; }
 
     public ScrollableTableModel(java.util.List colNames, ArrayList colClases)
     {
@@ -37,13 +40,13 @@ public class ScrollableTableModel extends AbstractTableModel {
                 "?user="     + omoikane.principal.Principal.loginJasper +
                 "&password=" + omoikane.principal.Principal.passJasper  +
                 "&useOldAliasMetadataBehavior=true&useCompression=true";
-        setJdbc_url(protocol);
+        setJdbcUrl(protocol);
         conectarDB();
     }
 
     public void conectarDB() {
 
-        conn = DriverManager.getConnection(getJdbc_url());
+        conn = DriverManager.getConnection(getJdbcUrl());
         conn.setAutoCommit(false);
 
         control   = conn.createStatement();

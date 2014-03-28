@@ -130,8 +130,8 @@ class Ventas {
 
     static def reimprimirTicket(form)
     {
-        def comprobante = new Comprobantes()
-        comprobante.ticket(IDAlmacen, form)//imprimir ticket
+        def comprobante = omoikane.principal.Principal.applicationContext.getBean(Comprobantes.class);
+        comprobante.ticket(IDAlmacen, form as Long)//imprimir ticket
         comprobante.imprimir()//imprimir ticket
     }
 

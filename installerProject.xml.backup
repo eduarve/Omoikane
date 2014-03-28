@@ -13,22 +13,6 @@
             <canBeEdited>1</canBeEdited>
             <selected>1</selected>
             <show>1</show>
-            <desktopShortcutList>
-                <shortcut>
-                    <comment>Phesus Omoikane</comment>
-                    <exec></exec>
-                    <icon></icon>
-                    <name>Omoikane</name>
-                    <path></path>
-                    <platforms>all</platforms>
-                    <runAsAdmin>0</runAsAdmin>
-                    <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/inicio.bat</windowsExec>
-                    <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/omoikane.ico</windowsIcon>
-                    <windowsPath>${installdir}/</windowsPath>
-                </shortcut>
-            </desktopShortcutList>
             <folderList>
                 <folder>
                     <description>Program Files</description>
@@ -87,6 +71,12 @@
                         <distributionFile>
                             <origin>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/dist/config.xml</origin>
                         </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/schemadb.sql</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/README.md</origin>
+                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -112,16 +102,6 @@
             </folderList>
             <startMenuShortcutList>
                 <startMenuShortcut>
-                    <comment>Phesus Omoikane</comment>
-                    <name>Omoikane</name>
-                    <runAsAdmin>0</runAsAdmin>
-                    <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/inicio.bat</windowsExec>
-                    <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/omoikane.ico</windowsIcon>
-                    <windowsPath>${installdir}/</windowsPath>
-                </startMenuShortcut>
-                <startMenuShortcut>
                     <comment>Desinstalar Omoikane</comment>
                     <name>Desinstalar Omoikane</name>
                     <runAsAdmin>0</runAsAdmin>
@@ -133,12 +113,120 @@
                 </startMenuShortcut>
             </startMenuShortcutList>
         </component>
+        <include>
+            <file>/Users/octavioruizcastillo/Downloads/jre1.7.0_51-windows/java.xml</file>
+        </include>
+        <component>
+            <name>MySQL</name>
+            <description>MySQL</description>
+            <canBeEdited>1</canBeEdited>
+            <selected>1</selected>
+            <show>1</show>
+            <folderList>
+                <folder>
+                    <description>MySQL</description>
+                    <destination>${installdir}/mysql</destination>
+                    <name>MySQL</name>
+                    <platforms>windows</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <allowWildcards>1</allowWildcards>
+                            <origin>/Users/octavioruizcastillo/Downloads/mysql-5.6.16-win32/*</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+            </folderList>
+            <postInstallationActionList>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>socket</key>
+                    <section>mysql</section>
+                    <value>${installdir}/mysql/data/mysql.sock</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>socket</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/mysql.sock</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>pid-file</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/mysql.pid</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>datadir</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>log-bin</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/mysql-bin</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>log-error</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/mysql-error.log</value>
+                </iniFileSet>
+                <iniFileSet>
+                    <file>${installdir}/mysql/my.ini</file>
+                    <key>slow-query-log-file</key>
+                    <section>mysqld</section>
+                    <value>${installdir}/mysql/data/mysql-slow.log</value>
+                </iniFileSet>
+                <runProgram>
+                    <explanation>Instalando servicio de MySQL</explanation>
+                    <program>${installdir}/mysql/bin/mysqld.exe</program>
+                    <programArguments>--install MySQL --defaults-file=${installdir}/mysql/my.ini</programArguments>
+                    <progressText>Instalando servicio de MySQL</progressText>
+                </runProgram>
+                <runProgram>
+                    <abortOnError>0</abortOnError>
+                    <explanation>Iniciando servicio de MySQL</explanation>
+                    <program>NET</program>
+                    <programArguments>START MySQL</programArguments>
+                    <progressText>Iniciando servicio de MySQL</progressText>
+                    <ruleEvaluationLogic>or</ruleEvaluationLogic>
+                    <showMessageOnError>0</showMessageOnError>
+                </runProgram>
+                <runProgram>
+                    <abortOnError>0</abortOnError>
+                    <program>${installdir}/mysql/bin/mysql.exe</program>
+                    <programArguments>-u root &lt; ${installdir}/schemadb.sql</programArguments>
+                    <showMessageOnError>0</showMessageOnError>
+                </runProgram>
+            </postInstallationActionList>
+        </component>
     </componentList>
+    <preUninstallationActionList>
+        <runProgram>
+            <program>NET</program>
+            <programArguments>STOP MySQL</programArguments>
+        </runProgram>
+        <runProgram>
+            <program>${installdir}/bin/mysqld</program>
+            <programArguments>--remove</programArguments>
+        </runProgram>
+    </preUninstallationActionList>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <projectSchemaVersion>1.0</projectSchemaVersion>
+    <requireInstallationByRootUser>1</requireInstallationByRootUser>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
     <vendor>Phesus</vendor>
+    <finalPageActionList>
+        <runProgram>
+            <explanation>Ejecutar omoikane ahora</explanation>
+            <program>${installdir}/omoikane-launcher.exe</program>
+            <programArguments></programArguments>
+            <run>0</run>
+        </runProgram>
+    </finalPageActionList>
     <parameterList>
         <directoryParameter>
             <name>installdir</name>
@@ -156,9 +244,7 @@
     </parameterList>
     <platformOptionsList>
         <platformOptions>
-            <postInstallationScript>${installdir}\bin\postinstallation.bat</postInstallationScript>
-            <postInstallationScriptArguments>${installdir.dos}</postInstallationScriptArguments>
-            <platform>windows</platform>
+            <platform></platform>
         </platformOptions>
     </platformOptionsList>
 </project>

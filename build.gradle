@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.1.1'
+version = '4.1.2'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -114,7 +114,7 @@ dependencies {
         	'org.dbunit:dbunit:2.4.8',
         	'com.github.springtestdbunit:spring-test-dbunit:1.0.0',
 			'org.jfxtras:jfxtras-labs:2.2-r5',
-        	'com.dooapp.fxform2:FXForm2:0.2.1',
+        	'com.dooapp.fxform2:core:2.2.6',
         	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
         	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
         /* Modulo Etiquetas */
@@ -137,8 +137,7 @@ dependencies {
 				  'lib/dpotjni.jar',
                   'lib/Configuratron.jar',
                   'lib/FXExperienceControls.jar',
-                  'lib/JavaFxDialog.jar',
-                  'lib/jfxrt.jar')
+                  'lib/JavaFxDialog.jar')
 	runtime files('lib/OmoikaneMedia.jar',
                   'lib/OmoikaneMedia2.jar',
 				  'lib/nimbus.jar')
@@ -167,7 +166,7 @@ dependencies {
 				 	[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],                 
                  	'org.dbunit:dbunit:2.4.8',
                  	'com.github.springtestdbunit:spring-test-dbunit:1.0.0',
-                 	'com.dooapp.fxform2:FXForm2:0.2.1',
+                 	'com.dooapp.fxform2:core:2.2.6',
                  	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
                  	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
                  /* Modulo Etiquetas */
@@ -191,6 +190,9 @@ jar {
 				   'Class-Path': manifestClasspath
     }
 }
+javafx {
+    mainClass = mainClassName
+} 
 
 task distribuir(dependsOn: 'installApp') {
 	miDistDir        = new File("dist")

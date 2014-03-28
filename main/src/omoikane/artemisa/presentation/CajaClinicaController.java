@@ -105,6 +105,9 @@ public class CajaClinicaController
     @FXML //  fx:id="pacienteLbl"
     private Label pacienteLbl; // Value injected by FXMLLoader
 
+    @FXML
+    private Label idLabel;
+
     @FXML //  fx:id="pacientesList"
     private ListView<Paciente> pacientesList; // Value injected by FXMLLoader
 
@@ -207,6 +210,7 @@ public class CajaClinicaController
 
         this.paciente=paciente;
         pacienteLbl.setText(paciente.getNombre());
+        idLabel.setText(paciente.getId().toString());
         transacciones = pacienteRepo.findTransaccionesOf(paciente);
         ObservableList<Transaccion> transaccions = FXCollections.observableArrayList( transacciones );
         tabEdoCuenta.setItems(transaccions);

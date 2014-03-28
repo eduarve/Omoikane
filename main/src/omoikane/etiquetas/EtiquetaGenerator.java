@@ -10,6 +10,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import omoikane.principal.Articulos;
 import omoikane.producto.Articulo;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.*;
@@ -25,6 +26,7 @@ import java.util.HashMap;
  */
 public class EtiquetaGenerator {
     JasperPrint jp;
+    public Logger logger        = Logger.getLogger(EtiquetaGenerator.class);
 
     public void generate(String reportURL,Collection<Articulo> articulos)
     {
@@ -43,7 +45,7 @@ public class EtiquetaGenerator {
             jasperViewer.requestFocus();
             jasperViewer.setVisible(true);
         }catch (Exception e) {
-            omoikane.sistema.Dialogos.lanzarDialogoError(null, "Error al generar etiquetas", omoikane.sistema.Herramientas.getStackTraceString(e));
+            logger.error("Error al generar etiquetas", e);
         }
 
     }

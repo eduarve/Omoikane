@@ -57,9 +57,15 @@ public class CEAppender extends AppenderSkeleton {
     }
 
 
-    private void errorWindow(LoggingEvent event) {
-        JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
-        Dialogos.lanzarDialogoError(mainJFrame, "Al iniciar aplicación: " + event.getMessage(), Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
+    private void errorWindow(final LoggingEvent event) {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
+                Dialogos.lanzarDialogoError(mainJFrame, "Al iniciar aplicación: " + event.getMessage(), Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
+            }
+        });
     }
 
 }

@@ -1,3 +1,24 @@
+## Versión 4.1.2 (2014-03-27)
+
+- Mejora sustacial del instalador, ahora además de copiar omoikane hace lo siguiente:
+  - Incluye su propio JRE 7u51 independiente del que tenga (o no tenga) la PC
+  - Tiene un lanzador nativo, ya no se muestra la ventana de la consola del sistema
+  - Instala su propio servidor MySQL y lo inicia como servicio
+  - Crea y llena el esquema inicial de la base de datos
+  - Deja listo omoikane para comenzar a usarse en ese mismo momento 
+- Características preliminares y ejemplos de Mepro, escritos en groovy y sin compilar, se pueden usar desde la opción "Scripting", además se pueden modificar:
+  - Multi-impresor: Herramienta de impresión masiva de tickets de venta, se pueden imprimir todos los tickets a partir de x fecha.
+  - Etiquetor: Herramienta para impresión rápida de "etiquetas", al pasar un producto genera al instante la etiqueta
+  - GroovyFX: Ejemplo de creación de GUI usando GroovyFX en Mepro
+  - PruebaFXGui: Ejemplo de creación rápida de un formulario en Mepro usando JavaFX y FXForm
+- Corrección de error en las plantillas de etiquetas
+- Actualización de la biblioteca FXForm
+- Corrección (#78, #79 y #80) al esquema inicial ahora incluye: Cliente inicial, impuestos iniciales (IVA e IEPS) y `Concepto`
+- Corrección de precios erróneos en catálogo de artículos (#76)
+- Corrección de falla al reimprimir tickets (#80)
+- Cambio del esquema modelo a de utf8 a latin1, por compatibilidad con SymmetricDS
+- [Artemisa] Se muestra el ID de la cuenta del paciente en la pantalla "Caja clínica"		
+
 ## Versión 4.1.1 (2014-03-09) Correcciones
 
 - Corrección de Mepro. Sólo se podía editar, ejecutar y eliminar el último script de la lista

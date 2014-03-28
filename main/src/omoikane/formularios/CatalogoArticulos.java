@@ -598,14 +598,16 @@ public class CatalogoArticulos extends OmJInternalFrame {
         String query = getMainQuery();
 
         if(xCodDes) {
-            query += "LEFT JOIN codigo_producto as b ON a.id_articulo = b.producto_id_articulo ";
+            //query += "LEFT JOIN codigo_producto as b ON a.id_articulo = b.producto_id_articulo ";
         }
         
         if(xCodDes || xLineas || xGrupos) { query += "WHERE "; }
         if(xCodDes) {
-                query += " (a.descripcion like '%"+busqueda+"%' or " +
+                query += " a.id_articulo IN (" +
+                        "SELECT a.id_articulo FROM articulos a LEFT JOIN codigo_producto as b ON a.id_articulo = b.producto_id_articulo WHERE " +
+                        "(a.descripcion like '%"+busqueda+"%' or " +
                         "a.codigo like '%"+busqueda+"%' or " +
-                        "b.codigo like '%"+busqueda+"%') ";
+                        "b.codigo like '%"+busqueda+"%')) ";
         }
         if(xCodDes && (xLineas || xGrupos)) { query += "OR "; }
         if(xLineas) {
@@ -698,11 +700,11 @@ class ArticulosTableModel extends ScrollableTableModel {
     }
 
     @Override
-    public String getJdbc_url() {
+    public String getJdbcUrl() {
         if(Principal.HA) {
             return "jdbc:mysql://localhost/store001?user=root&password=";
         } else {
-            return super.getJdbc_url();
+            return super.getJdbcUrl();
         }
     }
 

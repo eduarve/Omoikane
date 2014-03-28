@@ -13,14 +13,15 @@ package omoikane.sistema
  import omoikane.entities.VentaDetalleImpuesto
  import omoikane.nadesicoiLegacy.Db
  import omoikane.principal.Principal
+ import omoikane.repository.VentaRepo
 
  import javax.persistence.EntityManagerFactory
  import java.io.*;
-import groovy.text.GStringTemplateEngine
+ import groovy.text.GStringTemplateEngine
 
  import java.text.NumberFormat
  import java.text.SimpleDateFormat
-import groovy.inspect.swingui.*
+ import groovy.inspect.swingui.*
  import javax.persistence.PersistenceContext
  import javax.persistence.EntityManager
  import omoikane.entities.LegacyVenta
@@ -46,6 +47,9 @@ import groovy.inspect.swingui.*
      @Autowired
      ProductoRepo productoRepo;
 
+     @Autowired
+     VentaRepo ventaRepo;
+
     /**
      * Método que utiliza hibernate para acceder a los datos de la venta en lugar de nadesico (versión antigua ticket())
      */
@@ -58,7 +62,7 @@ import groovy.inspect.swingui.*
         if(data.usuario == null) { throw new Exception("Usuario inválido"); }
         data.usuario = data.usuario.properties;
 
-        data.detalles     = []
+        data.detalles   = []
         data.id_almacen = data.idAlmacen;
         data.id_caja    = data.idCaja;
         data.id_venta   = venta.getId();
@@ -80,18 +84,9 @@ import groovy.inspect.swingui.*
         generado          = generarTicket()
     }
 
-    def ticket(IDAlmacen, IDVenta) {
-        def serv = new Nadesico().conectar()
-        try {
-            data         = serv.getVenta(IDVenta, IDAlmacen)
-            data.caja    = serv.getCaja(data.id_caja)
-            data.usuario = serv.getUsuario(data.id_usuario, IDAlmacen)
-            generado     = generarTicket()
-        } catch(e) {
-            throw e
-        } finally {
-            serv.desconectar()
-        }
+    def ticket(IDAlmacen, Long IDVenta) {
+        LegacyVenta lv = ventaRepo.readByPrimaryKey(IDVenta as Long);
+        return ticketVenta( lv, IDVenta as Long )
     }
 
     def Corte(ID) {

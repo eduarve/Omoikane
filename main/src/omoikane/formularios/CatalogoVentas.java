@@ -136,7 +136,7 @@ public class CatalogoVentas extends javax.swing.JInternalFrame {
             public void run() {
                 String[]  columnas = { "Fecha","Venta", "Caja", "Almacen", "Cliente","Total"};
                 ArrayList cols     = new ArrayList<String>(Arrays.asList(columnas));
-                Class[]   clases   = {String.class, Integer.class, Integer.class, String.class, String.class, Double.class};
+                Class[]   clases   = {String.class, Integer.class, Integer.class, String.class, String.class, String.class};
                 ArrayList cls      = new ArrayList<Class>(Arrays.asList(clases));
                 double[] anchoCols = {0.2,0.1,0.08,0.25,0.25,0.1};
 
@@ -685,6 +685,9 @@ class VentasTableModel extends ScrollableTableModel {
         if(col==0) {
             SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy '@' hh:mm a");
             return sdf.format((java.util.Date) super.getValueAt(row, col));
+        } else if(col==5) {
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
+            return nf.format(super.getValueAt(row,col));
         } else {
             return super.getValueAt(row,col);
         }
