@@ -351,6 +351,7 @@ public class CompraController implements Initializable {
                          if(modelo.getBean().getItems().get(i) == item.getBean() ) modelo.getBean().getItems().remove(i);
                     }
                     modelo.getItems().remove(tableRow.getIndex());
+                    CompraController.this.indice.remove(item.getBean().getArticulo().getIdArticulo());
                     Platform.runLater(persistModel());
                 }
             });
