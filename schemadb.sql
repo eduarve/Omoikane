@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 16-09-2013 a las 19:21:40
--- Versión del servidor: 5.1.66
--- Versión de PHP: 5.3.3-7+squeeze15
+-- Tiempo de generaciï¿½n: 16-09-2013 a las 19:21:40
+-- Versiï¿½n del servidor: 5.1.66
+-- Versiï¿½n de PHP: 5.3.3-7+squeeze15
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -267,27 +267,6 @@ CREATE TABLE IF NOT EXISTS `cajas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clientes`
---
-
-CREATE TABLE IF NOT EXISTS `clientes` (
-  `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
-  `RFC` text COLLATE latin1_spanish_ci,
-  `razonSocial` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `direccion` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `telefono` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cp` varchar(64) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `descuento` double DEFAULT '0',
-  `saldo` double DEFAULT '0',
-  `uModificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `version` int(11) DEFAULT '0',
-  `razon_social` varchar(255) COLLATE latin1_spanish_ci NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id_cliente`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `codigo_producto`
 --
 
@@ -487,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `movimientos_cortes` (
   `id_usuario` int(10) unsigned NOT NULL,
   `concepto` varchar(45),
   PRIMARY KEY (`tipo`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quién lo autorizó';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quiï¿½n lo autorizï¿½';
 
 -- --------------------------------------------------------
 
@@ -505,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `movimientoscortes` (
   `cantidad` double NOT NULL,
   `id_usuario` int(10) unsigned NOT NULL,
   PRIMARY KEY (`tipo`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quién lo autorizó';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='ID_USUARIO se refiere a quiï¿½n lo autorizï¿½';
 
 -- --------------------------------------------------------
 
@@ -849,6 +828,39 @@ CREATE TABLE `Compra_items` (
 
 ALTER TABLE `cortes` ADD `abierto` BIT( 1 ) NOT NULL;
 
+--
+-- Tablas relacionadas con los precios alternos / listas de precios
+--
+
+CREATE TABLE `ListaDePrecios` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+CREATE TABLE `PrecioAlterno` (
+  `utilidad` decimal(19,2) DEFAULT NULL,
+  `articulo_id_articulo` int(11) NOT NULL,
+  `listaDePrecios_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`articulo_id_articulo`,`listaDePrecios_id`),
+  KEY `FK34B5A611B3E87FB` (`articulo_id_articulo`),
+  KEY `FK34B5A6111C11FE1F` (`listaDePrecios_id`),
+  CONSTRAINT `FK34B5A6111C11FE1F` FOREIGN KEY (`listaDePrecios_id`) REFERENCES `ListaDePrecios` (`id`),
+  CONSTRAINT `FK34B5A611B3E87FB` FOREIGN KEY (`articulo_id_articulo`) REFERENCES `articulos` (`id_articulo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+CREATE TABLE `cliente` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `actualizacion` datetime NOT NULL,
+  `creacion` datetime NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `RFC` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `saldo` decimal(19,2) NOT NULL,
+  `listaDePrecios_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK96841DDA1C11FE1F` (`listaDePrecios_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
 -- ------------------------------
 
 --
@@ -857,17 +869,17 @@ ALTER TABLE `cortes` ADD `abierto` BIT( 1 ) NOT NULL;
 
 INSERT INTO `Proveedor` (`activo`, `nombre`, `notas`) VALUES (1, 'Sin proveedor', '');
 
-INSERT INTO `lineas` (`descripcion`, `descuento`, `uModificacion`, `version`) VALUES ('Sin línea', 0, CURRENT_TIMESTAMP(), 0);
+INSERT INTO `lineas` (`descripcion`, `descuento`, `uModificacion`, `version`) VALUES ('Sin lï¿½nea', 0, CURRENT_TIMESTAMP(), 0);
 
 INSERT INTO `grupos` (`descripcion`, `descuento`, `uModificacion`, `version`, `u_modificacion`) VALUES ('Sin grupo', 0, CURRENT_TIMESTAMP(), 0, '2000-01-01 00:00:00');
 
 INSERT INTO `sucursales` (`id_almacen`, `creacion`, `hAbierta`, `hCerrada`, `uModificacion`, `abierta`) VALUES (1, CURRENT_TIMESTAMP(), '2000-01-01 00:00:00', '2000-01-01 00:00:00', '2000-01-01 00:00:00', 0);
 
-INSERT INTO `almacenes` (`descripcion`, `uModificacion`) VALUES ('Almacén 1', CURRENT_TIMESTAMP());
+INSERT INTO `almacenes` (`descripcion`, `uModificacion`) VALUES ('Almacï¿½n 1', CURRENT_TIMESTAMP());
 
 INSERT INTO `cajas` (`id_almacen`, `descripcion`, `creado`, `uModificacion`, `horaAbierta`, `horaCerrada`, `abierta`, `uFolio`) VALUES (1, 'Caja 1', CURRENT_TIMESTAMP(), '2000-01-01 00:00:00', '2000-01-01 00:00:00', '2000-01-01 00:00:00', 0, 0);
 
-INSERT INTO  `clientes` (`id_cliente` , `RFC` , `razonSocial`, `direccion`, `telefono`, `cp` , `descuento`, `saldo`, `uModificacion`, `version`, `razon_social`) VALUES ('1', 'XAXX010101000', 'Público en general', ' ', ' ', ' ', '0', '0', CURRENT_TIMESTAMP , '0', 'Público en general');
+INSERT INTO `cliente` (id,actualizacion,creacion,nombre,RFC,saldo,listaDePrecios_id) VALUES (1,'2009-01-01 00:00:00','2009-01-01 00:00:00','PÃºblico en general','XAXX010101000','0.00',NULL);
 
 INSERT INTO `Impuesto` (`id`, `descripcion`, `porcentaje`) VALUES
 (1, 'IVA (16%)', 16.00),
