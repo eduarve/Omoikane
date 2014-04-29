@@ -85,7 +85,7 @@ public class ComprasCRUDController
         AnchorPane.setRightAnchor(view.getRoot(), 0d);
         contenido.getChildren().setAll(view.getRoot());
 
-        List<Compra> compraList = compraRepo.readAll( new PageRequest(0, 25, new Sort(Order.DESCENDING, "fecha")) ).asList();
+        List<Compra> compraList = compraRepo.findAll( new PageRequest(0, 25, new Sort(Order.DESCENDING, "fecha")) );
         lista.setItems(FXCollections.observableArrayList( compraList ));
 
         compraController = (CompraController) ((SceneOverloaded)view).getController();

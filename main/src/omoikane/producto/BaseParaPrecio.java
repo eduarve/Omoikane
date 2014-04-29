@@ -42,6 +42,10 @@ public class BaseParaPrecio implements Serializable {
     @Column(name = "porcentajeUtilidad")
     private double porcentajeUtilidad;
 
+    // Ésta columna contiene una cadena con el formato (ID Lista de precio):(factor de utilidad)[, ...]
+    @Column
+    private String preciosAlternos;
+
     public BaseParaPrecio() {
     }
 
@@ -99,6 +103,14 @@ public class BaseParaPrecio implements Serializable {
 
     public void setPorcentajeUtilidad(double porcentajeUtilidad) {
         this.porcentajeUtilidad = porcentajeUtilidad;
+    }
+
+    public String getPreciosAlternos() {
+        return preciosAlternos;
+    }
+
+    public void setPreciosAlternos(String preciosAlternos) {
+        this.preciosAlternos = preciosAlternos;
     }
 
 

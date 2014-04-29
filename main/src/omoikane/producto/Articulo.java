@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -196,11 +193,19 @@ public class Articulo implements Serializable, IProductoApreciado {
         return precio;
     }
 
+    @Transient
+    public PrecioOmoikaneLogic getPrecio(Integer listaDePrecios_id) {
+        precio = new PrecioOmoikaneLogic( listaDePrecios_id, getBaseParaPrecio(), getImpuestos() );
+        return precio;
+    }
+
     @Override
     public void setPrecio(IPrecio precio) {
         this.precio = (PrecioOmoikaneLogic) precio;
     }
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "articulo")
+    private Set<PrecioAlterno> preciosAlternos;
 
     @OneToMany(mappedBy = "producto")
     private Collection<CodigoProducto> codigosAlternos;

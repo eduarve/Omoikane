@@ -32,4 +32,6 @@ public interface ICajaLogic {
     void persistirVenta();
 
     LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd);
+
+    void cambiarCliente(Integer idCliente);
 }

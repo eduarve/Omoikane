@@ -38,13 +38,14 @@ public class ProductoModel {
         id         = new SimpleLongProperty(0l);
         concepto   = new SimpleStringProperty("Concepto vacío");
         setCodigo   ( new SimpleStringProperty(null) );
-        setCantidad(new SimpleObjectProperty<>(new BigDecimal(0)));
+        cantidad   = new SimpleObjectProperty<>(new BigDecimal(0));
         setPrecio(new SimpleObjectProperty<>(new BigDecimal(0)));
         precioBase = new SimpleObjectProperty<>(new BigDecimal(0));
         impuestos      = new SimpleListProperty<>(FXCollections.<ImpuestoModel>observableArrayList());
         descuentosBase = new SimpleObjectProperty<>(new BigDecimal(0));
         importeString = new SimpleStringProperty("");
         ventaDetalleEntity = new LegacyVentaDetalle();
+
     }
 
     /**

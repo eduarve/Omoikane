@@ -8,7 +8,9 @@
 
 package omoikane.sistema
 
-import java.awt.*;
+ import com.sun.javafx.applet.Splash
+
+ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import groovy.inspect.swingui.*
@@ -117,13 +119,19 @@ import java.text.SimpleDateFormat
         return salida;
     }
 
+    def static getEscritorio() {
+        JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
+        if(mainJFrame instanceof omoikane.formularios.Splash) mainJFrame = JFrame.getFrames()[1];
+        return mainJFrame;
+    }
+
     def static centrarVentana(ventana)
     {
         def compensaY = 0
         def config    = omoikane.principal.Principal.config.resolucionPantalla
         
         if(((config.@ancho[0] as Double)/4)==((config.@alto[0] as Double)/3)) { compensaY = 90 } //Compensaciòn particular para 1024768
-        Dimension screenSize = omoikane.principal.Principal.escritorio.escritorioFrame.getSize();
+        Dimension screenSize = getEscritorio().getSize();
         Dimension ventanSize = ventana.getPreferredSize();
 
         def posX = screenSize.width/2 - (ventanSize.width/2) as int
@@ -135,7 +143,7 @@ import java.text.SimpleDateFormat
     def static centrarAbsoluto(ventana) {
         def compensaY = 0
 
-        Dimension screenSize = omoikane.principal.Principal.escritorio.escritorioFrame.getSize();
+        Dimension screenSize = getEscritorio().getSize();
         Dimension ventanSize = ventana.getPreferredSize();
 
         def posX = screenSize.width/2 - (ventanSize.width/2) as int
@@ -168,9 +176,10 @@ import java.text.SimpleDateFormat
         componente.getActionMap().put(nombre, ax);
     }
 
-    def static iconificable(cat) {
+    def static iconificable(JInternalFrame cat) {
         cat.setIconifiable(true);
-        SwingBuilder.build { cat.internalFrameIconified = { e -> omoikane.principal.Principal.escritorio.escritorioFrame.fondoToBack() } }
+        //SwingBuilder.build { cat.internalFrameIconified = { e -> getEscritorio().fondoToBack() } }
+        cat.internalFrameIconified = { e-> getEscritorio().fondoToBack(); }
     }
 
     public static String bytes2HexString(byte[] huellaBytes)

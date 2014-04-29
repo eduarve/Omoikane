@@ -7,27 +7,38 @@
 
 package omoikane.principal
 
-import omoikane.sistema.*
-import java.text.*;
-import groovy.sql.*;
-import omoikane.sistema.*;
-import javax.swing.event.*;
-import java.awt.event.*;
+ import javafx.application.Platform
+ import javafx.embed.swing.JFXPanel
+ import omoikane.clientes.Cliente
+ import omoikane.clientes.ClienteView
+
+ import javax.persistence.EntityManager
+ import javax.persistence.EntityManagerFactory
+
+ import omoikane.sistema.*
+
+ import java.awt.event.*;
 import javax.swing.*;
 import static omoikane.sistema.Usuarios.*;
 import static omoikane.sistema.Permisos.*;
 
 class Clientes {
-    static def escritorio = omoikane.principal.Principal.escritorio
+
 
     static def lanzarCatalogo()
     {        
         try{
         if(cerrojo(PMA_ABRIRCLIENTE)){
+
+            def escritorio = Herramientas.getEscritorio();
+
             def cat = (new omoikane.formularios.CatalogoClientes())
             cat.setVisible(true);
-            escritorio.getPanelEscritorio().add(cat)
-            Herramientas.setColumnsWidth(cat.jTable1, [0.20,0.21,0.39,0.12,0.04,0.04]);
+
+            if(escritorio instanceof omoikane.formularios.Escritorio)
+                (escritorio.PanelEscritorio).add(cat);
+
+            Herramientas.setColumnsWidth(cat.jTable1, 960, [0.21,0.39,0.22,0.08,0.08]);
             Herramientas.panelCatalogo(cat)
 
             Herramientas.iconificable(cat)
@@ -42,9 +53,14 @@ class Clientes {
     public static String lanzarDialogoCatalogo()
     {
         try{
+
             def retorno
             def foco=new Object()
-            def cat = lanzarCatalogo()
+            def cat = lanzarCatalogo();
+            //((JDesktopPane)Herramientas.getEscritorio().PanelEscritorio).add(cat);
+            //Principal.getEscritorio().getPanelEscritorio().add(cat);
+
+
             cat.setModoDialogo()
             cat.internalFrameClosed = {synchronized(foco){foco.notifyAll()} }
             cat.txtBusqueda.keyReleased = { if(it.keyCode == it.VK_ENTER) cat.btnAceptar.doClick() }
@@ -77,48 +93,64 @@ class Clientes {
        } catch(e) { Dialogos.error("Error al eliminar Cliente", e) }
     }
 
+    /**
+     * Devuelve la instancia correcta del JDesktopPane, tanto si es lanzado desde omoikane completo
+     * o en pruebas o standalone
+     */
+    private static def getInstanciaEscritorio() {
+
+        def escritorio = Herramientas.getEscritorio();
+        if(escritorio instanceof omoikane.formularios.Escritorio)
+            return ((JDesktopPane)Herramientas.getEscritorio().PanelEscritorio);
+        else
+            return (JDesktopPane)Herramientas.getEscritorio().getContentPane();
+    }
+
     static def lanzarDetallesClientes(ID)
     {
         try{
         if(cerrojo(PMA_DETALLESCLIENTE)){
             def formCliente = new omoikane.formularios.Cliente()
             formCliente.setVisible(true)
+
+
             Herramientas.panelFormulario(formCliente)
-            escritorio.getPanelEscritorio().add(formCliente)
+            getInstanciaEscritorio().add(formCliente);
+
             formCliente.toFront()
-            /*
-            Herramientas.panelFormulario(formCliente)
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F1     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F3     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F4     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F5     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F6     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F7     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F8     , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F11    , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F12    , "nada") { }
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_DELETE , "nada") { }
-            */
+            Herramientas.iconificable(formCliente)
+
             try { formCliente.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles clientes", Herramientas.getStackTraceString(e)) }
-            def serv = Nadesico.conectar()
-            def art  = serv.getCliente(ID)
-            serv.desconectar()
-            formCliente.setTxtIDCliente     art.id_cliente    as String
-            formCliente.setTxtRFC           art.RFC           as String
-            formCliente.setTxtDireccion     art.direccion     as String
-            formCliente.setTxtTelefono      art.telefono      as String
-            formCliente.setTxtRazonSocial   art.razonSocial   as String
-            formCliente.setTxtCP            art.cp            as String
-            formCliente.setTxtUModificacion art.uModificacion as String
-            formCliente.setTxtDescuento     art.descuento     as String
-            formCliente.setTxtSaldo         art.saldo         as String
-            formCliente.ID                   = ID
+
             formCliente.setModoDetalles();
+            addJFXClientePanel(false, ID, formCliente);
+
             return formCliente
-        }else{Dialogos.lanzarAlerta("Acceso Denegado")}
+        } else { Dialogos.lanzarAlerta("Acceso Denegado") }
         } catch(e) { Dialogos.error("Error al lanzar los detalles Cliente", e) }
     }
 
+
+    static def addJFXClientePanel(Boolean editable, Integer id, omoikane.formularios.Cliente c) {
+
+        JFXPanel panel = new JFXPanel();
+        c.setContentPane(panel);
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                ClienteView cv = (ClienteView) Principal.applicationContext.getBean("clienteView");
+                cv.setEditable(editable);
+                cv.setClienteInternalFrame(c);
+                cv.init(id);
+                panel.setScene(cv.getScene());
+            }
+        });
+    }
+
+    /*
     static def guardar(formCliente)
     {
         try{
@@ -150,30 +182,30 @@ class Clientes {
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
         } catch(e) { Dialogos.error("Error al guardar nuevo cliente", e) }
     }
+    */
 
     static def lanzarFormNuevoCliente()
     {
         try{
         if(cerrojo(PMA_MODIFICARCLIENTE)){
-            def form = new omoikane.formularios.Cliente()
-            form.setVisible(true)
-            Herramientas.panelFormulario(form)
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F1    , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F3    , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F4    , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F5    , "nada"    ) { }
-            Herramientas.In2ActionX(form, KeyEvent.VK_F6    , "guardar" ) { form.btnGuardar.doClick()  }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F7    , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F8    , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F11   , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_F12   , "nada"    ) { }
-            //Herramientas.In2ActionX(form, KeyEvent.VK_DELETE, "nada"    ) { }
-            escritorio.getPanelEscritorio().add(form)
-            form.toFront()
-            try { form.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles Cliente", Herramientas.getStackTraceString(e)) }
-            form.setEditable(true);
-            form.setModoNuevo();
-            return form
+            def formCliente = new omoikane.formularios.Cliente()
+            formCliente.setVisible(true)
+
+
+            Herramientas.panelFormulario(formCliente)
+            getInstanciaEscritorio().add(formCliente);
+
+            formCliente.toFront()
+            Herramientas.iconificable(formCliente)
+
+            try { formCliente.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles clientes", Herramientas.getStackTraceString(e)) }
+
+            formCliente.setEditable(true);
+            formCliente.setModoNuevo();
+
+            addJFXClientePanel(true, 0, formCliente);
+
+            return formCliente
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
         } catch(e) { Dialogos.error("Error al lanzar formulario de un nuevo Cliente", e) }
     }
@@ -181,13 +213,29 @@ class Clientes {
     static def lanzarModificarCliente(ID)
     {
         try{
-            def formCliente = lanzarDetallesClientes(ID)
-            Herramientas.In2ActionX(formCliente, KeyEvent.VK_F6,"modificar") {formCliente.btnModificar.doClick()}
+            def formCliente = new omoikane.formularios.Cliente()
+            formCliente.setVisible(true)
+
+
+            Herramientas.panelFormulario(formCliente)
+            getInstanciaEscritorio().add(formCliente);
+
+            formCliente.toFront()
+            Herramientas.iconificable(formCliente)
+
+            try { formCliente.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles clientes", Herramientas.getStackTraceString(e)) }
+
+            formCliente.setEditable(true);
+            formCliente.setModoNuevo();
+
             formCliente.setModoModificar();
+
+            addJFXClientePanel(true, ID, formCliente);
             return formCliente
         } catch(e) { Dialogos.error("Error al lanzar modificar Cliente", e) }
     }
 
+    /*
     static def modificar(formCliente)
     {
         try{
@@ -220,4 +268,6 @@ class Clientes {
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
         } catch(e) { Dialogos.error("Error al modificar Cliente", e) }
     }
+    */
+
 }

@@ -1,3 +1,33 @@
+## Versión 4.2 alfa (2014-03-29)
+
+- Agregué soporte para resolución 1024x768
+- Soporte multi-cliente en caja
+- Soporta un nivel de precios por cliente en caja
+- Corrige bug que agrupaba de manera incorrecta los productos, solo producía efectos negativos cuando una venta con productos agrupados se cerraba y volvía a abrir (se resumía)
+- Ajustes estéticos en ventana de caja, el texto en los botones ya no se corta
+- Se reduce el tiempo de espera en el buscador incorporado, de 2 segundos a 1
+- En caja: Corregí el error que enviaba el enfoque al campo “Cambio” en una venta nueva en lugar del campo “Captura”
+- Cargo las compras de una manera mucho más eficiente
+- Corregí el mensaje de error que decía “Error al iniciar aplicación” cuando la razón no tenía nada que ver con el inicio de la aplicación
+- Corregí el comportamiento no deseado de recibir enfoque en la tabla de impuestos en la ventana de “Artículo” que detenía el ciclo de enfoque al capturar un producto
+- Reincorporé:
+  - Entidad cliente
+  - Catálogo de clientes
+  - Cliente asignado a una venta
+- Cambié el efecto de “Fondo borroso” de las ventanas del filtro BoxBlur a Pointillize
+- Aumenté la opacidad del fondo de las ventanas semitransparentes
+- Actualicé el splash de la aplicación
+- Corregí el bug que impedía reimprimir cortes de caja
+- Corregí el bug que impedía reimprimir tickets de venta
+- Activé el registro de excepciones no manejadas
+- Un producto puede tener varios niveles de precios, también llamados en el sistema “precios alternos”
+- Reduje la dependencia del “Escritorio” de la aplicación, éste es un paso más que permite abrir muchas ventanas del sistema en escritorios personalizados o en una interfaz javafx
+- Actualicé la vista “base_para_precios” para incluir la información de niveles de precios / precios secundarios / precios alternos o como quieran llamarlos
+- Introduje información de prueba (fixtures) de las nuevas entidades “lista de precios” y “precio alterno”
+- Introduje test unitario de precios alternos
+- Introduje las entidades “PrecioAlterno” y “ListaDePrecios”
+- Introduje tests no-unitarios (que actúan como accesos directos a pantallas del sistema): Catálogo de cliente y cliente
+
 ## Versión 4.1.2 (2014-03-27)
 
 - Mejora sustacial del instalador, ahora además de copiar omoikane hace lo siguiente:

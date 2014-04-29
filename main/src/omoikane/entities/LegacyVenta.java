@@ -4,6 +4,8 @@
  */
 package omoikane.entities;
 
+import omoikane.clientes.Cliente;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -35,8 +37,14 @@ public class LegacyVenta implements Serializable {
     @Column(name = "id_almacen")
     private int idAlmacen;
 
+    //Se usará el atributo idCliente para establecer el cliente relacionado, por causas de comodidad y performance, esa es la
+    //  razón de usar updatable e insertable = false
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "id_cliente", updatable = false, insertable = false)
+    private Cliente cliente;
+
     @Column(name = "id_cliente")
-    private Integer idCliente;
+    private Integer idCliente = 1;
 
     @Basic(optional = false)
     @Column(name = "fecha_hora")
@@ -76,6 +84,7 @@ public class LegacyVenta implements Serializable {
     @Column(name = "folio")
     private Long folio;
 
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "venta")
     List<LegacyVentaDetalle> items;
 
@@ -114,12 +123,12 @@ public class LegacyVenta implements Serializable {
         this.idAlmacen = idAlmacen;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Date getFechaHora() {
@@ -266,5 +275,11 @@ public class LegacyVenta implements Serializable {
     }
 
 
-    
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
 }

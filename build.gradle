@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.1.2'
+version = '4.2.0'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -190,9 +190,6 @@ jar {
 				   'Class-Path': manifestClasspath
     }
 }
-javafx {
-    mainClass = mainClassName
-} 
 
 task distribuir(dependsOn: 'installApp') {
 	miDistDir        = new File("dist")

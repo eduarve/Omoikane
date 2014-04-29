@@ -290,6 +290,12 @@ public class Producto implements IProductoApreciado {
         this.precio = (PrecioOmoikaneLogic) precio;
     }
 
+    @Transient
+    public PrecioOmoikaneLogic getPrecio(Integer listaDePrecios_id) {
+        precio.loadPrecioAlterno(listaDePrecios_id);
+        return precio;
+    }
+
     @Override
     public BaseParaPrecio getBaseParaPrecio() {
         return baseParaPrecio;

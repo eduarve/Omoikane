@@ -25,6 +25,7 @@ import omoikane.sistema.huellas.ContextoFPSDK.SDK
 import omoikane.sistema.huellas.HuellasCache
 import omoikane.sistema.seguridad.AuthContext
 import phesus.configuratron.ConfiguratorApp
+import sun.awt.CGraphicsEnvironment
 
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
@@ -74,11 +75,11 @@ public class Principal {
         public static def                   scanMan
         public static def                   tipoCorte               = ContextoCorte.TIPO_DUAL
         final  static def                   ASEGURADO               = true
-        final  static def                   SHOW_UNHANDLED_EXCEPTIONS = false
+        final  static def                   SHOW_UNHANDLED_EXCEPTIONS = true
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false;
-        public static final String          VERSION                 = "4.1.2";
+        public static final String          VERSION                 = "4.2.0";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
 
@@ -96,6 +97,7 @@ public class Principal {
 
                 logger.trace("Iniciando sistema. Versión " + VERSION);
                 configExceptions()
+                initAWT()
 
                 //Inicializa el hilo que muestra el splash
 
@@ -263,5 +265,10 @@ public class Principal {
         });
         latch.await();
         Platform.setImplicitExit(false);
+    }
+
+    private static void initAWT() {
+        System.setProperty("javafx.macosx.embedded", "true");
+        java.awt.Toolkit.getDefaultToolkit();
     }
 }

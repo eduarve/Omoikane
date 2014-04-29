@@ -77,4 +77,10 @@
   <articulos_impuesto articulos_id_articulo="22935" impuestos_id="3"/>
   <articulos_impuesto articulos_id_articulo="22936" impuestos_id="1"/>
   <articulos_impuesto articulos_id_articulo="22939" impuestos_id="1"/>
+  <listaDePrecios id="1" descripcion="Mayoreo"/>
+  <listaDePrecios id="2" descripcion="Familia y amigos"/>
+  <precioAlterno articulo_id_articulo="22935" listaDePrecios_id="1" utilidad="25"/>
+  <precioAlterno articulo_id_articulo="22935" listaDePrecios_id="2" utilidad="5"/>
+  <cliente id="2" nombre="Tio Juan" saldo="0" listaDePrecios_id="2" rfc="MEBN780304" actualizacion="2009-01-01 00:00:00" creacion="2009-01-01 00:00:00"/>
+  <cliente id="1" nombre="Público en general" saldo="0"  rfc="XXXX" actualizacion="2009-01-01 00:00:00" creacion="2009-01-01 00:00:00"/>
 </dataset>

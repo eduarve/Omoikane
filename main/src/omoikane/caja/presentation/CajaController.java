@@ -33,7 +33,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import jfxtras.labs.scene.control.BigDecimalField;
-import omoikane.caja.business.CajaLogicImpl;
 import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.business.LineaDeCapturaFilter;
 import omoikane.caja.handlers.*;
@@ -45,7 +44,6 @@ import org.apache.log4j.Logger;
 import org.synyx.hades.domain.PageRequest;
 
 import javax.swing.*;
-import javax.xml.ws.spi.http.HttpHandler;
 
 
 public class CajaController
@@ -133,6 +131,7 @@ public class CajaController
     @FXML private Button abrirCajonButton;
     @FXML private Button btnCobrar;
     @FXML private Button btnCancelarProducto;
+    @FXML private Button cambiarClienteButton;
     @FXML private Button cerrarButton;
     @FXML private Button abrirCatalogoButton;
     @FXML private AnchorPane capturaPane;
@@ -140,6 +139,7 @@ public class CajaController
 
     @FXML private Rectangle hudRectangle;
     @FXML private Text hudText;
+    @FXML private Label txtCliente;
 
     private BasculaHandler basculaHandler;
     VentaEspecialHandler ventaEspecialHandler;
@@ -368,6 +368,7 @@ public class CajaController
         //Agregar el controlador de clicks
         ClickHandler clickHandler = new ClickHandler(this);
         mainToolBar.addEventFilter(ActionEvent.ACTION, clickHandler);
+        cambiarClienteButton.addEventFilter(ActionEvent.ACTION, clickHandler);
 
         //Agregar el manejador de ventas especiales
         ventaEspecialHandler = new VentaEspecialHandler(this);
@@ -409,6 +410,8 @@ public class CajaController
                 new MostrarCatalogoHandler(controller).handle(event);
             if (event.getTarget() == plmButton)
                 new PlmHandler(controller).handle(event);
+            if (event.getTarget() == cambiarClienteButton)
+                new MostrarCatalogoClientesHandler(controller).handle(event);
         }
     }
 
@@ -450,6 +453,10 @@ public class CajaController
                 new Number2StringBinding(modelo.getCambio(), NumberFormat.getCurrencyInstance())
         );
         getEfectivoTextField().numberProperty().bindBidirectional(modelo.getEfectivo());
+
+        txtCliente.textProperty().bind(
+                new ClienteToStringBinding(modelo.getCliente())
+        );
 
         //Binding efectivo and cambio to logic
         getModel().getEfectivo().addListener(new ChangeListener<BigDecimal>() {
@@ -551,7 +558,7 @@ public class CajaController
             synchronized(this)
             {
                 busquedaActiva = true;
-                try { this.wait(2000); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
+                try { this.wait(1000); } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error en el timer de búsqueda automática", Herramientas.getStackTraceString(e)); }
                 if(busquedaActiva && cc.modelo != null) {
                     getModel().setPaginacionBusqueda(new PageRequest(0,10));
                     cc.getCajaLogic().buscar(cc.getModel());

@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="732.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.compras.MVC.CompraController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="813.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.compras.MVC.CompraController">
   <children>
     <Label text="Compra" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
       <font>
@@ -39,7 +39,7 @@
       </font>
     </Label>
     <TextField fx:id="txtIdProveedor" layoutX="206.0" layoutY="42.0" prefHeight="28.0" prefWidth="41.0" promptText="ID" />
-    <TextField fx:id="txtFolioOrigen" layoutX="605.0" layoutY="42.0" prefHeight="28.0" prefWidth="110.0" />
+    <TextField fx:id="txtFolioOrigen" layoutX="686.0" layoutY="42.0" prefHeight="28.0" prefWidth="110.0" />
     <Label fx:id="lblProveedor" layoutX="259.0" layoutY="42.0" prefHeight="28.0" prefWidth="210.0" text="">
       <font>
         <Font size="13.0" />
@@ -65,7 +65,7 @@
         <Color blue="0.625" green="0.625" red="0.625" fx:id="x3" />
       </textFill>
     </Label>
-    <Label font="$x2" layoutX="479.0" layoutY="45.0" prefHeight="21.0" prefWidth="126.00009999999747" text="Folio de origen" textFill="GREY" />
+    <Label font="$x2" layoutX="553.0" layoutY="45.0" prefHeight="21.0" prefWidth="126.00009999999747" text="Folio de origen" textFill="GREY" />
     <Label font="$x2" text="Subtotal" AnchorPane.bottomAnchor="81.0" AnchorPane.rightAnchor="185.0" />
     <Label fx:id="subtotalLabel" alignment="CENTER_RIGHT" prefWidth="141.0" text="\$0.00" textAlignment="RIGHT" AnchorPane.bottomAnchor="77.0" AnchorPane.rightAnchor="30.0">
       <font>

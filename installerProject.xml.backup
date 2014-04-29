@@ -1,7 +1,7 @@
 <project>
     <shortName>omoikane</shortName>
     <fullName>Omoikane</fullName>
-    <version>4.1.0</version>
+    <version>4.1.2</version>
     <installerFilename>${project.shortName}-${project.version}-${platform_name}-installer.${platform_exec_suffix}</installerFilename>
     <readmeFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/README.md</readmeFile>
     <licenseFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/LICENSE</licenseFile>
@@ -221,9 +221,9 @@
     <vendor>Phesus</vendor>
     <finalPageActionList>
         <runProgram>
-            <explanation>Ejecutar omoikane ahora</explanation>
             <program>${installdir}/omoikane-launcher.exe</program>
             <programArguments></programArguments>
+            <progressText>Ejecutar omoikane ahora</progressText>
             <run>0</run>
         </runProgram>
     </finalPageActionList>

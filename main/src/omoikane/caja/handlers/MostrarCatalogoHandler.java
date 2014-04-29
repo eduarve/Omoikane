@@ -5,6 +5,8 @@ import omoikane.caja.presentation.CajaController;
 import omoikane.principal.Articulos;
 import omoikane.principal.Caja;
 
+import javax.swing.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: octavioruizcastillo
@@ -19,6 +21,15 @@ public class MostrarCatalogoHandler extends ICajaEventHandler {
 
     @Override
     public void handle(Event event) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                mostrarCatalogo();
+            }
+        });
+    }
+
+    private void mostrarCatalogo() {
         String retorno = Articulos.lanzarDialogoCatalogo();
 
         retorno = (retorno==null)?"":retorno;

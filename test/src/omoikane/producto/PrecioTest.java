@@ -14,6 +14,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 
 /**
@@ -29,14 +32,25 @@ import java.math.BigDecimal;
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
-@DatabaseSetup("../repository/sampleData.xml")
+@DatabaseSetup("../repository/sampleDataLight.xml")
 public class PrecioTest {
     @Autowired
     ProductoRepo productoRepo;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Test
     public void testPrecio() {
         Articulo a = productoRepo.findByCodigo("7501059238305").get(0);
         Assert.assertTrue( a.getBaseParaPrecio().getCosto() == 6.92d );
+    }
+
+    @Test
+    public void testPrecioAlterno() {
+        Articulo a = productoRepo.findByCodigo("12345").get(0);
+        Assert.assertTrue( a.getPrecio().getPrecio().equals(new BigDecimal("25.1720")) );
+        Assert.assertTrue( a.getPrecio(1).getPrecio().equals(new BigDecimal("21.7000")) );
+        Assert.assertTrue( a.getPrecio(2).getPrecio().equals(new BigDecimal("18.2280")) );
     }
 }

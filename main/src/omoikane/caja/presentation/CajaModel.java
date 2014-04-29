@@ -1,11 +1,9 @@
 package omoikane.caja.presentation;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import omoikane.clientes.Cliente;
 import omoikane.entities.LegacyVenta;
 import org.synyx.hades.domain.Pageable;
 
@@ -30,6 +28,7 @@ public class CajaModel {
     private ObjectProperty<BigDecimal> efectivo;
     private ObjectProperty<BigDecimal> cambio;
     private LegacyVenta ventaEntity;
+    private SimpleObjectProperty<Cliente> cliente;
 
     /**
      * Instancía todos los atributos
@@ -42,6 +41,7 @@ public class CajaModel {
         total       = new SimpleObjectProperty<BigDecimal>( new BigDecimal( 0 ) );
         efectivo    = new SimpleObjectProperty<BigDecimal>( new BigDecimal( 0 ) );
         cambio      = new SimpleObjectProperty<BigDecimal>( new BigDecimal( 0 ) );
+        cliente     = new SimpleObjectProperty<Cliente>();
 
         getDescuento().get().setScale( 2, BigDecimal.ROUND_HALF_UP );
         getImpuestos().get().setScale( 2, BigDecimal.ROUND_HALF_UP );
@@ -145,4 +145,13 @@ public class CajaModel {
     public void setVentaEntity(LegacyVenta legacyVenta) {
         ventaEntity = legacyVenta;
     }
+
+    public ObjectProperty<Cliente> getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        getCliente().set(cliente);
+    }
+
 }

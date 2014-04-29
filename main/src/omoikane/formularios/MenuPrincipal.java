@@ -376,6 +376,7 @@ public class MenuPrincipal extends OmJInternalFrame {
 
         CajaManager manager = new CajaManager();
         JInternalFrame internalFrame = manager.startJFXCaja();
+        omoikane.principal.Principal.getEscritorio().getPanelEscritorio().setSelectedFrame(internalFrame);
 
         System.out.println(timer.getElapsedTime());
 }//GEN-LAST:event_btnVenderActionPerformed

@@ -26,9 +26,8 @@
     </TableView>
     <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Agregar al inventario" />
         <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
-        <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />
+        <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar y aplicar" />
         <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" visible="false" />
       </items>
     </ToolBar>
@@ -41,7 +40,11 @@
     </Label>
     <TextField fx:id="txtIdProveedor" layoutX="206.0" layoutY="42.0" prefHeight="28.0" prefWidth="41.0" promptText="ID" />
     <TextField fx:id="txtFolioOrigen" layoutX="605.0" layoutY="42.0" prefHeight="28.0" prefWidth="110.0" />
-    <Label fx:id="lblProveedor" font="$x2" layoutX="259.0" layoutY="42.0" prefHeight="28.0" prefWidth="210.0" text="" />
+    <Label fx:id="lblProveedor" layoutX="259.0" layoutY="42.0" prefHeight="28.0" prefWidth="210.0" text="">
+      <font>
+        <Font size="13.0" />
+      </font>
+    </Label>
     <Label fx:id="idLabel" font="$x1" prefWidth="133.0" text="" visible="false" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="48.0" />
     <TextField fx:id="codigoTextField" prefHeight="28.0" prefWidth="141.0" promptText="Código de producto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
     <Label id="descripcionText" fx:id="descripcionLabel" prefHeight="28.0" prefWidth="232.0" style="-fx-background-color: lightgrey;&#10;" text="" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="333.0" />

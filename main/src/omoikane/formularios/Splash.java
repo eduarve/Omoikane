@@ -53,7 +53,7 @@ public class Splash extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setForeground(new java.awt.Color(0, 153, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/splash_os.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/omoikane/principal/Splash4Chico.png"))); // NOI18N
         jLabel1.setOpaque(true);
 
         jProgressBar1.setIndeterminate(true);
@@ -65,14 +65,12 @@ public class Splash extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1)
-            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
+
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addComponent(jLabel1))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

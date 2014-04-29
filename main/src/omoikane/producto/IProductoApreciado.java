@@ -14,6 +14,9 @@ public interface IProductoApreciado {
     public IPrecio getPrecio();
 
     @Transient
+    public IPrecio getPrecio(Integer listaDePrecios_id);
+
+    @Transient
     public void setPrecio(IPrecio precio);
 
     @Transient

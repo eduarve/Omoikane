@@ -409,6 +409,7 @@ public class Articulo extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        impuestosTable.setFocusable(false);
         jScrollPane1.setViewportView(impuestosTable);
 
         jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 340, 80));

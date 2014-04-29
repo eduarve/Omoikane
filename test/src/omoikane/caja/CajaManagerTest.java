@@ -60,7 +60,9 @@ public class CajaManagerTest {
                 CajaManager manager = new CajaManager();
                 JInternalFrame frame = manager._startJFXCaja(false);
                 JFrame jFrame = new JFrame("Caja");
-                jFrame.setContentPane(frame);
+                JDesktopPane jDesktopPane = new JDesktopPane();
+                jDesktopPane.add(frame);
+                jFrame.getContentPane().add(jDesktopPane);
                 jFrame.setVisible(true);
 
             }

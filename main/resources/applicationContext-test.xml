@@ -22,6 +22,7 @@
     <context:component-scan base-package="omoikane.entities"/>
     <context:component-scan base-package="omoikane.inventarios"/>
     <context:component-scan base-package="omoikane.compras.entities"/>
+    <context:component-scan base-package="omoikane.clientes"></context:component-scan>
     <!--<context:component-scan base-package="omoikane.sistema"/>-->
     <bean id="articulo" class="omoikane.producto.Articulo"></bean>
     <bean id="baseParaPrecio" class="omoikane.producto.BaseParaPrecio"></bean>
@@ -37,6 +38,11 @@
     <bean id="ventaDetalleImpuesto" class="omoikane.entities.VentaDetalleImpuesto"></bean>
     <bean id="corte" class="omoikane.entities.Corte"></bean>
     <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
+    <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios"></bean>
+    <bean id="precioAlterno" class="omoikane.producto.PrecioAlterno"></bean>
+    <bean id="cliente" class="omoikane.clientes.Cliente"></bean>
+    <bean id="clienteView" class="omoikane.clientes.ClienteView"></bean>
+
 
     <bean id="/SpringAnnotatedConfig" class="omoikane.sistema.SpringAnnotatedConfig"></bean>
     <bean id="properties" class="java.util.HashMap"></bean>
@@ -52,6 +58,7 @@
         <hades:dao id="conteoInventarioRepo" />
         <hades:dao id="cajaRepo" />
         <hades:dao id="compraRepo" />
+        <hades:dao id="clienteRepo"/>
     </hades:dao-config>
 
     <bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -81,7 +88,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <!--<property name="generateDdl" value="true"/>-->
+                <property name="generateDdl" value="true"/>
                 <property name="database" value="MYSQL"/>
             </bean>
         </property>
@@ -99,7 +106,7 @@
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
-    <tx:annotation-driven/>
+    <tx:annotation-driven mode="proxy"  transaction-manager="transactionManager"/>
 
     <import resource="applicationContext-artemisa-test.xml"/>
 

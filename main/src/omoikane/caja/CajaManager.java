@@ -41,7 +41,7 @@ public class CajaManager extends Application {
             Scene scene = initCaja();
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Caja 3.0 alfa");
+            primaryStage.setTitle("Caja 3.0");
             primaryStage.show();
 
         } catch (Exception ex) {
@@ -91,11 +91,12 @@ public class CajaManager extends Application {
 
         Herramientas.panelCatalogo(frame);
         if(onDesktop) omoikane.principal.Principal.getEscritorio().getPanelEscritorio().add(frame);
-        frame.setSize(1120, 615);
-        frame.setPreferredSize(new Dimension(1120, 615));
+        frame.setSize(1024, 625);
+        frame.setPreferredSize(new Dimension(1024, 625));
         frame.generarFondo();
         frame.setVisible(true);
         if(onDesktop) Herramientas.centrarVentana(frame);
+        if(onDesktop) frame.setLocation(frame.getX(), frame.getY()+25);
         if(onDesktop) Herramientas.iconificable(frame);
         frame.toFront();
 
@@ -140,7 +141,7 @@ public class CajaManager extends Application {
                         "def serv = omoikane.sistema.Nadesico.conectar();" +
                                 "cajaAbierta = serv.cajaAbierta(omoikane.principal.Principal.IDCaja);" +
                                 "serv.desconectar();" +
-                                "return cajaAbierta;");
+                                "return cajaAbierta as Boolean;");
 
                 new Thread(new MostrarCaja(cajaAbierta)).start();
                 break;

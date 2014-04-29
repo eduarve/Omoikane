@@ -1,9 +1,14 @@
-package omoikane.entities;
+package omoikane.clientes;
 
+import omoikane.entities.LegacyVenta;
+import omoikane.producto.ListaDePrecios;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -17,26 +22,62 @@ import java.util.Collection;
  * Time: 04:04
  * To change this template use File | Settings | File Templates.
  */
-//@Entity
+@Entity
 public class Cliente {
 
+    @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
-    private int clienteId;
+    private int id = 0;
 
+    @Column(length = 255)
     @NotEmpty
-    private String nombre;
+    private String nombre = "";
 
-    @Min(value = 0)
-    private BigDecimal descuento;
-
+    @Column(name = "saldo")
+    @Basic
     @NotNull
-    private BigDecimal saldo;
+    private BigDecimal saldo = new BigDecimal("0.00");
 
+    @Column(name = "RFC")
+    @Basic
+    @NotEmpty
+    private String rfc;
+
+    @Column(name = "actualizacion")
+    @Basic
     @NotNull
     private Timestamp actualizacion;
 
+    @Column(name = "creacion")
+    @Basic
     @NotNull
     private Timestamp creacion;
+
+    @Column(name = "listaDePrecios_id")
+    private Integer listaDePreciosId = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinColumn(insertable = false, updatable = false)
+    @NotFound(action= NotFoundAction.IGNORE)
+    private ListaDePrecios listaDePrecios;
+
+    public Integer getListaDePreciosId() {
+        return listaDePreciosId;
+    }
+
+    public void setListaDePreciosId(Integer listaDePreciosId) {
+        this.listaDePreciosId = listaDePreciosId;
+    }
+
+    public ListaDePrecios getListaDePrecios() {
+        return listaDePrecios;
+    }
+
+    public void setListaDePrecios(ListaDePrecios listaDePrecios) {
+        this.listaDePrecios = listaDePrecios;
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -49,18 +90,14 @@ public class Cliente {
         actualizacion = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
-    @Column(name = "cliente_id")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getClienteId() {
-        return clienteId;
+    public int getId() {
+        return id;
     }
 
-    public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
+    public void setId(int clienteId) {
+        this.id = clienteId;
     }
 
-    @Column(name = "nombre", length = 65535)
     public String getNombre() {
         return nombre;
     }
@@ -69,19 +106,6 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-
-    @Column(name = "descuento")
-    @Basic
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
-    @Column(name = "saldo")
-    @Basic
     public BigDecimal getSaldo() {
         return saldo;
     }
@@ -90,8 +114,6 @@ public class Cliente {
         this.saldo = saldo;
     }
 
-    @Column(name = "actualizacion")
-    @Basic
     public Timestamp getActualizacion() {
         return actualizacion;
     }
@@ -100,14 +122,20 @@ public class Cliente {
         this.actualizacion = umodificacion;
     }
 
-    @Column(name = "creacion")
-    @Basic
     public Timestamp getCreacion() {
         return creacion;
     }
 
     public void setCreacion(Timestamp creacion) {
         this.creacion = creacion;
+    }
+
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
     }
 
     @Override
@@ -117,8 +145,7 @@ public class Cliente {
 
         Cliente cliente = (Cliente) o;
 
-        if (clienteId != cliente.clienteId) return false;
-        if (cliente.descuento.compareTo(descuento) != 0) return false;
+        if (id != cliente.id) return false;
         if (cliente.saldo.compareTo(saldo) != 0) return false;
         if (nombre.equals(cliente.getNombre())) return false;
         if (actualizacion != null ? !actualizacion.equals(cliente.actualizacion) : cliente.actualizacion != null)
@@ -129,14 +156,15 @@ public class Cliente {
         return true;
     }
 
-    private Collection<Venta> ventasByClienteId;
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    private Collection<LegacyVenta> ventas;
 
-    @OneToMany(mappedBy = "clienteByClienteId")
-    public Collection<Venta> getVentasByClienteId() {
-        return ventasByClienteId;
+    public Collection<LegacyVenta> getVentas() {
+        return ventas;
     }
 
-    public void setVentasByClienteId(Collection<Venta> ventasByClienteId) {
-        this.ventasByClienteId = ventasByClienteId;
+    public void setVentas(Collection<LegacyVenta> ventas) {
+        this.ventas = ventas;
     }
 }

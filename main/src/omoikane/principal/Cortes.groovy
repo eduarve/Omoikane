@@ -102,7 +102,7 @@ class Cortes {
             def form = (new omoikane.formularios.CorteCajaDetalles())
             form.setVisible(true);
             Herramientas.panelFormulario(form)
-            form.btnImprimir.actionPerformed = {lanzarImprimirCorte(form.ID)}
+            form.btnImprimir.actionPerformed = {lanzarImprimirCorte(form.ID as Long)}
             escritorio.getPanelEscritorio().add(form)
             Herramientas.iconificable(form)
             form.toFront()
@@ -157,11 +157,11 @@ class Cortes {
     static def lanzarImprimirCorte(ID)
     {
         def comprobante = new Comprobantes()
-        comprobante.Corte(ID)//imprimir ticket
+        comprobante.Corte(ID as Long)//imprimir ticket
         comprobante.probar()//imprimir ticket
         if(corteDualActivo()) {
             Thread.sleep(6000)
-            comprobante.Corte(lastMovID2, "cortes_dual") //imprimir corte
+            comprobante.Corte(lastMovID2 as Long, "cortes_dual") //imprimir corte
             comprobante.probar()//imprimir ticket
         }
     }

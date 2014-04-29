@@ -23,6 +23,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         //Instrucciones para el funcionamiento del fondo semistransparente
         this.setOpaque(false);
         ((JPanel)this.getContentPane()).setOpaque(false);
+
         this.getLayeredPane().setOpaque(false);
         this.getRootPane().setOpaque(false);
         this.generarFondo(this);
@@ -198,12 +199,12 @@ public class Cliente extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        omoikane.principal.Clientes.guardar(this);
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        omoikane.principal.Clientes.modificar(this);
+
     }//GEN-LAST:event_btnModificarActionPerformed
 
     public void setEditable(boolean editable)
@@ -298,7 +299,7 @@ public class Cliente extends javax.swing.JInternalFrame {
 
       tmp = gc.createCompatibleImage(areaDibujo.width, areaDibujo.height,BufferedImage.TRANSLUCENT);
       Graphics2D g2d = (Graphics2D) tmp.getGraphics();
-      g2d.setColor(new Color(55,55,255,225));
+      g2d.setColor(new Color(0,0,0,165));
       g2d.fillRect(0,0,areaDibujo.width,areaDibujo.height);
       fondo = tmp;
     }

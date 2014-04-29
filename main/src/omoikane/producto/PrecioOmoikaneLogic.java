@@ -22,6 +22,29 @@ public class PrecioOmoikaneLogic implements IPrecio {
         this.impuestos = impuestos;
     }
 
+    public PrecioOmoikaneLogic(Integer listaDePrecios_id, BaseParaPrecio baseParaPrecio, Collection<Impuesto> impuestos) {
+        this.baseParaPrecio = baseParaPrecio;
+        this.impuestos = impuestos;
+        loadPrecioAlterno(listaDePrecios_id);
+    }
+
+    /**
+     * Analiza los metadatos de precios alternos y aplica el seleccionado a esta instancia.
+     * Si no exíste dicha instancia de precio alterno (o ninguna) ignora la instrucción.
+     * @param listaDePrecios_id
+     */
+    public void loadPrecioAlterno(Integer listaDePrecios_id) {
+        String preciosAlternos = baseParaPrecio.getPreciosAlternos();
+        if(preciosAlternos != null && !preciosAlternos.isEmpty()) {
+            for ( String precioAlterno : preciosAlternos.split(",") ) {
+                String[] kv = precioAlterno.split(":");
+                if(Integer.valueOf( kv[0] ) == listaDePrecios_id) {
+                    baseParaPrecio.setPorcentajeUtilidad(new BigDecimal(kv[1]).doubleValue());
+                }
+            }
+        }
+    }
+
     /** Obtiene el descuento en conjunto de todos los factores que generan descuento
      * Formula, factor valor final del producto: valor = - (x-1) (y-1) (z-1)
      * Formula, factor de descuento: descuento = 1 - valor

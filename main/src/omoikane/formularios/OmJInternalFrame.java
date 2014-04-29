@@ -34,25 +34,25 @@ public class OmJInternalFrame extends javax.swing.JInternalFrame {
         BufferedImage fondo = Principal.getEscritorio().getPanelEscritorio().getBufferImage(getHeight(), getWidth());
 
         if(cacheFondo == null) {
-            BoxBlurFilter filter = new BoxBlurFilter();
+            //BoxBlurFilter filter = new BoxBlurFilter();
 
             cacheFondo = copyImage(fondo);
 
             //fondo = new GaussianBlurFilter(4).filter(fondo, null);
-            filter.setIterations(2);
-            filter.setRadius(5);
+            //filter.setIterations(2);
+            //filter.setRadius(5);
 
-            //PointillizeFilter pointillizeFilter = new PointillizeFilter();
-            //pointillizeFilter.setEdgeColor(6);
-            //pointillizeFilter.setEdgeThickness(1);
-            //pointillizeFilter.setFadeEdges(false);
-            //pointillizeFilter.setFuzziness(6);
-            //pointillizeFilter.filter(cacheFondo, cacheFondo);
+            PointillizeFilter pointillizeFilter = new PointillizeFilter();
+            pointillizeFilter.setEdgeColor(6);
+            pointillizeFilter.setEdgeThickness(1);
+            pointillizeFilter.setFadeEdges(true);
+            pointillizeFilter.setFuzziness(6);
+            pointillizeFilter.filter(cacheFondo, cacheFondo);
 
-            filter.filter(cacheFondo, cacheFondo);
+            //filter.filter(cacheFondo, cacheFondo);
 
             Graphics2D graphics2D = (Graphics2D) cacheFondo.getGraphics();
-            graphics2D.setColor(new Color(0,0,0,125));
+            graphics2D.setColor(new Color(0,0,0,155));
             graphics2D.fillRect(0,0,cacheFondo.getWidth(),cacheFondo.getHeight());
 
         }
@@ -81,7 +81,7 @@ public class OmJInternalFrame extends javax.swing.JInternalFrame {
 
         tmp = gc.createCompatibleImage(areaDibujo.width, areaDibujo.height,BufferedImage.TRANSLUCENT);
         Graphics2D g2d = (Graphics2D) tmp.getGraphics();
-        g2d.setColor(new Color(0,0,0,165));
+        g2d.setColor(new Color(0,0,0, 205));
         g2d.fillRect(0,0,areaDibujo.width,areaDibujo.height);
         fondo = tmp;
     }

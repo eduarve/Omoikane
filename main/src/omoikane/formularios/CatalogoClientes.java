@@ -15,19 +15,22 @@ import javax.swing.*;
 import omoikane.sistema.*;
 import javax.swing.event.*;
 
-public class CatalogoClientes extends javax.swing.JInternalFrame {
+public class CatalogoClientes extends OmJInternalFrame {
 
     TimerBusqueda                       timerBusqueda;
     BufferedImage                       fondo;
-    omoikane.sistema.NadesicoTableModel modelo;
+    ScrollableTableModel                modelo;
     public String                       txtQuery;
     public String                       codigoSeleccionado;
     public int                          IDSeleccionado;
     public int                          IDAlmacen           = omoikane.principal.Principal.IDAlmacen;
     public boolean                      modal               = false;
 
-    //funcion de busqueda automatica
-
+    /**
+     * Hilo iniciado cada vez que se oprime una tecla en el buscador, espera x ms antes de ejecutar la búsqueda,
+     * el timer se llama a cancelar cuando se oprime una nueva tecla antes de x ms, evitando ejecutar muchas búsqueda cuando
+     * no es requerido
+     */
     class TimerBusqueda extends Thread
     {
         CatalogoClientes    ca;
@@ -52,17 +55,17 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
         jProgressBar1.setIndeterminate(true);
         programarShortcuts();
 
-        String[]  columnas = {"RFC", "Razon Social", "Direccion", "Telefono", "Descuento", "Saldo"};
+        String[]  columnas = {"RFC", "Nombre", "Última modificación", "Lista de precios", "Saldo"};
         ArrayList cols     = new ArrayList<String>(Arrays.asList(columnas));
-        Class[]   clases   = {String.class, String.class, String.class, String.class, Double.class, Double.class};
+        Class[]   clases   = {String.class, String.class, String.class, String.class, String.class, String.class};
         ArrayList cls      = new ArrayList<Class>(Arrays.asList(clases));
 
-        NadesicoTableModel modeloTabla = new NadesicoTableModel(cols, cls);
+        ScrollableTableModel modeloTabla = new ScrollableTableModel(cols, cls);
         //jTable1.enableInputMethods(false);
         modelo = modeloTabla;
         jTable1.setModel(modeloTabla);
 
-        setQueryTable("SELECT id_cliente,RFC,razonSocial,direccion,telefono,descuento,saldo FROM clientes");
+        setQueryTable("SELECT id, RFC,nombre,actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id), saldo, saldo FROM cliente");
         jProgressBar1.setIndeterminate(false);
 
         //Instrucciones para el funcionamiento del fondo semistransparente
@@ -74,6 +77,8 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
 
         Herramientas.centrarVentana(this);
         this.btnAceptar.setVisible(false);
+        this.btnImprimir.setVisible(false);
+        this.btnEliminar.setVisible(false);
 
         //Instrucciones para el funcionamiento de las teclas de navegación
         Set newKeys = new HashSet(getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
@@ -183,7 +188,7 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "RFC", "Razón Social", "Dirección", "Teléfono", "Descuento", "Saldo"
+                "RFC", "Nombre", "Actualización", "Descuento", "Saldo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -388,22 +393,19 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
         this.setVisible(false);
         new Thread() {
             public void run() {
-                NadesicoTableModel tabModelo = modelo;
-                modelo = null;
+                ScrollableTableModel tabModelo = modelo;
                 tabModelo.destroy();
                 dispose();
             }
         }.start();
-        if(!modal){
-        ((javax.swing.JInternalFrame)((omoikane.principal.MenuPrincipal)omoikane.principal.Principal.getMenuPrincipal()).getMenuPrincipal()).requestFocusInWindow();
-        }
-}//GEN-LAST:event_btnCerrarActionPerformed
+        //if(!modal){ ((javax.swing.JInternalFrame)((omoikane.principal.MenuPrincipal)omoikane.principal.Principal.getMenuPrincipal()).getMenuPrincipal()).requestFocusInWindow(); }
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int IDCliente = ((NadesicoTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
+        int IDCliente = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         if(IDCliente != -1) {
-            String descripcion = ((NadesicoTableModel)jTable1.getModel()).getDescripcion(jTable1.getSelectedRow());
+            String descripcion = ((ScrollableTableModel)jTable1.getModel()).getDescripcion(jTable1.getSelectedRow());
             if(JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar éste Cliente: \""+descripcion+"\"?", "lala", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                 omoikane.principal.Clientes.eliminarCliente(IDCliente);
             }
@@ -412,28 +414,28 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        int IDCliente = ((NadesicoTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
+        int IDCliente = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         //Lanzar la ventana de detalles:
         if(IDCliente != -1) { 
             JInternalFrame wnd = (JInternalFrame) omoikane.principal.Clientes.lanzarModificarCliente(IDCliente);
-            wnd.addInternalFrameListener(iframeAdapter);
+            wnd.addInternalFrameListener(new IFrameAdapter());
         }
 }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
         JInternalFrame wnd = (JInternalFrame) omoikane.principal.Clientes.lanzarFormNuevoCliente();
-        wnd.addInternalFrameListener(iframeAdapter);
+        wnd.addInternalFrameListener(new IFrameAdapter());
 }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
         // TODO add your handling code here:
-        int IDCliente = ((NadesicoTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
+        int IDCliente = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         
         //Lanzar la ventana de detalles:
         if(IDCliente != -1) { 
         JInternalFrame wnd = (JInternalFrame) omoikane.principal.Clientes.lanzarDetallesClientes(IDCliente);
-        wnd.addInternalFrameListener(iframeAdapter);}
+        wnd.addInternalFrameListener(new IFrameAdapter());}
 }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
@@ -493,7 +495,7 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
-        NadesicoTableModel stm = ((NadesicoTableModel)jTable1.getModel());
+        ScrollableTableModel stm = ((ScrollableTableModel)jTable1.getModel());
         int IDCliente = stm.getIDArticuloFila(this.jTable1.getSelectedRow());
 
         if(IDCliente != -1) {
@@ -522,7 +524,7 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
     public void buscar()
     {
        String busqueda = this.txtBusqueda.getText();
-       String query    = "select id_cliente,RFC,razonSocial,direccion,telefono,descuento,saldo FROM clientes WHERE razonSocial like '%"+busqueda+"%'";
+       String query    = "select id,RFC,nombre, actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id),saldo FROM cliente WHERE nombre like '%"+busqueda+"%'";
        setQueryTable(query);
     }
 
@@ -561,8 +563,11 @@ public class CatalogoClientes extends javax.swing.JInternalFrame {
     public javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
 
-    public InternalFrameAdapter iframeAdapter = new InternalFrameAdapter()
+    public class IFrameAdapter extends InternalFrameAdapter
     {
-        public void internalFrameClosed(InternalFrameEvent e) { buscar();requestFocusInWindow(); }
+        public void internalFrameClosed(InternalFrameEvent e) {
+            ((ScrollableTableModel)jTable1.getModel()).refrescar();
+            requestFocusInWindow();
+        }
     };
 }

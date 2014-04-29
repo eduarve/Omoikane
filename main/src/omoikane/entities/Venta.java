@@ -1,5 +1,7 @@
 package omoikane.entities;
 
+import omoikane.clientes.Cliente;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

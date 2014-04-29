@@ -1,18 +1,17 @@
 package omoikane.caja.business;
 
 import groovy.util.Eval;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.data.IProductosDAO;
 import omoikane.caja.handlers.StockIssuesHandler;
 import omoikane.caja.presentation.*;
-import omoikane.entities.Caja;
-import omoikane.entities.LegacyVenta;
-import omoikane.entities.LegacyVentaDetalle;
+import omoikane.clientes.Cliente;
+import omoikane.entities.*;
 import omoikane.principal.Principal;
-import omoikane.producto.Impuesto;
-import omoikane.producto.Producto;
-import omoikane.entities.VentaDetalleImpuesto;
+import omoikane.producto.*;
 import omoikane.repository.CajaRepo;
 import omoikane.repository.VentaRepo;
 import omoikane.sistema.Comprobantes;
@@ -172,6 +171,7 @@ public class CajaLogicImpl implements ICajaLogic {
     public void deleteRowFromVenta(int row) {
 
         getController().getModel().getVenta().remove(row);
+        persistirVenta();
 
     }
 
@@ -185,6 +185,33 @@ public class CajaLogicImpl implements ICajaLogic {
     @Override
     public LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd) {
         return transactionalPersistItemVenta(lvd);
+    }
+
+    @Override
+    public void cambiarCliente(final Integer idCliente) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                _cambiarCliente(idCliente);
+                return null;
+            }
+        };
+        Platform.runLater(task);
+
+    }
+
+    public void _cambiarCliente(Integer idCliente) {
+        System.out.println("prueba");
+        try {
+            Cliente cliente = entityManager.find(Cliente.class, idCliente);
+
+            getController().getModel().setCliente(cliente);
+            System.out.println("prueba"+cliente.getNombre());
+
+            persistirVenta();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     public LegacyVentaDetalle transactionalPersistItemVenta(final LegacyVentaDetalle lvd) {
@@ -216,15 +243,26 @@ public class CajaLogicImpl implements ICajaLogic {
         }
     }
 
+    /**
+     * Éste método convierte un "modelo general de producto" en un "modelo de caja de producto" utilizado únicamente
+     * en la caja. Además por defecto establece el nivel de precios correcto.
+     * @param producto
+     * @param productoModel
+     */
     private void productoToProductoModel(Producto producto, ProductoModel productoModel) {
+
+        //nvp: nivel de precio, puede ser el ID de la lista de precios asignada al cliente o 0 para usar el precio primario
+        Integer nvp   = getController().getModel().getCliente().get().getListaDePreciosId();
+        PrecioOmoikaneLogic precio= producto.getPrecio(nvp);
+
         productoModel.getId()                 .set( producto.getId() );
         productoModel.codigoProperty()        .set(producto.getCodigo());
-        productoModel.precioBaseProperty()    .set(producto.getPrecio().getPrecioBase());
+        productoModel.precioBaseProperty()    .set(precio.getPrecioBase());
         productoModel.conceptoProperty()      .set(producto.getDescripcion());
-        productoModel.descuentosBaseProperty().set(producto.getPrecio().getDescuento());
-        Collection<ImpuestoModel> impuestos = impuestosToImpuestosModel(producto.getPrecio().getListaImpuestos());
+        productoModel.descuentosBaseProperty().set(precio.getDescuento());
+        Collection<ImpuestoModel> impuestos = impuestosToImpuestosModel(precio.getListaImpuestos());
         productoModel.setImpuestos( impuestos );
-        productoModel.precioProperty()        .set( producto.getPrecio().getPrecio() );
+        productoModel.precioProperty()        .set( precio.getPrecio() );
         productoModel.setProductoData(producto);
     }
 
@@ -303,6 +341,9 @@ public class CajaLogicImpl implements ICajaLogic {
         LegacyVenta ventaIncompleta = buscarVentaIncompleta();
 
         CajaModel model = new CajaModel();
+        Cliente cliente = entityManager.find(Cliente.class, 1);
+        model.setCliente(cliente);
+
         getController().setModel( model );
 
         if(ventaIncompleta == null) {
@@ -320,13 +361,20 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     private void cargarVentaIncompleta(LegacyVenta venta) {
-
+        cargarCliente(venta);
         for( LegacyVentaDetalle lvd : venta.getItems()) {
             ProductoModel productoModel = new ProductoModel();
             productoToProductoModel(productosDAO.findById(new Long(lvd.getIdArticulo())), productoModel);
             productoModel.cantidadProperty().set(BigDecimal.valueOf(lvd.getCantidad()));
+            productoModel.setVentaDetalleEntity( lvd );
             getController().getModel().getVenta().add(productoModel);
         }
+    }
+
+    private void cargarCliente(LegacyVenta venta) {
+        if(venta.getIdCliente()==null) venta.setIdCliente(1);
+        Cliente cliente = entityManager.find(Cliente.class, venta.getIdCliente());
+        getController().getModel().setCliente(cliente);
     }
 
     public void imprimirVenta(LegacyVenta venta) {
@@ -339,6 +387,7 @@ public class CajaLogicImpl implements ICajaLogic {
         Integer idCaja    = Principal.IDCaja;
         Integer idAlmacen = Principal.IDAlmacen;
         Integer idUsuario = Usuarios.getIDUsuarioActivo();
+        Integer idCliente = model.getCliente().get().getId();
         Double  efectivo  = model.getEfectivo().get().doubleValue();
         Double  cambio    = model.getCambio().get().doubleValue();
         Date    fechaHora = (Date) entityManager.createNativeQuery("SELECT current_timestamp").getSingleResult();
@@ -351,10 +400,10 @@ public class CajaLogicImpl implements ICajaLogic {
             venta.setFolio(Long.valueOf(folio));
         }
 
-        venta.setIdCliente ( 1 );
         venta.setIdUsuario(idUsuario);
         venta.setIdAlmacen(idAlmacen);
         venta.setIdCaja(idCaja);
+        venta.setIdCliente(idCliente);
         venta.setEfectivo(efectivo);
         venta.setCambio(cambio);
         venta.setCentecimosredondeados(0d);

@@ -33,12 +33,20 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
             return isControl;
         }
 
+        /**
+         * Las reglas para pasar el enfoque en el campo "capturaTextField":
+         * 1. Que haya al menos un producto en la venta
+         * 2. Que no haya texto en el campo de captura
+         * @param keyCode
+         * @param control
+         * @param event
+         */
         private void enterKeyNavigationRules(KeyCode keyCode, Control control, Event event) {
             if (keyCode.equals(KeyCode.ENTER) && control.getId() != null)
                 switch (control.getId()) {
                     case "capturaTextField":
                         String text = cc.getCapturaTextField().getText();
-                        if (text == null || text.equals("")) {
+                        if (cc.getModel().getVenta().size() > 0 && (text == null || text.equals(""))) {
                             //cc.getBtnEfectivo().requestFocus();
                             cc.getEfectivoTextField().requestFocus();
                         }
@@ -80,5 +88,7 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
                 new CancelarVenta(cc).handle(event);
             if (new KeyCodeCombination(KeyCode.P, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
                 new PlmHandler(cc).handle(event);
+            if (new KeyCodeCombination(KeyCode.C, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
+                new MostrarCatalogoClientesHandler(cc).handle(event);
         }
     }

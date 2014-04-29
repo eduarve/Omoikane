@@ -50,14 +50,28 @@ import groovy.inspect.swingui.*
         ancho = Integer.valueOf (ancho)
         alto  = Integer.valueOf (alto)
 
-        if(ancho==1024&&alto==768) {
+        if(ancho==1024&& ( alto==768 || alto==720)) {
             escritorioFrame.setSize(new java.awt.Dimension(ancho,alto))
             escritorioFrame.setPreferredSize(new java.awt.Dimension(ancho,alto))
             escritorioFrame.setMinimumSize(new java.awt.Dimension(ancho,alto))
             escritorioFrame.setBounds(0,0,ancho,alto)
+            escritorioFrame.lblImagenFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/omoikane/principal/SkinGris1024x720.png"))); // NOI18N
             escritorioFrame.lblImagenFondo.setBounds(0,0,ancho,alto)
-            escritorioFrame.usuario.setLocation(136,162)
-            escritorioFrame.reloj.setLocation(790,146)
+
+            InputStream is = Escritorio.getResourceAsStream("/omoikane/Media2/fonts/Roboto-Thin.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont  = font.deriveFont(36f);
+            Font sizedFont2 = font.deriveFont(14f);
+
+            escritorioFrame.usuario.setFont(sizedFont2);
+            GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            genv.registerFont(sizedFont);
+
+            InputStream iconis = Escritorio.getResourceAsStream("/omoikane/Media2/icons/linecons.ttf");
+            Font iconFont = Font.createFont(Font.TRUETYPE_FONT, (java.io.InputStream) iconis);
+            Font sizedIconFont  = iconFont.deriveFont(36f);
+
+            escritorioFrame.reloj.setLocation(900,5)
         }
         else if(ancho==1280&&alto==720) {
             escritorioFrame.setSize(new java.awt.Dimension(ancho,alto))

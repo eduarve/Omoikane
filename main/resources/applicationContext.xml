@@ -38,6 +38,10 @@
     <bean id="ventaDetalleImpuesto" class="omoikane.entities.VentaDetalleImpuesto"></bean>
     <bean id="corte" class="omoikane.entities.Corte"></bean>
     <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
+    <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios"></bean>
+    <bean id="precioAlterno" class="omoikane.producto.PrecioAlterno"></bean>
+    <bean id="cliente" class="omoikane.clientes.Cliente"></bean>
+    <bean id="clienteView" class="omoikane.clientes.ClienteView"></bean>
 
     <bean id="/SpringAnnotatedConfig" class="omoikane.sistema.SpringAnnotatedConfig"></bean>
     <bean id="properties" class="java.util.HashMap"></bean>
@@ -52,6 +56,7 @@
         <hades:dao id="conteoInventarioRepo" />
         <hades:dao id="cajaRepo" />
         <hades:dao id="compraRepo" />
+        <hades:dao id="clienteRepo"/>
     </hades:dao-config>
 
     <bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
