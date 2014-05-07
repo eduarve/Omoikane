@@ -9,8 +9,6 @@ import omoikane.repository.ProductoRepo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 import java.awt.*;
@@ -45,7 +43,7 @@ public class CatalogoArticulosHandler {
                 mapa.put("linea", producto.getIdLinea());
                 mapa.put("grupo", producto.getIdGrupo());
                 mapa.put("precio", producto.getPrecio().getPrecio());
-                mapa.put("existencia", producto.getStock().getEnTienda());
+                mapa.put("existencia", producto.getStockInitializated().getEnTienda());
                 model.add(mapa);
             }
             StyleBuilder boldStyle         = stl.style().bold();

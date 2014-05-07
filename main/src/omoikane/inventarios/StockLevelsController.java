@@ -9,13 +9,8 @@ import omoikane.producto.Articulo;
 import omoikane.repository.ProductoRepo;
 import omoikane.sistema.Dialogos;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.validation.*;
 
 import javax.persistence.EntityManager;
@@ -105,7 +100,7 @@ public class StockLevelsController implements Initializable {
 
     public void setProducto(Long id) {
         producto = productoRepo.findByIdIncludeStock(id);
-        stock = producto.getStock();
+        stock = producto.getStockInitializated();
 
         stockTienda.setNumber( stock.getEnTienda() );
         stockBodega.setNumber(stock.getEnBodega());

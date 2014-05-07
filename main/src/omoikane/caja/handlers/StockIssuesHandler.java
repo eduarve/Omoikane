@@ -4,6 +4,7 @@ import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.entities.Paquete;
 import omoikane.inventarios.Stock;
+import omoikane.inventarios.StockIssuesLogic;
 import omoikane.principal.Principal;
 import omoikane.producto.Articulo;
 import omoikane.producto.Producto;
@@ -22,35 +23,17 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 public class StockIssuesHandler {
-    ProductoRepo repo;
     CajaController controller;
 
     public StockIssuesHandler(CajaController c) {
-        repo = (ProductoRepo) Principal.applicationContext.getBean("productoRepo");
         controller = c;
     }
 
-    /**
-     * Quantity sold, there are 2 cases:
-     * - Simple product sold: Just reduces the quantity sold
-     * - Package product: Infers this type and load the child products and quantity per package from database,
-     * then, multiplies quantity per package by quantity sold
-     */
     public void handle() {
         for(ProductoModel pm : controller.getModel().getVenta()) {
-            Articulo p = repo.readByPrimaryKey(pm.getLongId());
-            if(p.getEsPaquete()) {
-                for(Paquete paquete : p.getRenglonesPaquete()) {
-                    Articulo productoContenido = paquete.getProductoContenido();
-                    Stock s = productoContenido.getStock();
-                    BigDecimal quantitySold = paquete.getCantidad().multiply( pm.getCantidad() );
-                    s.setEnTienda( s.getEnTienda().subtract(quantitySold) );
-                }
-            } else {
-                BigDecimal quantitySold = pm.getCantidad();
-                Stock s = p.getStock();
-                s.setEnTienda( s.getEnTienda().subtract( quantitySold ) );
-            }
+            StockIssuesLogic logic = Principal.applicationContext.getBean(StockIssuesLogic.class);
+            logic.setArticulo(pm.getLongId());
+            logic.reduceStock( pm.getCantidad() );
         }
     }
 }

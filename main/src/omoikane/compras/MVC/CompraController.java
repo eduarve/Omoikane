@@ -26,7 +26,9 @@ import javafx.util.Callback;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.compras.entities.Compra;
 import omoikane.compras.entities.ItemCompra;
+import omoikane.inventarios.StockIssuesLogic;
 import omoikane.principal.Articulos;
+import omoikane.principal.Principal;
 import omoikane.proveedores.Proveedor;
 import omoikane.repository.CompraRepo;
 import omoikane.entities.Usuario;
@@ -37,16 +39,23 @@ import omoikane.repository.ProveedorRepo;
 import omoikane.sistema.Permisos;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.transaction.TransactionManager;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormatSymbols;
@@ -60,6 +69,7 @@ import java.util.List;
  * Time: 05:50 PM
  * To change this template use File | Settings | File Templates.
  */
+@Service
 public class CompraController implements Initializable {
 
     public static final Logger logger = Logger.getLogger(CompraController.class);
@@ -69,7 +79,7 @@ public class CompraController implements Initializable {
     @Autowired
     EhCacheManagerFactoryBean cacheManager;
 
-    @PersistenceContext
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
     EntityManager entityManager;
 
     @Autowired
@@ -159,6 +169,7 @@ public class CompraController implements Initializable {
     }
 
     private void handleAplicarInventario() {
+
         mainPane.setDisable(true);
         Task aplicarInventarioTask = new Task<Void>() {
             @Override
@@ -178,26 +189,45 @@ public class CompraController implements Initializable {
         aplicarInventarioTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
+                Throwable t = workerStateEvent.getSource().getException();
+                logger.error(t.getMessage(), t);
                 mainPane.setDisable(false);
             }
         });
         new Thread(aplicarInventarioTask).start();
     }
 
-    @Transactional
-    private void aplicarInventarioToModel() {
+    /**
+     * Tuve que utilizar un transactionTemplate en éste método debido a que es llamado por otro método de la misma clase.
+     * Debido a una limitación inherente de los proxys usados por Spring no es posible llamar a través de un proxy a un
+     * método de la misma clase sin usar trucos enredados, por esa misma razón no utilicé la anotación @Transactional,
+     * sin embargo, los métodos de la clase StockIssuesLogic si utilizan @Transactional y les es propagada la sesión.
+     */
+    public void aplicarInventarioToModel() {
 
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+            // the code in this method executes in a transactional context
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                _aplicatInventarioToModel();
+            }
+        });
+
+    }
+
+    private void _aplicatInventarioToModel() {
         for (ItemCompraEntityWrapper itemCompraEntityWrapper : modelo.getItems()) {
             Articulo a        = itemCompraEntityWrapper.articuloProperty().get();
-            Articulo articulo = productoRepo.findByIdIncludeStock(a.getIdArticulo());
 
-            Stock s = articulo.getStock();
-            s.setEnTienda(s.getEnTienda().add( itemCompraEntityWrapper.cantidadProperty().get() ));
+            StockIssuesLogic stockIssuesLogic = Principal.applicationContext.getBean(StockIssuesLogic.class);
+            stockIssuesLogic.setArticulo(a.getIdArticulo());
+            Articulo articulo = stockIssuesLogic.increaseStock( itemCompraEntityWrapper.cantidadProperty().get() );
 
-            productoRepo.saveAndFlush(articulo);
-;
+            productoRepo.save(articulo);
+
             modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
-            repo.saveAndFlush(modelo._compra);
+            repo.save(modelo._compra);
 
         }
     }
@@ -423,6 +453,7 @@ public class CompraController implements Initializable {
         txtIdProveedor.disableProperty().unbind();
         txtFolioOrigen.textProperty().unbind();
         actionCol.visibleProperty().unbind();
+        if(modelo != null) modelo.getFolioOrigen().unbind();
 
         imprimirButton.setDisable(false);
         archivarButton.setDisable(false);
@@ -440,7 +471,7 @@ public class CompraController implements Initializable {
         fechaLabel.textProperty().bind(Bindings.convert(modelo.getDate()));
         idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
         lblProveedor.textProperty().bind(modelo.nombreProveedorProperty());
-        //txtFolioOrigen.textProperty().bind( modelo.getFolioOrigen() );
+        txtFolioOrigen.setText( compra != null ? compra.getFolioOrigen() : "" );
         txtFolioOrigen.textProperty().set( modelo.getFolioOrigen().get() );
         modelo.getFolioOrigen().bind(txtFolioOrigen.textProperty());
         actionCol.visibleProperty().bind(modelo.getCompletado().not());

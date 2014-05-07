@@ -241,7 +241,7 @@ public class TomaInventarioController implements Initializable {
             Articulo a        = itemConteoPropWrapper.articuloProperty().get();
             Articulo articulo = productoRepo.findByIdIncludeStock(a.getIdArticulo());
 
-            Stock s = articulo.getStock();
+            Stock s = articulo.getStockInitializated();
             s.setEnTienda(itemConteoPropWrapper.conteoProperty().get());
 
             productoRepo.saveAndFlush(articulo);
@@ -312,7 +312,7 @@ public class TomaInventarioController implements Initializable {
 
         String codigo            = capturaArticulo.getCodigo();
         String descripcion       = capturaArticulo.getDescripcion();
-        BigDecimal stockBD       = capturaArticulo.getStock().getEnTienda();
+        BigDecimal stockBD       = capturaArticulo.getStockInitializated().getEnTienda();
         BigDecimal diferencia    = conteo.subtract(stockBD);
         BigDecimal costoUnitario = new BigDecimal( capturaArticulo.getBaseParaPrecio().getCosto() );
 

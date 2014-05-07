@@ -62,9 +62,14 @@ public class CEAppender extends AppenderSkeleton {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
+                //System.out.println(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
                 JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
-                Dialogos.lanzarDialogoError(mainJFrame, event.getMessage(), Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
+                String stackTrace = "";
+                if(event.getThrowableInformation() != null && event.getThrowableInformation().getThrowable() != null)
+                    stackTrace = Misc.getStackTraceString(event.getThrowableInformation().getThrowable());
+                else
+                    stackTrace = "Sin stacktrace";
+                Dialogos.lanzarDialogoError(mainJFrame, event.getMessage(), stackTrace);
             }
         });
     }

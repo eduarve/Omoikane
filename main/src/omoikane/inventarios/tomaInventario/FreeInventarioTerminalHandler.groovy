@@ -1,7 +1,6 @@
 package omoikane.inventarios.tomaInventario
 
 import javafx.stage.DirectoryChooser
-import javafx.stage.FileChooser
 import javafx.stage.Stage
 import omoikane.producto.Articulo
 import omoikane.repository.ProductoRepo
@@ -66,7 +65,7 @@ class FreeInventarioTerminalHandler implements ITerminalHandler {
                     articulo.descripcion,
                     articulo.unidad,
                     nb.format( articulo.getPrecio().precio.doubleValue() ),
-                    articulo.stock.getUbicacion()
+                    articulo.stockInitializated.getUbicacion()
             ]
             String renglon = renglonData.join("\t")+"\r\n";
             logger.debug(renglon);

@@ -170,10 +170,14 @@ public class Articulo implements Serializable, IProductoApreciado {
     public Stock stock;
 
     @Transactional
-    public Stock getStock() {
+    public Stock getStockInitializated() {
         Stock s = stock;
         Hibernate.initialize(s);
         return s;
+    }
+
+    public Stock getStock() {
+        return stock;
     }
 
     public void setStock(Stock s) {
