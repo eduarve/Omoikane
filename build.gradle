@@ -250,12 +250,11 @@ task distribuir(dependsOn: 'installApp') {
 		exclude "${title}-${version}.jar"
 	}
 	
-	//Copy extensions
-	/*daExts = new File("$miDistDir/lib/ext")
+	//Sobrescribo jfxrt.jar	
 	copy {
-		from "lib/ext"
-		into "$daExts"
-	}*/
+		from "lib/jfxrt.jar"
+		into "$daLibs"
+	}
     
     //Copy templates
     templatesFolder = new File("$miDistDir/Plantillas")

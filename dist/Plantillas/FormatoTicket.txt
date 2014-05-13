@@ -1,8 +1,8 @@
 ${""+ (27 as char)+(112 as char)+(0 as char)+(25 as char)+(250 as char)}
-  *  * SUPER  FARMACIA  MEDINA  *  *
-NAHUM MEDINA GARCIA      MEGN560328MQ0
-  HEROES DE TLAPACOYAN 207 COL CENTRO
-       TLAPACOYAN, VER. CP 93650-
+  *  * SUPER  NEGOCIO DE EJEMPLO *  *
+[Razón Social]      			[RFC]
+       [Calle] [Número] [Colonia]
+     [Municipio], [Estado]. CP [CP]
  - - - - - - - - - - - - - - - - - - -
 
 ${caja.descripcion}  ${cajero}
@@ -23,8 +23,8 @@ ID: ${idFolio}
 
          Gracias por su compra!
 
-   SUCURSAL VALDEZ No.601 COL.CENTRO
-      C.P. 93650 TLAPACOYAN, VER.
- TELS: 01 (225) 315 42 03 Y 315 42 02
+   SUCURSAL HIDALGO No.45 COL.CENTRO
+      C.P. 060000 CUAUHTÉMOC, D.F.
+ TELS: [01 (55) 123 45 67 Y 765 43 21]
 
 ${""+ (27 as char)+(100 as char)+(8 as char)}

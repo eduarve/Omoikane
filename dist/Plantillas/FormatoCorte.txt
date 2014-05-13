@@ -1,18 +1,18 @@
 ${""+ (27 as char)+(112 as char)+(0 as char)+(25 as char)+(250 as char)}
-    * SUPER  FARMACIA  MEDINA *        .
-        NAHUM MEDINA GARCIA
-RFC:MEGN560328MQ0 CURP:MEGN560328HPLDRH00
-MATRIZ: HEROES DE TLAPACOYAN # 207
-COLONIA CENTRO C.P.93650 TLAPACOYAN VER.
+    * SUPER  NEGOCIO DE EJEMPLO *        
+          [RAZON SOCIAL]
+RFC:XX0X123456XXX CURP:MEGN560328HPLDRH00
+MATRIZ: Venustiano Carranza 52
+COLONIA CENTRO C.P.06000 Cuauhtémoc, D.F.
  - - - - - - - - - - - - - - - - - - - - -
-EXPIDE SUCURSAL: VALDEZ # 601
-COL CENTRO TLAPACOYAN VER.
-TEL. 01 225 3154202 Y 3154203
+      EXPIDE SUCURSAL: Hidalgo # 45
+   CUAUHTÉMOC, CENTRO, DISTRITO FEDERAL
+  TELS: [01 (55) 123 45 67 Y 765 43 21]
  - - - - - - - - - - - - - - - - - - - - -
 
 ${fecha}
 
-          NAHUM MEDINA GARCIA
+          [Razón Social]
        ${leyenda}
 
 Caja  : ${descripcion}

@@ -9,8 +9,9 @@
     <componentList>
         <component>
             <name>default</name>
-            <description>Default Component</description>
+            <description>Cliente</description>
             <canBeEdited>1</canBeEdited>
+            <detailedDescription>Instala el cliente Omoikane</detailedDescription>
             <selected>1</selected>
             <show>1</show>
             <folderList>
@@ -118,8 +119,9 @@
         </include>
         <component>
             <name>MySQL</name>
-            <description>MySQL</description>
+            <description>Servidor</description>
             <canBeEdited>1</canBeEdited>
+            <detailedDescription>Instala los componentes necesarios para el servidor, incluyendo la base de datos MySQL</detailedDescription>
             <selected>1</selected>
             <show>1</show>
             <folderList>
@@ -182,14 +184,14 @@
                 <runProgram>
                     <explanation>Instalando servicio de MySQL</explanation>
                     <program>${installdir}/mysql/bin/mysqld.exe</program>
-                    <programArguments>--install MySQL --defaults-file=${installdir}/mysql/my.ini</programArguments>
+                    <programArguments>--install MySQLOmoikane --defaults-file="${installdir}/mysql/my.ini"</programArguments>
                     <progressText>Instalando servicio de MySQL</progressText>
                 </runProgram>
                 <runProgram>
                     <abortOnError>0</abortOnError>
                     <explanation>Iniciando servicio de MySQL</explanation>
                     <program>NET</program>
-                    <programArguments>START MySQL</programArguments>
+                    <programArguments>START MySQLOmoikane</programArguments>
                     <progressText>Iniciando servicio de MySQL</progressText>
                     <ruleEvaluationLogic>or</ruleEvaluationLogic>
                     <showMessageOnError>0</showMessageOnError>
@@ -197,7 +199,7 @@
                 <runProgram>
                     <abortOnError>0</abortOnError>
                     <program>${installdir}/mysql/bin/mysql.exe</program>
-                    <programArguments>-u root &lt; ${installdir}/schemadb.sql</programArguments>
+                    <programArguments>-u root &lt; "${installdir}/schemadb.sql"</programArguments>
                     <showMessageOnError>0</showMessageOnError>
                 </runProgram>
             </postInstallationActionList>
@@ -205,19 +207,25 @@
     </componentList>
     <preUninstallationActionList>
         <runProgram>
+            <abortOnError>0</abortOnError>
             <program>NET</program>
-            <programArguments>STOP MySQL</programArguments>
+            <programArguments>STOP MySQLOmoikane</programArguments>
         </runProgram>
         <runProgram>
-            <program>${installdir}/bin/mysqld</program>
-            <programArguments>--remove</programArguments>
+            <program>${installdir}/mysql/bin/mysqld.exe</program>
+            <programArguments>--remove MySQLOmoikane --defaults-file="${installdir}/mysql/my.ini"</programArguments>
         </runProgram>
     </preUninstallationActionList>
+    <allowAddRemoveComponents>1</allowAddRemoveComponents>
+    <allowComponentSelection>1</allowComponentSelection>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
+    <installationLogFile>${installdir}/install.log</installationLogFile>
     <projectSchemaVersion>1.0</projectSchemaVersion>
+    <requestedExecutionLevel>asInvoker</requestedExecutionLevel>
     <requireInstallationByRootUser>1</requireInstallationByRootUser>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
+    <uninstallationLogFile>${installdir}/uninstall.log</uninstallationLogFile>
     <vendor>Phesus</vendor>
     <finalPageActionList>
         <runProgram>
@@ -232,12 +240,11 @@
             <name>installdir</name>
             <description>Installer.Parameter.installdir.description</description>
             <explanation>Installer.Parameter.installdir.explanation</explanation>
-            <value>${platform_install_prefix}/${project.shortName}-${project.version}</value>
-            <default>${platform_install_prefix}/${project.shortName}-${project.version}</default>
+            <value>${platform_install_prefix}/${project.shortName}</value>
+            <default>${platform_install_prefix}/${project.shortName}</default>
             <allowEmptyValue>0</allowEmptyValue>
-            <ask>yes</ask>
             <cliOptionName>prefix</cliOptionName>
-            <mustBeWritable>yes</mustBeWritable>
+            <mustBeWritable>1</mustBeWritable>
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
