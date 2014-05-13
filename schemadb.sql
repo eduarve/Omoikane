@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `ConteoInventario` (
   `completado` bit(1) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
   `id_usuario` bigint(20) DEFAULT NULL,
+  `aplicado` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK997A080D61D916F4` (`id_usuario`),
   KEY `completadoIndex` (`completado`)

@@ -1,4 +1,29 @@
-## Versión 4.2 alfa (2014-03-29)
+## Versión 4.1.2 (2014-05-13)
+
+- Issue #83 resuelto. Agregar definición de tablas ListaDePrecios y PrecioAlterno a esquema inicial
+- Issue #86 resuelto. Captura de compra: Después de borrar partida no es posible reintroducir el código eliminado
+- Issue #88 resuelto. Actualizaciones del esquema inicial
+- Issue #89 resuelto. Ocultar features incompletos de la versión 4.2
+- Bug solved: que mostraba incorrectamente folios de compras guardadas
+- Bug solved: artículos de partidas eliminadas durante la captura de
+una compra no podían volver a ser agregados (en esa misma compra)
+- Centralicé los asuntos relacionados con aumento y disminución de
+inventarios con el objetivo de que sean ejecutados todos los
+comportamientos y respetadas las restricciones del modelo de negocio
+desde cualquier parte que se requiera alterar el inventario.
+- Los aumentos y reducciones de stock hechos a través de
+“StockIssuesLogic” respetan las reglas de paquetes/kits
+- ... Por lo tanto compras ya aumenta adecuadamente los stocks de
+paquetes en sus respectivos componentes (issue #87)
+- Desmarcación de formatos TXT de tickets
+- Actualización de jfxrt.jar a la versión usada por el instalador (7u51)
+- Mejora del instalador, incluye wrapper nativo de JRE 7u51
+- Mejora del instalador, instala automáticamente MySQL y carga el
+esquema inicial de la BD
+- Issue #91 Instalación permite instalar únicamente cliente, únicamente servidor o ambos
+
+
+## Versión 4.2 alfa (2014-04-29)
 
 - Agregué soporte para resolución 1024x768
 - Soporte multi-cliente en caja
