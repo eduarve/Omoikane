@@ -42,7 +42,7 @@
         <h1>
 <a name="omoikane" class="anchor" href="#omoikane"><span class="octicon octicon-link"></span></a>Omoikane</h1>
 
-<p>Punto de venta opensource de tecnología de vanguardia. Solución sencilla para cualquier tipo de negocio, especializado en negocios, que por sus características complejas no pueden ser tratados con puntos de venta básicos. (la mayoría en el mercado). Puede manejar desde 1 producto hasta cientos de miles sin problemas. Tiene características de inventario y almacén sencillas de uso, pero avanzadas en características que superan la media del mercado.</p>
+<p>Poderoso punto de venta opensource de tecnología de vanguardia. Solución sencilla para cualquier tipo de negocio, especializado en negocios, que por sus características complejas no pueden ser tratados con puntos de venta básicos. (la mayoría en el mercado). Puede manejar desde 1 producto hasta cientos de miles sin problemas. Tiene características de inventario y almacén sencillas de uso, pero avanzadas en características que superan la media del mercado.</p>
 
 <p><img src="http://i.imgur.com/JHh7C0f.png" alt="Caja"></p>
 
@@ -82,6 +82,8 @@
 <strong>Multi-impuesto</strong> Es posible agregar cualquier cantidad de impuestos a cualquier producto. Por ejemplo IVA 0%, IVA 16%, IEPS 8%, IEPS 25%, etc. Es posible agregar cualquier impuesto que sea una proporción del valor del producto.</li>
 <li>
 <strong>Facturación y notas de crédito CFDI</strong> La facturación electrónica se puede realizar mediante diversos proveedores de timbres, desde 30 centavos por timbre aún comprando un solo timbre.</li>
+<li>
+<strong>Catálogo offline</strong> Consulte su catálogo de artículos aún sin conexión. Útil en caso de caídas del servidor o para llevar consigo la información.</li>
 </ul><h2>
 <a name="caracter%C3%ADsticas-agendadas" class="anchor" href="#caracter%C3%ADsticas-agendadas"><span class="octicon octicon-link"></span></a>Características agendadas:</h2>
 
@@ -106,49 +108,23 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 <li>Procesador de doble núcleo de 2 GHz o superior</li>
 <li>Conexión a internet</li>
 <li>Para el uso de huella dactilar: Windows XP o superior y lector de huellas DigitalPersona u.are.u 4000 o 4500</li>
+<li>Para multi-caja se requiere una red LAN y/o VPN</li>
 </ul><h3>
-<a name="instalaci%C3%B3n-de-la-base-de-datos" class="anchor" href="#instalaci%C3%B3n-de-la-base-de-datos"><span class="octicon octicon-link"></span></a>Instalación de la base de datos</h3>
+<a name="instrucciones" class="anchor" href="#instrucciones"><span class="octicon octicon-link"></span></a>Instrucciones</h3>
 
-<ol>
-<li>Descargar MySQL Server, desde la página oficial. <a href="http://dev.mysql.com/downloads/mysql/">Página oficial de MySQL Server</a>
-</li>
-<li><a href="http://dev.mysql.com/downloads/tools/workbench/">Descargar MySQL Workbench</a></li>
-<li><a href="https://github.com/Phesus/Omoikane/releases/download/4.1.0/schemadb.sql">Descargar el esquema de la base de datos</a></li>
-<li>Instalar MySQL con los parámetros deseados, para un negocio pequeño los parámetros que vienen por default en el instalador serán más que suficientes. Es importante recordar el password que pongamos durante la instalación.</li>
-<li>Instalar MySQL Workbench, éste software facilita las operaciones con la base de datos y será de gran utilidad para administrarla.</li>
-<li>Abrir workbench, tome en cuenta que la interfaz está dividida en 3 columnas: "SQL Development", "Data Modeling" y "Server Administration".</li>
-<li>Cargar la base de datos de Omoikane, para ésto: haga doble click en "mysql@localhost" en la columna "Server Administration", ahora vaya a "Data export and restore", seleccione la pestaña "Import from disk", seleccione "Import from self-contained file", haga click en "..." y busque el archivo "schemadb.sql" (del paso 3). Por último haga click en "Select all tables" y "Start import".</li>
-<li>¡Felicidades! Si los pasos anteriores se han seguido con éxito, la base de datos estará lista para ser utilizada.</li>
-</ol><h4>
-<a name="notas" class="anchor" href="#notas"><span class="octicon octicon-link"></span></a>Notas</h4>
+<p><a href="https://github.com/Phesus/Omoikane/wiki/Instalacion#quickstart--instalaci%C3%B3n-r%C3%A1pida-mono-caja">Quickstart / Instalación mono-caja</a></p>
 
-<ul>
-<li>Es posible conectarse a cualquier otro tipo de instalación de MySQL y resultaría útil para configuraciones excentricas, por ejemplo usando LAMP, TurnKey Linux, WAMP, etc.</li>
-<li>Para un negocio grande, digamos más de 4 cajas de cobro, simplemente utilicen la configuración "Para producción" del instalador</li>
-</ul><h3>
-<a name="instalaci%C3%B3n-del-cliente" class="anchor" href="#instalaci%C3%B3n-del-cliente"><span class="octicon octicon-link"></span></a>Instalación del cliente</h3>
+<p><a href="https://github.com/Phesus/Omoikane/wiki/Instalacion#instalaci%C3%B3n-multi-caja">Instalación multi-caja</a></p>
 
-<ol>
-<li>Descargar el último instalador de omoikane del <a href="https://github.com/Phesus/Omoikane/releases">área de releases</a>
-</li>
-<li>Ejecutar el instalador, la instalación de omoikane, se divide en 5 instaladores, lanzado uno después de otro automáticamente: Instalador del Omoikane, Java JRE 7u25, .NET Framework 2.0, DigitalPersona RTE, driver u.are.u 4500</li>
-<li>Configurar usando el configurador integrado, para ello ejecutar el siguiente comando en la línea de comandos desde la carpeta donde se instaló el programa:</li>
-</ol><pre><code>java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
-</code></pre>
-
-<p>Por ejemplo, si el programa se instaló en windows, en la carpeta default (c:\Phesus\Omoikane), entonces:</p>
-
-<pre><code>c:
-cd c:\phesus\omoikane
-java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
-</code></pre>
-
-<ol>
-<li>Utilizar el configurador para establecer los principales parámetros del sistema. La parte más importante de la configuración es establecer los parámetros de conexión a la base de datos, estos parámetros tienen que ser consistentes con los que se introdujeron cuando se configuró la base de datos:</li>
-</ol><h2>
+<h2>
 <a name="configuraci%C3%B3n" class="anchor" href="#configuraci%C3%B3n"><span class="octicon octicon-link"></span></a>Configuración</h2>
 
-<p><a href="https://github.com/Phesus/Omoikane/wiki/Configuraci%C3%B3n">Leer acerca de la configuración en nuestro wiki/manual</a></p>
+<p><a href="https://github.com/Phesus/Omoikane/wiki/04_configuracion">Leer acerca de la configuración en nuestro wiki/manual</a></p>
+
+<h2>
+<a name="manual" class="anchor" href="#manual"><span class="octicon octicon-link"></span></a>Manual</h2>
+
+<p><a href="https://github.com/Phesus/Omoikane/wiki">Documentación</a></p>
 
 <h2>
 <a name="licencia" class="anchor" href="#licencia"><span class="octicon octicon-link"></span></a>Licencia</h2>
