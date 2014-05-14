@@ -44,7 +44,7 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 - Para el uso de huella dactilar: Windows XP o superior y lector de huellas DigitalPersona u.are.u 4000 o 4500
 - Para multi-caja se requiere una red LAN y/o VPN
 
-### Instalación
+### Instrucciones
 
 [Quickstart / Instalación mono-caja](https://github.com/Phesus/Omoikane/wiki/Instalacion#quickstart--instalaci%C3%B3n-r%C3%A1pida-mono-caja)
 
