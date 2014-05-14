@@ -42,40 +42,13 @@ Además se agendarán las características sugeridas por nuestros usuarios, prev
 - Procesador de doble núcleo de 2 GHz o superior
 - Conexión a internet
 - Para el uso de huella dactilar: Windows XP o superior y lector de huellas DigitalPersona u.are.u 4000 o 4500
+- Para multi-caja se requiere una red LAN y/o VPN
 
-### Instalación de la base de datos
-1. Descargar MySQL Server, desde la página oficial. [Página oficial de MySQL Server](http://dev.mysql.com/downloads/mysql/)
-2. [Descargar MySQL Workbench](http://dev.mysql.com/downloads/tools/workbench/)
-3. [Descargar el esquema de la base de datos](https://github.com/Phesus/Omoikane/releases/download/4.1.0/schemadb.sql)
-4. Instalar MySQL con los parámetros deseados, para un negocio pequeño los parámetros que vienen por default en el instalador serán más que suficientes. Es importante recordar el password que pongamos durante la instalación.
-5. Instalar MySQL Workbench, éste software facilita las operaciones con la base de datos y será de gran utilidad para administrarla.
-6. Abrir workbench, tome en cuenta que la interfaz está dividida en 3 columnas: "SQL Development", "Data Modeling" y "Server Administration".
-7. Cargar la base de datos de Omoikane, para ésto: haga doble click en "mysql@localhost" en la columna "Server Administration", ahora vaya a "Data export and restore", seleccione la pestaña "Import from disk", seleccione "Import from self-contained file", haga click en "..." y busque el archivo "schemadb.sql" (del paso 3). Por último haga click en "Select all tables" y "Start import".
-8. ¡Felicidades! Si los pasos anteriores se han seguido con éxito, la base de datos estará lista para ser utilizada.
+### Instalación
 
-#### Notas
-- Es posible conectarse a cualquier otro tipo de instalación de MySQL y resultaría útil para configuraciones excentricas, por ejemplo usando LAMP, TurnKey Linux, WAMP, etc.
-- Para un negocio grande, digamos más de 4 cajas de cobro, simplemente utilicen la configuración "Para producción" del instalador
+[Quickstart / Instalación mono-caja](https://github.com/Phesus/Omoikane/wiki/Instalacion#quickstart--instalaci%C3%B3n-r%C3%A1pida-mono-caja)
 
-### Instalación del cliente
-1. Descargar el último instalador de omoikane del [área de releases](https://github.com/Phesus/Omoikane/releases)
-2. Ejecutar el instalador, la instalación de omoikane, se divide en 5 instaladores, lanzado uno después de otro automáticamente: Instalador del Omoikane, Java JRE 7u25, .NET Framework 2.0, DigitalPersona RTE, driver u.are.u 4500
-3. Configurar usando el configurador integrado, para ello ejecutar el siguiente comando en la línea de comandos desde la carpeta donde se instaló el programa:
-
-```
-java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
-```
-
-Por ejemplo, si el programa se instaló en windows, en la carpeta default (c:\Phesus\Omoikane), entonces:
-```
-c:
-cd c:\phesus\omoikane
-java -classpath omoikane.jar omoikane.configuracion.ConfiguratorAppManager
-```
-
-4. En éste punto el sistema inicia y es completamente funcional, sin embargo aún está usando el usuario "Instalador", que es el usuario default. Agregue un usuario con privilegios de `Propietario`, esto es muy importante porqué al agregarse el primer usuario ya no será posible iniciar sesión como `Instalador`.
- 
-5. Utilizar el configurador para establecer los principales parámetros del sistema. La parte más importante de la configuración es establecer los parámetros de conexión a la base de datos, estos parámetros tienen que ser consistentes con los que se introdujeron cuando se configuró la base de datos:
+[Instalación multi-caja](https://github.com/Phesus/Omoikane/wiki/Instalacion#instalaci%C3%B3n-multi-caja)
 
 ## Configuración
 
