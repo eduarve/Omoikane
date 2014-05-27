@@ -218,6 +218,7 @@
     </preUninstallationActionList>
     <allowAddRemoveComponents>1</allowAddRemoveComponents>
     <allowComponentSelection>1</allowComponentSelection>
+    <description>Omoikane punto de venta</description>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <installationLogFile>${installdir}/install.log</installationLogFile>
@@ -225,8 +226,10 @@
     <requestedExecutionLevel>asInvoker</requestedExecutionLevel>
     <requireInstallationByRootUser>1</requireInstallationByRootUser>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
+    <summary>Omoikane punto de venta</summary>
     <uninstallationLogFile>${installdir}/uninstall.log</uninstallationLogFile>
     <vendor>Phesus</vendor>
+    <windowsResourceFileVersion>4.1.2</windowsResourceFileVersion>
     <finalPageActionList>
         <runProgram>
             <program>${installdir}/omoikane-launcher.exe</program>

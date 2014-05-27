@@ -130,7 +130,7 @@ public class Articulos
               cat.btnCerrar.doClick();
             }
         }
-        synchronized(foco){foco.wait()}
+         synchronized(foco){foco.wait()}
         retorno
     }
 

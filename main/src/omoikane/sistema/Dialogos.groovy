@@ -29,6 +29,7 @@ class Dialogos
         try {
                 String msjXLineas = "";
                 int largo = 50, nLetrasLinea = 0;
+                if(mensaje == null) mensaje = "Error desconocido";
                 String[] palabras  = mensaje.split(" ");
 
                 for(int i = 0; i < palabras.length; i++)

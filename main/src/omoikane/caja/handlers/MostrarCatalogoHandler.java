@@ -21,12 +21,21 @@ public class MostrarCatalogoHandler extends ICajaEventHandler {
 
     @Override
     public void handle(Event event) {
+        /*
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 mostrarCatalogo();
             }
         });
+        */
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mostrarCatalogo();
+            }
+        };
+        new Thread(r).start();
     }
 
     private void mostrarCatalogo() {
