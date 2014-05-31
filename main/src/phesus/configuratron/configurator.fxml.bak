@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.9998779296875" prefWidth="488.999977929685" xmlns:fx="http://javafx.com/fxml" fx:controller="phesus.configuratron.ConfiguratorController">
+  <children>
+    <Accordion prefHeight="271.0" prefWidth="572.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="72.0">
+      <expandedPane>
+        <TitledPane fx:id="x6" animated="false" prefHeight="180.0" prefWidth="432.0" text="General">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="457.0">
+              <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.49993896484375" layoutX="12.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Label layoutX="20.0" layoutY="28.0" text="Resolución de pantalla" />
+                <Label alignment="CENTER" layoutY="28.0" prefWidth="25.0" text="x" textAlignment="CENTER" AnchorPane.leftAnchor="281.0" />
+                <TextField fx:id="resolucionAncho" layoutY="25.0" prefWidth="124.0" AnchorPane.leftAnchor="150.0" />
+                <TextField layoutY="25.0" prefWidth="124.0" AnchorPane.leftAnchor="314.0" AnchorPane.rightAnchor="19.0" />
+                <TextField layoutY="56.0" prefWidth="287.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="20.0" />
+                <Label layoutX="19.0" layoutY="59.0" text="ID de Sucursal" />
+                <Label layoutX="20.0" layoutY="93.0" text="ID de Caja" />
+                <TextField layoutY="90.0" prefWidth="287.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="20.0" />
+                <Label layoutX="20.0" layoutY="125.0" text="Tipo de Corte" />
+                <ChoiceBox layoutY="123.0" prefWidth="287.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="20.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.49993896484375" layoutX="12.0" layoutY="169.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Label layoutX="18.0" layoutY="189.0" text="URL del Servidor" />
+                <Button layoutX="379.0" layoutY="215.0" minHeight="16.0" mnemonicParsing="false" prefHeight="22.0" style="-fx-base: blue" text="Probar" textFill="WHITE" />
+                <TextField fx:id="urlServidor" layoutX="123.0" layoutY="186.0" prefWidth="249.0" />
+                <Label layoutX="18.0" layoutY="218.0" text="URL base de datos" />
+                <Button layoutX="379.0" layoutY="186.0" minHeight="16.0" mnemonicParsing="false" prefHeight="22.0" style="-fx-base: blue" text="Probar" />
+                <TextField layoutX="123.0" layoutY="245.0" prefWidth="312.0" />
+                <Label layoutX="18.0" layoutY="248.0" text="Usuario BD" />
+                <TextField layoutX="123.0" layoutY="275.0" prefWidth="311.0001220703125" />
+                <Label layoutX="17.0" layoutY="278.0" text="Contraseña BD" />
+                <TextField layoutX="123.0" layoutY="215.0" prefWidth="249.0" />
+              </children>
+            </AnchorPane>
+          </content>
+        </TitledPane>
+      </expandedPane>
+      <panes>
+        <fx:reference source="x6" />
+        <TitledPane animated="false" text="Periféricos">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="166.0" layoutX="13.0" layoutY="164.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutX="13.0" layoutY="89.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutX="13.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Label layoutX="22.0" layoutY="271.0" text="Paridad" />
+                <TextField layoutX="343.0" layoutY="268.0" prefWidth="88.0" />
+                <Label layoutX="237.0" layoutY="271.0" text="Stop char" />
+                <TextField layoutX="132.0" layoutY="49.0" prefWidth="299.0" />
+                <Label layoutX="22.0" layoutY="25.0" text="Impresora de ticket" />
+                <ToggleButton layoutX="185.0" layoutY="23.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,2;&#10;" text="Inactiva">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="x4" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton layoutX="132.0" layoutY="96.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;" text="Activo">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="x1" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton layoutX="185.0" layoutY="96.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;" text="Inactivo" toggleGroup="$x1" />
+                <ToggleButton layoutX="132.0" layoutY="23.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,2;&#10;" text="Activa" toggleGroup="$x4" />
+                <ToggleButton layoutX="132.0" layoutY="173.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;&#10;&#10;" text="Activa">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="x2" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton layoutX="185.0" layoutY="173.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactiva" toggleGroup="$x2" />
+                <Label layoutX="22.0" layoutY="52.0" text="Puerto" />
+                <Label layoutX="22.0" layoutY="99.0" text="Scanner" />
+                <TextField layoutX="132.0" layoutY="125.0" prefWidth="88.0" />
+                <Label layoutX="22.0" layoutY="128.0" text="Puerto" />
+                <TextField layoutX="343.0" layoutY="125.0" prefWidth="87.9998779296875" />
+                <Label layoutX="237.0" layoutY="128.0" text="Baud rate" />
+                <Label layoutX="22.0" layoutY="175.0" text="Báscula" />
+                <TextField layoutX="132.0" layoutY="204.0" prefWidth="88.0" />
+                <Label layoutX="22.0" layoutY="207.0" text="Puerto" />
+                <TextField layoutX="343.0" layoutY="204.0" prefWidth="88.0" />
+                <Label layoutX="237.0" layoutY="207.0" text="Baud rate" />
+                <TextField layoutX="132.0" layoutY="236.0" prefWidth="88.0" />
+                <Label layoutX="22.0" layoutY="239.0" text="Bits" />
+                <TextField layoutX="343.0" layoutY="236.0" prefWidth="88.0" />
+                <Label layoutX="237.0" layoutY="239.0" text="Stop bit" />
+                <TextField layoutX="132.0" layoutY="268.0" prefWidth="88.0" />
+                <Label layoutX="22.0" layoutY="302.0" text="Comando" />
+                <TextField layoutX="132.0" layoutY="299.0" prefWidth="299.0" />
+              </children>
+            </AnchorPane>
+          </content>
+        </TitledPane>
+        <TitledPane fx:id="x3" animated="false" text="Plantillas">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutX="12.0" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <TextArea layoutX="20.0" layoutY="47.0" prefHeight="125.0" prefWidth="418.0" />
+                <Label layoutX="14.0" layoutY="192.0" text="Plantilla del ticket" />
+                <Label layoutX="12.0" layoutY="14.0" text="Plantilla del corte de caja" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutX="14.0" layoutY="211.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <TextArea layoutX="22.0" layoutY="223.0" prefHeight="125.0" prefWidth="418.0" />
+              </children>
+            </AnchorPane>
+          </content>
+        </TitledPane>
+      </panes>
+    </Accordion>
+    <Label text="Configuración" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="16.0">
+      <effect>
+        <Reflection fraction="0.5158730158730159" topOpacity="0.2857142857142857" />
+      </effect>
+      <font>
+        <Font name="System Bold" size="26.0" />
+      </font>
+    </Label>
+    <Button mnemonicParsing="false" text="Aplicar Cambios" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="90.0">
+      <font>
+        <Font size="14.0" fx:id="x5" />
+      </font>
+    </Button>
+    <Button font="$x5" mnemonicParsing="false" text="Cerrar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+    <Label layoutX="14.0" layoutY="540.0" text="Configuratron 1.0. ORC @ Phesus '12">
+      <effect>
+        <Reflection fraction="0.5158730158730159" topOpacity="0.2857142857142857" />
+      </effect>
+    </Label>
+  </children>
+</AnchorPane>

@@ -14,8 +14,15 @@ package omoikane.sistema
  import omoikane.nadesicoiLegacy.Db
  import omoikane.principal.Principal
  import omoikane.repository.VentaRepo
+ import phesus.configuratron.model.TipoImpresora
 
  import javax.persistence.EntityManagerFactory
+ import javax.print.Doc
+ import javax.print.DocFlavor
+ import javax.print.DocPrintJob
+ import javax.print.PrintService
+ import javax.print.SimpleDoc
+ import java.awt.print.PrinterJob
  import java.io.*;
  import groovy.text.GStringTemplateEngine
 
@@ -39,6 +46,9 @@ package omoikane.sistema
     def generado
     def impresora = omoikane.principal.Principal.impresoraActiva
     def protocolo = omoikane.principal.Principal.puertoImpresion
+    TipoImpresora tipoImpresora = omoikane.principal.Principal.tipoImpresora
+    def nombreImpresora = omoikane.principal.Principal.nombreImpresora
+
     public Logger logger = Logger.getLogger(Comprobantes.class);
 
      @PersistenceContext
@@ -294,12 +304,10 @@ package omoikane.sistema
         Thread.start {
             if (impresora)
             {
-            try {
-                FileOutputStream os = new FileOutputStream("$protocolo");
-                PrintStream ps = new PrintStream(os);
-                ps.println(generado);
-                ps.close();
-            } catch (FileNotFoundException fnf) { Dialogos.error("Error al imprimir al puerto $protocolo", fnf); }
+                if(tipoImpresora == TipoImpresora.PARALELO)
+                    imprimirConPuertoParalelo()
+                else
+                    imprimirConPuertoUSB()
             }
             else
             {
@@ -311,11 +319,46 @@ package omoikane.sistema
         }
     }
 
-    public void abrirCajon() {
+     public void abrirCajon() {
         generado = "" + (27 as char)+(112 as char)+(0 as char)+(25 as char)+(250 as char);
 
         imprimir();
     }
+
+    private void imprimirConPuertoParalelo() {
+        try {
+            FileOutputStream os = new FileOutputStream("$protocolo");
+            PrintStream ps = new PrintStream(os);
+            ps.println(generado);
+            ps.close();
+        } catch (FileNotFoundException fnf) { Dialogos.error("Error al imprimir al puerto $protocolo", fnf); }
+    }
+
+     private void imprimirConPuertoUSB() {
+         PrintService printService = getPrintService(nombreImpresora);
+         try {
+             DocPrintJob job = printService.createPrintJob();
+
+             byte[] by = generado.getBytes();
+             DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+             Doc doc = new SimpleDoc(by, flavor, null);
+             job.print(doc, null);
+         } catch (Exception e) {
+             logger.error("Hubo un problema con la impresión", e);
+         }
+     }
+
+     private PrintService getPrintService(String serviceName) {
+         PrintService[] ps = PrinterJob.lookupPrintServices();
+         for (int i = 0; i < ps.length; i++) {
+             if (ps[i].getName().indexOf(serviceName) >= 0) {
+                 return ps[i];
+             }
+         }
+         logger.info("Impresora no encontrada. "+serviceName);
+
+         return null;
+     }
 
 }
   

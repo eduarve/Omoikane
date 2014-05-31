@@ -5,6 +5,7 @@
 
 package omoikane.exceptions;
 
+import java.awt.*;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -16,6 +17,7 @@ public class CEHandler extends Handler {
 
     @Override
     public void publish(LogRecord record) {
+        Toolkit.getDefaultToolkit().beep();
         ExceptionWindow ew = new ExceptionWindow();
         ew.getLblTituloError().setText(record.getMessage());
         ew.getTxtExcepcion().setText(Misc.getStackTraceString(record.getThrown()));

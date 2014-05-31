@@ -69,12 +69,12 @@ class Caja implements Serializable {
                     def res  = serv.getCaja(txtID);
                     if(res == 0) {
                         Dialogos.lanzarAlerta("No exíste esa caja")
-                    }else{
+                    } else {
                         if(serv.cajaAbierta(txtID) != false) { Dialogos.lanzarAlerta("La caja ya estaba abierta!!!")  }else{
                             def caja = serv.getCaja(txtID)
 
                             serv.abrirCaja(txtID)
-                            retorna = true
+                            retorna = txtID as Integer == IDCaja as Integer
                             Dialogos.lanzarAlerta("Se inició la sesión de la caja correctamente")
                             form.dispose()
 

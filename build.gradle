@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.1.2'
+version = '4.2.0'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -117,6 +117,7 @@ dependencies {
         	'com.dooapp.fxform2:core:2.2.6',
         	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
         	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
+            'org.flywaydb:flyway-core:3.0',
         /* Modulo Etiquetas */
         	'net.sf.barcode4j:barcode4j:2.1',
         	'com.kenai.nbpwr:org-apache-batik-all:1.7-201002241055',
@@ -135,9 +136,9 @@ dependencies {
 				  'lib/dpfpverification.jar',
 				  'lib/dpotapi.jar',
 				  'lib/dpotjni.jar',
-                  'lib/Configuratron.jar',
                   'lib/FXExperienceControls.jar',
-                  'lib/JavaFxDialog.jar')
+                  'lib/JavaFxDialog.jar',
+				  'lib/jfxrt.jar')
 	runtime files('lib/OmoikaneMedia.jar',
                   'lib/OmoikaneMedia2.jar',
 				  'lib/nimbus.jar')
@@ -169,6 +170,7 @@ dependencies {
                  	'com.dooapp.fxform2:core:2.2.6',
                  	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
                  	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
+                    'org.flywaydb:flyway-core:3.0',
                  /* Modulo Etiquetas */
                  	'net.sf.barcode4j:barcode4j:2.1',
                  	'com.kenai.nbpwr:org-apache-batik-all:1.7-201002241055',
@@ -194,18 +196,10 @@ jar {
 task distribuir(dependsOn: 'installApp') {
 	miDistDir        = new File("dist")
 
-	//Copy griaule related files
-	/* Descontinuado el 09/07/2012
-	copy {
-	   from "libgrfingerjava.so", 
-			"GrFingerLicenseAgreement.txt",
-			"GrFingerJavaLicenseAgreement.txt",
-			"pthreadVC2.dll",
-			"CapPluginHamster.dll",
-			"grfingerjava.dll"
-	   into "$miDistDir"
-	}
-	*/
+    ant.propertyfile(
+            file: "omoikane.properties") {
+        entry( key: "version", value: version)
+    }
 
     //Copy DigitalPersona related files
     copy {

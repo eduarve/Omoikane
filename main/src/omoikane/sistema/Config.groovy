@@ -13,6 +13,7 @@ import groovy.inspect.swingui.*
  import omoikane.principal.Principal
  import omoikane.sistema.huellas.ContextoFPSDK
  import omoikane.sistema.seguridad.AuthContext
+ import phesus.configuratron.model.TipoImpresora
 
  class Config {
     def    prefs
@@ -51,6 +52,8 @@ import groovy.inspect.swingui.*
             Principal.IDCaja                  = Integer.valueOf(config.idCaja[0].text())
             Principal.puertoImpresion         = String .valueOf(config.puertoImpresion[0].text())
             Principal.impresoraActiva         = Boolean.valueOf(config.impresoraActiva[0].text())
+            Principal.nombreImpresora         = String .valueOf(config.nombreImpresora[0].text())
+            Principal.tipoImpresora           = TipoImpresora.valueOf( config.tipoImpresora[0].text() )
             Principal.URLMySQL                = String .valueOf(config.URLMySQL[0].text())
             Principal.loginJasper             = String .valueOf(config.loginJasper[0].text())
             Principal.passJasper              = String .valueOf(config.passJasper[0].text())

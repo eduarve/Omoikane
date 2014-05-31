@@ -14,6 +14,9 @@
         puerto serial a usb  linux : /dev/ttyUSBX   windows: COMX
         X es el valor del puerto en el que se encuentra
 
+    29/05/2014
+    - Nuevo campo nombreImpresora. Almacena el nombre del sistema dado a un impresora seleccionada para imprimir tickets
+
 	15/02/2014
 	- Agregué nodo HA. Activa y desactiva las características de alta disponibilidad, tales como catálogo de
     productos sin conexión.

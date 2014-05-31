@@ -18,6 +18,9 @@ import omoikane.sistema.Usuarios as SisUsuarios
 
 import omoikane.sistema.cortes.ContextoCorte
 import org.apache.log4j.Logger
+import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.FlywayException
+import org.flywaydb.core.api.MigrationInfo
 import org.springframework.context.support.ClassPathXmlApplicationContext
 import org.springframework.context.ApplicationContext
 import omoikane.exceptions.UEHandler
@@ -25,6 +28,7 @@ import omoikane.sistema.huellas.ContextoFPSDK.SDK
 import omoikane.sistema.huellas.HuellasCache
 import omoikane.sistema.seguridad.AuthContext
 import phesus.configuratron.ConfiguratorApp
+import phesus.configuratron.model.TipoImpresora
 import sun.awt.CGraphicsEnvironment
 
 import javax.persistence.EntityManager
@@ -50,7 +54,7 @@ import java.util.concurrent.CountDownLatch
 public class Principal {
         static Escritorio escritorio
         static MenuPrincipal        menuPrincipal;
-        static def        config
+        static omoikane.sistema.Config      config
         private static def splash;
         public static int                   IDAlmacen
         public static int                   IDCaja
@@ -79,9 +83,11 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false;
-        public static final String          VERSION                 = "4.1.2";
+        public static final String          VERSION                 = "4.2.0";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
+        public static String                nombreImpresora
+        public static TipoImpresora         tipoImpresora
 
     public static void main(args)
         {
@@ -144,6 +150,8 @@ public class Principal {
                 splash.detener()
 
                 iniciarSesion()
+                //Verifica la versión del esquema de la BD
+                checkDBMigrations();
                 menuPrincipal.iniciar()
 
                 if(scannerActivo){
@@ -270,5 +278,46 @@ public class Principal {
     private static void initAWT() {
         System.setProperty("javafx.macosx.embedded", "true");
         java.awt.Toolkit.getDefaultToolkit();
+    }
+
+    /**
+     * Comprueba base de datos y migraciones
+     */
+    public static void checkDBMigrations() {
+
+        try {
+            Flyway flyway = new Flyway();
+            flyway.setDataSource(URLMySQL, loginJasper, passJasper);
+
+            //Flyway o esquema BD no inicializado
+            if(flyway.info().current() == null) {
+                String[] options = [ "Instalación nueva", "Actualización", "Cancelar" ];
+                int decision = JOptionPane.showOptionDialog(null, "El esquema de la BD no ha sido inicializado. ¿Que tipo de instalación es esta?", "Inicializar BD",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options, options[2]);
+
+                if(decision == 0) {
+                    //Inicializar desde la primera versión (nueva instalación)
+                    flyway.setInitVersion("0");
+                    flyway.init();
+                    flyway.migrate();
+                } else if(decision == 1) {
+                    // Inicializar en la última versión (BD legada, en funcionamiento)
+                    MigrationInfo[] mi = flyway.info().pending();
+                    MigrationInfo lastMigration = mi[mi.length-1];
+                    flyway.setInitVersion(lastMigration.getVersion());
+                    flyway.init();
+                    flyway.migrate();
+                } else if(decision == 2) {
+                    //Hacer nada
+                    throw new FlywayException("Flyway no inicializado, la tabla de metadatos de flyway no exíste.");
+                }
+            }
+
+            flyway.migrate();
+
+        } catch(FlywayException fe) {
+            logger.error("Esquema BD no inicializado", fe);
+        }
     }
 }

@@ -8,7 +8,9 @@
 
 package omoikane.sistema
 
-import omoikane.formularios.*;
+import omoikane.formularios.*
+
+ import java.awt.Toolkit;
 
 class Dialogos
 {
@@ -25,6 +27,7 @@ class Dialogos
 
     static def lanzarDialogoError(parent, mensaje, detalles)
     {
+        Toolkit.getDefaultToolkit().beep();
         println "[Error: $mensaje]"
         try {
                 String msjXLineas = "";
@@ -53,6 +56,7 @@ class Dialogos
 
     static def lanzarAlerta(mensaje)
     {
+        Toolkit.getDefaultToolkit().beep();
         def alerta = new omoikane.formularios.Alerta(null, true)
         alerta.setMensaje(mensaje)
         alerta.setVisible(true)
