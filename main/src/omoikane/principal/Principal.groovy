@@ -83,7 +83,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false;
-        public static final String          VERSION                 = "4.2.0";
+        public static final String          VERSION                 = "4.1.3";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
