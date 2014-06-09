@@ -197,7 +197,7 @@ task distribuir(dependsOn: 'installApp') {
 	miDistDir        = new File("dist")
 
     ant.propertyfile(
-            file: "omoikane.properties") {
+            file: "$miDistDir/omoikane.properties") {
         entry( key: "version", value: version)
     }
 

@@ -62,19 +62,38 @@ public class CEAppender extends AppenderSkeleton {
 
     private void errorWindow(final LoggingEvent event) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                //System.out.println(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
-                JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
-                String stackTrace = "";
-                if(event.getThrowableInformation() != null && event.getThrowableInformation().getThrowable() != null)
-                    stackTrace = Misc.getStackTraceString(event.getThrowableInformation().getThrowable());
-                else
-                    stackTrace = "Sin stacktrace";
-                Dialogos.lanzarDialogoError(mainJFrame, event.getMessage(), stackTrace);
-            }
-        });
+        final Object monitor = new Object();
+
+        synchronized (monitor) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (monitor) {
+                        try {
+                            //System.out.println(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
+                            JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
+                            String stackTrace = "";
+                            if(event.getThrowableInformation() != null && event.getThrowableInformation().getThrowable() != null)
+                                stackTrace = Misc.getStackTraceString(event.getThrowableInformation().getThrowable());
+                            else
+                                stackTrace = "Sin stacktrace";
+                            Dialogos.lanzarDialogoError(mainJFrame, event.getMessage(), stackTrace);
+                            monitor.notify();
+                        } catch (Exception e) {
+                            monitor.notify();
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            if(!SwingUtilities.isEventDispatchThread())
+                try {
+                    monitor.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        }
+
     }
 
 }

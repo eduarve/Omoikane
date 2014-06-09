@@ -15,7 +15,10 @@
         X es el valor del puerto en el que se encuentra
 
     29/05/2014
-    - Nuevo campo nombreImpresora. Almacena el nombre del sistema dado a un impresora seleccionada para imprimir tickets
+    - Nuevo nodo nombreImpresora. Almacena el nombre del sistema dado a un impresora seleccionada para imprimir tickets
+	- Nuevo nodo tipoImpresora. Se refiere al tipo de impresora que se utiliza para imprimir tickets. Opciones.
+		- "USB": Se refiere a cualquier impresora con un driver instalado, es decir, que aparezca en el cuadro de impresoras del sistema.
+		- "PARALELO": Se refiere a una impresora conectada al puerto paralelo físico o virtual, aunque no haya sido instalada mediante driver.
 
 	15/02/2014
 	- Agregué nodo HA. Activa y desactiva las características de alta disponibilidad, tales como catálogo de
@@ -59,6 +62,9 @@
 
     <impresoraActiva>false</impresoraActiva>
     <puertoImpresion>LPT1:</puertoImpresion>
+    <tipoImpresora>PARALELO</tipoImpresora>
+    <nombreImpresora></nombreImpresora>
+
     <scannerActivo>false</scannerActivo>
     <ScannerPort>COM4</ScannerPort>
     <ScannerBaudRate>9600</ScannerBaudRate>

@@ -364,8 +364,8 @@ public class CajaLogicImpl implements ICajaLogic {
         cargarCliente(venta);
         for( LegacyVentaDetalle lvd : venta.getItems()) {
             ProductoModel productoModel = new ProductoModel();
-            productoToProductoModel(productosDAO.findById(new Long(lvd.getIdArticulo())), productoModel);
             productoModel.cantidadProperty().set(BigDecimal.valueOf(lvd.getCantidad()));
+            productoToProductoModel(productosDAO.findById(new Long(lvd.getIdArticulo())), productoModel);
             productoModel.setVentaDetalleEntity( lvd );
             getController().getModel().getVenta().add(productoModel);
         }

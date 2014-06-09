@@ -38,7 +38,8 @@ public class ProductoModel {
         id         = new SimpleLongProperty(0l);
         concepto   = new SimpleStringProperty("Concepto vacío");
         setCodigo   ( new SimpleStringProperty(null) );
-        cantidad   = new SimpleObjectProperty<>(new BigDecimal(0));
+        //Los métodos SET agregan bindings necesarios
+        setCantidad(new SimpleObjectProperty<>(new BigDecimal(0)));
         setPrecio(new SimpleObjectProperty<>(new BigDecimal(0)));
         precioBase = new SimpleObjectProperty<>(new BigDecimal(0));
         impuestos      = new SimpleListProperty<>(FXCollections.<ImpuestoModel>observableArrayList());

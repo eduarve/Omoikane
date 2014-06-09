@@ -165,7 +165,7 @@ public class CatalogoVentas extends javax.swing.JInternalFrame {
                     } catch(Exception e) { omoikane.sistema.Dialogos.lanzarDialogoError(null, "Error en el registro: Fecha inválida", omoikane.sistema.Herramientas.getStackTraceString(e)); }
                 }
 
-                setQueryTable("SELECT ventas.id_venta,ventas.fecha_hora,ventas.id_venta,ventas.id_caja,almacenes.descripcion,clientes.nombre,ventas.total FROM ventas,cliente,almacenes WHERE ventas.id_almacen="+IDAlmacen+" AND ventas.id_cliente=cliente.id"+whereFecha);
+                setQueryTable("SELECT ventas.id_venta,ventas.fecha_hora,ventas.id_venta,ventas.id_caja,almacenes.descripcion,cliente.nombre,ventas.total FROM ventas,cliente,almacenes WHERE ventas.id_almacen="+IDAlmacen+" AND ventas.id_cliente=cliente.id"+whereFecha);
                 jTable1.setModel(modeloTabla);
 
                 jProgressBar1.setIndeterminate(false);
