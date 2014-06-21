@@ -36,6 +36,6 @@ public class DefaultScanMan extends ScanMan {
             super.robot.keyPress(KeyEvent.VK_ENTER);
             super.robot.keyRelease(KeyEvent.VK_ENTER);
 
-        } catch(Exception exc) { Dialogos.error("Error capturar desde escáner de códigos de barras", exc); }
+        } catch(Exception exc) { Dialogos.error("Error al capturar desde escáner de códigos de barras", exc); }
     }
 }

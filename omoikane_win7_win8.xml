@@ -1,7 +1,7 @@
 <project>
     <shortName>omoikane</shortName>
     <fullName>Omoikane</fullName>
-    <version>4.1.3</version>
+    <version>4.1.3-Win8</version>
     <installerFilename>${project.shortName}-${project.version}-${platform_name}-installer.${platform_exec_suffix}</installerFilename>
     <readmeFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/README.md</readmeFile>
     <licenseFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/LICENSE</licenseFile>
@@ -77,6 +77,9 @@
                         </distributionFile>
                         <distributionFile>
                             <origin>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/dist/omoikane.properties</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/schemadb.sql</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -196,6 +199,12 @@
                     <ruleEvaluationLogic>or</ruleEvaluationLogic>
                     <showMessageOnError>0</showMessageOnError>
                 </runProgram>
+                <runProgram>
+                    <abortOnError>0</abortOnError>
+                    <program>${installdir.dos}\mysql\bin\mysql.exe</program>
+                    <programArguments>-u root &lt; ${installdir.dos}\schemadb.sql</programArguments>
+                    <showMessageOnError>0</showMessageOnError>
+                </runProgram>
             </postInstallationActionList>
         </component>
     </componentList>
@@ -206,18 +215,19 @@
             <programArguments>STOP MySQLOmoikane</programArguments>
         </runProgram>
         <runProgram>
-            <program>${installdir}/mysql/bin/mysqld.exe</program>
-            <programArguments>--remove MySQLOmoikane --defaults-file="${installdir}/mysql/my.ini"</programArguments>
+            <program>${installdir.dos}/mysql/bin/mysqld.exe</program>
+            <programArguments>--remove MySQLOmoikane --defaults-file="${installdir.dos}/mysql/my.ini"</programArguments>
         </runProgram>
     </preUninstallationActionList>
     <allowAddRemoveComponents>1</allowAddRemoveComponents>
     <allowComponentSelection>1</allowComponentSelection>
+    <defaultUnixDirectoryPermissions>777</defaultUnixDirectoryPermissions>
+    <defaultUnixFilePermissions>777</defaultUnixFilePermissions>
     <description>Omoikane punto de venta</description>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <installationLogFile>${installdir}/install.log</installationLogFile>
     <projectSchemaVersion>1.0</projectSchemaVersion>
-    <requestedExecutionLevel>highestAvailable</requestedExecutionLevel>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
     <summary>Omoikane punto de venta</summary>
     <uninstallationLogFile>${installdir}/uninstall.log</uninstallationLogFile>
@@ -236,8 +246,8 @@
             <name>installdir</name>
             <description>Installer.Parameter.installdir.description</description>
             <explanation>Installer.Parameter.installdir.explanation</explanation>
-            <value>${platform_install_prefix}/${project.shortName}</value>
-            <default>${platform_install_prefix}/${project.shortName}</default>
+            <value>${env(SYSTEMDRIVE)}/${project.shortName}</value>
+            <default>${env(SYSTEMDRIVE)}/${project.shortName}</default>
             <allowEmptyValue>0</allowEmptyValue>
             <cliOptionName>prefix</cliOptionName>
             <mustBeWritable>1</mustBeWritable>

@@ -75,6 +75,7 @@ import groovy.inspect.swingui.*
                         stopBits: String.valueOf(config.bascula.@stopBits[0]),
                         parity:   String.valueOf(config.bascula.@parity[0]),
                         stopChar: String.valueOf(config.bascula.@stopChar[0]),
+
                         weightCommand: cmd
                 ];
             }

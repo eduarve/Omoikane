@@ -16,6 +16,7 @@ import java.math.BigDecimal;
  */
 @Embeddable
 public class VentaDetalleImpuesto {
+
     @Column
     private BigDecimal base;
     @Column
@@ -66,4 +67,5 @@ public class VentaDetalleImpuesto {
     public void setImpuestoId(Long impuestoId) {
         this.impuestoId = impuestoId;
     }
+
 }

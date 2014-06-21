@@ -217,7 +217,7 @@
     <enableTimestamp>1</enableTimestamp>
     <installationLogFile>${installdir}/install.log</installationLogFile>
     <projectSchemaVersion>1.0</projectSchemaVersion>
-    <requestedExecutionLevel>highestAvailable</requestedExecutionLevel>
+    <requestedExecutionLevel>asInvoker</requestedExecutionLevel>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
     <summary>Omoikane punto de venta</summary>
     <uninstallationLogFile>${installdir}/uninstall.log</uninstallationLogFile>

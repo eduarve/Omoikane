@@ -51,7 +51,7 @@
 	- tipoCorte
 		1: Est�ndar, 2: Doble
 --><document>
-    <resolucionPantalla alto="720" ancho="1280"/>
+    <resolucionPantalla alto="720" ancho="1024"/>
     <cacheSTable adelante="5" atras="3"/>
 
 

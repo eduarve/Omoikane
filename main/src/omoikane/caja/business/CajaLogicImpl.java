@@ -440,6 +440,7 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     private void syncLegacyVentaDetalleWithModel(Integer idCaja, Integer idAlmacen, ProductoModel producto, LegacyVentaDetalle lvd) {
+        lvd.setIdRenglon ( producto.getVentaDetalleEntity().getIdRenglon() );
         lvd.setIdAlmacen ( idAlmacen );
         lvd.setIdArticulo( producto.getLongId().intValue() );
         lvd.setIdCaja    ( idCaja );

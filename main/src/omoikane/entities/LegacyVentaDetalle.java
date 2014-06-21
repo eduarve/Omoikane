@@ -56,12 +56,14 @@ public class LegacyVentaDetalle implements Serializable {
     private Double total;
     @Column(name = "id_linea")
     private Integer idLinea;
+
     @ElementCollection()
     @LazyCollection(LazyCollectionOption.FALSE)
     @CollectionTable(
             name="ventas_detalles_impuestos",
             joinColumns=@JoinColumn(name="id_renglon")
     )
+    @OrderColumn
     private List<VentaDetalleImpuesto> ventaDetalleImpuestos;
 
     public LegacyVentaDetalle() {

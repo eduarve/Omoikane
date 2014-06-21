@@ -82,8 +82,8 @@ public class Principal {
         final  static def                   SHOW_UNHANDLED_EXCEPTIONS = true
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
-        public static final Boolean         DEBUG                   = false;
-        public static final String          VERSION                 = "4.1.3.1";
+        public static final Boolean         DEBUG                   = false
+        public static final String          VERSION                 = "4.1.3.4";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -126,10 +126,16 @@ public class Principal {
                 /*
                     Verifico la conexión a la base de datos, si no hay se procede al comportamiento para casos sin conexión
                  */
-                logger.trace("Verificando conexión con BD...")
+                logger.trace("Verificando conexión con BD y migraciones...")
                 try {
+                    //Verifica la conexión con la BD y la versión del esquema de la BD
+                    checkDBMigrations();
+                    //Verificar conexión consultando tabla cajas
                     checkDatabaseAvailability();
+                } catch (FlywayException fe) {
+                    logger.error("Base de datos no actualizada para ésta versión de omoikane.", fe);
                 } catch( Exception e ) {
+                    logger.trace("Error relacionado con BD", e);
                     disconnectedBehavior();
                     return;
                 }
@@ -150,8 +156,7 @@ public class Principal {
                 splash.detener()
 
                 iniciarSesion()
-                //Verifica la versión del esquema de la BD
-                checkDBMigrations();
+
                 menuPrincipal.iniciar()
 
                 if(scannerActivo){
@@ -285,39 +290,37 @@ public class Principal {
      */
     public static void checkDBMigrations() {
 
-        try {
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(URLMySQL, loginJasper, passJasper);
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(URLMySQL, loginJasper, passJasper);
 
-            //Flyway o esquema BD no inicializado
-            if(flyway.info().current() == null) {
-                String[] options = [ "Instalación nueva", "Actualización", "Cancelar" ];
-                int decision = JOptionPane.showOptionDialog(null, "El esquema de la BD no ha sido inicializado. ¿Que tipo de instalación es esta?", "Inicializar BD",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                        null, options, options[2]);
+        //Detectar si Flyway o esquema BD no inicializado
+        if(flyway.info().current() == null) {
+            splash.detener();
+            String[] options = [ "Instalación nueva", "Actualización", "Cancelar" ];
+            int decision = JOptionPane.showOptionDialog(null, "El esquema de la BD no ha sido inicializado. ¿Que tipo de instalación es esta?", "Inicializar BD",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, options, options[2]);
+            splash.iniciar();
 
-                if(decision == 0) {
-                    //Inicializar desde la primera versión (nueva instalación)
-                    flyway.setInitVersion("0");
-                    flyway.init();
-                    flyway.migrate();
-                } else if(decision == 1) {
-                    // Inicializar en la última versión (BD legada, en funcionamiento)
-                    MigrationInfo[] mi = flyway.info().pending();
-                    MigrationInfo lastMigration = mi[mi.length-1];
-                    flyway.setInitVersion(lastMigration.getVersion());
-                    flyway.init();
-                    flyway.migrate();
-                } else if(decision == 2) {
-                    //Hacer nada
-                    throw new FlywayException("Flyway no inicializado, la tabla de metadatos de flyway no exíste.");
-                }
+            if(decision == 0) {
+                //Inicializar desde la primera versión (nueva instalación)
+                flyway.setInitVersion("0");
+                flyway.init();
+                flyway.migrate();
+            } else if(decision == 1) {
+                // Inicializar en la última versión (BD legada, en funcionamiento)
+                MigrationInfo[] mi = flyway.info().pending();
+                MigrationInfo lastMigration = mi[mi.length-1];
+                flyway.setInitVersion(lastMigration.getVersion());
+                flyway.init();
+                flyway.migrate();
+            } else if(decision == 2) {
+                //Hacer nada
+                throw new FlywayException("Flyway no inicializado, la tabla de metadatos de flyway no exíste.");
             }
-
-            flyway.migrate();
-
-        } catch(FlywayException fe) {
-            logger.error("Esquema BD no inicializado", fe);
         }
+
+        flyway.migrate();
+
     }
 }

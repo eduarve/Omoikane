@@ -1,6 +1,6 @@
 <project>
     <shortName>omoikane</shortName>
-    <fullName>Omoikane</fullName>
+    <fullName>Omoikane_Win7_Win8</fullName>
     <version>4.1.3</version>
     <installerFilename>${project.shortName}-${project.version}-${platform_name}-installer.${platform_exec_suffix}</installerFilename>
     <readmeFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/README.md</readmeFile>
@@ -183,8 +183,8 @@
                 </iniFileSet>
                 <runProgram>
                     <explanation>Instalando servicio de MySQL</explanation>
-                    <program>${installdir}/mysql/bin/mysqld.exe</program>
-                    <programArguments>--install MySQLOmoikane --defaults-file="${installdir}/mysql/my.ini"</programArguments>
+                    <program>${installdir.dos}\mysql\bin\mysqld.exe</program>
+                    <programArguments>--install MySQLOmoikane --defaults-file=${installdir.dos}\mysql\my.ini</programArguments>
                     <progressText>Instalando servicio de MySQL</progressText>
                 </runProgram>
                 <runProgram>
@@ -217,7 +217,7 @@
     <enableTimestamp>1</enableTimestamp>
     <installationLogFile>${installdir}/install.log</installationLogFile>
     <projectSchemaVersion>1.0</projectSchemaVersion>
-    <requestedExecutionLevel>highestAvailable</requestedExecutionLevel>
+    <requireInstallationByRootUser>1</requireInstallationByRootUser>
     <startMenuGroupName>${project.fullName}</startMenuGroupName>
     <summary>Omoikane punto de venta</summary>
     <uninstallationLogFile>${installdir}/uninstall.log</uninstallationLogFile>

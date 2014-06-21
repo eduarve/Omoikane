@@ -197,11 +197,13 @@ public class Articulo implements Serializable, IProductoApreciado {
         return precio;
     }
 
+
     @Transient
     public PrecioOmoikaneLogic getPrecio(Integer listaDePrecios_id) {
         precio = new PrecioOmoikaneLogic( listaDePrecios_id, getBaseParaPrecio(), getImpuestos() );
         return precio;
     }
+
 
     @Override
     public void setPrecio(IPrecio precio) {
