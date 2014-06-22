@@ -41,6 +41,9 @@ import javax.swing.SwingUtilities
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.beans.PropertyChangeListener
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.Statement
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -83,7 +86,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.1.3.4";
+        public static final String          VERSION                 = "4.1.3.5";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -128,10 +131,10 @@ public class Principal {
                  */
                 logger.trace("Verificando conexión con BD y migraciones...")
                 try {
-                    //Verifica la conexión con la BD y la versión del esquema de la BD
-                    checkDBMigrations();
                     //Verificar conexión consultando tabla cajas
                     checkDatabaseAvailability();
+                    //Verifica la conexión con la BD y la versión del esquema de la BD
+                    checkDBMigrations();
                 } catch (FlywayException fe) {
                     logger.error("Base de datos no actualizada para ésta versión de omoikane.", fe);
                 } catch( Exception e ) {
@@ -238,8 +241,18 @@ public class Principal {
 
     static void checkDatabaseAvailability() throws Exception {
 
-        applicationContext.getBean(CajaRepo.class).count();
+        String protocol = omoikane.principal.Principal.URLMySQL +
+                "?user="     + omoikane.principal.Principal.loginJasper +
+                "&password=" + omoikane.principal.Principal.passJasper  +
+                "&useOldAliasMetadataBehavior=true&useCompression=true";
 
+        Connection conn = DriverManager.getConnection(protocol);
+
+        Statement control   = conn.createStatement();
+        control.executeQuery("SELECT CURRENT_TIMESTAMP();").first();
+        control.close();
+
+        conn.close();
     }
 
     static def iniciarSesion() throws Exception {

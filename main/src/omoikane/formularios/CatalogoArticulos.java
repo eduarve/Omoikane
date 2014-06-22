@@ -177,6 +177,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
     }
 
     public void setQueryTable(String query) {
+        System.out.println( "==="+query);
         txtQuery = query;
 
         modelo.setQuery(query);

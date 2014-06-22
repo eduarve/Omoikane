@@ -1,5 +1,7 @@
 package omoikane.producto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -11,8 +13,13 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 
-@Entity
-@IdClass(PrecioAlternoPK.class)
+/**
+ * Nota: Ésta clase estaba mapeada con Hibernate, debido a que no son necesarias consultas transaccionales
+ * con ésta clase (tabla) decidí volver la colección precios alternos un campo de metadatos en la tabla Articulo.
+ * Ésta clase sirve como POJO para contener un precio alterno.
+ */
+//@Entity
+//@IdClass(PrecioAlternoPK.class)
 public class PrecioAlterno {
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,9 @@
 package omoikane.producto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,6 +48,24 @@ public class BaseParaPrecio implements Serializable {
     // Ésta columna contiene una cadena con el formato (ID Lista de precio):(factor de utilidad)[, ...]
     @Column
     private String preciosAlternos;
+
+    /**
+     * Analiza la cadena "preciosAlternos" para generar un mapa.
+     * @return Map<"ID Lista de Precios":Integer, "Factor de utilidad":BigDecimal>
+     */
+    public HashMap<Integer, BigDecimal> getPreciosAlternos() {
+        HashMap mapa = new HashMap<Integer, BigDecimal>();
+        if(preciosAlternos != null && !preciosAlternos.isEmpty()) {
+            for ( String precioAlterno : preciosAlternos.split(",") ) {
+                String[] kv = precioAlterno.split(":");
+                mapa.put(
+                        Integer.valueOf( kv[0] ),
+                        new BigDecimal ( kv[1] )
+                );
+            }
+        }
+        return mapa;
+    }
 
     public BaseParaPrecio() {
     }
@@ -103,14 +124,6 @@ public class BaseParaPrecio implements Serializable {
 
     public void setPorcentajeUtilidad(double porcentajeUtilidad) {
         this.porcentajeUtilidad = porcentajeUtilidad;
-    }
-
-    public String getPreciosAlternos() {
-        return preciosAlternos;
-    }
-
-    public void setPreciosAlternos(String preciosAlternos) {
-        this.preciosAlternos = preciosAlternos;
     }
 
 

@@ -120,8 +120,13 @@ import java.text.SimpleDateFormat
     }
 
     def static getEscritorio() {
+
         JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
-        if(mainJFrame instanceof omoikane.formularios.Splash) mainJFrame = JFrame.getFrames()[1];
+        for(Frame f : JFrame.getFrames()) {
+            if(f instanceof omoikane.formularios.Splash) continue;
+            if(f instanceof JFrame) mainJFrame = f;
+        }
+
         return mainJFrame;
     }
 

@@ -29,19 +29,14 @@ public class PrecioOmoikaneLogic implements IPrecio {
     }
 
     /**
-     * Analiza los metadatos de precios alternos y aplica el seleccionado a esta instancia.
+     * Analiza los alternos y aplica el seleccionado a esta instancia.
      * Si no exíste dicha instancia de precio alterno (o ninguna) ignora la instrucción.
      * @param listaDePrecios_id
      */
     public void loadPrecioAlterno(Integer listaDePrecios_id) {
-        String preciosAlternos = baseParaPrecio.getPreciosAlternos();
-        if(preciosAlternos != null && !preciosAlternos.isEmpty()) {
-            for ( String precioAlterno : preciosAlternos.split(",") ) {
-                String[] kv = precioAlterno.split(":");
-                if(Integer.valueOf( kv[0] ) == listaDePrecios_id) {
-                    baseParaPrecio.setPorcentajeUtilidad(new BigDecimal(kv[1]).doubleValue());
-                }
-            }
+        if(!baseParaPrecio.getPreciosAlternos().isEmpty() && baseParaPrecio.getPreciosAlternos().containsKey(listaDePrecios_id)) {
+            Double porcentajeUtilidad = baseParaPrecio.getPreciosAlternos().get(listaDePrecios_id).doubleValue();
+            baseParaPrecio.setPorcentajeUtilidad( porcentajeUtilidad );
         }
     }
 

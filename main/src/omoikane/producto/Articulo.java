@@ -2,6 +2,7 @@ package omoikane.producto;
 
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.sf.ehcache.hibernate.HibernateUtil;
 import omoikane.entities.Anotacion;
 import omoikane.entities.CodigoProducto;
@@ -210,8 +211,6 @@ public class Articulo implements Serializable, IProductoApreciado {
         this.precio = (PrecioOmoikaneLogic) precio;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "articulo")
-    private Set<PrecioAlterno> preciosAlternos;
 
     @OneToMany(mappedBy = "producto")
     private Collection<CodigoProducto> codigosAlternos;

@@ -56,8 +56,8 @@
                 <Font size="16.0" fx:id="x1" />
               </font>
             </Label>
-            <Label fx:id="txtCliente" font="$x1" prefWidth="309.9998779296875" text="Público en general" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="201.0" />
-            <Button fx:id="cambiarClienteButton" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" text="Cambiar Cliente [Alt+C]" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="txtCliente" font="$x1" prefWidth="309.9998779296875" text="Público en general" visible="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="201.0" />
+            <Button fx:id="cambiarClienteButton" minHeight="19.0" mnemonicParsing="false" prefHeight="19.0" text="Cambiar Cliente [Alt+C]" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
           </children>
         </AnchorPane>
         <AnchorPane fx:id="capturaPane" disable="false" maxWidth="384.0" minHeight="0.0" minWidth="384.0" prefHeight="480.0" prefWidth="384.0">
