@@ -154,6 +154,10 @@ public class Articulo implements Serializable, IProductoApreciado {
         return this.baseParaPrecio;
     }
 
+    public String getPreciosAlternosAsString() {
+        return this.baseParaPrecio.getPreciosAlternosAsString();
+    }
+
     @OneToMany(mappedBy = "productoContenedor")
     public List<Paquete> renglonesPaquete;
 

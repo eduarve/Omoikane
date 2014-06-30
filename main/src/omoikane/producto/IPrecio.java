@@ -11,6 +11,7 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public interface IPrecio {
+    public BigDecimal getCosto();
     public BigDecimal getPorcentajeDescuentoTotal();
     public BigDecimal getDescuento();
     public BigDecimal getUtilidad();

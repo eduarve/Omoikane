@@ -105,9 +105,9 @@ public class CodigosController
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        assert btnAgregarCodigo != null : "fx:id=\"btnAgregarCodigo\" was not injected: check your FXML file 'CodigosView.fxml'.";
-        assert btnEliminar != null : "fx:id=\"btnEliminar\" was not injected: check your FXML file 'CodigosView.fxml'.";
-        assert txtCodigoNuevo != null : "fx:id=\"txtCodigoNuevo\" was not injected: check your FXML file 'CodigosView.fxml'.";
+        assert btnAgregarCodigo != null : "fx:id=\"btnAgregarCodigo\" was not injected: check your FXML file 'ListaDePreciosProductoView.fxml'.";
+        assert btnEliminar != null : "fx:id=\"btnEliminar\" was not injected: check your FXML file 'ListaDePreciosProductoView.fxml'.";
+        assert txtCodigoNuevo != null : "fx:id=\"txtCodigoNuevo\" was not injected: check your FXML file 'ListaDePreciosProductoView.fxml'.";
 
     }
 

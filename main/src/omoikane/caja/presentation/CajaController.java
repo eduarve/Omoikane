@@ -236,7 +236,7 @@ public class CajaController
                     LegacyVenta venta = cajaLogic.terminarVenta(getModel());
                     cajaLogic.imprimirVenta(venta);
 
-                    if(venta != null) JOptionPane.showMessageDialog(Principal.getEscritorio().getFrameEscritorio(), "Venta Registrada");
+                    if(venta != null) JOptionPane.showMessageDialog(Herramientas.getEscritorio(), "Venta Registrada");
                 } catch (Exception e) {
                     logger.error("Error al guardar venta.", e);
                     failed();

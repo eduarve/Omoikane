@@ -21,6 +21,7 @@ class Permisos {
     static def PMA_DETALLESARTICULO    = CAPTURISTA
     static def PMA_MODIFICARARTICULO   = CAPTURISTA
     static def PMA_ELIMINARARTICULO    = PROPIETARIO
+    static def PMA_LISTADEPRECIOSCRUD  = GERENTE
 
     static def PMA_ABRIRCAJA       = SUPERVISOR
     static def PMA_DETALLESCAJA    = SUPERVISOR
@@ -80,6 +81,8 @@ class Permisos {
     static def PMA_ABRIRCAJAS            = SUPERVISOR //INICIAR VENTAS EN CAJA
     static def PMA_VENTAESPECIAL         = GERENTE
     static def PMA_MOVIMIENTOSCAJA       = SUPERVISOR
+
+    static def PMA_IMPUESTOSCRUD         = GERENTE;
 
     public static def PMA_CONFIGURACION         = SUPERVISOR;
     public static def PMA_REPORTES              = SUPERVISOR;

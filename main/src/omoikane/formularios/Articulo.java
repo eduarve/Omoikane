@@ -436,7 +436,7 @@ public class Articulo extends javax.swing.JInternalFrame {
         jPanel7.setLayout(new java.awt.BorderLayout());
 
         jScrollPane4.setMaximumSize(new java.awt.Dimension(32767, 200));
-        jScrollPane4.setPreferredSize(new java.awt.Dimension(406, 383));
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(426, 383));
         jScrollPane4.setViewportView(txtComentarios);
 
         txtComentarios.setColumns(25);
@@ -449,7 +449,7 @@ public class Articulo extends javax.swing.JInternalFrame {
 
         tabbedPane.addTab("<html>Notas</html>", jPanel7);
 
-        getContentPane().add(tabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 430, 400));
+        getContentPane().add(tabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 430, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

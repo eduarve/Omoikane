@@ -10,6 +10,8 @@ import omoikane.producto.CodigosController
 import omoikane.producto.Impuesto
 import omoikane.producto.PaqueteController
 import omoikane.producto.PrecioOmoikaneLogic
+import omoikane.producto.compras.ComprasProductoController
+import omoikane.producto.listadeprecios.ListaDePreciosProductoController
 import omoikane.repository.ProductoRepo
 import omoikane.sistema.*
 import groovy.sql.*;
@@ -233,6 +235,9 @@ public class Articulos
             addJFXStockPanel(ID, formArticulo);
             addJFXPaquetePanel(ID, formArticulo);
 
+            addJFXComprasProductoPanel(art, formArticulo);
+            addJFXListasDePreciosPanel(art, formArticulo);
+
             return formArticulo
             
             } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario detalles artículo", Herramientas.getStackTraceString(e)) }
@@ -285,7 +290,35 @@ public class Articulos
             }
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
     }
-    static def addJFXStockPanel(Long idArticulo, omoikane.formularios.Articulo a) {
+    static def addJFXComprasProductoPanel(omoikane.producto.Articulo a, omoikane.formularios.Articulo form) {
+        JFXPanel panel = new JFXPanel();
+        form.tabbedPane.addTab("Compras", panel);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("comprasProductoView");
+                ((ComprasProductoController)scene.getController()).setProducto(a);
+                panel.setScene(scene);
+            }
+        });
+    }
+    static def addJFXListasDePreciosPanel(omoikane.producto.Articulo a, omoikane.formularios.Articulo form) {
+        JFXPanel panel = new JFXPanel();
+        form.tabbedPane.addTab("Listas de precios", panel);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("listaDePreciosProductoView");
+                ((ListaDePreciosProductoController)scene.getController()).setProducto(a);
+                panel.setScene(scene);
+            }
+        });
+    }
+    static def addJFXStockPanel(Long idArticulo,  omoikane.formularios.Articulo a) {
 
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Stock", panel);

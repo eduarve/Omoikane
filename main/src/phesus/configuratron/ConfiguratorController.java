@@ -22,6 +22,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import omoikane.principal.Principal;
+import omoikane.repository.CajaRepo;
+import omoikane.sistema.SceneOverloaded;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -103,6 +106,8 @@ public class ConfiguratorController implements Initializable {
     @FXML private RadioButton puertoUsbRadioButton;
 
     @FXML private ToggleGroup impresoraGroup;
+
+    @FXML private Accordion accordion;
 
     @FXML public void aplicarCambios(ActionEvent event) {
 
@@ -248,6 +253,23 @@ public class ConfiguratorController implements Initializable {
         plantillaCorte .textProperty().bindBidirectional( templates.getPlantillaCorte() );
         plantillaTicket.textProperty().bindBidirectional(templates.getPlantillaTicket());
 
+
+        // Verificar disponibilidad de Spring, Hibernate y BD
+        Boolean entornoExtendido = false;
+        try {
+            checkSpringHibernate();
+            entornoExtendido = true;
+        } catch(Exception e) { }
+
+        // ---- Impuestos
+
+        if(entornoExtendido) addImpuestosPanel();
+
+
+        // ---- Listas de precios
+
+        if(entornoExtendido) addListasDePrecios();
+
     }
 
     public Boolean mySQLTester( String url, String user, String pass ) {
@@ -271,6 +293,42 @@ public class ConfiguratorController implements Initializable {
 
     public Button getCerrarBtn() {
         return cerrarBtn;
+    }
+
+    private void addImpuestosPanel() {
+        final TitledPane ip = new TitledPane();
+        ip.setText("Tipos de impuestos");
+        accordion.getPanes().add(ip);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("impuestosCRUDView");
+                ip.setContent(scene.getRoot());
+            }
+        });
+    }
+
+    private void addListasDePrecios() {
+        final TitledPane ip = new TitledPane();
+        ip.setText("Niveles de precios");
+        accordion.getPanes().add(ip);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("listaDePreciosCRUDView");
+                ip.setContent(scene.getRoot());
+            }
+        });
+    }
+
+    private void checkSpringHibernate() throws Exception {
+
+        omoikane.principal.Principal.applicationContext.getBean(CajaRepo.class).count();
+
     }
 
 }

@@ -119,7 +119,7 @@ import java.text.SimpleDateFormat
         return salida;
     }
 
-    def static getEscritorio() {
+    static JFrame getEscritorio() {
 
         JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
         for(Frame f : JFrame.getFrames()) {

@@ -30,3 +30,11 @@ VIEW
 
 -- Cambios en almacenamiento de impuestos, de tabla secundaria a metadatos en una columna
 ALTER TABLE precios ADD COLUMN impuestos TEXT DEFAULT NULL COMMENT 'Almacena los metadatos de los impuestos';
+
+-- Columnas para nuevos CRUD
+ALTER TABLE ListaDePrecios ADD COLUMN notas TEXT;
+ALTER TABLE ListaDePrecios ADD COLUMN activo BIT(1) DEFAULT 1;
+
+ALTER TABLE Impuesto ADD COLUMN notas TEXT;
+ALTER TABLE Impuesto ADD COLUMN activo BIT(1) DEFAULT 1;
+

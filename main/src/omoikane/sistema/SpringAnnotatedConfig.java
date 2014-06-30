@@ -13,6 +13,10 @@ import omoikane.inventarios.tomaInventario.ConteoInventarioCRUDController;
 import omoikane.inventarios.tomaInventario.TomaInventarioController;
 import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
+import omoikane.producto.compras.ComprasProductoController;
+import omoikane.producto.impuestos.ImpuestosCRUDController;
+import omoikane.producto.listadeprecios.ListaDePreciosCRUDController;
+import omoikane.producto.listadeprecios.ListaDePreciosProductoController;
 import omoikane.proveedores.ProveedoresController;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -82,8 +86,32 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    ListaDePreciosCRUDController listaDePreciosCRUDController() {
+        return new ListaDePreciosCRUDController();
+    }
+
+    @Bean
+    @Scope("prototype")
     ImpresionEtiquetasController impresionEtiquetasController() {
         return new ImpresionEtiquetasController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ImpuestosCRUDController impuestosCRUDController() {
+        return new ImpuestosCRUDController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ListaDePreciosProductoController listaDePreciosProductoController() {
+        return new ListaDePreciosProductoController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ComprasProductoController comprasProductoController() {
+        return new ComprasProductoController();
     }
 
     @Bean
@@ -138,6 +166,30 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     Scene impresionEtiquetasView() {
         return initView("/omoikane/etiquetas/presentation/ImpresionEtiquetasView.fxml", impresionEtiquetasController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene listaDePreciosCRUDView() {
+        return initView("/omoikane/producto/listadeprecios/ListaDePreciosCRUDView.fxml", listaDePreciosCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene impuestosCRUDView() {
+        return initView("/omoikane/producto/impuestos/ImpuestosCRUDView.fxml", impuestosCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene listaDePreciosProductoView() {
+        return initView("/omoikane/producto/listadeprecios/ListaDePreciosProductoView.fxml", listaDePreciosProductoController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene comprasProductoView() {
+        return initView("/omoikane/producto/compras/ComprasProductoView.fxml", comprasProductoController());
     }
 
     private SceneOverloaded initView(String fxml, final Initializable controller) {

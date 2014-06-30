@@ -12,65 +12,20 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-classpath-element ../../../../../lib/FXExperienceControls.jar?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.9998779296875" prefWidth="488.999977929685" xmlns:fx="http://javafx.com/fxml" fx:controller="phesus.configuratron.ConfiguratorController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.9998779296875" prefWidth="623.999977929685" xmlns:fx="http://javafx.com/fxml" fx:controller="phesus.configuratron.ConfiguratorController">
   <children>
-    <Accordion prefHeight="271.0" prefWidth="572.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="72.0">
+    <Accordion fx:id="accordion" prefHeight="271.0" prefWidth="572.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="72.0">
       <expandedPane>
-        <TitledPane fx:id="x6" animated="false" text="Periféricos">
+        <TitledPane fx:id="x3" animated="false" text="Plantillas">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="376.0000999999975" prefWidth="456.9998779296875">
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="166.0" layoutY="196.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.00019155273185" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="11.0" />
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutY="123.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="11.0" />
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="100.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0002831054662" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
-                <Label layoutX="23.0" layoutY="303.0" text="Paridad" />
-                <TextField id="stopCharScanner" fx:id="stopCharScale" layoutX="344.0" layoutY="300.0" prefWidth="88.0" />
-                <Label layoutX="238.0" layoutY="303.0" text="Stop char" />
-                <TextField fx:id="puertoImpresora" layoutX="207.0" layoutY="52.0" prefWidth="224.99990000000253" />
-                <Label layoutX="22.0" layoutY="25.0" text="Impresora de ticket" />
-                <ToggleButton fx:id="impresoraInactiva" layoutX="361.0" layoutY="23.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactiva">
-                  <toggleGroup>
-                    <ToggleGroup fx:id="toggleGroup4" />
-                  </toggleGroup>
-                </ToggleButton>
-                <ToggleButton fx:id="scannerActivo" layoutX="133.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Activo">
-                  <toggleGroup>
-                    <ToggleGroup fx:id="x1" />
-                  </toggleGroup>
-                </ToggleButton>
-                <ToggleButton fx:id="scannerInactivo" layoutX="186.0" layoutY="130.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactivo" toggleGroup="$x1" />
-                <ToggleButton fx:id="impresoraActiva" layoutX="308.0" layoutY="23.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Activa" toggleGroup="$toggleGroup4" />
-                <ToggleButton fx:id="basculaActiva" layoutX="133.0" layoutY="205.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;&#10;&#10;" text="Activa">
-                  <toggleGroup>
-                    <ToggleGroup fx:id="x2" />
-                  </toggleGroup>
-                </ToggleButton>
-                <ToggleButton fx:id="basculaInactiva" layoutX="186.0" layoutY="205.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactiva" toggleGroup="$x2" />
-                <Label layoutX="23.0" layoutY="133.0" text="Scanner" />
-                <TextField fx:id="puertoScanner" layoutX="133.0" layoutY="159.0" prefWidth="88.0" />
-                <Label layoutX="23.0" layoutY="162.0" text="Puerto" />
-                <IntegerField fx:id="scannerBaud" layoutX="344.0" layoutY="159.0" prefWidth="87.9998779296875" />
-                <Label layoutX="238.0" layoutY="162.0" text="Baud rate" />
-                <Label layoutX="23.0" layoutY="207.0" text="Báscula" />
-                <TextField id="puertoBascula" fx:id="portScale" layoutX="133.0" layoutY="236.0" prefWidth="88.0" />
-                <Label layoutX="23.0" layoutY="239.0" text="Puerto" />
-                <IntegerField id="baudScanner" fx:id="baudScale" layoutX="344.0" layoutY="236.0" prefWidth="88.0" />
-                <Label layoutX="238.0" layoutY="239.0" text="Baud rate" />
-                <IntegerField fx:id="bitsScale" layoutX="133.0" layoutY="268.0" prefWidth="88.0" />
-                <Label layoutX="23.0" layoutY="271.0" text="Bits" />
-                <IntegerField id="stopBitScanner" fx:id="stopBitScale" layoutX="344.0" layoutY="268.0" prefWidth="88.0" />
-                <Label layoutX="238.0" layoutY="271.0" text="Stop bit" />
-                <TextField id="parityScanner" fx:id="parityScale" layoutX="133.0" layoutY="300.0" prefWidth="88.0" />
-                <Label layoutX="23.0" layoutY="334.0" text="Comando" />
-                <TextField id="weightCommandScanner" fx:id="weightCommandScale" layoutX="133.0" layoutY="331.0" prefWidth="299.0" />
-                <ChoiceBox fx:id="impresoraList" layoutX="206.0" layoutY="79.0" prefWidth="225.0">
-                </ChoiceBox>
-                <RadioButton fx:id="puertoParaleloRadioButton" layoutX="22.0" layoutY="56.0" mnemonicParsing="false" prefWidth="178.0" text="Puerto paralelo">
-                  <toggleGroup>
-                    <ToggleGroup fx:id="impresoraGroup" />
-                  </toggleGroup>
-                </RadioButton>
-                <RadioButton fx:id="puertoUsbRadioButton" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" text="Puerto USB" toggleGroup="$impresoraGroup" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="566.9999694824219" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="13.0" />
+                <TextArea fx:id="plantillaTicket" layoutY="47.0" prefHeight="125.0" prefWidth="548.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="24.0" />
+                <Label layoutX="14.0" layoutY="192.0" text="Plantilla de corte" />
+                <Label layoutX="12.0" layoutY="14.0" prefWidth="116.0" text="Plantilla de ticket" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutY="211.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="566.9999000000025" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="13.0" />
+                <TextArea fx:id="plantillaCorte" layoutY="223.0" prefHeight="125.0" prefWidth="548.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="24.0" />
               </children>
             </AnchorPane>
           </content>
@@ -81,46 +36,90 @@
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="457.0">
               <children>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.49993896484375" layoutX="12.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.49993896484375" layoutX="14.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="567.0" />
                 <Label layoutX="20.0" layoutY="28.0" text="Resolución de pantalla" />
-                <Label alignment="CENTER" layoutY="28.0" prefWidth="25.0" text="x" textAlignment="CENTER" AnchorPane.leftAnchor="281.0" />
-                <IntegerField fx:id="resolucionAncho" layoutY="25.0" prefWidth="124.0" AnchorPane.leftAnchor="150.0" />
-                <IntegerField fx:id="resolucionAlto" layoutY="25.0" prefWidth="124.0" AnchorPane.leftAnchor="314.0" AnchorPane.rightAnchor="19.0" />
-                <IntegerField fx:id="idAlmacen" layoutY="56.0" prefWidth="287.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="20.0" />
+                <Label alignment="CENTER" layoutY="28.0" prefWidth="25.0" text="x" textAlignment="CENTER" AnchorPane.leftAnchor="306.0" />
+                <IntegerField fx:id="resolucionAncho" layoutY="25.0" prefWidth="123.0" AnchorPane.leftAnchor="174.0" />
+                <IntegerField fx:id="resolucionAlto" layoutY="25.0" prefWidth="234.0" AnchorPane.leftAnchor="339.0" AnchorPane.rightAnchor="20.0" />
+                <IntegerField fx:id="idAlmacen" layoutY="56.0" prefWidth="396.9999000000025" AnchorPane.leftAnchor="174.0" AnchorPane.rightAnchor="20.0" />
                 <Label layoutX="19.0" layoutY="59.0" text="ID de Almacén" />
                 <Label layoutX="20.0" layoutY="93.0" text="ID de Caja" />
-                <IntegerField fx:id="idCaja" layoutY="90.0" prefWidth="287.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="20.0" />
+                <IntegerField fx:id="idCaja" layoutY="90.0" prefWidth="396.9999000000025" AnchorPane.leftAnchor="174.0" AnchorPane.rightAnchor="20.0" />
                 <Label layoutX="20.0" layoutY="125.0" text="Tipo de Corte" />
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="174.0" layoutX="12.0" layoutY="169.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="174.0" layoutX="12.0" layoutY="169.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="566.9999694824219" />
                 <Label layoutX="18.0" layoutY="189.0" text="URL del Servidor" />
-                <Button layoutX="19.0" layoutY="306.0" minHeight="16.0" mnemonicParsing="false" onAction="#probarMySQL" prefHeight="22.0" prefWidth="418.0" style="-fx-base: blue" text="Probar Conexión con la base de datos" textFill="WHITE" />
-                <TextField fx:id="urlServidor" layoutX="123.0" layoutY="186.0" prefWidth="312.0" />
+                <Button layoutX="19.0" layoutY="306.0" minHeight="16.0" mnemonicParsing="false" onAction="#probarMySQL" prefHeight="22.0" prefWidth="548.0" style="-fx-base: blue" text="Probar Conexión con la base de datos" textFill="WHITE" />
+                <TextField fx:id="urlServidor" layoutX="150.0" layoutY="186.0" prefWidth="418.0" />
                 <Label layoutX="18.0" layoutY="218.0" text="URL base de datos" />
-                <TextField fx:id="userBD" layoutX="123.0" layoutY="245.0" prefWidth="312.0" />
+                <TextField fx:id="userBD" layoutX="150.0" layoutY="245.0" prefWidth="418.0" />
                 <Label layoutX="18.0" layoutY="248.0" text="Usuario BD" />
-                <TextField fx:id="passBD" layoutX="123.0" layoutY="275.0" prefWidth="311.0001220703125" />
+                <TextField fx:id="passBD" layoutX="150.0" layoutY="275.0" prefWidth="418.0" />
                 <Label layoutX="17.0" layoutY="278.0" text="Contraseña BD" />
-                <TextField fx:id="urlBD" layoutX="123.0" layoutY="215.0" prefWidth="312.0" />
-                <ComboBox fx:id="tipoCorte" layoutX="150.0" layoutY="123.0" prefHeight="21.0" prefWidth="287.0" />
+                <TextField fx:id="urlBD" layoutX="150.0" layoutY="215.0" prefWidth="418.0" />
+                <ComboBox fx:id="tipoCorte" layoutX="175.0" layoutY="123.0" prefHeight="21.0" prefWidth="398.0" />
               </children>
             </AnchorPane>
           </content>
         </TitledPane>
-        <fx:reference source="x6" />
-        <TitledPane fx:id="x3" animated="false" text="Plantillas">
+        <TitledPane fx:id="x6" animated="false" text="Periféricos">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="376.0000999999975" prefWidth="456.9998779296875">
               <children>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutX="12.0" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
-                <TextArea fx:id="plantillaTicket" layoutX="20.0" layoutY="47.0" prefHeight="125.0" prefWidth="418.0" />
-                <Label layoutX="14.0" layoutY="192.0" text="Plantilla de corte" />
-                <Label layoutX="12.0" layoutY="14.0" prefWidth="116.0" text="Plantilla de ticket" />
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="149.49993896484375" layoutX="14.0" layoutY="211.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="432.0000915527344" />
-                <TextArea fx:id="plantillaCorte" layoutX="22.0" layoutY="223.0" prefHeight="125.0" prefWidth="418.0" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="166.0" layoutY="196.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="567.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="11.0" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutY="123.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="566.9999694824219" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="11.0" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="100.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" style="-fx-arc-height: 10;&#10;-fx-arc-width: 10;" width="567.0000305175781" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" />
+                <Label layoutX="23.0" layoutY="303.0" text="Paridad" />
+                <TextField id="stopCharScanner" fx:id="stopCharScale" layoutX="478.0" layoutY="297.0" prefWidth="88.0" />
+                <Label layoutX="372.0" layoutY="300.0" text="Stop char" />
+                <TextField fx:id="puertoImpresora" layoutX="207.0" layoutY="52.0" prefWidth="359.0" />
+                <Label layoutX="22.0" layoutY="25.0" text="Impresora de ticket" />
+                <ToggleButton fx:id="impresoraInactiva" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactiva">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="toggleGroup4" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="scannerActivo" layoutX="133.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Activo">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="x1" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="scannerInactivo" layoutX="186.0" layoutY="130.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactivo" toggleGroup="$x1" />
+                <ToggleButton fx:id="impresoraActiva" layoutX="442.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Activa" toggleGroup="$toggleGroup4" />
+                <ToggleButton fx:id="basculaActiva" layoutX="133.0" layoutY="205.0" mnemonicParsing="false" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;&#10;&#10;" text="Activa">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="x2" />
+                  </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="basculaInactiva" layoutX="186.0" layoutY="205.0" mnemonicParsing="false" selected="true" style="-fx-background-radius: 0,0,0,0;&#10;-fx-background-insets: 0,0,1,1;" text="Inactiva" toggleGroup="$x2" />
+                <Label layoutX="23.0" layoutY="133.0" text="Scanner" />
+                <TextField fx:id="puertoScanner" layoutX="133.0" layoutY="159.0" prefWidth="234.0" />
+                <Label layoutX="23.0" layoutY="162.0" text="Puerto" />
+                <IntegerField fx:id="scannerBaud" layoutX="478.0" layoutY="159.0" prefWidth="87.9998779296875" />
+                <Label layoutX="372.0" layoutY="162.0" text="Baud rate" />
+                <Label layoutX="23.0" layoutY="207.0" text="Báscula" />
+                <TextField id="puertoBascula" fx:id="portScale" layoutX="133.0" layoutY="236.0" prefWidth="234.0" />
+                <Label layoutX="23.0" layoutY="239.0" text="Puerto" />
+                <IntegerField id="baudScanner" fx:id="baudScale" layoutX="478.0" layoutY="233.0" prefWidth="88.0" />
+                <Label layoutX="372.0" layoutY="236.0" text="Baud rate" />
+                <IntegerField fx:id="bitsScale" layoutX="133.0" layoutY="268.0" prefWidth="234.0" />
+                <Label layoutX="23.0" layoutY="271.0" text="Bits" />
+                <IntegerField id="stopBitScanner" fx:id="stopBitScale" layoutX="478.0" layoutY="265.0" prefWidth="88.0" />
+                <Label layoutX="372.0" layoutY="268.0" text="Stop bit" />
+                <TextField id="parityScanner" fx:id="parityScale" layoutX="133.0" layoutY="300.0" prefWidth="234.0" />
+                <Label layoutX="23.0" layoutY="334.0" text="Comando" />
+                <TextField id="weightCommandScanner" fx:id="weightCommandScale" layoutX="133.0" layoutY="331.0" prefWidth="432.0001220703125" />
+                <ChoiceBox fx:id="impresoraList" layoutX="206.0" layoutY="79.0" prefWidth="359.0" />
+                <RadioButton fx:id="puertoParaleloRadioButton" layoutX="22.0" layoutY="56.0" mnemonicParsing="false" prefWidth="178.0" text="Puerto paralelo">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="impresoraGroup" />
+                  </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="puertoUsbRadioButton" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" text="Puerto USB" toggleGroup="$impresoraGroup" />
               </children>
             </AnchorPane>
           </content>
         </TitledPane>
+        <fx:reference source="x3" />
       </panes>
     </Accordion>
     <Label text="Configuración" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="16.0">

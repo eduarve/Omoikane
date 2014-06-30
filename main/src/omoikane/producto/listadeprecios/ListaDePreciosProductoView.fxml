@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.9998779296875" prefWidth="591.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.producto.CodigosController">
+  <children>
+    <GridPane fx:id="listaGrid" gridLinesVisible="false" hgap="10.0" prefHeight="285.999977929685" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, lightgray, white);" vgap="10.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+      <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" text="Lista de precio" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+          <font>
+            <Font name="System Bold" size="13.0" fx:id="x1" />
+          </font>
+        </Label>
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" text="Costo" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="-1.0" text="Factor de utilidad" textAlignment="CENTER" textOverrun="ELLIPSIS" underline="false" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="50.0" text="Precio público" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="61.0" text="Impuestos" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="48.0" text="Descuento" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="48.0" text="Utilidad ($)" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+    <AnchorPane minHeight="16.0" prefHeight="44.9998779296875" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, black, #1F1F1F)" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Button fx:id="btnGuardar" defaultButton="false" mnemonicParsing="false" onAction="#onGuardar" prefHeight="28.0" text="Guardar cambios" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0" />
+      </children>
+      <effect>
+        <InnerShadow />
+      </effect>
+    </AnchorPane>
+    <AnchorPane minHeight="16.0" prefHeight="48.0" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, black, #1F1F1F)" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <Label alignment="CENTER" prefWidth="563.0" style="&#10;" text="Listas de precio del producto" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0">
+          <font>
+            <Font size="23.0" />
+          </font>
+        </Label>
+      </children>
+      <effect>
+        <InnerShadow />
+      </effect>
+    </AnchorPane>
+  </children>
+</AnchorPane>

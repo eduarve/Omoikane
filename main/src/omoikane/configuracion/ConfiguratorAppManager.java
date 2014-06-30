@@ -51,8 +51,8 @@ public class ConfiguratorAppManager {
         if(omoikane.principal.Principal.getEscritorio() != null) {
             Herramientas.panelCatalogo(frame);
             omoikane.principal.Principal.getEscritorio().getPanelEscritorio().add(frame);
-            frame.setSize(499, 595);
-            frame.setPreferredSize(new Dimension(499, 595));
+            frame.setSize(624, 625);
+            frame.setPreferredSize(new Dimension(624, 625));
 
             frame.setVisible(true);
             Herramientas.centrarVentana(frame);

@@ -2,6 +2,7 @@ package omoikane.repository;
 
 import omoikane.producto.Articulo;
 import org.synyx.hades.dao.GenericDao;
+import org.synyx.hades.dao.Modifying;
 import org.synyx.hades.dao.Query;
 import org.synyx.hades.domain.Pageable;
 
@@ -39,5 +40,9 @@ public interface ProductoRepo extends GenericDao<Articulo, Long>
 
     @Query("SELECT a FROM Articulo a JOIN FETCH a.baseParaPrecio WHERE a.descripcion like ?1 OR a.codigo like ?1")
     List<Articulo> findByDescripcionLikeOrCodigoLike(String busqueda);
+
+    @Modifying
+    @Query("UPDATE BaseParaPrecio bp SET bp.preciosAlternos = ? WHERE bp.idArticulo = ?")
+    int setPreciosAlternosFor(String preciosAlternosText, Long id);
 
 }

@@ -1,11 +1,15 @@
-package omoikane.producto;
+package omoikane.producto.listadeprecios;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import javafx.application.Application;
+import javafx.application.Platform;
 import omoikane.principal.Principal;
+import omoikane.producto.DummyJFXApp;
+import omoikane.repository.ProductoRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -29,20 +33,22 @@ import java.util.HashMap;
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
-@DatabaseSetup("../repository/sampleDataLight.xml")
-public class CodigosTest {
+//@DatabaseSetup("../repository/sampleDataLight.xml")
+public class ListaDePreciosProductoTest {
 
-    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CodigosTest.class);
+    static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ListaDePreciosProductoTest.class);
+
+    @Autowired
+    ProductoRepo productoRepo;
 
     @Test
-    public void codigosViewTest() {
+    public void ListaDePreciosProductoViewTest() {
         Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-test.xml");
         HashMap testProperties = (HashMap) Principal.applicationContext.getBean( "properties" );
-        testProperties.put("DummyJFXApp.viewBeanToTest", "codigosView");
+        testProperties.put("DummyJFXApp.viewBeanToTest", "listaDePreciosProductoView");
         Application.launch(DummyJFXApp.class);
 
-        CodigosController cc = (CodigosController) DummyJFXApp.getInstance().getController();
-        cc.setProducto(1l);
+
     }
 
 }

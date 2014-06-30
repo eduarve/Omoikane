@@ -2,7 +2,9 @@ package omoikane.producto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -65,6 +67,27 @@ public class BaseParaPrecio implements Serializable {
             }
         }
         return mapa;
+    }
+
+    public void setPrecioAlterno(Integer listaDePrecios_id, BigDecimal factorUtilidad) {
+        HashMap<Integer, BigDecimal> mapa = getPreciosAlternos();
+        mapa.put(listaDePrecios_id, factorUtilidad);
+        StringBuilder builder = new StringBuilder();
+        NumberFormat nb = NumberFormat.getNumberInstance();
+        nb.setMaximumFractionDigits(2);
+        nb.setMinimumFractionDigits(2);
+
+        Boolean first = true;
+        for(Map.Entry<Integer, BigDecimal> row : mapa.entrySet()) {
+            if(first) first = false; else builder.append(",");
+            builder.append(row.getKey() + ":" + nb.format( row.getValue() ));
+        }
+
+        preciosAlternos = builder.toString();
+    }
+
+    public String getPreciosAlternosAsString() {
+        return preciosAlternos;
     }
 
     public BaseParaPrecio() {

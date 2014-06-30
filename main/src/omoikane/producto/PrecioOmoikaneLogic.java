@@ -40,6 +40,11 @@ public class PrecioOmoikaneLogic implements IPrecio {
         }
     }
 
+    @Override
+    public BigDecimal getCosto() {
+        return new BigDecimal( baseParaPrecio.getCosto() );
+    }
+
     /** Obtiene el descuento en conjunto de todos los factores que generan descuento
      * Formula, factor valor final del producto: valor = - (x-1) (y-1) (z-1)
      * Formula, factor de descuento: descuento = 1 - valor
@@ -160,5 +165,9 @@ public class PrecioOmoikaneLogic implements IPrecio {
         BigDecimal z = getImpuestos();
 
         return x.subtract(y).add(z);
+    }
+
+    public double getFactorUtilidad() {
+        return baseParaPrecio.getPorcentajeUtilidad();
     }
 }

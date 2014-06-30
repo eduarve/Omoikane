@@ -1,6 +1,7 @@
 package omoikane.producto;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +22,14 @@ public class ListaDePrecios {
     @Column
     private String descripcion;
 
+    @Column
+    private String notas;
+
+    @NotNull
+    @Column
+    private
+    Boolean activo = true;
+
     public Long getId() {
         return id;
     }
@@ -35,5 +44,21 @@ public class ListaDePrecios {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getNotas() {
+        return notas;
+    }
+
+    public void setNotas(String notas) {
+        this.notas = notas;
+    }
+
+    public Boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

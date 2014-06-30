@@ -80,6 +80,7 @@ public class CancelarProducto extends ICajaEventHandler {
         getController().setMainToolBarDisable(false);
         getController().hideHud();
         getController().getVentaTableView().onKeyReleasedProperty().set(null);
+        getController().getMainAnchorPane().requestFocus();
         getController().getCapturaTextField().requestFocus();
     }
 

@@ -156,11 +156,10 @@ public class CajaLogicImpl implements ICajaLogic {
             model.getVenta().add(0, productoModel);
 
             lvd = new LegacyVentaDetalle();
+            lvd.setVenta(model.getVentaEntity());
         }
 
         syncLegacyVentaDetalleWithModel(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
-
-        lvd.setVenta(model.getVentaEntity());
 
         LegacyVentaDetalle l = persistirItemVenta(lvd);
         productoModel.setVentaDetalleEntity( l );
@@ -440,7 +439,7 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     private void syncLegacyVentaDetalleWithModel(Integer idCaja, Integer idAlmacen, ProductoModel producto, LegacyVentaDetalle lvd) {
-        lvd.setIdRenglon ( producto.getVentaDetalleEntity().getIdRenglon() );
+
         lvd.setIdAlmacen ( idAlmacen );
         lvd.setIdArticulo( producto.getLongId().intValue() );
         lvd.setIdCaja    ( idCaja );

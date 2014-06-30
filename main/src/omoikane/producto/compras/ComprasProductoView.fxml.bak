@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.9998779296875" prefWidth="591.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.producto.CodigosController">
+  <children>
+    <Label alignment="CENTER" contentDisplay="CENTER" disable="false" prefHeight="48.0" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, black, darkslategray);&#10;" text="Compras por producto" textAlignment="CENTER" textFill="WHITE" underline="false" visible="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <effect>
+        <InnerShadow />
+      </effect>
+      <font>
+        <Font name="Arial" size="23.0" />
+      </font>
+    </Label>
+    <GridPane fx:id="listaGrid" gridLinesVisible="false" hgap="10.0" prefHeight="285.9998779296875" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, lightgray, white);" vgap="10.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+      <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" text="Fecha" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+          <font>
+            <Font name="System Bold" size="13.0" fx:id="x1" />
+          </font>
+        </Label>
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" text="Folio" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="-1.0" text="Proveedor" textAlignment="CENTER" textOverrun="ELLIPSIS" underline="false" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="61.0" text="Importe" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="48.0" text="Costo" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" font="$x1" prefHeight="48.0" text="Cantidad" textAlignment="CENTER" underline="false" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="69.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+    <AnchorPane minHeight="16.0" prefHeight="45.0" prefWidth="591.0" style="-fx-background-color: linear-gradient(to bottom right, black, darkslategray)" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <TextField fx:id="textCostoPromedio" alignment="CENTER_RIGHT" editable="false" prefWidth="136.0" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="14.0" />
+        <Label text="Costo promedio (últimas 5 operaciones):" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="157.0">
+          <effect>
+            <Shadow color="WHITE" height="3.0" radius="1.0" width="3.0" />
+          </effect>
+          <font>
+            <Font name="Arial" size="13.0" />
+          </font>
+        </Label>
+      </children>
+      <effect>
+        <InnerShadow />
+      </effect>
+    </AnchorPane>
+  </children>
+</AnchorPane>

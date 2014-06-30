@@ -39,7 +39,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Super Farmacias Medina"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pau Mart"]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement positionType="Float" x="1" y="35" width="115" height="43"/>

@@ -51,6 +51,9 @@ public class CajaManagerTest {
     @Test
     public void cajaSwingTest() throws InvocationTargetException, InterruptedException {
 
+        Principal.IDAlmacen = 1;
+        Usuarios.setIDUsuarioActivo( 1 );
+
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {

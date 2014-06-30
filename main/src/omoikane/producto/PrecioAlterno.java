@@ -49,7 +49,7 @@ public class PrecioAlterno {
 
     @Override
     public int hashCode() {
-        int result = articulo.hashCode();
+        int result = 0;
         result = 31 * result + listaDePrecios.hashCode();
         result = 31 * result + utilidad.hashCode();
         return result;
