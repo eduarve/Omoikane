@@ -1,4 +1,42 @@
-## Versión 4.1.2 (2014-05-13)
+## Versión 4.2.0 (2014-06-30)
+
+- #105 Agregué CRUD de listas de precios. En lugar de “DELETE” el CRUD
+desactiva. Además puede almacenar notas sobre cada lista de precios,
+solo por si acaso.
+- #106 Agregué CRUD de impuestos. Es posible agregar tantos impuestos
+como se quieran, la gran limitación por ahora es que únicamente se
+pueden agregar impuestos basados en factores(porcentajes en realidad) y
+no en tarifas fijas. Capacidad para desactivar y para almacenar notas
+por impuesto.
+- Los CRUDs de impuestos y listas de precios son accesibles desde la
+configuración.
+- Corrección del bug #104. Almacenamiento erróneo de ítems de ventas,
+en ítems agrupados.
+- Workaround del bug #103
+- Corrección de un bug en el mensaje “Venta registrada” sólo sucedía
+cuando se lanza la caja sin el escritorio, por el momento eso solo
+ocurre en tests.
+- #107 Agregué un panel a la ficha “Artículo” para especificar precios
+alternos/listas de precios/niveles de precios por ejemplo: precio 2,
+precio 3, etc.
+- #108 Agregué panel a la ficha artículo que muestra las últimas 5
+compras de ese producto, cantidades, costos, nombre del proveedor y
+costo promedio (el promedio de esas 5 compras)
+- Ajuste de tamaño de pool de conexiones
+- Corrección de comportamientos de desconexión de BD y de esquema de BD
+incorrecto
+- Los factores de utilidad para precios alternos (listas de precios)
+pasaron de estar almacenados en tablas secundarias a metadatos en
+almacenados en una columna de la tabla “precios” para optimizar las
+operaciones relacionadas con precios.
+- Corrección de bug que no permitía abrir Omoikane si se había mostrado
+la ventaja de solución de problemas de migración del esquema de la BD
+- Issues solved: #100 y #102
+- Issues closed #48 #54 #68
+- Correcciones #96 #97 #98 #99
+
+
+## Versión 4.1.3 (2014-05-13)
 
 - Issue #83 resuelto. Agregar definición de tablas ListaDePrecios y PrecioAlterno a esquema inicial
 - Issue #86 resuelto. Captura de compra: Después de borrar partida no es posible reintroducir el código eliminado
@@ -21,7 +59,7 @@ paquetes en sus respectivos componentes (issue #87)
 - Mejora del instalador, instala automáticamente MySQL y carga el
 esquema inicial de la BD
 - Issue #91 Instalación permite instalar únicamente cliente, únicamente servidor o ambos
-
+- Issues resueltos: #52 #61 #63 #82 #84 #90 #92 #95
 
 ## Versión 4.2 alfa (2014-04-29)
 
