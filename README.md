@@ -24,10 +24,10 @@ Poderoso punto de venta opensource de tecnología de vanguardia. Solución senci
 - __Multi-impuesto__ Es posible agregar cualquier cantidad de impuestos a cualquier producto. Por ejemplo IVA 0%, IVA 16%, IEPS 8%, IEPS 25%, etc. Es posible agregar cualquier impuesto que sea una proporción del valor del producto.
 - __Facturación y notas de crédito CFDI__ La facturación electrónica se puede realizar mediante diversos proveedores de timbres, desde 30 centavos por timbre aún comprando un solo timbre.
 - __Catálogo offline__ Consulte su catálogo de artículos aún sin conexión. Útil en caso de caídas del servidor o para llevar consigo la información.
+- __Niveles de precio__ Con omoikane es posible definir un número ilimitado de niveles de precios, por ejemplo: Precio 1, Precio 2, Precio 3, etc. Los niveles de precios se pueden asignar a clientes específicos o genéricos.
 
 ## Características agendadas:
 - Agrupación por departamento. Actualmente se puede usar la agrupación por líneas como suplemento.
-- Descuentos por cliente: Ésta característica se bloqueo hace poco para arreglar detalles.
 - Multi-almacén. Estamos analizando de que manera implementar esta característica sin impactar la simplicidad del sistema.
 - Descuentos por cantidad. Una solución en la versión actual es usar los paquetes para dar descuentos por cantidad. Es útil para negocios que venden pocos productos en diferentes cantidades.
 Además se agendarán las características sugeridas por nuestros usuarios, previo análisis por nuestra parte.
