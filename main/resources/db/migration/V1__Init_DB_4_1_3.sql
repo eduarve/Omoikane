@@ -826,7 +826,7 @@ CREATE TABLE `PrecioAlterno` (
   CONSTRAINT `FK34B5A611B3E87FB` FOREIGN KEY (`articulo_id_articulo`) REFERENCES `articulos` (`id_articulo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-CREATE TABLE `cliente` (
+CREATE TABLE `Cliente` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `actualizacion` datetime NOT NULL,
   `creacion` datetime NOT NULL,
@@ -886,7 +886,7 @@ INSERT INTO `almacenes` (`descripcion`, `uModificacion`) VALUES ('Almac�n 1', 
 
 INSERT INTO `cajas` (`id_almacen`, `descripcion`, `creado`, `uModificacion`, `horaAbierta`, `horaCerrada`, `abierta`, `uFolio`) VALUES (1, 'Caja 1', CURRENT_TIMESTAMP(), '2000-01-01 00:00:00', '2000-01-01 00:00:00', '2000-01-01 00:00:00', 0, 0);
 
-INSERT INTO `cliente` (id,actualizacion,creacion,nombre,RFC,saldo,listaDePrecios_id) VALUES (1,'2009-01-01 00:00:00','2009-01-01 00:00:00','Público en general','XAXX010101000','0.00',NULL);
+INSERT INTO `Cliente` (id,actualizacion,creacion,nombre,RFC,saldo,listaDePrecios_id) VALUES (1,'2009-01-01 00:00:00','2009-01-01 00:00:00','Público en general','XAXX010101000','0.00',NULL);
 
 INSERT INTO `Impuesto` (`id`, `descripcion`, `porcentaje`) VALUES
 (1, 'IVA (16%)', 16.00),

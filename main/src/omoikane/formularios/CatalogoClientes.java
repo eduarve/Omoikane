@@ -65,7 +65,7 @@ public class CatalogoClientes extends OmJInternalFrame {
         modelo = modeloTabla;
         jTable1.setModel(modeloTabla);
 
-        setQueryTable("SELECT id, RFC,nombre,actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id), saldo, saldo FROM cliente");
+        setQueryTable("SELECT id, RFC,nombre,actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id), saldo, saldo FROM Cliente");
         jProgressBar1.setIndeterminate(false);
 
         //Instrucciones para el funcionamiento del fondo semistransparente
@@ -524,7 +524,7 @@ public class CatalogoClientes extends OmJInternalFrame {
     public void buscar()
     {
        String busqueda = this.txtBusqueda.getText();
-       String query    = "select id,RFC,nombre, actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id),saldo FROM cliente WHERE nombre like '%"+busqueda+"%'";
+       String query    = "select id,RFC,nombre, actualizacion, if(isNull(listaDePrecios_id),0,listaDePrecios_id),saldo FROM Cliente WHERE nombre like '%"+busqueda+"%'";
        setQueryTable(query);
     }
 
