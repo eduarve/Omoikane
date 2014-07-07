@@ -1,5 +1,6 @@
 package omoikane.caja.handlers;
 
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import omoikane.caja.presentation.CajaController;
 import omoikane.principal.Caja;
@@ -18,6 +19,20 @@ public class MovimientosDeCaja extends ICajaEventHandler {
 
     @Override
     public void handle(Event event) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                ventanaMovimientos();
+                return null;
+            }
+        };
+        new Thread(task).start();
+    }
+
+    private void ventanaMovimientos() {
         Caja.btnMovimientosAction();
+
+        cajaController.getVentaTableView().requestFocus();
+        cajaController.getCapturaTextField().requestFocus();
     }
 }

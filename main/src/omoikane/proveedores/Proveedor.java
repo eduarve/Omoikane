@@ -63,4 +63,8 @@ public class Proveedor implements Serializable {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
+
+    public String toString() {
+        return nombre;
+    }
 }

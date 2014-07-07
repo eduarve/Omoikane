@@ -18,9 +18,13 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface CompraRepo extends GenericDao<Compra, Long> {
+    @Query("FROM Compra c LEFT JOIN FETCH c.items ic LEFT JOIN FETCH c.proveedor p LEFT JOIN FETCH ic.articulo a LEFT JOIN FETCH a.baseParaPrecio bp WHERE completado = ?")
     Compra findByCompletado(Boolean completado);
 
-    @Query("FROM Compra c LEFT JOIN FETCH c.items ic JOIN FETCH ic.articulo a")
+    @Query("FROM Compra c JOIN FETCH c.proveedor p")
     List<Compra> findAll(Pageable pageable);
+
+    @Query("FROM Compra c LEFT JOIN FETCH c.items ic LEFT JOIN FETCH c.proveedor p LEFT JOIN FETCH ic.articulo a LEFT JOIN FETCH a.baseParaPrecio bp WHERE c.id = ?")
+    Compra find(Long id);
 
 }

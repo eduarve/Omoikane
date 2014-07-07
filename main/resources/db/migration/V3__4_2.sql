@@ -38,3 +38,7 @@ ALTER TABLE ListaDePrecios ADD COLUMN activo BIT(1) DEFAULT 1;
 ALTER TABLE Impuesto ADD COLUMN notas TEXT;
 ALTER TABLE Impuesto ADD COLUMN activo BIT(1) DEFAULT 1;
 
+-- Cambio en compra para almacenar estado de pago
+ALTER TABLE Compra ADD COLUMN estadoPago INT(11);
+
+

@@ -526,6 +526,8 @@ public class CompraController implements Initializable {
     @Transactional
     private CompraEntityWrapper loadOrCreateModel(Compra compra) {
 
+        if(compra != null)
+            compra = repo.find(compra.getId());
         if(compra == null)
             compra = repo.findByCompletado(false);
         if(compra == null) {

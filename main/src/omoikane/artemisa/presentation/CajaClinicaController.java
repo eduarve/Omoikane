@@ -90,6 +90,9 @@ public class CajaClinicaController
     @FXML //  fx:id="abonoTxt"
     private TextField abonoTxt; // Value injected by FXMLLoader
 
+    @FXML //  fx:id="partidaCol"
+    private TableColumn<Transaccion, Long> partidaCol; // Value injected by FXMLLoader
+
     @FXML //  fx:id="abonosCol"
     private TableColumn<Transaccion, BigDecimal> abonosCol; // Value injected by FXMLLoader
 
@@ -127,6 +130,7 @@ public class CajaClinicaController
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         assert abonoTxt != null : "fx:id=\"abonoTxt\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
+        assert partidaCol != null : "fx:id=\"partidaCol\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
         assert abonosCol != null : "fx:id=\"abonosCol\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
         assert cargosCol != null : "fx:id=\"cargosCol\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
         assert conceptoCol != null : "fx:id=\"conceptoCol\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
@@ -137,6 +141,7 @@ public class CajaClinicaController
         assert saldoTxt != null : "fx:id=\"saldoTxt\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
         assert tabEdoCuenta != null : "fx:id=\"tabEdoCuenta\" was not injected: check your FXML file 'CajaClinicaView.fxml'.";
 
+        partidaCol.setCellValueFactory(new PropertyValueFactory<Transaccion, Long>("id"));
         fechaCol.setCellValueFactory(new PropertyValueFactory<Transaccion, Date>("fecha"));
         cargosCol.setCellValueFactory(new PropertyValueFactory<Transaccion, BigDecimal>("cargo"));
         abonosCol.setCellValueFactory(new PropertyValueFactory<Transaccion, BigDecimal>("abono"));

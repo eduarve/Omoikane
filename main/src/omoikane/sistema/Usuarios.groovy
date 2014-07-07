@@ -69,8 +69,8 @@ package omoikane.sistema;
             usuarioActivo.ID = id;
         }
     }
-    public static def identificaPersona() throws Exception {
-            def respuesta
+    public static Map identificaPersona() throws Exception {
+            Map respuesta
 
             Usuarios sysUsers = omoikane.principal.Principal.applicationContext.getBean(Usuarios.class);
 
@@ -78,11 +78,15 @@ package omoikane.sistema;
                 Usuario usuario;
 
                 usuario = AuthContext.instanciar().authenticate();
-                if(usuario == null) return false;
+                if(usuario == null) {
+                    respuesta = [:]
+                    respuesta.cerrojo= { return false; }
+                    return respuesta;
+                }
 
                 def serv          = Nadesico.conectar()
                 if(usuario == null) {
-                    respuesta = 0;
+                    respuesta = null;
                 } else {
                     def nadesicoUsuario = serv.getUsuario(usuario.getId(),1);
                     respuesta = [ID: usuario.getId(), huella: "", nombre: usuario.getNombre(), sucursales:["1":nadesicoUsuario.perfil]]
@@ -103,15 +107,11 @@ package omoikane.sistema;
             }
             */
 
-            if(respuesta != 0) {
-                respuesta.cerrojo= { llave ->
-                  return llave<=respuesta.sucursales[Principal.IDAlmacen as String]
-                }
-                ultimoUsuarioIdentificado = respuesta
-            } else {
-                respuesta = [:]
-                respuesta.cerrojo= { return false; }
+            respuesta.cerrojo= { llave ->
+              return llave<=respuesta.sucursales[Principal.IDAlmacen as String]
             }
+            ultimoUsuarioIdentificado = respuesta
+
 
             respuesta
     }

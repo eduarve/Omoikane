@@ -43,7 +43,7 @@ public class MostrarCatalogoClientesHandler extends ICajaEventHandler {
         retorno[0] = (retorno[0] ==null)?"": retorno[0];
         cajaController.getCajaLogic().cambiarCliente(Integer.valueOf(retorno[0]));
 
-        cajaController.getMainAnchorPane().requestFocus();
+        cajaController.getVentaTableView().requestFocus();
         cajaController.getCapturaTextField().requestFocus();
 
     }

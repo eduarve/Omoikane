@@ -72,7 +72,10 @@ public class VentaEspecialHandler extends ICajaEventHandler {
                 getController().getVentaTableView().requestFocus();
                 getController().getVentaTableView().onKeyReleasedProperty().set(ventaKBHandler);
             } else {
+                logger.info("Acceso denegado");
+                getController().getVentaTableView().requestFocus();
                 getController().getCapturaTextField().requestFocus();
+
             }
         } catch (Exception e) {
             logger.error("Error al habilitar venta especial", e);

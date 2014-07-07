@@ -3,7 +3,9 @@ package omoikane.compras.entities;
 import omoikane.entities.Usuario;
 import omoikane.inventarios.tomaInventario.ItemConteoInventario;
 import omoikane.proveedores.Proveedor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Index;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,11 @@ import java.util.List;
  */
 @Entity
 public class Compra {
+
+    public enum EstadoPago {
+        PAGADA, IMPAGA
+    };
+
     private Long id;
 
     private Date fecha;
@@ -33,13 +40,16 @@ public class Compra {
 
     private Proveedor proveedor;
 
+    private EstadoPago estadoPago = EstadoPago.IMPAGA;
+
     @PrePersist
     public void prePersist() {
         setFecha(new Date());
         setCompletado(false);
     }
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @Transactional
+    @ElementCollection(fetch = FetchType.LAZY)
     @OrderColumn
     public List<ItemCompra> getItems() { return items; }
 
@@ -106,6 +116,16 @@ public class Compra {
 
     public void setFolioOrigen(String folioOrigen) {
         this.folioOrigen = folioOrigen;
+    }
+
+    @Column
+    public EstadoPago getEstadoPago() {
+        if(estadoPago==null) estadoPago = EstadoPago.IMPAGA;
+        return estadoPago;
+    }
+
+    public void setEstadoPago(EstadoPago e) {
+        estadoPago = e;
     }
 
     public String toString() {

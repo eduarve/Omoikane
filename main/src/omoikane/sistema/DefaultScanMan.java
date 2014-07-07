@@ -20,13 +20,18 @@ public class DefaultScanMan extends ScanMan {
         for (char ch=it.first(); ch != CharacterIterator.DONE; ch=it.next()) {
             if(((int)ch)==13) { break; }
 
+            /*
             try {
                 Thread.sleep(20);
             } catch (InterruptedException ex) {
                 Logger.getLogger(DefaultScanMan.class.getName()).log(Level.SEVERE, null, ex);
 
             }
+            */
             super.robot.keyPress((int) ch);
+            super.robot.keyRelease((int) ch);
+            super.robot.delay(20);
+
         }
         
 

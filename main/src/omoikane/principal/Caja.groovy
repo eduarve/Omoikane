@@ -182,63 +182,63 @@ class Caja implements Serializable {
     }
 
     static def btnMovimientosAction() {
-        Thread.start {
-            def panel  = new omoikane.formularios.PanelMovimientosCaja()
-            if(omoikane.sistema.Usuarios.autentifica(PMA_MOVIMIENTOSCAJA)) {
-                try {
 
-                    panel.setVisible(true)
-                    Herramientas.In2ActionX(panel, KeyEvent.VK_F6, "retiro"   ) { panel.btnRetiro.doClick()     }
-                    Herramientas.In2ActionX(panel, KeyEvent.VK_F5, "deposito"   ) { panel.btnDeposito.doClick()     }
-                    Herramientas.In2ActionX(panel, KeyEvent.VK_ENTER, "cerrar"   ) { panel.btnCerrar.doClick()     }
-                    Herramientas.In2ActionX(panel, KeyEvent.VK_ESCAPE, "cerrar"   ) { panel.btnCerrar.doClick()     }
-                    def movServ = Nadesico.conectar()
-                    SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    def horas = movServ.getCaja(IDCaja)
-                    movServ.desconectar()
+        def panel  = new omoikane.formularios.PanelMovimientosCaja()
+        if(omoikane.sistema.Usuarios.autentifica(PMA_MOVIMIENTOSCAJA)) {
+            try {
 
-                    def contexto = new EstrategiaEstandar();
-                    def ventas= contexto.obtenerSumaCaja(IDCaja, sdf.format(horas.horaAbierta), 'CURRENT_TIMESTAMP')
+                panel.setVisible(true)
+                Herramientas.In2ActionX(panel, KeyEvent.VK_F6, "retiro"   ) { panel.btnRetiro.doClick()     }
+                Herramientas.In2ActionX(panel, KeyEvent.VK_F5, "deposito"   ) { panel.btnDeposito.doClick()     }
+                Herramientas.In2ActionX(panel, KeyEvent.VK_ENTER, "cerrar"   ) { panel.btnCerrar.doClick()     }
+                Herramientas.In2ActionX(panel, KeyEvent.VK_ESCAPE, "cerrar"   ) { panel.btnCerrar.doClick()     }
+                def movServ = Nadesico.conectar()
+                SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                def horas = movServ.getCaja(IDCaja)
+                movServ.desconectar()
 
-                    panel.txtNVentas.text   = ventas.nVentas
-                    panel.txtVentas.text    = ventas.total
-                    panel.txtRetiros.text   = ventas.retiros
-                    panel.txtDepositos.text = ventas.depositos
+                def contexto = new EstrategiaEstandar();
+                def ventas= contexto.obtenerSumaCaja(IDCaja, sdf.format(horas.horaAbierta), 'CURRENT_TIMESTAMP')
 
-                    panel.btnRetiro.actionPerformed = {
-                        Thread.start {
-                            def sisUsers = omoikane.sistema.Usuarios
-                            def usuario = sisUsers.identificaPersona()
-                            if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
-                                Caja.doMovimientoCaja(panel, "Retiro",usuario.ID)
-                            }
-                            else{Dialogos.lanzarAlerta("Sin Permiso"); }
+                panel.txtNVentas.text   = ventas.nVentas
+                panel.txtVentas.text    = ventas.total
+                panel.txtRetiros.text   = ventas.retiros
+                panel.txtDepositos.text = ventas.depositos
+
+                panel.btnRetiro.actionPerformed = {
+                    Thread.start {
+                        def sisUsers = omoikane.sistema.Usuarios
+                        def usuario = sisUsers.identificaPersona()
+                        if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
+                            Caja.doMovimientoCaja(panel, "Retiro",usuario.ID)
                         }
+                        else{Dialogos.lanzarAlerta("Sin Permiso"); }
                     }
+                }
 
-                    panel.btnDeposito.actionPerformed = {
-                        Thread.start {
-                            def sisUsers = omoikane.sistema.Usuarios
-                            def usuario = sisUsers.identificaPersona()
-                            if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
-                                Caja.doMovimientoCaja(panel, "Deposito",usuario.ID)
-                            }
-                            else{Dialogos.lanzarAlerta("Sin Permiso"); }
+                panel.btnDeposito.actionPerformed = {
+                    Thread.start {
+                        def sisUsers = omoikane.sistema.Usuarios
+                        def usuario = sisUsers.identificaPersona()
+                        if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
+                            Caja.doMovimientoCaja(panel, "Deposito",usuario.ID)
                         }
+                        else{Dialogos.lanzarAlerta("Sin Permiso"); }
                     }
+                }
 
-                    def dialog = new JInternalDialog2(((omoikane.principal.Escritorio)omoikane.principal.Principal.getEscritorio()).getFrameEscritorio(), "Movimientos Caja", panel)
-                    panel.btnCerrar.actionPerformed = { Thread.start { dialog.setActivo(false);  } }
-                    panel.txtImporte.requestFocusInWindow()
-                    dialog.setActivo(true)
-                    panel.txtImporte.requestFocusInWindow()
-                } catch(exce) {
-                    logger.error("Error en movimientos caja: ${exce.getMessage()}", exce)
-                }} else {
-                javax.swing.JOptionPane.showMessageDialog(panel, "Acceso denegado")
-            }
-
+                def dialog = new JInternalDialog2(((omoikane.principal.Escritorio)omoikane.principal.Principal.getEscritorio()).getFrameEscritorio(), "Movimientos Caja", panel)
+                panel.btnCerrar.actionPerformed = { Thread.start { dialog.setActivo(false);  } }
+                panel.txtImporte.requestFocusInWindow()
+                dialog.setActivo(true)
+                panel.txtImporte.requestFocusInWindow()
+            } catch(exce) {
+                logger.error("Error en movimientos caja: ${exce.getMessage()}", exce)
+            }} else {
+            javax.swing.JOptionPane.showMessageDialog(panel, "Acceso denegado")
         }
+
+
     }
     static def lanzarCaja() {
         if(cerrojo(PMA_LANZARCAJA)){

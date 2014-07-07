@@ -245,7 +245,10 @@ public class LegacyVenta implements Serializable {
         this.folio = folio;
     }
 
-    public List<LegacyVentaDetalle> getItems() { return items; }
+    public List<LegacyVentaDetalle> getItems() {
+        if(items == null) items = new ArrayList<>();
+        return items;
+    }
 
     public void setItems(List<LegacyVentaDetalle> lvd) { items = lvd; }
 

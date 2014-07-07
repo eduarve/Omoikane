@@ -60,8 +60,8 @@ public class CompraManager {
 
         Herramientas.panelCatalogo(frame);
         Principal.getEscritorio().getPanelEscritorio().add(frame);
-        frame.setSize(1134, 640);
-        frame.setPreferredSize(new Dimension(1134, 640));
+        frame.setSize(1000, 640);
+        frame.setPreferredSize(new Dimension(1000, 640));
         frame.setVisible(true);
         Herramientas.centrarVentana(frame);
         Herramientas.iconificable(frame);

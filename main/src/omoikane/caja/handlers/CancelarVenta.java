@@ -42,6 +42,8 @@ public class CancelarVenta extends ICajaEventHandler {
                 registrar(getController().getModel().getVenta());
                 ventaRepo.delete(getController().getCajaLogic().getVentaAbiertaBean());
                 getController().getCajaLogic().nuevaVenta();
+                getController().getMainAnchorPane().requestFocus();
+                getController().getCapturaTextField().requestFocus();
             } else {
                 getController().getMainAnchorPane().requestFocus();
                 getController().getCapturaTextField().requestFocus();
