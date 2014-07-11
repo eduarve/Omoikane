@@ -121,7 +121,7 @@ public class VentaEspecialHandler extends ICajaEventHandler {
                         throw new UnsupportedOperationException("No está soportado modificar el precio de artículos con más de un impuesto");
                 }
 
-                BigDecimal descuentoPorc = pm.getProductoData().getDescuento();
+                BigDecimal descuentoPorc = pm.getPorcentajeDescuentoTotal();
                 BigDecimal cien         = new BigDecimal("100");
                 BigDecimal uno          = new BigDecimal("1");
 

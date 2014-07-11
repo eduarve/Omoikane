@@ -121,6 +121,8 @@ import java.text.SimpleDateFormat
 
     static JFrame getEscritorio() {
 
+        if(omoikane.principal.Principal.escritorio.getFrameEscritorio() != null)
+            return omoikane.principal.Principal.escritorio.getFrameEscritorio();
         JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
         for(Frame f : JFrame.getFrames()) {
             if(f instanceof omoikane.formularios.Splash) continue;

@@ -30,6 +30,7 @@ public class ProductoModel {
     private ObjectProperty<BigDecimal> precioBase;
     private ListProperty<ImpuestoModel> impuestos;
     private ObjectProperty<BigDecimal> descuentosBase;
+    private ObjectProperty<BigDecimal> porcDescuentosBase;
     private StringProperty importeString;
     private Producto productoData;
     private LegacyVentaDetalle ventaDetalleEntity;
@@ -204,6 +205,10 @@ public class ProductoModel {
             imps.add(nf.format(imp.getImpuesto()));
         }
         return imps;
+    }
+
+    public BigDecimal getPorcentajeDescuentoTotal() {
+        return getProductoData().getPrecio().getPorcentajeDescuentoTotal();
     }
 
     public BigDecimal getDescuentos() {

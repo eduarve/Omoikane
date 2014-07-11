@@ -82,12 +82,12 @@ public class Articulos
     static def lanzarCatalogo() {
         try {
             if(cerrojo(PMA_ABRIRARTICULO)) {
-                _lanzarCatalogo()
+                return _lanzarCatalogo()
             } else {
                 Dialogos.lanzarAlerta("Acceso Denegado")
             }
         } catch (Exception e) {
-            _lanzarCatalogo();
+            return _lanzarCatalogo();
         }
     }
 

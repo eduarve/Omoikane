@@ -118,6 +118,7 @@ public class ScanMan implements SerialPortEventListener
 
                 handleScan(new String(buffer,0,len))
 
+
             }
             catch ( Exception e )
             {

@@ -430,8 +430,8 @@ public class CatalogoArticulos extends OmJInternalFrame {
                 if(tabModelo != null) { tabModelo.destroy(); }
                 modelo = null;
 
-                if(!modal){
-                ((javax.swing.JInternalFrame)((omoikane.principal.MenuPrincipal)omoikane.principal.Principal.getMenuPrincipal()).getMenuPrincipal()).requestFocusInWindow();
+                if(!modal && Principal.getMenuPrincipal() != null && Principal.getMenuPrincipal().getMenuPrincipal() != null){
+                    Principal.getMenuPrincipal().getMenuPrincipal().requestFocusInWindow();
                 }
             }
         }.start();

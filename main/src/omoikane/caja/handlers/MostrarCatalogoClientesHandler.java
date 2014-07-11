@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import omoikane.caja.presentation.CajaController;
 import omoikane.principal.Clientes;
+import omoikane.sistema.Usuarios;
 
 import javax.swing.*;
 
@@ -26,14 +27,18 @@ public class MostrarCatalogoClientesHandler extends ICajaEventHandler {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                mostrarCatalogo();
+                if(Usuarios.autentifica(Usuarios.GERENTE)) {
+                    mostrarCatalogo();
+                } else {
+                    getController().getCapturaTextField().requestFocus();
+                }
+
                 return null;
             }
         };
-        new Thread(task).start();
-        //Platform.runLater(task);
 
-        //SwingUtilities.invokeLater(task);
+        new Thread(task).start();
+
 
     }
 

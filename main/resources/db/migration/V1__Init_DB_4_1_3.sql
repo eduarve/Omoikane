@@ -813,7 +813,7 @@ CREATE TABLE `ListaDePrecios` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE `PrecioAlterno` (
   `utilidad` decimal(19,2) DEFAULT NULL,
@@ -836,7 +836,7 @@ CREATE TABLE `Cliente` (
   `listaDePrecios_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK96841DDA1C11FE1F` (`listaDePrecios_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- ------------------------------
 
