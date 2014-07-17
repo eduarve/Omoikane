@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -142,6 +143,16 @@ public class Articulo implements Serializable, IProductoApreciado {
 
     public void setIdGrupo(int idGrupo) {
         this.idGrupo = idGrupo;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        uModificacion = new Timestamp(Calendar.getInstance().getTime().getTime());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        uModificacion = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
     @OneToOne(fetch = FetchType.EAGER)

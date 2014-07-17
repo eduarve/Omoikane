@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
@@ -166,19 +167,16 @@ public class CajaClinicaController
         //*************************************************************
         //Configurar celda con boton eliminar transacción. Cortesía de: https://gist.github.com/jewelsea/3081826
         //*************************************************************
-        TableColumn<Transaccion, Boolean> actionCol = new TableColumn<>("Acciones");
+        TableColumn<Transaccion, Transaccion> actionCol = new TableColumn<>("Acciones");
         actionCol.setSortable(false);
+        actionCol.setPrefWidth(150d);
 
         // define a simple boolean cell value for the action column so that the column will only be shown for non-empty rows.
-        actionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Transaccion, Boolean>, ObservableValue<Boolean>>() {
-            @Override public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Transaccion, Boolean> features) {
-                return new SimpleBooleanProperty(features.getValue() != null);
-            }
-        });
+        actionCol.setCellValueFactory(new PropertyValueFactory<Transaccion, Transaccion>("itself"));
 
         // create a cell value factory with an add button for each row in the table.
-        actionCol.setCellFactory(new Callback<TableColumn<Transaccion, Boolean>, TableCell<Transaccion, Boolean>>() {
-            @Override public TableCell<Transaccion, Boolean> call(TableColumn<Transaccion, Boolean> personBooleanTableColumn) {
+        actionCol.setCellFactory(new Callback<TableColumn<Transaccion, Transaccion>, TableCell<Transaccion, Transaccion>>() {
+            @Override public TableCell<Transaccion, Transaccion> call(TableColumn<Transaccion, Transaccion> accionesTablecolumn) {
                 return new ActionsCell(tabEdoCuenta);
             }
         });
@@ -319,21 +317,35 @@ public class CajaClinicaController
         cuentaSimplificadaPrint.show();
     }
 
-    private class ActionsCell extends TableCell<Transaccion, Boolean> {
-        // a button for adding a new person.
+    /**
+     * Celda con los botones de acción para una transacción
+     */
+    private class ActionsCell extends TableCell<Transaccion, Transaccion> {
+        // Botón para borrar transacción
         final Button delButton       = new Button("Borrar");
         // pads and centers the add button in the cell.
         final StackPane paddedButton = new StackPane();
+        // Botón para reimprimir abono
+        final Button reciboButton       = new Button("Recibo");
+        // Layout de los botones
+        final HBox hBox;
 
         /**
          * ActionsCell constructor
-         * @param table the table to which a new person can be added.
+         * @param table La tabla a la que se le agregarán los botones
          */
         ActionsCell(final TableView table) {
+            hBox = new HBox();
+            hBox.setSpacing(3d);
 
             paddedButton.setPadding(new javafx.geometry.Insets(3, 0, 0, 0));
-            paddedButton.getChildren().add(delButton);
-            final TableCell<Transaccion, Boolean> c = this;
+            paddedButton.getChildren().add(hBox);
+
+            //Relleno el HBox con los botones de acciones
+            hBox.getChildren().add(delButton);
+            hBox.getChildren().add(reciboButton);
+
+            final TableCell<Transaccion, Transaccion> c = this;
             delButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent actionEvent) {
                     TableRow tableRow = c.getTableRow();
@@ -341,12 +353,25 @@ public class CajaClinicaController
                     onEliminarTransaccion(item);
                 }
             });
+
+            reciboButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent actionEvent) {
+                    TableRow tableRow = c.getTableRow();
+                    Transaccion item= (Transaccion) tableRow.getTableView().getItems().get(tableRow.getIndex());
+                    AbonoPrint abonoPrint = new AbonoPrint((Abono) item);
+                    abonoPrint.show();
+                }
+            });
         }
 
         /** places an add button in the row only if the row is not empty. */
-        @Override protected void updateItem(Boolean item, boolean empty) {
+        @Override protected void updateItem(Transaccion item, boolean empty) {
             super.updateItem(item, empty);
             if (!empty) {
+                if(item instanceof Abono)
+                    reciboButton.setVisible(true);
+                else
+                    reciboButton.setVisible(false);
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setGraphic(paddedButton);
             }
@@ -369,9 +394,9 @@ public class CajaClinicaController
 
     private void registrarCancelacionTransaccion(Transaccion quitar) {
         CancelacionTransaccion c = new CancelacionTransaccion();
-        c.setConcepto   ( quitar.getConcepto() );
+        c.setConcepto(quitar.getConcepto());
         c.setPaciente(quitar.getPaciente());
-        c.setImporte    ( quitar.getCargo().subtract(quitar.getAbono()) );
+        c.setImporte(quitar.getCargo().subtract(quitar.getAbono()));
         cancelacionTransaccionDAO.save(c);
     }
 

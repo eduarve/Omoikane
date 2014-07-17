@@ -117,7 +117,7 @@ class ArticulosFunciones {
         def db   = Db.connect()
         try {
           db.connection.autoCommit = false
-          db.executeUpdate("UPDATE articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ? WHERE id_articulo = ?"
+          db.executeUpdate("UPDATE articulos SET codigo = ?, id_linea = ?, id_grupo = ?, descripcion = ?, unidad = ?, uModificacion = CURRENT_TIMESTAMP WHERE id_articulo = ?"
                            , [codigo, IDLinea, IDGrupo, descripcion, unidad, IDArticulo])
 
           ArticulosFunciones.modPrecio(IDAlmacen, IDArticulo, costo:costo as Double, utilidad:utilidad  as Double, descuento:descuento as Double)

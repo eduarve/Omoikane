@@ -3,6 +3,7 @@ package omoikane.formularios;
 import com.jhlabs.image.BoxBlurFilter;
 import com.jhlabs.image.PointillizeFilter;
 import omoikane.principal.Principal;
+import org.jdesktop.swingx.image.GaussianBlurFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,36 +30,60 @@ public class OmJInternalFrame extends javax.swing.JInternalFrame {
     {
         if(!Principal.fondoBlur) { g.drawImage(this.fondo, 0, 0, null); return; }
 
+        int anchoPantalla = Principal.getEscritorio().getEscritorioFrame().getWidth();
+        int altoPantalla  = Principal.getEscritorio().getEscritorioFrame().getHeight();
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        BufferedImage fondo = Principal.getEscritorio().getPanelEscritorio().getBufferImage(getHeight(), getWidth());
+        //BufferedImage fondo = Principal.getEscritorio().getPanelEscritorio().getBufferImage(1024, 720);
+        BufferedImage fondo = Principal.getEscritorio().getPanelEscritorio().getBufferedImage(
+                anchoPantalla,
+                altoPantalla);
 
         if(cacheFondo == null) {
             //BoxBlurFilter filter = new BoxBlurFilter();
 
             cacheFondo = copyImage(fondo);
 
-            //fondo = new GaussianBlurFilter(4).filter(fondo, null);
+            cacheFondo = new GaussianBlurFilter(6).filter(fondo, null);
             //filter.setIterations(2);
             //filter.setRadius(5);
 
+            /*
             PointillizeFilter pointillizeFilter = new PointillizeFilter();
             pointillizeFilter.setEdgeColor(6);
             pointillizeFilter.setEdgeThickness(1);
             pointillizeFilter.setFadeEdges(true);
             pointillizeFilter.setFuzziness(6);
-            pointillizeFilter.filter(cacheFondo, cacheFondo);
+            pointillizeFilter.filter(cacheFondo, cacheFondo); */
 
             //filter.filter(cacheFondo, cacheFondo);
 
             Graphics2D graphics2D = (Graphics2D) cacheFondo.getGraphics();
-            graphics2D.setColor(new Color(0,0,0,155));
+            graphics2D.setColor(new Color(5,5,5,105));
             graphics2D.fillRect(0,0,cacheFondo.getWidth(),cacheFondo.getHeight());
 
         }
 
-        BufferedImage fondoVentana = cacheFondo.getSubimage(getX(), getY(), getWidth(), getHeight());
-        g.drawImage(fondoVentana, 0, 0, null);
+        int anchoFrame = getWidth();
+        int altoFrame  = getHeight();
+        int x          = getX();
+        int y          = getY();
+        int frameX     = 0;
+        int frameY     = 0;
+
+        if(getX()+anchoFrame > anchoPantalla) anchoFrame = anchoFrame - ((getX()+anchoFrame) - anchoPantalla);
+        if(getY()+altoFrame  > altoPantalla ) altoFrame  = altoFrame - ((getY()+altoFrame ) - altoPantalla);
+        if(x < 0) { frameX -= x; x = 0; }
+        if(y < 0) { frameY -= y; y = 0; }
+
+        BufferedImage fondoVentana = cacheFondo.getSubimage(x, y, anchoFrame, altoFrame);
+        g.drawImage(fondoVentana, frameX, frameY, null);
+        if(Principal.DEBUG) {
+            g.drawString("X:" + x + ",Y:" + y + ",W:" + anchoFrame + ", H:" + altoFrame, 15, 15);
+            g.drawString("X:" + getX() + ",Y:" + getY() + ",W:" + getWidth() + ", H:" + getHeight(), 15, 30);
+            g.drawString("W:" + cacheFondo.getWidth() + ", H:" + cacheFondo.getHeight(), 15, 45);
+        }
 
 
     }

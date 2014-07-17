@@ -65,7 +65,7 @@ public class Principal {
         public static int                   sysAlto
         public static int                   CacheSTableAtras
         public static int                   CacheSTableAdelante
-        public static boolean               fondoBlur
+        public static boolean               fondoBlur               = true
         public static String                puertoImpresion
         public static boolean               impresoraActiva
         public static boolean               scannerActivo
@@ -86,7 +86,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.2.1";
+        public static final String          VERSION                 = "4.2.2";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora

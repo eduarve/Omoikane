@@ -40,6 +40,9 @@ public class Transaccion {
         abono = new BigDecimal(0);
     }
 
+    @Transient
+    public Transaccion itself = this;
+
     @PrePersist
     protected void onCreate() {
         setFecha( new Timestamp(Calendar.getInstance().getTime().getTime()) );
@@ -91,5 +94,9 @@ public class Transaccion {
 
     public String getPacienteNombre() {
         return paciente.getNombre();
+    }
+
+    public Transaccion getItself() {
+        return itself;
     }
 }
