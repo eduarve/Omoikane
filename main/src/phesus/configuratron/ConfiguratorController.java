@@ -270,6 +270,10 @@ public class ConfiguratorController implements Initializable {
 
         if(entornoExtendido) addListasDePrecios();
 
+        // ---- CRUD Departamentos
+
+        if(entornoExtendido) addCRUDDepartamentos();
+
     }
 
     public Boolean mySQLTester( String url, String user, String pass ) {
@@ -320,6 +324,21 @@ public class ConfiguratorController implements Initializable {
             public void run() {
 
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("listaDePreciosCRUDView");
+                ip.setContent(scene.getRoot());
+            }
+        });
+    }
+
+    private void addCRUDDepartamentos() {
+        final TitledPane ip = new TitledPane();
+        ip.setText("Departamentos");
+        accordion.getPanes().add(ip);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("departamentoCRUDView");
                 ip.setContent(scene.getRoot());
             }
         });

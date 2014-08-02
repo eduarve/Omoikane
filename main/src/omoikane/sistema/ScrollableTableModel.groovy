@@ -26,10 +26,12 @@ public class ScrollableTableModel extends AbstractTableModel {
         Connection		conn
         Statement 		control
         ResultSet 		rs
-        String          jdbcUrl;
+        private String          jdbcUrl;
         java.util.Hashtable<String,java.util.List> cacheFila = new Hashtable();
 
-    public String getJdbcUrl() { return jdbcUrl }
+    public String getJdbcUrl() {
+        return jdbcUrl;
+    }
     public void setJdbcUrl(String url) { jdbcUrl = url; }
 
     public ScrollableTableModel(java.util.List colNames, ArrayList colClases)

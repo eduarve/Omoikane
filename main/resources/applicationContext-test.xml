@@ -39,6 +39,7 @@
     <bean id="corte" class="omoikane.entities.Corte"></bean>
     <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
     <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios"></bean>
+    <bean id="departamento" class="omoikane.producto.departamento.Departamento"></bean>
 
     <bean id="cliente" class="omoikane.clientes.Cliente"></bean>
     <bean id="clienteView" class="omoikane.clientes.ClienteView"></bean>
@@ -61,6 +62,7 @@
         <hades:dao id="clienteRepo"/>
         <hades:dao id="listaDePreciosRepo"/>
         <hades:dao id="impuestoRepo"/>
+        <hades:dao id="departamentoRepo"/>
     </hades:dao-config>
 
     <bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -90,7 +92,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <!--<property name="generateDdl" value="true"/>-->
+                <property name="generateDdl" value="true"/>
                 <property name="database" value="MYSQL"/>
             </bean>
         </property>

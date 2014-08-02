@@ -15,12 +15,12 @@ import groovy.inspect.swingui.*
  import omoikane.sistema.seguridad.AuthContext
  import phesus.configuratron.model.TipoImpresora
 
- class Config {
+public class Config {
     def    prefs
     Config config
     
-    Config() {
-       cargar()
+    Config(String file = Principal.configFilePath) {
+       cargar(file)
        if(config == null ) {
            config = this
            defineAtributos()
@@ -28,9 +28,9 @@ import groovy.inspect.swingui.*
        config = this
     }
 
-    def cargar () {
+    def cargar (String file) {
         //def xmlTxt = getClass().getResourceAsStream("/omoikane/principal/config.xml")
-        def xmlTxt = new File("config.xml")
+        def xmlTxt = new File(file)
         def xml    = new groovy.util.XmlParser().parseText(xmlTxt.text)
         prefs = xml
     }
@@ -65,6 +65,14 @@ import groovy.inspect.swingui.*
             Principal.tipoCorte               = Integer.valueOf(config.tipoCorte[0].text())
             Principal.authType                = AuthContext.valueOf(String.valueOf(config.authType[0].text()))
             Principal.HA                      = Boolean.valueOf(config.HA[0].text())
+
+            //Definición de propiedades opcionales
+            assignProp(Principal.urlJasperserver)   { Principal.urlJasperserver = String.valueOf(config.URLJasperserver[0].text()); }
+            assignProp(Principal.loginJasperserver) { Principal.loginJasperserver = String.valueOf(config.userJasperserver[0].text()); }
+            assignProp(Principal.passJasperserver)  { Principal.passJasperserver = String.valueOf(config.passJasperserver[0].text()); }
+            assignProp(Principal.multiSucursal)     { Principal.multiSucursal = Boolean.valueOf(config.multiSucursal[0].text()); }
+            assignProp(Principal.isFlywayActive)    { Principal.isFlywayActive = Boolean.valueOf(config.isFlywayActive[0].text()); }
+
             if(Principal.basculaActiva) {
                 String cmd = ""
                 String.valueOf(config.bascula.@weightCommand[0]).split(",").each { cmd += (it as Integer) as char }
@@ -80,4 +88,16 @@ import groovy.inspect.swingui.*
                 ];
             }
         }
+     def assignProp(def var, Closure expr) {
+         try {
+             //Intento cargar el valor del archivo de configuración, si es que existe
+             expr();
+         } catch(Exception e) {
+             //No existe la propiedad en el archivos de configuración
+             //Verifico si no existe una propiedad default
+             if(var == null)
+             //No existe una propiedad default así que lanzo la excepción
+                 throw e;
+         }
+     }
 }

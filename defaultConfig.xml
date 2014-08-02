@@ -14,6 +14,16 @@
         puerto serial a usb  linux : /dev/ttyUSBX   windows: COMX
         X es el valor del puerto en el que se encuentra
 
+	02/08/2014
+	Se agregan los siguientes parámetros (nodos) OPCIONALES
+	- "URLJasperserver": URL del servidor Jasper Server para mostrar reportes avanzados
+	- "userJasperserver": Nombre de usuario del servidor jasper server
+	- "passJasperserver": Contraseña del servidor jasper server
+	- "multiSucursal": Habilita el modo mullti-sucursal, también es necesario añadir los archivos [sucursal].config.xml.
+		Valores permitidos: TRUE, FALSE. Default: FALSE
+	- "isFlywayActive": Habilita/deshabilita las migraciones automáticas de la base de datos.
+		Valores permitidos: TRUE, FALSE. Default: TRUE
+	
     29/05/2014
     - Nuevo nodo nombreImpresora. Almacena el nombre del sistema dado a un impresora seleccionada para imprimir tickets
 	- Nuevo nodo tipoImpresora. Se refiere al tipo de impresora que se utiliza para imprimir tickets. Opciones.

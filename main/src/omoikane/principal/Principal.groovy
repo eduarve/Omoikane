@@ -5,19 +5,27 @@
 
 package omoikane.principal
 
+import airbrake.AirbrakeAppender
+import groovy.inspect.swingui.ObjectBrowser
+import groovy.swing.SwingBuilder
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
 import omoikane.configuracion.ConfiguratorAppManager
 import omoikane.formularios.CatalogoArticulos
 import omoikane.ha.DisconnectionHandler
+import omoikane.mepro.FramePrincipal
 import omoikane.repository.CajaRepo
 import omoikane.repository.UsuarioRepo
 import omoikane.sistema.*
 import omoikane.sistema.Usuarios as SisUsuarios
 
 import omoikane.sistema.cortes.ContextoCorte
+import org.apache.log4j.Appender
+import org.apache.log4j.Level
 import org.apache.log4j.Logger
+import org.apache.log4j.spi.Filter
+import org.apache.log4j.spi.LoggingEvent
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.FlywayException
 import org.flywaydb.core.api.MigrationInfo
@@ -34,10 +42,14 @@ import sun.awt.CGraphicsEnvironment
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import javax.swing.Action
+import javax.swing.BoxLayout
+import javax.swing.JDialog
 import javax.swing.JFrame
 import javax.swing.JInternalFrame
 import javax.swing.JOptionPane
+import javax.swing.JPanel
 import javax.swing.SwingUtilities
+import java.awt.FlowLayout
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.beans.PropertyChangeListener
@@ -86,11 +98,18 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.2.2";
+        public static final String          VERSION                 = "4.3";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
         public static TipoImpresora         tipoImpresora
+        public static String                loginJasperserver       = "jasperadmin"
+        public static String                passJasperserver        = "jasperadmin"
+        public static String                urlJasperserver         = "http://172.16.0.3:8080/jasperserver"
+        public static boolean               multiSucursal           = false
+        public static String                configFilePath          = "config.xml";
+        public static boolean               isFlywayActive          = true;
+
 
     public static void main(args)
         {
@@ -121,7 +140,10 @@ public class Principal {
                 Runtime.getRuntime().addShutdownHook(shutdownHandler);
 
                 logger.trace("Cargando configuración...")
-                config = new omoikane.sistema.Config()
+                config = new omoikane.sistema.Config(configFilePath)
+
+                //Comportamiento multisucursal
+                if(Principal.multiSucursal) multiSucursalGUI();
 
                 logger.trace("Cargando ApplicationContext...")
                 applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -134,7 +156,7 @@ public class Principal {
                     //Verificar conexión consultando tabla cajas
                     checkDatabaseAvailability();
                     //Verifica la conexión con la BD y la versión del esquema de la BD
-                    checkDBMigrations();
+                    if(isFlywayActive) checkDBMigrations();
                 } catch (FlywayException fe) {
                     logger.error("Base de datos no actualizada para ésta versión de omoikane.", fe);
                 } catch( Exception e ) {
@@ -183,7 +205,47 @@ public class Principal {
 
         }
 
-    /**
+    static def multiSucursalGUI() {
+
+        def dir = new File('./')
+
+        def swing;
+        def mainMenu;
+        def pnlScripts;
+        swing = SwingBuilder.build {
+            lookAndFeel( 'nimbus' )
+            mainMenu = new JDialog(title:"Phesus Proxy Sucursales")
+            mainMenu.setLayout(new FlowLayout());
+            mainMenu.setModal(true)
+        }
+
+        //Los archivos de configuración de sucursales deben tener el nombre
+        // de la sucursal y la doble extensión .config.xml. Por ejemplo "centro.config.xml".
+        dir.eachFileMatch(~/(.*\.config.xml)/) {
+            //El nombre de la sucursal es el nombre el archivo sin extensiones
+            def nombre  = it.name.split("\\.")[0]
+            def archivo = it;
+
+            mainMenu.add(
+                    swing.panel() {
+                        swing.button(
+                                icon: imageIcon("/omoikane/Media2/icons/PNG/32/shop.png"),
+                                text: nombre, actionCommand:it, actionPerformed:
+                                {
+                                    Principal.configFilePath = archivo
+                                    mainMenu.show false
+                                },
+                                preferredSize:[130,35])
+                        //swing.button(text: "GC", actionCommand:it, actionPerformed: { lanzarGC(archivo) })
+                        //swing.button(icon: imageIcon("/omoikane/mepro/media/blog_post_edit.png"), actionCommand:it, actionPerformed: { modificarScript(archivo) })
+                        //swing.button(icon: imageIcon("/omoikane/mepro/media/remove.png"), actionCommand:it, actionPerformed: { eliminarScript(archivo) } )
+                    }
+            )
+        }
+        mainMenu.pack()
+        mainMenu.show true
+    }
+/**
      * Éste método desribe el comportamiento a seguir para el arranque del programa sin conexión a la BD.
      */
     static void disconnectedBehavior() {
@@ -278,7 +340,6 @@ public class Principal {
         if(SHOW_UNHANDLED_EXCEPTIONS) {
             Thread.setDefaultUncaughtExceptionHandler(new UEHandler());
         }
-        //Logger.getRootLogger().addAppender(new CEAppender());
     }
 
     static def initJavaFx() {

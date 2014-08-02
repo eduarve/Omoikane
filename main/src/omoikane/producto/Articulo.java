@@ -8,6 +8,7 @@ import omoikane.entities.Anotacion;
 import omoikane.entities.CodigoProducto;
 import omoikane.entities.Paquete;
 import omoikane.inventarios.Stock;
+import omoikane.producto.departamento.Departamento;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -59,6 +61,12 @@ public class Articulo implements Serializable, IProductoApreciado {
     @Basic(optional = false)
     @Column(name = "id_grupo")
     private int idGrupo;
+    @NotNull
+    @Column
+    private Boolean activo = true;
+
+    @Column(name = "departamento_id", insertable = false, updatable = false)
+    private Long departamentoId;
 
     @Transient private Boolean esPaqueteDefaultValue = false;
 
@@ -179,6 +187,8 @@ public class Articulo implements Serializable, IProductoApreciado {
         return p;
     }
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Departamento departamento;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
@@ -282,6 +292,30 @@ public class Articulo implements Serializable, IProductoApreciado {
 
     public void setEsPaquete(Boolean esGrupo) {
         this.esPaquete = esGrupo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    public Long getDepartamentoId() {
+        return departamentoId;
+    }
+
+    public void setDepartamentoId(Long departamentoId) {
+        this.departamentoId = departamentoId;
     }
 }
 

@@ -17,6 +17,7 @@ public class PrecioOmoikaneLogic implements IPrecio {
     BaseParaPrecio baseParaPrecio;
     Collection<Impuesto> impuestos;
 
+
     public PrecioOmoikaneLogic(BaseParaPrecio baseParaPrecio, Collection<Impuesto> impuestos) {
         this.baseParaPrecio = baseParaPrecio;
         this.impuestos = impuestos;
@@ -30,13 +31,15 @@ public class PrecioOmoikaneLogic implements IPrecio {
 
     /**
      * Analiza los alternos y aplica el seleccionado a esta instancia.
-     * Si no exíste dicha instancia de precio alterno (o ninguna) ignora la instrucción.
+     * Si no exíste dicha instancia de precio alterno (o ninguna) toma la utilidad base.
      * @param listaDePrecios_id
      */
     public void loadPrecioAlterno(Integer listaDePrecios_id) {
         if(!baseParaPrecio.getPreciosAlternos().isEmpty() && baseParaPrecio.getPreciosAlternos().containsKey(listaDePrecios_id)) {
             Double porcentajeUtilidad = baseParaPrecio.getPreciosAlternos().get(listaDePrecios_id).doubleValue();
             baseParaPrecio.setPorcentajeUtilidad( porcentajeUtilidad );
+        } else {
+            baseParaPrecio.setPorcentajeUtilidad( baseParaPrecio.getPorcentajeUtilidadBase() );
         }
     }
 

@@ -60,7 +60,7 @@ public class LineaDeCapturaFilter {
      */
     private void filtroEAN13() {
         String captura = getCodigo();
-        if(captura.length() == 13 && captura.substring(0,2).equals("26")) {
+        if(captura != null && captura.length() == 13 && captura.substring(0,2).equals("26")) {
             BigDecimal cant = new BigDecimal(captura.substring(7, 12) ).divide(new BigDecimal(1000));
             NumberFormat nf = NumberFormat.getNumberInstance();
             nf.setGroupingUsed(false);

@@ -22,6 +22,7 @@ class Permisos {
     static def PMA_MODIFICARARTICULO   = CAPTURISTA
     static def PMA_ELIMINARARTICULO    = PROPIETARIO
     static def PMA_LISTADEPRECIOSCRUD  = GERENTE
+    static def PMA_DEPARTAMENTOCRUD    = GERENTE
 
     static def PMA_ABRIRCAJA       = SUPERVISOR
     static def PMA_DETALLESCAJA    = SUPERVISOR

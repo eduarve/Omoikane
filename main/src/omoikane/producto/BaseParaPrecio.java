@@ -1,5 +1,7 @@
 package omoikane.producto;
 
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -51,6 +53,10 @@ public class BaseParaPrecio implements Serializable {
     @Column
     private String preciosAlternos;
 
+    //Almacena el valor original de "porcentajeUtilidad", ya que dicho valor puede cambiar para representar
+    //  otra lista de precios.
+    @Transient private Double porcentajeUtilidadBase;
+
     /**
      * Analiza la cadena "preciosAlternos" para generar un mapa.
      * @return Map<"ID Lista de Precios":Integer, "Factor de utilidad":BigDecimal>
@@ -74,6 +80,7 @@ public class BaseParaPrecio implements Serializable {
         mapa.put(listaDePrecios_id, factorUtilidad);
         StringBuilder builder = new StringBuilder();
         NumberFormat nb = NumberFormat.getNumberInstance();
+        nb.setGroupingUsed(false);
         nb.setMaximumFractionDigits(2);
         nb.setMinimumFractionDigits(2);
 
@@ -146,9 +153,22 @@ public class BaseParaPrecio implements Serializable {
     }
 
     public void setPorcentajeUtilidad(double porcentajeUtilidad) {
+        //Si se llama a éste método se está sobreescribiendo la utilidad original
+        // por lo tanto la variable "PorcentajeUtilidadBase" respalda el primer valor de utilidad dado
+
+        if(porcentajeUtilidadBase==null)
+            porcentajeUtilidadBase = this.porcentajeUtilidad;
         this.porcentajeUtilidad = porcentajeUtilidad;
     }
 
 
+    public Double getPorcentajeUtilidadBase() {
+        //Si no se ha respaldado "porcentajeUtilidadBase" es porque no se ha sobreescrito "porcentajeUtilidad"
+        //      por lo tanto recurro a "porcentajeUtilidad"
+        if(porcentajeUtilidadBase == null)
+            return porcentajeUtilidad;
+        else
+            return porcentajeUtilidadBase;
+    }
 }
 

@@ -1,3 +1,70 @@
+## Versión 4.3.0 (2014-08-02)
+
+- Se agrega reporte remoto de excepciones mediante airbrake
+- Departamentos, nuevo característica que da soporte para clasificación por productos por departamentos
+- CRUD de departamentos en panel de configuración
+- Panel de configuración redimensionable 
+- NIP de usuario ahora acepta números con longitud de 4 a 8 dígitos
+- Panel de confección de etiquetas ahora acepta códigos secundarios
+- Incrementé el tamaño del panel de artículos para dar más espacio a las opciones recientemente añadidas
+- Capacidad para eliminar mediante desactivación los productos, ésta técnica también es llamada soft delete
+- Agregué una nueva columna de opciones en el menú principal reduciendo el ancho de todos los botones
+- CRUD de clientes ahora es accesible desde el menú principal
+- Panel de reportes avanzados. Éste panel se conecta a un servidor Jasper Server para obtener características más avanzadas y dinámicas en los reportes.
+- Nuevos settings opcionales en config.xml: URLJasperserver, loginJasperserver, passJasperserver, multiSucursal, isFlywayActive.
+- Multi-sucursal. Ahora es posible conectarse a otras sucursales al iniciar el sistema, se deben realizar archivos de configuración para cada sucursal con el formato [Nombre de sucursal].config.xml y activar el parámetros opcional “<multiSucursal>true</multiSucursal>”  en el archivo de configuración principal AKA “config.xml”. Recomiendo desactivar el parámetro “isFlywayActive” para evitar problemas con versiones distintas entre sucursales.
+- Corrige bug que mostraba utilidad de una lista de precios indefinida igual a la de otra lista de precios, el comportamiento correcto es utilizar la utilidad base (no la de otra lista de precios)
+- Corrige bug que mostraba las primeras 5 compras en lugar de las últimas 5 en la pestaña “compras” del panel “Artículo”. Además la fecha de las compras ahora se muestra en formato SHORT
+- Corrige bug que ponía comas en las utilidades de las listas de precios
+
+## Versión 4.2.2 (2014-07-16)
+
+- [Artemisa] Se agregó un botón en la caja clínica para reimprimir
+recibos de pago
+- [Artemisa] Se agregó el número de partida a cada transacción en la
+caja clínica
+- [Omoikane] Optimización del FrostedGlassDesktopPane, ahora es más
+eficiente, además corregí un bug que distorsionaba la imagen y los
+errores causados al sacar una ventana de la pantalla visible.
+- Corregido bug #111 No se actualiza la fecha de modificación de un
+producto
+
+## Versión 4.2.1 (2014-07-10)
+
+- [Artemisa] Agregué columna de partida a la “caja clínica”
+- Corrección del problema de pérdida de enfoque del cursor en Caja:
+Después de cancelar producto, cancelar venta, mostrar catálogo de
+clientes, mostrar movimientos de caja y habilitar venta especial. En
+algunos casos se perdía el enfoque al no recibir los permisos de la
+respectiva acción, en otros casos al recibir permisos o en ambas
+situaciones.
+- [Compras] Permite filtrar por proveedor
+- [Compras] Se redujo exageradamente el tiempo que tarda en abrir el
+CRUD
+- [Compras] Permite filtrar por fecha
+- [Compras] #72 Concepto “Estado del pago de una compra” que contempla
+dos estados: “Compra Pagada” y “Compra impaga”, éste status es visible
+en cada compra y se puede modificar con un click.
+- [Compras] Permite filtrar por “Estado del pago”
+- Corrección de bug que daba un falso positivo en autenticación,
+generando errores en pantallas protegidas (se recibía una autenticación
+positiva pero sin usuario no era posible hacer cualquier cosa)
+- Corrección de bug que generaba un error al cambiar de cliente en caja
+cuando no había items
+- Optimicé handler de escáner de código de barras serial.
+- Corrección de los auto incrementos en el esquema inicial
+- Corrección bug artemisa: Catálogo de artículos solo abre una vez por
+instancia de la aplicación
+- Corrección de bug #110 en ventas especiales: No se aplican descuentos
+por línea o grupo a precios especiales
+- Corrección de algunas pérdidas de enfoque en operaciones en caja
+- Ajustes en handler de escáner de código de barras serial
+- Mejora de la función “getEscritorio”, ahora reconoce más escenarios
+como el escritorio de Artemisa
+- Protección de la operación de cambio de cliente en Caja, para que un
+cajero no pueda utilizar el cambio de cliente para aplicar cambios de
+precio sin la autorización de un superior (perfil gerente)
+
 ## Versión 4.2.0 (2014-06-30)
 
 - #105 Agregué CRUD de listas de precios. En lugar de “DELETE” el CRUD

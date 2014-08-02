@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class ComprasProductoController
         Query query = entityManager.createNativeQuery(
                 "SELECT c.fecha, c.folioOrigen, p.nombre, ci.cantidad, ci.costoUnitario, ci.cantidad*ci.costoUnitario " +
                 "FROM Proveedor p JOIN Compra c ON p.id = c.proveedor_id JOIN Compra_items ci ON ci.Compra_id = c.id " +
-                "WHERE ci.articulo_id_articulo = ? LIMIT 5;");
+                "WHERE ci.articulo_id_articulo = ? ORDER BY c.fecha DESC LIMIT 5;");
         query.setParameter(1, art.getIdArticulo());
         List<Object[]> comprasPorItem = query.getResultList();
         int i = 1;
@@ -99,7 +100,7 @@ public class ComprasProductoController
         final NumberFormat nb = NumberFormat.getNumberInstance();
         nb.setMaximumFractionDigits(2);
         nb.setMinimumFractionDigits(2);
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance(DateFormat.SHORT);
 
         //Declaración de variables y asignación de valores
         Label labelFecha       = new Label(sdf.format( row.get(0) ));

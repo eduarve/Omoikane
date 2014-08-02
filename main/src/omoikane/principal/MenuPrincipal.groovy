@@ -61,7 +61,7 @@ class MenuPrincipal {
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnVender.requestFocusInWindow() }
             }
             menuPrincipal.btnDetallesVentas.keyReleased = {
-                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnPreferencias.requestFocusInWindow() }
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnReportes.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnLineas.requestFocusInWindow() }
             }
             menuPrincipal.btnLineas.keyReleased = {
@@ -70,14 +70,14 @@ class MenuPrincipal {
             }
             menuPrincipal.btnMovAlmacen.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnLineas.requestFocusInWindow() }
-                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnPreferencias.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnReportes.requestFocusInWindow() }
             }
             menuPrincipal.btnCerrar.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnMepro.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCajas.requestFocusInWindow() }
             }
             menuPrincipal.btnCortes.keyReleased = {
-                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnReportes.requestFocusInWindow() }
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnReportesAvanzados.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnGrupos.requestFocusInWindow() }
             }
             menuPrincipal.btnGrupos.keyReleased = {
@@ -93,12 +93,12 @@ class MenuPrincipal {
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnReportes.requestFocusInWindow() }
             }
             menuPrincipal.btnPreferencias.keyReleased = {
-                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnMovAlmacen.requestFocusInWindow() }
-                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnDetallesVentas.requestFocusInWindow() }
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnProveedores.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCerrar.requestFocusInWindow() }
             }
             menuPrincipal.btnTomaInventarios.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnGrupos.requestFocusInWindow() }
-                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnReportes.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnReportesAvanzados.requestFocusInWindow() }
             }
             menuPrincipal.btnEtiquetas.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnCajas.requestFocusInWindow() }
@@ -106,15 +106,27 @@ class MenuPrincipal {
             }
             menuPrincipal.btnProveedores.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnEtiquetas.requestFocusInWindow() }
-                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnMepro.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnPreferencias.requestFocusInWindow() }
             }
             menuPrincipal.btnMepro.keyReleased = {
-                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnProveedores.requestFocusInWindow() }
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnCompras.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCerrar.requestFocusInWindow() }
             }
             menuPrincipal.btnReportes.keyReleased = {
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnMovAlmacen.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnDetallesVentas.requestFocusInWindow() }
+            }
+            menuPrincipal.btnReportesAvanzados.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnTomaInventarios.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCortes.requestFocusInWindow() }
+            }
+            menuPrincipal.btnClientes.keyReleased = {
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnCerrar.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCompras.requestFocusInWindow() }
+            }
+            menuPrincipal.btnCompras.keyReleased = {
+                if(it.keyCode==it.VK_UP)   { menuPrincipal.btnClientes.requestFocusInWindow() }
+                if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnMepro.requestFocusInWindow() }
             }
 
 

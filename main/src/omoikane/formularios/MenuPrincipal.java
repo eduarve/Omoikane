@@ -24,6 +24,7 @@ import omoikane.inventarios.tomaInventario.ConteoInventarioManager;
 import omoikane.mepro.Mepro;
 import omoikane.moduloreportes.MenuOmoikane;
 import omoikane.proveedores.ProveedoresManager;
+import omoikane.reportes.JasperServerReportsManager;
 import omoikane.sistema.Herramientas;
 import omoikane.sistema.StopWatch;
 
@@ -73,7 +74,6 @@ public class MenuPrincipal extends OmJInternalFrame {
         btnCerrar = new javax.swing.JButton();
         btnVender = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        btnCajas = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -89,7 +89,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         btnMepro = new javax.swing.JButton();
         btnCortes = new javax.swing.JButton();
         btnArticulos = new javax.swing.JButton();
-        btnTomaInventarios = new javax.swing.JButton();
+        btnCompras = new javax.swing.JButton();
         btnGrupos = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
         btnDetallesVentas = new javax.swing.JButton();
@@ -97,7 +97,10 @@ public class MenuPrincipal extends OmJInternalFrame {
         lblVersion = new javax.swing.JLabel();
         btnReportes = new javax.swing.JButton();
         btnProveedores = new javax.swing.JButton();
-        btnTomaInventarios1 = new javax.swing.JButton();
+        btnTomaInventarios = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
+        btnCajas = new javax.swing.JButton();
+        btnReportesAvanzados = new javax.swing.JButton();
 
         setIconifiable(true);
         setTitle("Menú Principal");
@@ -112,17 +115,17 @@ public class MenuPrincipal extends OmJInternalFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 36px; }</style></head>\n<body>\nMenú Principal\n</body></html>");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 600, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 540, -1));
 
         btnCerrar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnCerrar.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 24px; }.icon { font-family: 'linecons'; font-size: 24px; } </style></head>\n<body>\n<span class=\"icon\">&#xe01e;</span>\nCerrar\n</span></body></html>");
+        btnCerrar.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 24px; }.icon { font-family: 'linecons'; font-size: 24px; } </style></head> <body> <span class=\"icon\">&#xe01e;</span> Cerrar </span></body></html>");
         btnCerrar.setIconTextGap(-5);
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 200, 70));
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 350, 70));
 
         btnVender.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnVender.setText("Vender");
@@ -132,23 +135,13 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnVenderActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 210, 70));
+        getContentPane().add(btnVender, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 170, 70));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Artículos");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
-
-        btnCajas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnCajas.setText("Cajas");
-        btnCajas.setIconTextGap(-5);
-        btnCajas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCajasActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 110, 200, 70));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 840, 10));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 890, 10));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -159,7 +152,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Almacen");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
-        getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 840, 10));
+        getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 890, 10));
 
         btnAlmacenes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnAlmacenes.setText("Almacenes");
@@ -169,7 +162,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnAlmacenesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAlmacenes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 210, 70));
+        getContentPane().add(btnAlmacenes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 170, 70));
 
         btnMovAlmacen.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnMovAlmacen.setText("<html>Movimientos<br>Almacén</html>");
@@ -179,10 +172,11 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnMovAlmacenActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMovAlmacen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, 200, 70));
+        getContentPane().add(btnMovAlmacen, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 170, 70));
 
         btnPreferencias.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnPreferencias.setText("Config.");
+        btnPreferencias.setText("Configuración");
+        btnPreferencias.setToolTipText("");
         btnPreferencias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPreferencias.setIconTextGap(-12);
         btnPreferencias.addActionListener(new java.awt.event.ActionListener() {
@@ -190,7 +184,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnConfigActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPreferencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 410, 90, 70));
+        getContentPane().add(btnPreferencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 410, 170, 70));
 
         btnUsuarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnUsuarios.setText("Usuarios");
@@ -201,8 +195,8 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnUsuariosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 210, 70));
-        getContentPane().add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 840, 10));
+        getContentPane().add(btnUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 170, 70));
+        getContentPane().add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 890, 10));
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -214,15 +208,15 @@ public class MenuPrincipal extends OmJInternalFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 30, Short.MAX_VALUE)
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 40, Short.MAX_VALUE)
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 480, 30, 40));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 480, 30, 40));
 
         btnLineas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnLineas.setText("Líneas");
@@ -232,7 +226,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnLineasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLineas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 210, 200, 70));
+        getContentPane().add(btnLineas, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, 170, 70));
 
         btnMepro.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnMepro.setText("<html>Scripting</html>");
@@ -243,7 +237,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnMeproActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMepro, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 410, 100, 70));
+        getContentPane().add(btnMepro, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 410, 170, 70));
 
         btnCortes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnCortes.setText("Cortes");
@@ -253,7 +247,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnCortesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCortes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 110, 200, 70));
+        getContentPane().add(btnCortes, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 170, 70));
 
         btnArticulos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnArticulos.setText("Catálogo");
@@ -263,17 +257,17 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnArticulosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 210, 70));
+        getContentPane().add(btnArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 170, 70));
 
-        btnTomaInventarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnTomaInventarios.setText("Compras");
-        btnTomaInventarios.setIconTextGap(-5);
-        btnTomaInventarios.addActionListener(new java.awt.event.ActionListener() {
+        btnCompras.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnCompras.setText("Compras");
+        btnCompras.setIconTextGap(-5);
+        btnCompras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTomaInventariosActionPerformed(evt);
+                btnComprasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTomaInventarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, 200, 70));
+        getContentPane().add(btnCompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 310, 170, 70));
 
         btnGrupos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnGrupos.setText("Grupos");
@@ -283,8 +277,8 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnGruposActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGrupos, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 210, 200, 70));
-        getContentPane().add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 840, 10));
+        getContentPane().add(btnGrupos, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 210, 170, 70));
+        getContentPane().add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 890, 10));
 
         btnDetallesVentas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnDetallesVentas.setText("<html>Detalles<br>de Ventas</html>");
@@ -294,7 +288,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnDetallesVentasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDetallesVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 200, 70));
+        getContentPane().add(btnDetallesVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 170, 70));
 
         btnEtiquetas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnEtiquetas.setText("Etiquetas");
@@ -303,11 +297,12 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnEtiquetasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEtiquetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 210, 200, 70));
+        getContentPane().add(btnEtiquetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 210, 170, 70));
 
         lblVersion.setForeground(new java.awt.Color(255, 255, 255));
+        lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblVersion.setText("<html><head><style type='text/css'>body { font-family: 'Roboto Thin'; font-size: 10px; }</style></head> <body> Versión </span></body></html>");
-        getContentPane().add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 490, 140, 20));
+        getContentPane().add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 490, 140, 20));
 
         btnReportes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnReportes.setText("<html>Reportes</html>");
@@ -318,7 +313,7 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnReportesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 410, 200, 70));
+        getContentPane().add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 410, 170, 70));
 
         btnProveedores.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnProveedores.setText("Proveedores");
@@ -328,17 +323,48 @@ public class MenuPrincipal extends OmJInternalFrame {
                 btnProveedoresActionPerformed(evt);
             }
         });
-        getContentPane().add(btnProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 310, 200, 70));
+        getContentPane().add(btnProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 310, 170, 70));
 
-        btnTomaInventarios1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnTomaInventarios1.setText("Toma de Inventarios");
-        btnTomaInventarios1.setIconTextGap(-5);
-        btnTomaInventarios1.addActionListener(new java.awt.event.ActionListener() {
+        btnTomaInventarios.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnTomaInventarios.setText("Toma de Inventarios");
+        btnTomaInventarios.setIconTextGap(-5);
+        btnTomaInventarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTomaInventarios1ActionPerformed(evt);
+                btnTomaInventariosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTomaInventarios1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 200, 70));
+        getContentPane().add(btnTomaInventarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 170, 70));
+
+        btnClientes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnClientes.setText("Clientes");
+        btnClientes.setIconTextGap(-5);
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, 170, 70));
+
+        btnCajas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnCajas.setText("Cajas");
+        btnCajas.setIconTextGap(-5);
+        btnCajas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCajasActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, 170, 70));
+
+        btnReportesAvanzados.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnReportesAvanzados.setText("<html>Reportes Avanzados</html>");
+        btnReportesAvanzados.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReportesAvanzados.setIconTextGap(-5);
+        btnReportesAvanzados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesAvanzadosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReportesAvanzados, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 410, 170, 70));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -353,10 +379,6 @@ public class MenuPrincipal extends OmJInternalFrame {
     private void btnAlmacenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlmacenesActionPerformed
         omoikane.principal.Almacenes.lanzarCatalogo();
 }//GEN-LAST:event_btnAlmacenesActionPerformed
-
-    private void btnCajasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajasActionPerformed
-        omoikane.principal.Caja.lanzarCatalogo();
-}//GEN-LAST:event_btnCajasActionPerformed
 
     private void btnMovAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovAlmacenActionPerformed
         StopWatch timer = new StopWatch().start();
@@ -394,10 +416,10 @@ public class MenuPrincipal extends OmJInternalFrame {
         System.out.println(timer.getElapsedTime());
 }//GEN-LAST:event_btnArticulosActionPerformed
 
-    private void btnTomaInventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventariosActionPerformed
+    private void btnComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprasActionPerformed
         omoikane.compras.CompraManager cm = new omoikane.compras.CompraManager();
         JInternalFrame frame = cm.startJFXCompra();
-}//GEN-LAST:event_btnTomaInventariosActionPerformed
+}//GEN-LAST:event_btnComprasActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         omoikane.principal.Usuarios.lanzarCatalogo();
@@ -435,10 +457,23 @@ public class MenuPrincipal extends OmJInternalFrame {
         JInternalFrame frame = pm.startJFXProveedores();
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
-    private void btnTomaInventarios1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventarios1ActionPerformed
+    private void btnTomaInventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTomaInventariosActionPerformed
         ConteoInventarioManager im = new ConteoInventarioManager();
         JInternalFrame frame = im.startJFXTomaInventario();
-    }//GEN-LAST:event_btnTomaInventarios1ActionPerformed
+    }//GEN-LAST:event_btnTomaInventariosActionPerformed
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        omoikane.principal.Clientes.lanzarCatalogo();
+    }//GEN-LAST:event_btnClientesActionPerformed
+
+    private void btnCajasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajasActionPerformed
+        omoikane.principal.Caja.lanzarCatalogo();
+    }//GEN-LAST:event_btnCajasActionPerformed
+
+    private void btnReportesAvanzadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesAvanzadosActionPerformed
+        JasperServerReportsManager rm = new JasperServerReportsManager();
+        JInternalFrame frame = rm.startJFXReports();
+    }//GEN-LAST:event_btnReportesAvanzadosActionPerformed
 
 
     private void btnEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -461,6 +496,8 @@ public class MenuPrincipal extends OmJInternalFrame {
     private javax.swing.JButton btnArticulos;
     private javax.swing.JButton btnCajas;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnCompras;
     private javax.swing.JButton btnCortes;
     private javax.swing.JButton btnDetallesVentas;
     private javax.swing.JButton btnEtiquetas;
@@ -471,8 +508,8 @@ public class MenuPrincipal extends OmJInternalFrame {
     private javax.swing.JButton btnPreferencias;
     private javax.swing.JButton btnProveedores;
     public javax.swing.JButton btnReportes;
+    public javax.swing.JButton btnReportesAvanzados;
     private javax.swing.JButton btnTomaInventarios;
-    private javax.swing.JButton btnTomaInventarios1;
     private javax.swing.JButton btnUsuarios;
     private javax.swing.JButton btnVender;
     private javax.swing.JLabel jLabel1;

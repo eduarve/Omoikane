@@ -41,11 +41,11 @@ class Ventas {
         try {
         def db   = Db.connect()
         def Venta = db.firstRow("SELECT * FROM ventas WHERE id_almacen = $IDAlmacen AND id_venta = $ID")
-        def Cliente=db.firstRow("SELECT razonSocial FROM clientes WHERE id_cliente=$Venta.id_cliente")
+        def Cliente=db.firstRow("SELECT nombre FROM Cliente WHERE id = $Venta.id_cliente")
         def Almacen=db.firstRow("SELECT descripcion FROM almacenes WHERE id_almacen=$Venta.id_almacen")
         Venta.date       = Venta.fecha_hora
         Venta.fecha_hora = Venta.fecha_hora as String
-        Venta.nombreCliente=Cliente.razonSocial
+        Venta.nombreCliente=Cliente.nombre
         Venta.nombreAlmacen=Almacen.descripcion
 
 

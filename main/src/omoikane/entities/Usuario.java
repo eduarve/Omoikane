@@ -36,7 +36,7 @@ public class Usuario {
 
     private byte[] huella3;
 
-    @Range(min = 1000, max = 9999, message = "El nip debe ser un número de 4 dígitos")
+    @Range(min = 1000, max = 99999999, message = "El nip debe ser un número de entre 4 y 8 dígitos")
     private int nip;
 
     @NotNull    private Timestamp umodificacion;

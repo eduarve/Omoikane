@@ -119,7 +119,12 @@ public class CajaLogicImpl implements ICajaLogic {
         model.setPaginacionBusqueda(new PageRequest(pagina.getPageNumber()+1, pagina.getPageSize()));
     }
 
-
+    /**
+     * Añade un producto a la venta de acuerdo a la captura realizada por el usuario
+     * @param model
+     * @param capturaFilter
+     * @throws Exception
+     */
     private void addProducto(CajaModel model, LineaDeCapturaFilter capturaFilter) throws Exception {
         model.getProductos().clear(); // Borra resultados de la búsqueda integrada
 

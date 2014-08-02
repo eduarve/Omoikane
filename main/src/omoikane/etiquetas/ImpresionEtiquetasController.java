@@ -77,10 +77,21 @@ public class ImpresionEtiquetasController implements Initializable {
     private void actionSeguiente() {
         articulosToReport = new ArrayList<Articulo>();
         for (ImpresionEtiquetasModel articuloModel: tablaContenido.getItems()) {
-            List<Articulo> articuloList = productoRepo.findByCodigo(articuloModel.getCodigo());
-            if (articuloList.isEmpty())
+
+            // Primero busca artículos por código principal
+            List<Articulo> articulos = productoRepo.findByCodigo(articuloModel.getCodigo());
+
+            // Si no encuentra artículos por código principal entonces busca por código alterno
+            if(articulos.size() < 1)
+                articulos = productoRepo.findByCodigoAlterno(articuloModel.getCodigo());
+
+            //No encontró artículos
+            if (articulos.isEmpty())
                 continue;
-            Articulo articulo = productoRepo.findByCodigo(articuloModel.getCodigo()).get(0);
+
+            // Si encontró cualquier artículo por código principal o alterno toma el primero
+            Articulo articulo = articulos.get(0);
+
             Long cantidad = articuloModel.getCantidad();
             int i= 0;
             while ( cantidad.compareTo(new Long(i)) > 0) {

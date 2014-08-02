@@ -34,7 +34,15 @@ public class EditableTableCell<S extends Object, T extends String> extends Abstr
         if (textField == null)
             return;
 
-        List<Articulo> articulos =  productoRepo.findByCodigo(textField.getText());
+        String codigo = textField.getText();
+
+        // Primero busca artículos por código principal
+        List<Articulo> articulos = productoRepo.findByCodigo(codigo);
+
+        // Si no encuentra artículos por código principal entonces busca por código alterno
+        if(articulos.isEmpty())
+            articulos = productoRepo.findByCodigoAlterno(codigo);
+
         if (articulos.isEmpty()) {
             if( losingFocus ) {
                 commitEdit(((T) "Producto no encontrado"));

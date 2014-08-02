@@ -28,6 +28,8 @@ import omoikane.producto.BaseParaPrecio;
 import omoikane.producto.Impuesto;
 import omoikane.producto.PrecioOmoikaneLogic;
 import omoikane.sistema.*;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
 import org.jdesktop.swingx.image.GaussianBlurFilter;
 
@@ -106,8 +108,9 @@ public class CatalogoArticulos extends OmJInternalFrame {
                             "JOIN lineas l ON l.id_linea = a.id_linea " +
                             "JOIN grupos g ON g.id_grupo = a.id_grupo " +
                             "LEFT JOIN articulos_Impuesto ai ON a.id_articulo = ai.articulos_id_articulo " +
-                            "LEFT JOIN Impuesto i ON ai.impuestos_id = i.id ");
-                    String query = getMainQuery() + "GROUP BY a.id_articulo";
+                            "LEFT JOIN Impuesto i ON ai.impuestos_id = i.id " +
+                            "WHERE a.activo = 1 ");
+                    String query = getMainQuery() + "GROUP BY a.id_articulo ";
                     setQueryTable( query );
                     
                     jTable1.setModel(modeloTabla);
@@ -127,7 +130,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
             this.setOpaque(false);
 
             this.generarFondo();
-            this.btnEliminar.setVisible(false);
+            this.btnEliminar.setVisible(true);
             Herramientas.centrarVentana(this);
             this.btnAceptar.setVisible(false);
        } catch(Exception e) {
@@ -177,7 +180,8 @@ public class CatalogoArticulos extends OmJInternalFrame {
     }
 
     public void setQueryTable(String query) {
-        System.out.println( "==="+query);
+        if(Principal.DEBUG) System.out.println( "==="+query);
+
         txtQuery = query;
 
         modelo.setQuery(query);
@@ -443,9 +447,8 @@ public class CatalogoArticulos extends OmJInternalFrame {
         int IDArticulo = ((ScrollableTableModel)jTable1.getModel()).getIDArticuloFila(this.jTable1.getSelectedRow());
         if(IDArticulo != -1) {
             String descripcion = ((ScrollableTableModel)jTable1.getModel()).getDescripcion(jTable1.getSelectedRow());
-            if(JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar éste artículo: \""+descripcion+"\"?", "lala", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                omoikane.principal.Articulos.eliminarArticulo(IDArticulo);
-            }
+            omoikane.principal.Articulos.eliminarArticulo(this, IDArticulo);
+            ((ScrollableTableModel)jTable1.getModel()).refrescar();
         }
 }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -594,15 +597,11 @@ public class CatalogoArticulos extends OmJInternalFrame {
         String busqueda = this.txtBusqueda.getText();
 
         if(busqueda==null) { xCodDes = xLineas = xGrupos = false; }
-        //String query = "select DISTINCT a.id_articulo as xID,a.codigo as xCodigo, id_linea as xLinea, 'NA' as xGrupo, descripcion as xDescripcion, unidad as xUnidad, 1 as xPrecio, 1 as xExistencias" +
-        //        " from articulos as a ";
+
         String query = getMainQuery();
 
-        if(xCodDes) {
-            //query += "LEFT JOIN codigo_producto as b ON a.id_articulo = b.producto_id_articulo ";
-        }
         
-        if(xCodDes || xLineas || xGrupos) { query += "WHERE "; }
+        if(xCodDes || xLineas || xGrupos) { query += " AND "; }
         if(xCodDes) {
                 query += " a.id_articulo IN (" +
                         "SELECT a.id_articulo FROM articulos a LEFT JOIN codigo_producto as b ON a.id_articulo = b.producto_id_articulo WHERE " +
@@ -612,13 +611,13 @@ public class CatalogoArticulos extends OmJInternalFrame {
         }
         if(xCodDes && (xLineas || xGrupos)) { query += "OR "; }
         if(xLineas) {
-                query += "(linea like '%"+busqueda+"%' ) ";
+                query += "(l.descripcion like '%"+busqueda+"%' ) ";
         }
         if((xLineas||xCodDes) && xGrupos) { query += "OR "; }
         if(xGrupos) {
-                query += "(grupo like '%"+busqueda+"%' ) ";
+                query += "(g.descripcion like '%"+busqueda+"%' ) ";
         }
-        query += "GROUP BY a.id_articulo";
+        query += "GROUP BY a.id_articulo ";
         
         setQueryTable(query);
     }
@@ -628,37 +627,6 @@ public class CatalogoArticulos extends OmJInternalFrame {
         else if(lastBounds.equals(r)) { return true; }
         else { lastBounds = r; return false; }
     }
-
-    /*public void paintComponent(Graphics g)
-    {
-      Graphics2D g2d = (Graphics2D) g;
-      g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-      if(!areSameBounds(getBounds())) {
-          BoxBlurFilter filter = new BoxBlurFilter();
-          BufferedImage fondo = Principal.getEscritorio().getPanelEscritorio().getBufferImage(getHeight(), getWidth());
-          fondo = fondo.getSubimage(0+5+5, 0+5+5, getWidth()-10, getHeight()-10);
-          System.out.println("Fondo: "+getX()+","+getY()+","+getWidth()+","+getHeight());
-
-          //fondo = new GaussianBlurFilter(4).filter(fondo, null);
-          filter.setIterations(1);
-          filter.setRadius(1);
-          //filter.filter(fondo, fondo);
-          PointillizeFilter pointillizeFilter = new PointillizeFilter();
-          pointillizeFilter.setEdgeColor(1);
-          pointillizeFilter.setEdgeThickness(1);
-          pointillizeFilter.setFadeEdges(true);
-          pointillizeFilter.setFuzziness(1);
-          //pointillizeFilter.filter(fondo, fondo);
-
-          g2d.setColor(new Color(0,0,0,165));
-          g2d.fillRect(0,0,getWidth(),getHeight());
-          fondo.getGraphics().setColor(Color.RED);
-          fondo.getGraphics().drawRect(0,0,50,50);
-      }
-
-    } */
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -699,7 +667,7 @@ class ArticulosTableModel extends ScrollableTableModel {
         numberFormat.setGroupingUsed(false);
 
     }
-
+    /*
     @Override
     public String getJdbcUrl() {
         if(Principal.HA) {
@@ -707,7 +675,7 @@ class ArticulosTableModel extends ScrollableTableModel {
         } else {
             return super.getJdbcUrl();
         }
-    }
+    } */
 
     public Object getValueAt(int row,int col){
         if(col==5) {

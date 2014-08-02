@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane prefHeight="372.0" prefWidth="493.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.reportes.JasperServerReportsController">
+  <children>
+    <BorderPane prefHeight="372.0" prefWidth="493.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <center>
+        <AnchorPane fx:id="reportePanel" prefHeight="200.0" prefWidth="200.0">
+          <children>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="371.0" prefWidth="327.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <content>
+                <AnchorPane id="Content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="326.0" style="-fx-background-color:red;">
+                  <children>
+                    <WebView fx:id="reporteWebView" prefHeight="10.0" prefWidth="10.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </ScrollPane>
+          </children>
+        </AnchorPane>
+      </center>
+      <left>
+        <BorderPane prefHeight="372.0" prefWidth="165.0" style="-fx-background-color: RGB(40,40,40);">
+          <bottom>
+            <VBox prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="CENTER">
+              <children>
+                <Button fx:id="salirButton" cancelButton="false" defaultButton="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Salir" />
+              </children>
+            </VBox>
+          </bottom>
+          <center>
+            <VBox fx:id="menuVBox" alignment="TOP_CENTER" fillWidth="true" prefHeight="-1.0" prefWidth="-1.0" spacing="3.0" BorderPane.alignment="CENTER">
+              <BorderPane.margin>
+                <Insets bottom="10.0" top="20.0" />
+              </BorderPane.margin>
+            </VBox>
+          </center>
+          <effect>
+            <InnerShadow height="27.643356643356643" offsetX="-5.0" radius="13.321678321678322" width="27.643356643356643" />
+          </effect>
+          <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+          </padding>
+          <top>
+            <VBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
+              <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Reportes" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS">
+                  <effect>
+                    <DropShadow height="5.5" offsetY="2.0" radius="3.375" width="10.0" />
+                  </effect>
+                  <font>
+                    <Font name="Helvetica" size="26.0" />
+                  </font>
+                </Label>
+              </children>
+            </VBox>
+          </top>
+        </BorderPane>
+      </left>
+    </BorderPane>
+  </children>
+</AnchorPane>

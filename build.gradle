@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.2.2'
+version = '4.3'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -118,6 +118,9 @@ dependencies {
         	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
         	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
             'org.flywaydb:flyway-core:3.0',
+			'io.airbrake:airbrake-java:2.2.8',
+            'javax.ws.rs:javax.ws.rs-api:2.0',
+            'org.glassfish.jersey.core:jersey-client:2.5.1',
         /* Modulo Etiquetas */
         	'net.sf.barcode4j:barcode4j:2.1',
         	'com.kenai.nbpwr:org-apache-batik-all:1.7-201002241055',
@@ -171,6 +174,9 @@ dependencies {
                  	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
                  	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
                     'org.flywaydb:flyway-core:3.0',
+					'io.airbrake:airbrake-java:2.2.8',
+                    'javax.ws.rs:javax.ws.rs-api:2.0',
+                    'org.glassfish.jersey.core:jersey-client:2.5.1',
                  /* Modulo Etiquetas */
                  	'net.sf.barcode4j:barcode4j:2.1',
                  	'com.kenai.nbpwr:org-apache-batik-all:1.7-201002241055',

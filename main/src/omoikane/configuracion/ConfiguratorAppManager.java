@@ -53,6 +53,7 @@ public class ConfiguratorAppManager {
             omoikane.principal.Principal.getEscritorio().getPanelEscritorio().add(frame);
             frame.setSize(624, 625);
             frame.setPreferredSize(new Dimension(624, 625));
+            frame.setResizable(true);
 
             frame.setVisible(true);
             Herramientas.centrarVentana(frame);

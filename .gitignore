@@ -4,6 +4,7 @@ archive/**
 symmetric-client/**
 .gradle/**
 config.xml
+*.config.xml
 cache/**
 build/**
 Omoikane.iml

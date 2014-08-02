@@ -11,11 +11,13 @@ import omoikane.producto.Impuesto
 import omoikane.producto.PaqueteController
 import omoikane.producto.PrecioOmoikaneLogic
 import omoikane.producto.compras.ComprasProductoController
+import omoikane.producto.departamento.Departamento
 import omoikane.producto.listadeprecios.ListaDePreciosProductoController
 import omoikane.repository.ProductoRepo
 import omoikane.sistema.*
 import groovy.sql.*;
 import groovy.swing.*
+import org.apache.log4j.Logger
 import org.springframework.transaction.TransactionStatus
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult
@@ -38,7 +40,9 @@ import javafx.embed.swing.JFXPanel
 import javafx.scene.Scene
 import javafx.application.Platform
 
-
+/**
+ * Clase legada del primer sistema MOL, actúa como un Controller.
+ */
 public class Articulos
 {
     static def IDAlmacen = Principal.IDAlmacen
@@ -46,19 +50,20 @@ public class Articulos
 
     static def getArticulo(where) { new Articulo(where) }
 
-    static def findByCodigo(busqueda) {
-        def res
-        PuertoNadesico.workIn() { res = it.RAMCacheCodigos.executeQuery("select id_articulo from nadesicoi.RAMCacheCodigos as rca WHERE rca like '%"+busqueda+"%'") /*it.RAMCacheCodigos.findAllByCodigoLike("%"+busqueda+"%");*/ }
-        //println "resu:"+res.dump()
-    }
-
     static ProductoRepo productoRepo;
+
+    public static final Logger logger = Logger.getLogger(Articulos.class);
 
     static ProductoRepo getRepo() {
         if(productoRepo == null)
             productoRepo = omoikane.principal.Principal.applicationContext.getBean(ProductoRepo.class);
         else
             return productoRepo;
+    }
+
+    static JpaTransactionManager getTransactionManager() {
+        return omoikane.principal.Principal.applicationContext.getBean(JpaTransactionManager.class);
+
     }
 
     static OmJInternalFrame getCatalogoFrameInstance()
@@ -149,18 +154,37 @@ public class Articulos
 
     }
 
-    static def eliminarArticulo(ID)
+    /**
+     * Elimina un artículo seleccionado mediante soft-delete, siempre y cuando haya confirmación y permiso para el usuario.
+     * Soft-delete no elimina realmente el artículo si no que lo desactiva.
+     * @param parent JInternalFrame donde se estaciona el cuadro de confirmación
+     * @param ID ID del artículo a eliminar
+     * @return
+     */
+    static def eliminarArticulo( JInternalFrame parent, ID )
     {
-        Dialogos.lanzarAlerta("Función desactivada!")
-        /*
         if(cerrojo(PMA_ELIMINARARTICULO)){
-        def db = Sql.newInstance("jdbc:mysql://localhost/omoikane?user=root&password=", "root", "", "com.mysql.jdbc.Driver")
-        db.execute("DELETE FROM articulos WHERE id_articulo = " + ID)
-        db.close()
-        Dialogos.lanzarAlerta("Artículo " + ID + " supuestamente eliminado")
-        }else{Dialogos.lanzarAlerta("Acceso Denegado")}
-        */
+            int confirm = JOptionPane.showConfirmDialog(parent, "¿Está seguro de eliminar éste artículo?", "Eliminación suave de artículo", JOptionPane.YES_NO_CANCEL_OPTION)
+            if( confirm == JOptionPane.YES_OPTION)
+            {
+                TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+                Object result = transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                    @Override
+                    public void doInTransactionWithoutResult(TransactionStatus status) {
+                        try {
+                            getRepo().softDeleteByID(ID as Long)
+                            status.flush()
+                            Dialogos.lanzarAlerta("Artículo " + ID + " eliminado (soft-deleted)")
+                        } catch(Exception e) {
+                            logger.error("No registrado por causa de un error.", e);
+                        }
+                    }
+                })
+            }
+
+        } else { Dialogos.lanzarAlerta("Acceso Denegado") }
     }
+
     static def onCloseFocus ( JInternalFrame parent, JInternalFrame child ) {
         child.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -218,11 +242,21 @@ public class Articulos
             //formArticulo.getTxtImpuestosPorc().text    = formateador.format( precio.impuestos )
             //formArticulo.getTxtImpuestos().text        = precio.impuestos  as String
 
+            //Se cargan los impuestos aplicados al artículo
             precio.listaImpuestos.each { Impuesto im ->
                 ((DefaultTableModel)formArticulo.getImpuestosTable().getModel()).addRow([
                                 im
                 ].toArray());
             }
+
+            //Se establece en la GUI el departamento del artículo
+            JComboBox<Departamento> depBox = formArticulo.getComboDepartamento();
+            for(int i = 0; i < depBox.getModel().getSize(); i++) {
+                if(depBox.getModel().getElementAt(i).getId().equals(art.getDepartamentoId())) {
+                    depBox.setSelectedIndex(i);
+                }
+            }
+            //-----
 
             formArticulo.getTxtUtilidad().text         = precio.utilidad   as String
             formArticulo.ID                   = ID
@@ -257,6 +291,7 @@ public class Articulos
                 def descuento     = formArticulo.getTxtDesctoPorcentaje().text
                 def utilidad      = formArticulo.getTxtUtilidadPorc().text
                 def existencias   = 0;
+                Departamento departamento  = formArticulo.getComboDepartamento().getSelectedItem();
 
                 def notas   = formArticulo.getTxtComentarios()
                 Herramientas.verificaCampo(codigo,Herramientas.texto,"codigo"+Herramientas.error1)
@@ -277,7 +312,18 @@ public class Articulos
                     def serv   = Nadesico.conectar()
                     if(!serv.getLinea(IDLinea)) throw new Exception("Campo ID Línea inválida")
                     if(!serv.getGrupo(IDGrupo)) throw new Exception("Campo ID Grupo inválida")
-                    def datAdd = serv.addArticulo(IDAlmacen, IDLinea, IDGrupo, codigo, descripcion, unidad, costo, descuento, utilidad, existencias)
+                    def datAdd = serv.addArticulo(
+                            IDAlmacen,
+                            IDLinea,
+                            IDGrupo,
+                            departamento.getId(),
+                            codigo,
+                            descripcion,
+                            unidad,
+                            costo,
+                            descuento,
+                            utilidad,
+                            existencias)
                     def notasAdd = serv.addAnotacion(IDAlmacen, datAdd.ID, notas )
                     Dialogos.lanzarAlerta(datAdd.mensaje)
                     serv.desconectar()
@@ -423,7 +469,8 @@ public class Articulos
     {
         if(cerrojo(PMA_MODIFICARARTICULO)){
             def f = formArticulo
-            def c = [cod:f.getTxtCodigo(), lin:f.getTxtIDLinea(),gru:f.getTxtIDGrupo(), des:f.getTxtDescripcion(), cos:f.getTxtCosto(),
+            Departamento departamento = f.getComboDepartamento().getSelectedItem();
+            def c = [cod:f.getTxtCodigo(), lin:f.getTxtIDLinea(),gru:f.getTxtIDGrupo(), dep: departamento.getId(),des:f.getTxtDescripcion(), cos:f.getTxtCosto(),
             dto:f.getTxtDesctoPorcentaje().text, uti:f.getTxtUtilidadPorc().text, art:f.getTxtIDArticulo(), uni:f.getTxtUnidad(), notas:f.getTxtComentarios()]
             Herramientas.verificaCampos {
                 Herramientas.verificaCampo(c.cod,Herramientas.texto,"codigo"+Herramientas.error1)
@@ -438,7 +485,7 @@ public class Articulos
                 if(!serv.getLinea(c.lin)) throw new Exception("Campo ID Línea inválida")
                 if(!serv.getGrupo(c.gru)) throw new Exception("Campo ID Grupo inválida")
 
-                Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin,c.gru, c.des, c.uni, c.cos, c.uti, c.dto))
+                Dialogos.lanzarAlerta(serv.modArticulo(IDAlmacen, c.art, c.cod, c.lin, c.gru, c.dep, c.des, c.uni, c.cos, c.uti, c.dto))
                 serv.modAnotacion(IDAlmacen, c.art, c.notas)
                 serv.desconectar()
                 guardarImpuestos(Long.parseLong( c.art ), ((ImpuestosTableModel)formArticulo.getImpuestosTable().getModel()).getImpuestoList());

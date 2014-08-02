@@ -14,10 +14,12 @@ import omoikane.inventarios.tomaInventario.TomaInventarioController;
 import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
 import omoikane.producto.compras.ComprasProductoController;
+import omoikane.producto.departamento.DepartamentoCRUDController;
 import omoikane.producto.impuestos.ImpuestosCRUDController;
 import omoikane.producto.listadeprecios.ListaDePreciosCRUDController;
 import omoikane.producto.listadeprecios.ListaDePreciosProductoController;
 import omoikane.proveedores.ProveedoresController;
+import omoikane.reportes.JasperServerReportsController;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -116,6 +118,18 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    DepartamentoCRUDController departamentoCRUDController() {
+        return new DepartamentoCRUDController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    JasperServerReportsController jasperServerReportsController() {
+        return new JasperServerReportsController();
+    }
+
+    @Bean
+    @Scope("prototype")
     Scene codigosView() {
         return initView("/omoikane/producto/CodigosView.fxml", codigosController());
     }
@@ -190,6 +204,18 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     Scene comprasProductoView() {
         return initView("/omoikane/producto/compras/ComprasProductoView.fxml", comprasProductoController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene departamentoCRUDView() {
+        return initView("/omoikane/producto/departamento/DepartamentoCRUDView.fxml", departamentoCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene jasperServerReportsView() {
+        return initView("/omoikane/reportes/JasperServerReportsView.fxml", jasperServerReportsController());
     }
 
     private SceneOverloaded initView(String fxml, final Initializable controller) {

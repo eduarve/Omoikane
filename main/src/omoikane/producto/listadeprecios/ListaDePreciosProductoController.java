@@ -108,6 +108,7 @@ public class ListaDePreciosProductoController
         final NumberFormat cf = NumberFormat.getCurrencyInstance();
         final NumberFormat nb = NumberFormat.getNumberInstance();
         nb.setMaximumFractionDigits(2);
+        nb.setGroupingUsed(false);
         final PrecioOmoikaneLogic precioAlterno = art.getPrecio( ldp.getId().intValue() );
 
         //Declaración de variables y asignación de valores

@@ -53,4 +53,19 @@ public class PrecioTest {
         Assert.assertTrue( a.getPrecio(1).getPrecio().equals(new BigDecimal("21.7000")) );
         Assert.assertTrue( a.getPrecio(2).getPrecio().equals(new BigDecimal("18.2280")) );
     }
+
+    @Test
+    public void testPrecioAlterno2() {
+        Articulo a = productoRepo.readByPrimaryKey(22935l);
+        System.out.println(a.getPrecio().getPrecio());
+        System.out.println(a.getPrecio(1).getPrecio());
+        System.out.println(a.getPrecio(2).getPrecio());
+        System.out.println(a.getPrecio(3).getPrecio());
+
+        Assert.assertTrue( a.getPrecio().getPrecio().equals(new BigDecimal("25.1720")) );
+        Assert.assertTrue( a.getPrecio(1).getPrecio().equals(new BigDecimal("21.7000")) );
+        Assert.assertTrue( a.getPrecio(2).getPrecio().equals(new BigDecimal("18.2280")) );
+        //La tercera lista de precios no tiene utilidad asignada, el precio debe ser igual al base/original
+        Assert.assertTrue( a.getPrecio(3).getPrecio().equals(new BigDecimal("25.1720")) );
+    }
 }
