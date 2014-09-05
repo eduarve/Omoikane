@@ -14,6 +14,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+import omoikane.principal.Principal;
 import omoikane.sistema.Apagado;
 import omoikane.principal.Calendario;
 import omoikane.principal.Calculadora;
@@ -104,7 +105,7 @@ public class Escritorio extends javax.swing.JFrame {
         setFocusable(false);
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setMinimumSize(new java.awt.Dimension(1280, 800));
-        setUndecorated(true);
+        setUndecorated(Principal.modoKiosko);
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         PanelEscritorio.setFocusable(false);

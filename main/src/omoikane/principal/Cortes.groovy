@@ -6,6 +6,7 @@
 
 package omoikane.principal
 
+import omoikane.formularios.CatalogoSucursal
 import omoikane.principal.*
 import omoikane.sistema.*
 import groovy.sql.*;
@@ -62,7 +63,7 @@ class Cortes {
     static def lanzarCatalogoSuc()
     {
         if(cerrojo(PMA_ABRIRCORTES)){
-            def cat = (new omoikane.formularios.CatalogoSucursal())
+            CatalogoSucursal cat = (new omoikane.formularios.CatalogoSucursal())
             cat.setVisible(true);
             escritorio.getPanelEscritorio().add(cat)
             Herramientas.setColumnsWidth(cat.jTable1, [0.2,0.8]);
@@ -83,7 +84,7 @@ class Cortes {
             def cat = (new omoikane.formularios.CatalogoMovimientosCaja())
             cat.setVisible(true);
             escritorio.getPanelEscritorio().add(cat)
-            Herramientas.setColumnsWidth(cat.jTable1, [0.3,0.3,0.1,0.3]);
+            Herramientas.setColumnsWidth(cat.jTable1, [0.2,0.1,0.1,0.4,0.2]);
             Herramientas.panelCatalogo(cat)
             Herramientas.In2ActionX(cat, KeyEvent.VK_ESCAPE, "cerrar"   ) { cat.btnCerrar.doClick()   }
             Herramientas.In2ActionX(cat, KeyEvent.VK_F4    , "detalles" ) { cat.btnDetalles.doClick() }
@@ -124,10 +125,10 @@ class Cortes {
             nf.setMaximumFractionDigits(2);
             nf.setGroupingUsed(true);
             SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            def fecha = sdf.format(mov.fecha_hora)
-            fecha= " fecha_hora = '$fecha' "
+            String where
+            where = " folio_inicial = '${mov.folio_inicial}' AND folio_final = '${mov.folio_final}' AND id_caja =  ${mov.id_caja} "
             if(corteDualActivo()) {
-                def mov2  = puerto.getCorteWhereFrom(fecha," cortes_dual ")
+                def mov2  = puerto.getCorteWhereFrom(where," cortes_dual ")
                 lastMovID2=mov2.id_corte
             }
             form.ID = IDE

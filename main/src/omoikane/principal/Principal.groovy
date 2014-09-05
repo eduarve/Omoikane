@@ -98,7 +98,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.3";
+        public static final String          VERSION                 = "4.3.1";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -109,6 +109,7 @@ public class Principal {
         public static boolean               multiSucursal           = false
         public static String                configFilePath          = "config.xml";
         public static boolean               isFlywayActive          = true;
+        public static boolean               modoKiosko              = false;
 
 
     public static void main(args)
@@ -233,6 +234,8 @@ public class Principal {
                                 text: nombre, actionCommand:it, actionPerformed:
                                 {
                                     Principal.configFilePath = archivo
+                                    logger.trace("Cargando configuración de sucursal elegida...")
+                                    config = new omoikane.sistema.Config(configFilePath)
                                     mainMenu.show false
                                 },
                                 preferredSize:[130,35])

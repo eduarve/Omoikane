@@ -32,7 +32,7 @@ public class CatalogoMovimientosCaja extends javax.swing.JInternalFrame {
     public String    codigoSeleccionado;
     public String    txtQuery;
     TimerBusqueda    timerBusqueda;
-    SucursalTableModel modelo;
+    CatalogoMovimientosDeCajaTableModel modelo;
     BufferedImage    fondo;
 
     class TimerBusqueda extends Thread
@@ -51,6 +51,7 @@ public class CatalogoMovimientosCaja extends javax.swing.JInternalFrame {
             }
         }
 
+
         void cancelar()
         {
             busquedaActiva = false;
@@ -60,16 +61,16 @@ public class CatalogoMovimientosCaja extends javax.swing.JInternalFrame {
     /** Creates new form Catalogocortes */
     public CatalogoMovimientosCaja() {
         initComponents();
-        String[]  columnas = { "momento","Tipo","Id Movimiento","Importe"};
+        String[]  columnas = { "Momento","Tipo","ID", "Concepto","Importe"};
         ArrayList cols     = new ArrayList<String>(Arrays.asList(columnas));
-        Class[]   clases   = {Integer.class, String.class, String.class};
+        Class[]   clases   = {String.class, String.class, String.class, String.class, String.class};
         ArrayList cls      = new ArrayList<Class>(Arrays.asList(clases));
-        SucursalTableModel modeloTabla = new SucursalTableModel(cols, cls);
+        CatalogoMovimientosDeCajaTableModel modeloTabla = new CatalogoMovimientosDeCajaTableModel(cols, cls);
 
         //jTable1.enableInputMethods(false);
         this.modelo = modeloTabla;
         this.jTable1.setModel(modeloTabla);
-        setQueryTable("SELECT id, momento,tipo,id,importe FROM movimientos_cortes ");
+        setQueryTable("SELECT id, momento,tipo,id, concepto,importe FROM movimientos_cortes  ORDER BY ID DESC");
 
         //Instrucciones para el funcionamiento del fondo semistransparente
         this.setOpaque(false);
@@ -278,7 +279,7 @@ public class CatalogoMovimientosCaja extends javax.swing.JInternalFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        SucursalTableModel tabModelo = this.modelo;
+        CatalogoMovimientosDeCajaTableModel tabModelo = this.modelo;
         this.modelo = null;
         tabModelo.destroy();
         this.dispose();
@@ -434,5 +435,18 @@ public class CatalogoMovimientosCaja extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable1;
     public javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
+
+    class CatalogoMovimientosDeCajaTableModel extends ScrollableTableModel {
+        CatalogoMovimientosDeCajaTableModel(java.util.List ColNames,ArrayList ColClasses){super((ArrayList)ColNames,ColClasses);}
+        public Object getValueAt(int row,int col){
+            if(col==99)
+            {
+                SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy '@' hh:mm a");
+                return sdf.format((java.util.Date) super.getValueAt(row, col));}
+            else
+            {
+                return super.getValueAt(row,col);
+            }
+        }}
 
 }

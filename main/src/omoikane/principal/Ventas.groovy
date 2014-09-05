@@ -7,7 +7,8 @@
 
 package omoikane.principal
 
-import omoikane.principal.*
+ import omoikane.formularios.CatalogoVentas
+ import omoikane.principal.*
 import omoikane.sistema.*
 import groovy.sql.*;
 import groovy.swing.*;
@@ -34,7 +35,7 @@ class Ventas {
     static def lanzarCatalogo() //lanza el catalogo de ventas
     {
         if(cerrojo(PMA_ABRIRVENTAS)){
-            def cat = (new omoikane.formularios.CatalogoVentas())
+            CatalogoVentas cat = (new omoikane.formularios.CatalogoVentas())
             cat.setVisible(true);
             escritorio.getPanelEscritorio().add(cat)
             

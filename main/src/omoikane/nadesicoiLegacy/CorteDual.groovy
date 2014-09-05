@@ -12,7 +12,7 @@ package omoikane.nadesicoiLegacy
 import groovy.sql.*;
 
 
-class CorteDual {
+class   CorteDual {
 
      static def asignarA(serv) {
         serv.getSumaCorteSucursalDual=getSumaCorteSucursalDual

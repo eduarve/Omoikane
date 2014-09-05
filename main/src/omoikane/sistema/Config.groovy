@@ -72,6 +72,7 @@ public class Config {
             assignProp(Principal.passJasperserver)  { Principal.passJasperserver = String.valueOf(config.passJasperserver[0].text()); }
             assignProp(Principal.multiSucursal)     { Principal.multiSucursal = Boolean.valueOf(config.multiSucursal[0].text()); }
             assignProp(Principal.isFlywayActive)    { Principal.isFlywayActive = Boolean.valueOf(config.isFlywayActive[0].text()); }
+            assignProp(Principal.modoKiosko)        { Principal.modoKiosko = Boolean.valueOf(config.modoKiosko[0].text()); }
 
             if(Principal.basculaActiva) {
                 String cmd = ""

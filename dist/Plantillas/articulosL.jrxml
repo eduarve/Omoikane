@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="27fd42d0-7efe-447b-ba56-300eb9c0b873">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -24,28 +25,28 @@ WHERE
 	<columnHeader>
 		<band height="14" splitType="Stretch">
 			<staticText>
-				<reportElement x="1" y="0" width="121" height="13"/>
+				<reportElement x="1" y="0" width="121" height="13" uuid="884bcb58-5b70-46a6-9eed-de3759e76e00"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Codigo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="0" width="264" height="13"/>
+				<reportElement x="122" y="0" width="264" height="13" uuid="5874f34f-64d2-4c90-8a11-637b3a506d54"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="386" y="0" width="101" height="13"/>
+				<reportElement x="386" y="0" width="101" height="13" uuid="4b23c7c7-9cd2-4989-8ac8-52ff1883d5ae"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Unidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="487" y="0" width="101" height="13"/>
+				<reportElement x="487" y="0" width="101" height="13" uuid="18fbd104-4e68-46c1-a4da-2b49922b443b"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
@@ -56,32 +57,32 @@ WHERE
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement x="122" y="0" width="264" height="11"/>
+				<reportElement x="122" y="0" width="264" height="11" uuid="e9e55af9-a625-49e1-91ad-017dd24bf59b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_descripcion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulos_descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="386" y="0" width="101" height="11"/>
+				<reportElement x="386" y="0" width="101" height="11" uuid="5e1ad3a9-dfbb-467d-a7e2-1fd2d8a30fc6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_unidad}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulos_unidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="0" width="121" height="11"/>
+				<reportElement x="1" y="0" width="121" height="11" uuid="a7a06dbc-ed83-43ec-af0f-303d0112c6ca"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_codigo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulos_codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="487" y="0" width="101" height="11"/>
+				<reportElement x="487" y="0" width="101" height="11" uuid="b17e683f-4347-4ef3-a5cd-4148d49c9b30"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulos_impuestos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulos_impuestos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

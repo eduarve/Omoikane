@@ -205,12 +205,10 @@ public class CajaLogicImpl implements ICajaLogic {
     }
 
     public void _cambiarCliente(Integer idCliente) {
-        System.out.println("prueba");
         try {
             Cliente cliente = entityManager.find(Cliente.class, idCliente);
 
             getController().getModel().setCliente(cliente);
-            System.out.println("prueba"+cliente.getNombre());
 
             persistirVenta();
         } catch (Exception e) {

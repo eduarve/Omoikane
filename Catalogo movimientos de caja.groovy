@@ -1,0 +1,1 @@
+omoikane.principal.Cortes.lanzarCatalogoMovimientos();
