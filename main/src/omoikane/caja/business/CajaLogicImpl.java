@@ -5,6 +5,9 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import name.antonsmirnov.javafx.dialog.Dialog;
+import omoikane.caja.business.plugins.DummyPlugin;
+import omoikane.caja.business.plugins.IPlugin;
+import omoikane.caja.business.plugins.PluginManager;
 import omoikane.caja.data.IProductosDAO;
 import omoikane.caja.handlers.StockIssuesHandler;
 import omoikane.caja.presentation.*;
@@ -68,6 +71,12 @@ public class CajaLogicImpl implements ICajaLogic {
     @Autowired
     JpaTransactionManager transactionManager;
 
+    PluginManager pluginManager;
+
+    public CajaLogicImpl() {
+        pluginManager = new PluginManager();
+    }
+
     /**
      * Pseudo evento gatillado cuando se intenta capturar un producto en la "línea de captura".
      * Ignora cualquier intento de captura si ya existe una en curso
@@ -126,6 +135,7 @@ public class CajaLogicImpl implements ICajaLogic {
      * @throws Exception
      */
     private void addProducto(CajaModel model, LineaDeCapturaFilter capturaFilter) throws Exception {
+        pluginManager.notify(IPlugin.TIPO_EVENTO.PreAddPartida);
         model.getProductos().clear(); // Borra resultados de la búsqueda integrada
 
         Producto producto = productosDAO.findByCodigo(capturaFilter.getCodigo()).get(0);
@@ -167,7 +177,8 @@ public class CajaLogicImpl implements ICajaLogic {
         syncLegacyVentaDetalleWithModel(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
 
         LegacyVentaDetalle l = persistirItemVenta(lvd);
-        productoModel.setVentaDetalleEntity( l );
+        productoModel.setVentaDetalleEntity(l);
+        pluginManager.notify(IPlugin.TIPO_EVENTO.PostAddPartida);
 
     }
 
@@ -307,6 +318,7 @@ public class CajaLogicImpl implements ICajaLogic {
     public LegacyVenta terminarVenta(CajaModel model) throws RuntimeException {
 
         if(!isCajaOpen()) { Dialog.showInfo("Caja cerrada", "Caja cerrada, no se puede vender."); return null; }
+        pluginManager.notify(IPlugin.TIPO_EVENTO.PreFinishVenta);
 
         BigDecimal ventaTotal = model.getTotal().get();
         if( ventaTotal.compareTo( new BigDecimal("0.10") ) > 0 ) {
@@ -316,21 +328,29 @@ public class CajaLogicImpl implements ICajaLogic {
 
                 //Hace las salidas de inventario / Make inventory issues
                 new StockIssuesHandler(getController()).handle();
+
                 return venta;
 
             } catch (Exception e) {
                 throw new RuntimeException("Excepción persistiendo venta o aplicando cambios al stock", e);
+            } finally {
+                pluginManager.notify(IPlugin.TIPO_EVENTO.PostFinishVenta);
+                pluginManager.clearPlugins();
             }
         }
+
         return null;
     }
 
 
     @Override
     public void nuevaVenta() {
+        pluginManager.registerPlugin(new DummyPlugin(getController()));
+        pluginManager.notify(IPlugin.TIPO_EVENTO.PreStartVenta);
         instanciarModeloVenta();
 
         getController().getCapturaTextField().requestFocus();
+        pluginManager.notify(IPlugin.TIPO_EVENTO.PostStartVenta);
     }
 
     @Override

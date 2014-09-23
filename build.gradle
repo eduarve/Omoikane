@@ -5,7 +5,7 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.3.1'
+version = '4.3.2'
 
 mainClassName       = "omoikane.principal.MainJava"
 sourceCompatibility = 1.7
@@ -141,6 +141,7 @@ dependencies {
 				  'lib/dpotjni.jar',
                   'lib/FXExperienceControls.jar',
                   'lib/JavaFxDialog.jar',
+				  'lib/CDS_Oro.jar',
 				  'lib/jfxrt.jar')
 	runtime files('lib/OmoikaneMedia.jar',
                   'lib/OmoikaneMedia2.jar',
@@ -168,6 +169,7 @@ dependencies {
                  	[group: 'org.hibernate'         , name: 'hibernate-validator'    , version: '4.2.0.Final'],
 				 /* Varios */
 				 	[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],                 
+					[group: 'org.apache.commons'    , name: 'commons-lang3'	 		 , version: '3.3.2'],				
                  	'org.dbunit:dbunit:2.4.8',
                  	'com.github.springtestdbunit:spring-test-dbunit:1.0.0',
                  	'com.dooapp.fxform2:core:2.2.6',

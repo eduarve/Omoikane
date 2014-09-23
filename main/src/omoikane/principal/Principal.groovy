@@ -98,14 +98,14 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.3.1";
+        public static final String          VERSION                 = "4.3.2";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
         public static TipoImpresora         tipoImpresora
-        public static String                loginJasperserver       = "jasperadmin"
-        public static String                passJasperserver        = "jasperadmin"
-        public static String                urlJasperserver         = "http://172.16.0.3:8080/jasperserver"
+        public static String                loginJasperserver       = ""
+        public static String                passJasperserver        = ""
+        public static String                urlJasperserver         = ""
         public static boolean               multiSucursal           = false
         public static String                configFilePath          = "config.xml";
         public static boolean               isFlywayActive          = true;

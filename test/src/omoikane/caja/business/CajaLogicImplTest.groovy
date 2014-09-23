@@ -33,12 +33,14 @@ import org.springframework.test.context.TestExecutionListeners;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners( listeners = [ DependencyInjectionTestExecutionListener.class,
+@ContextConfiguration("classpath:applicationContext-test.xml")
+@TestExecutionListeners([ DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class,
     TransactionalTestExecutionListener.class,
     DbUnitTestExecutionListener.class ])
-@DatabaseSetup("../repository/sampleData20121117.xml")
-public class CajaLogicImplTest extends GroovyTestCase {
+@DatabaseSetup("../../repository/sampleDataLight.xml")
+
+public class CajaLogicImplTest {
 
     @Autowired
     IProductosDAO productosDAO;
@@ -66,7 +68,7 @@ public class CajaLogicImplTest extends GroovyTestCase {
     @Test
     public void buscarTest() {
         new Config();
-        cajaModel.setCaptura(new SimpleStringProperty("gerber"));
+        cajaModel.setCaptura(new SimpleStringProperty("Chocolat"));
         cajaLogic.buscar( cajaModel );
 
         for (ProductoModel productoModel : cajaModel.getProductos()) {
@@ -77,7 +79,7 @@ public class CajaLogicImplTest extends GroovyTestCase {
 
     @Test
     public void imprimirVentaTest() {
-        LegacyVenta venta = ventaRepo.readByPrimaryKey( 7270222 );
+        LegacyVenta venta = ventaRepo.readByPrimaryKey( 7270222l );
         cajaLogic.imprimirVenta ( venta );
     }
 

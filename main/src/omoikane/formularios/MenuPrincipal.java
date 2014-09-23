@@ -471,8 +471,10 @@ public class MenuPrincipal extends OmJInternalFrame {
     }//GEN-LAST:event_btnCajasActionPerformed
 
     private void btnReportesAvanzadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesAvanzadosActionPerformed
-        JasperServerReportsManager rm = new JasperServerReportsManager();
-        JInternalFrame frame = rm.startJFXReports();
+        javax.swing.JOptionPane.showMessageDialog(this, "Acceso denegado");
+
+        //JasperServerReportsManager rm = new JasperServerReportsManager();
+        //JInternalFrame frame = rm.startJFXReports();
     }//GEN-LAST:event_btnReportesAvanzadosActionPerformed
 
 

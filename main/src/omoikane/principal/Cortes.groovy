@@ -162,7 +162,7 @@ class Cortes {
         comprobante.probar()//imprimir ticket
         if(corteDualActivo()) {
             Thread.sleep(6000)
-            comprobante.Corte(lastMovID2 as Long, "cortes_dual") //imprimir corte
+            comprobante.CorteLegacy(lastMovID2 as Long, "cortes_dual") //imprimir corte
             comprobante.probar()//imprimir ticket
         }
     }
