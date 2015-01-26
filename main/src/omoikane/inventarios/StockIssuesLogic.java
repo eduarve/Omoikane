@@ -3,6 +3,7 @@ package omoikane.inventarios;
 import omoikane.entities.Paquete;
 import omoikane.producto.Articulo;
 import omoikane.repository.ProductoRepo;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,7 +28,8 @@ import java.math.BigDecimal;
  */
 @Service
 public class StockIssuesLogic {
-    Articulo p;
+
+    public static Logger logger = Logger.getLogger(StockIssuesLogic.class);
 
     @Autowired
     ProductoRepo productoRepo;
@@ -36,20 +38,22 @@ public class StockIssuesLogic {
     EntityManager entityManager;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void setArticulo(Long id) {
+    private Articulo getArticulo(Long id) {
 
         Articulo articulo = productoRepo.findByIdIncludeStock(id);
-        articulo.getRenglonesPaquete();
-        p = articulo;
+        return articulo;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Articulo reduceStock(BigDecimal howMany) {
+    public Articulo reduceStock(Long articuloId, BigDecimal howMany) {
+        logger.trace("Start reduceStock: "+articuloId);
+        Articulo p = getArticulo(articuloId);
 
         if(p.getEsPaquete()) {
             for(Paquete paquete : p.getRenglonesPaquete()) {
+                logger.trace("Reduce stock cascade (pack)");
                 Articulo productoContenido = paquete.getProductoContenido();
-                Stock s = productoContenido.getStockInitializated();
+                Stock s = productoContenido.getStock();
                 BigDecimal quantitySold = paquete.getCantidad().multiply( howMany );
                 s.setEnTienda( s.getEnTienda().subtract(quantitySold) );
             }
@@ -59,15 +63,19 @@ public class StockIssuesLogic {
             s.setEnTienda( s.getEnTienda().subtract( quantitySold ) );
         }
 
+        logger.trace("End reduceStock: "+articuloId);
+
         return p;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Articulo increaseStock(BigDecimal howMany) {
+    public Articulo increaseStock(Long articuloId, BigDecimal howMany) {
+        Articulo p = getArticulo(articuloId);
+
         if(p.getEsPaquete()) {
             for(Paquete paquete : p.getRenglonesPaquete()) {
                 Articulo productoContenido = paquete.getProductoContenido();
-                Stock s = productoContenido.getStockInitializated();
+                Stock s = productoContenido.getStock();
                 BigDecimal quantitySold = paquete.getCantidad().multiply( howMany );
                 s.setEnTienda( s.getEnTienda().add(quantitySold) );
             }
@@ -75,6 +83,26 @@ public class StockIssuesLogic {
             BigDecimal quantitySold = howMany;
             Stock s = p.getStockInitializated();
             s.setEnTienda( s.getEnTienda().add( quantitySold ) );
+        }
+
+        return p;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Articulo setStock(Long articuloId, BigDecimal howMany) {
+        Articulo p = getArticulo(articuloId);
+
+        if(p.getEsPaquete()) {
+            for(Paquete paquete : p.getRenglonesPaquete()) {
+                Articulo productoContenido = paquete.getProductoContenido();
+                Stock s = productoContenido.getStock();
+                BigDecimal quantity = paquete.getCantidad().multiply( howMany );
+                s.setEnTienda( quantity );
+            }
+        } else {
+            BigDecimal quantity = howMany;
+            Stock s = p.getStockInitializated();
+            s.setEnTienda( quantity );
         }
 
         return p;

@@ -2,6 +2,11 @@ package omoikane.inventarios.tomaInventario;
 
 import com.sun.javafx.stage.EmbeddedWindow;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import omoikane.producto.Articulo;
@@ -13,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import javax.swing.*;
 import java.io.*;
 import java.math.BigDecimal;
 
@@ -53,26 +59,36 @@ public class ScanPetTerminalHandler implements ITerminalHandler {
 
     @Override
     public void importData() {
-        Task<Void> importTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                importa();
-                return null;
-            }
-        };
-        new Thread(importTask).start();
-    }
 
-    public void importa() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccione el inventario tomado usando la app ScanPet y (opcionalmente) almacenado en dropbox");
         EmbeddedWindow stage = (EmbeddedWindow) this.getController().mainPane.getScene().getWindow();
 
-        final File selectedFile =
-                fileChooser.showOpenDialog(stage);
+        File selectedFile = null;
+        try {
+            selectedFile = fileChooser.showOpenDialog(stage);
+            final File finalSelectedFile = selectedFile;
+            importa(finalSelectedFile);
+        } catch(Exception e) { logger.error("Problema con el dialogo de archivos", e); }
         if (selectedFile == null) {
             return ;
         }
+
+        /*
+        Task<Void> importTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                importa(finalSelectedFile);
+                return null;
+            }
+        };
+        new Thread(importTask).start();
+        */
+
+    }
+
+    public void importa(File selectedFile) {
+
 
         InputStream inp = null;
         try {
@@ -92,32 +108,77 @@ public class ScanPetTerminalHandler implements ITerminalHandler {
             logger.error("Formato inválido del archivo de inventario", e);
         }
 
+        controller.setPersistOnChage(false); //No quiero que se haga merge cada vez que se inserta un renglon
+        controller.setPersistable(false); //En general no quiero que se persista
         ConteoInventarioPropWrapper modelo = getController().modelo;
         Integer encontrados = 0, noEncontrados = 0;
         Sheet sheet = wb.getSheetAt(0);
         Boolean first = true;
+        StringBuilder errores = new StringBuilder();
+
         for(Row row : sheet) {
-            if(first) { first = false; continue; }
+            if (first) {
+                first = false;
+                continue;
+            }
             BigDecimal cantidad = new BigDecimal(row.getCell(2).getNumericCellValue());
-            String     codigo   = row.getCell(0).getStringCellValue();
+            String codigo = row.getCell(0).getStringCellValue();
 
             Articulo a = getController().getArticulo(codigo);
-            if(a == null)
+            if (a == null)
+            {
+                errores.append("(No encontrado) Código: " + codigo + ", cantidad: " + cantidad +" ");
                 noEncontrados++;
-            else {
+            } else {
                 try {
                     getController().addItemConteo(a, cantidad);
-                    Thread.sleep(100);
+
                     encontrados++;
                 } catch(Exception e) {
                     e.printStackTrace();
-                    logger.info("No se pudo importar correctamente o por completo el código: "+codigo);
+                    errores.append("(Error) Código: " + codigo + ", cantidad: " + cantidad + " ");
                     noEncontrados++;
                 }
             }
         }
 
+        controller.setPersistable(true);
+        try {
+            controller.persistModel();
+        } catch(Exception e) {
+            logger.error("Error al guardar datos", e);
+        }
+        if(errores.length() > 0) importDialog(errores);
         logger.info(String.format("Importación finalizada, renglones importados: %s, productos no encontrado: %s ", encontrados, noEncontrados));
+        controller.setPersistOnChage(true);
 
+    }
+
+    public void importDialog(StringBuilder errores) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Dialogo de excepciones");
+        alert.setHeaderText("Dialogo de excepciones");
+        alert.setContentText("Algunos códigos no pudieron ser importados");
+
+        Label label = new Label("Los códigos fueron");
+
+        TextArea textArea = new TextArea(errores.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        // Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
     }
 }

@@ -1,6 +1,8 @@
 package omoikane.producto;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import omoikane.principal.Principal;
@@ -35,7 +37,7 @@ public class DummyJFXApp extends Application {
 
             //Principal.IDCaja = 1;
             Principal.IDAlmacen = 1;
-            Usuarios.setIDUsuarioActivo(1);
+            Usuarios.setIDUsuarioActivo(1l);
 
             HashMap testProperties = (HashMap) Principal.applicationContext.getBean( "properties" );
             String beanToTest = (String) testProperties.get("DummyJFXApp.viewBeanToTest");
@@ -44,6 +46,10 @@ public class DummyJFXApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("View Test");
             primaryStage.show();
+            if(testProperties.containsKey("DummyJFXApp.task")) {
+                Task<Void> task = (Task<Void>) testProperties.get("DummyJFXApp.task");
+                Platform.runLater(task);
+            }
 
             controller = scene.getController();
             instance = this;

@@ -1,6 +1,8 @@
 package omoikane.caja.handlers;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
@@ -15,6 +17,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.*;
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,20 +42,47 @@ public class CancelarVenta extends ICajaEventHandler {
 
     @Override
     public void handle(Event event) {
-        try {
-            if(Usuarios.autentifica(Usuarios.SUPERVISOR)) {
-                registrar(getController().getModel().getVenta());
-                ventaRepo.delete(getController().getCajaLogic().getVentaAbiertaBean());
-                getController().getCajaLogic().nuevaVenta();
-                getController().getMainAnchorPane().requestFocus();
-                getController().getCapturaTextField().requestFocus();
-            } else {
-                getController().getMainAnchorPane().requestFocus();
-                getController().getCapturaTextField().requestFocus();
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                cancelarVentaConAutorizacion();
             }
-        } catch (Exception e) {
-            logger.error("Error al cancelar venta", e);
-        }
+        });
+    }
+
+    private void cancelarVentaConAutorizacion() {
+        Boolean auth = Usuarios.autentifica(Usuarios.SUPERVISOR);
+        Platform.runLater(cancelarVenta(auth));
+    }
+
+    private Task<Void> cancelarVenta(Boolean auth) {
+        Task task = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                try {
+                    if(auth) {
+                        registrar(getController().getModel().getVenta());
+                        //Cancelar una venta es eliminar su caché en el sistema de archivos local y crear un nuevo modelo usando
+                        //  nuevaVenta
+                        File f = new File("venta.json");
+                        if(f.exists()) f.delete();
+
+                        getController().getCajaLogic().nuevaVenta();
+                        getController().getMainAnchorPane().requestFocus();
+                        getController().getCapturaTextField().requestFocus();
+                    } else {
+                        getController().getMainAnchorPane().requestFocus();
+                        getController().getCapturaTextField().requestFocus();
+                    }
+                } catch (Exception e) {
+                    logger.error("Error al cancelar venta", e);
+                }
+                return null;
+            }
+        };
+
+        return task;
     }
 
     @Transactional

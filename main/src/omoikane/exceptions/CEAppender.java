@@ -8,6 +8,7 @@ package omoikane.exceptions;
 import javafx.application.Platform;
 import omoikane.principal.Principal;
 import omoikane.sistema.Dialogos;
+import omoikane.sistema.Herramientas;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Priority;
@@ -78,6 +79,7 @@ public class CEAppender extends AppenderSkeleton {
                             else
                                 stackTrace = "Sin stacktrace";
                             Dialogos.lanzarDialogoError(mainJFrame, event.getMessage(), stackTrace);
+
                             monitor.notify();
                         } catch (Exception e) {
                             monitor.notify();
@@ -86,12 +88,12 @@ public class CEAppender extends AppenderSkeleton {
                     }
                 }
             });
-            if(!SwingUtilities.isEventDispatchThread())
+            /*if(!SwingUtilities.isEventDispatchThread())
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }          */
         }
 
     }

@@ -101,4 +101,5 @@ public class ConteoInventario {
         DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
         return  dateFormat.format(getFecha());
     }
+
 }

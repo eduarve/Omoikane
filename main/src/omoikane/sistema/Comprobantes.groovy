@@ -14,6 +14,7 @@ package omoikane.sistema
  import omoikane.nadesicoiLegacy.Db
  import omoikane.principal.Principal
  import omoikane.repository.VentaRepo
+ import org.hibernate.Query
  import phesus.configuratron.model.TipoImpresora
 
  import javax.persistence.EntityManagerFactory
@@ -78,6 +79,7 @@ package omoikane.sistema
         data.id_venta   = venta.getId();
 
         List<LegacyVentaDetalle> detalles = venta.getItems();
+
         def impuestosMap = [:]
         for( LegacyVentaDetalle lvd : detalles) {
             final temp = [:];

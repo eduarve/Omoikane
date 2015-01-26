@@ -5,14 +5,15 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '4.3.2'
+version = '4.4.0'
 
+def title			= "Omoikane"
 mainClassName       = "omoikane.principal.MainJava"
-sourceCompatibility = 1.7
-    title               = 'Omoikane'
+sourceCompatibility = 1.8
+
 // innoSetupCompiler   = 'c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe'
 // wyUpdateCompiler    = 'c:\\Program Files (x86)\\wyBuild\\wybuild.cmd.exe'
-versionNotes        = 
+def versionNotes        = 
     """
 		Versión 4.1.0
 		Novedades:
@@ -51,6 +52,10 @@ versionNotes        =
 def defaultEncoding = "UTF-8"
 [compileGroovy, compileTestGroovy]*.options*.encoding = defaultEncoding
 [compileGroovy, compileTestGroovy]*.groovyOptions*.encoding = defaultEncoding
+ //compileGroovy.groovyCompileOptions.fork = true;
+ //compileGroovy.options.forkOptions.executable = "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin/javac"
+ compileJava.options.fork = true;
+ compileJava.options.forkOptions.executable = "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin/javac"
 System.setProperty('file.encoding', defaultEncoding)
 
 sourceSets {
@@ -74,14 +79,16 @@ sourceSets {
 }
 
 repositories {
-    mavenCentral()
-	mavenRepo urls: "http://maven.springframework.org/milestone"
-    mavenRepo urls: "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"
+	mavenCentral()
+	maven {
+		url "http://maven.springframework.org/milestone"
+    	url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases"
+	}
 }
 
 dependencies {
-	groovy group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.7.6'
 	compile (
+			[group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.3.9'],
 			'joda-time:joda-time:1.6.2',
 			[group: 'net.sf.jasperreports'  , name: 'jasperreports'          , version: '3.7.2'],
 			[group: 'org.codehaus.groovy'   , name: 'groovy-all'             , version: '1.7.6'],
@@ -92,28 +99,31 @@ dependencies {
 			[group: 'com.kenai.nbpwr'       , name: 'org-jdesktop-animation-timing', version:'1.0-201002281504'],
 			[group: 'com.miglayout'         , name: 'miglayout'              , version: '3.7.4'],
 			[group: 'org.rxtx'              , name: 'rxtx'                   , version: '2.1.7'],
-			[group: 'javassist'             , name: 'javassist'              , version: '3.12.1.GA'],
+			[group: 'org.javassist'         , name: 'javassist'              , version: '3.18.2-GA'],
 		/* Hibernate y Spring */
 			[group: 'org.hibernate'         , name: 'hibernate-core'         , version: '3.6.5.Final'],
 			[group: 'org.slf4j'             , name: 'slf4j-log4j12'          , version: '1.6.1'],
-			[group: 'org.springframework'   , name: 'spring-core'            , version: '3.2.1.RELEASE'],
-			[group: 'org.springframework'   , name: 'spring-aop'             , version: '3.2.1.RELEASE'],
-			[group: 'org.springframework'   , name: 'spring-context'         , version: '3.2.1.RELEASE'],
-			[group: 'org.springframework'   , name: 'spring-orm'             , version: '3.2.1.RELEASE'],
-    		[group: 'org.springframework'   , name: 'spring-aspects'         , version: '3.2.1.RELEASE'],						
-        	[group: 'org.springframework'   , name: 'spring-tx'              , version: '3.2.1.RELEASE'],
-        	[group: 'org.springframework'   , name: 'spring-jdbc'            , version: '3.2.1.RELEASE'],
+			[group: 'org.springframework'   , name: 'spring-core'            , version: '4.0.7.RELEASE'],
+			[group: 'org.springframework'   , name: 'spring-aop'             , version: '4.0.7.RELEASE'],
+			[group: 'org.springframework'   , name: 'spring-context'         , version: '4.0.7.RELEASE'],
+			[group: 'org.springframework'   , name: 'spring-context-support' , version: '4.0.7.RELEASE'],
+			[group: 'org.springframework'   , name: 'spring-orm'             , version: '4.0.7.RELEASE'],
+    		[group: 'org.springframework'   , name: 'spring-aspects'         , version: '4.0.7.RELEASE'],						
+        	[group: 'org.springframework'   , name: 'spring-tx'              , version: '4.0.7.RELEASE'],
+        	[group: 'org.springframework'   , name: 'spring-jdbc'            , version: '4.0.7.RELEASE'],
 			[group: 'org.hibernate'         , name: 'hibernate-ehcache'      , version: '3.6.5.Final'],
 			[group: 'org.hibernate'         , name: 'hibernate-c3p0'         , version: '3.6.5.Final'],
 			[group: 'org.synyx.hades'       , name: 'org.synyx.hades'        , version: '2.0.3.RELEASE', transitive:false],
 			[group: 'org.hibernate'         , name: 'hibernate-entitymanager', version: '3.6.5.Final'],
         	[group: 'org.hibernate'         , name: 'hibernate-validator'    , version: '4.2.0.Final'],
+        /* Jackson */
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.4'],
 		/* Varios */
 			[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],
         	[group: 'org.apache.poi'        , name: 'poi-ooxml'              , version: '3.9'],
         	'org.dbunit:dbunit:2.4.8',
         	'com.github.springtestdbunit:spring-test-dbunit:1.0.0',
-			'org.jfxtras:jfxtras-labs:2.2-r5',
+			'org.jfxtras:jfxtras-labs:8.0-r3',
         	'com.dooapp.fxform2:core:2.2.6',
         	'net.sourceforge.dynamicreports:dynamicreports-core:3.1.4',
         	'net.sourceforge.dynamicreports:dynamicreports-googlecharts:3.1.4',
@@ -147,26 +157,30 @@ dependencies {
                   'lib/OmoikaneMedia2.jar',
 				  'lib/nimbus.jar')
 	testCompile (
+					[group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.3.9'],
 					'junit:junit:4.8.1',
                  	[group: 'org.codehaus.groovy'   , name: 'groovy-all'             , version: '1.7.6'],
                  	[group: 'org.apache.ant'        , name: 'ant'                    , version: '1.8.2'],
-		 		 	[group: 'javassist'             , name: 'javassist'              , version: '3.12.1.GA'],
+					[group: 'org.javassist'         , name: 'javassist'              , version: '3.18.2-GA'],
 				 	[group: 'org.slf4j'             , name: 'slf4j-log4j12'          , version: '1.6.1'],
 				 /* Hibernate y Spring */
 				 	[group: 'org.hibernate'         , name: 'hibernate-core'         , version: '3.6.5.Final'],	
-				 	[group: 'org.springframework'   , name: 'spring-core'            , version: '3.2.1.RELEASE'],
-				 	[group: 'org.springframework'   , name: 'spring-aop'             , version: '3.2.1.RELEASE'],
-				 	[group: 'org.springframework'   , name: 'spring-context'         , version: '3.2.1.RELEASE'],
- 				 	[group: 'org.springframework'   , name: 'spring-orm'             , version: '3.2.1.RELEASE'],
-				 	[group: 'org.springframework'   , name: 'spring-test'            , version: '3.2.1.RELEASE'],
-				 	[group: 'org.springframework'   , name: 'spring-aspects'         , version: '3.2.1.RELEASE'],				
-                 	[group: 'org.springframework'   , name: 'spring-tx'              , version: '3.2.1.RELEASE'],
-                 	[group: 'org.springframework'   , name: 'spring-jdbc'            , version: '3.2.1.RELEASE'],
+				 	[group: 'org.springframework'   , name: 'spring-core'            , version: '4.0.7.RELEASE'],
+				 	[group: 'org.springframework'   , name: 'spring-aop'             , version: '4.0.7.RELEASE'],
+				 	[group: 'org.springframework'   , name: 'spring-context'         , version: '4.0.7.RELEASE'],
+					[group: 'org.springframework'   , name: 'spring-context-support' , version: '4.0.7.RELEASE'],
+ 				 	[group: 'org.springframework'   , name: 'spring-orm'             , version: '4.0.7.RELEASE'],
+				 	[group: 'org.springframework'   , name: 'spring-test'            , version: '4.0.7.RELEASE'],
+				 	[group: 'org.springframework'   , name: 'spring-aspects'         , version: '4.0.7.RELEASE'],				
+                 	[group: 'org.springframework'   , name: 'spring-tx'              , version: '4.0.7.RELEASE'],
+                 	[group: 'org.springframework'   , name: 'spring-jdbc'            , version: '4.0.7.RELEASE'],
 				 	[group: 'org.hibernate'         , name: 'hibernate-ehcache'      , version: '3.6.5.Final'],
 				 	[group: 'org.hibernate'         , name: 'hibernate-c3p0'         , version: '3.6.5.Final'],
 				 	[group: 'org.synyx.hades'       , name: 'org.synyx.hades'        , version: '2.0.3.RELEASE', transitive:false],
 				 	[group: 'org.hibernate'         , name: 'hibernate-entitymanager', version: '3.6.5.Final'],
                  	[group: 'org.hibernate'         , name: 'hibernate-validator'    , version: '4.2.0.Final'],
+                 /* Jackson */
+                    [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.4'],
 				 /* Varios */
 				 	[group: 'commons-dbcp'          , name: 'commons-dbcp'           , version: '1.4'],                 
 					[group: 'org.apache.commons'    , name: 'commons-lang3'	 		 , version: '3.3.2'],				
@@ -190,6 +204,8 @@ dependencies {
 
 }
 
+
+
 jar {
     manifest {
 	    def manifestClasspath = configurations.runtime.collect { "lib/"+it.getName() }.join(' ') 
@@ -202,7 +218,7 @@ jar {
 }
 
 task distribuir(dependsOn: 'installApp') {
-	miDistDir        = new File("dist")
+	def miDistDir        = new File("dist")
 
     ant.propertyfile(
             file: "$miDistDir/omoikane.properties") {
@@ -245,7 +261,7 @@ task distribuir(dependsOn: 'installApp') {
     
     
 	//Copy libs without main binary
-	daLibs = new File("$miDistDir/lib")
+	def daLibs = new File("$miDistDir/lib")
 	copy {
 		from "$buildDir/install/${title}/lib"
 		into "$daLibs"
@@ -259,19 +275,38 @@ task distribuir(dependsOn: 'installApp') {
 	}
     
     //Copy templates
-    templatesFolder = new File("$miDistDir/Plantillas")
+    def templatesFolder = new File("$miDistDir/Plantillas")
 	copy {
 		from "Plantillas"
 		into "$templatesFolder"
 	}
 
     //Copy to local repo
-    miDistArchiveDir = new File("archive/dist-${version}")
+    def miDistArchiveDir = new File("archive/dist-${version}")
     copy {
         from "$miDistDir"
         into "$miDistArchiveDir"
     }
 
+}
+
+task hibernateInstrumentation {
+    ant.taskdef(name: 'hibernateInstrumentation' ,
+            classpath: project.sourceSets.main.compileClasspath.asPath,
+            classname: 'org.hibernate.tool.instrument.javassist.InstrumentTask'){
+
+    }
+    ant.hibernateInstrumentation(verbose: 'true') {
+        fileset(
+            dir: "${project.buildDir}"
+        ) {
+			include(name: "**/*.class")
+		}
+    }
+}
+
+compileJava.doLast {
+    hibernateInstrumentation
 }
 
 /** El instalador requiere incluir la �ltima versi�n del actualizador */

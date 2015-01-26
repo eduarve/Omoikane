@@ -11,6 +11,12 @@ import omoikane.producto.Producto;
 import omoikane.repository.CancelacionRepo;
 import omoikane.repository.ProductoRepo;
 import omoikane.repository.VentaRepo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -22,18 +28,20 @@ import java.math.BigDecimal;
  * Time: 02:10 AM
  * To change this template use File | Settings | File Templates.
  */
+@Service
 public class StockIssuesHandler {
-    CajaController controller;
 
-    public StockIssuesHandler(CajaController c) {
-        controller = c;
-    }
+    @Autowired
+    StockIssuesLogic stockIssuesLogic;
 
-    public void handle() {
+    public static Logger logger = Logger.getLogger(StockIssuesHandler.class);
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void handle(CajaController controller) {
         for(ProductoModel pm : controller.getModel().getVenta()) {
-            StockIssuesLogic logic = Principal.applicationContext.getBean(StockIssuesLogic.class);
-            logic.setArticulo(pm.getLongId());
-            logic.reduceStock( pm.getCantidad() );
+
+            stockIssuesLogic.reduceStock(pm.getLongId(), pm.getCantidad() );
+
         }
     }
 }

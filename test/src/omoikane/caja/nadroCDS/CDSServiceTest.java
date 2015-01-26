@@ -42,7 +42,7 @@ public class CDSServiceTest {
         }};
         //Activamos la tarjeta
         try {
-            ResponseActivateCard rap = cdsService.activarTarjeta("9981212573821", "Cajero 1", p);
+            ResponseActivateCard rap = cdsService.activarTarjeta("9981212574293", "Cajero 1", p);
             System.out.println( ToStringBuilder.reflectionToString(rap, ToStringStyle.MULTI_LINE_STYLE) );
         } catch (NadroCDSException nce) {
             //Es aceptable si el WS me indica que ya está activa, cualquier otro Exception es inaceptable
@@ -57,7 +57,7 @@ public class CDSServiceTest {
         cdsService.login();
 
         //Pruebo una tarjeta válida
-        Tarjeta t = cdsService.getInfoTarjeta("9981212573784");
+        Tarjeta t = cdsService.getInfoTarjeta("9981212574316");
         System.out.println( ToStringBuilder.reflectionToString(t, ToStringStyle.MULTI_LINE_STYLE) );
         System.out.println( ToStringBuilder.reflectionToString(t.getCliente(), ToStringStyle.MULTI_LINE_STYLE) );
 
@@ -84,7 +84,7 @@ public class CDSServiceTest {
                         ))
                 ;
 
-        ArrayOfResponseBonusList beneficios = cdsService.getBeneficios("9981212573821", productos);
+        ArrayOfResponseBonusList beneficios = cdsService.getBeneficios("9981212574293", productos);
 
         debugPrint(beneficios);
 
@@ -118,7 +118,7 @@ public class CDSServiceTest {
 
         Pedido pedido = new Pedido();
         pedido.setCedulaProfesionalMedico("");
-        pedido.setNoTarjeta("9981212573784");
+        pedido.setNoTarjeta("9981212574293");
         pedido.setNoTicket("1-1-10008000");
         pedido.setUsuario("Cajero X");
         pedido.setTotal(new BigDecimal("500.00"));

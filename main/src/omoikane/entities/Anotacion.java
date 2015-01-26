@@ -1,6 +1,7 @@
 package omoikane.entities;
 
 import omoikane.producto.Producto;
+import org.apache.xpath.operations.String;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

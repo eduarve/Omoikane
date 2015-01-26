@@ -39,7 +39,7 @@ public class LegacyVenta implements Serializable {
 
     //Se usará el atributo idCliente para establecer el cliente relacionado, por causas de comodidad y performance, esa es la
     //  razón de usar updatable e insertable = false
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", updatable = false, insertable = false)
     private Cliente cliente;
 

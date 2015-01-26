@@ -73,6 +73,7 @@ public class Config {
             assignProp(Principal.multiSucursal)     { Principal.multiSucursal = Boolean.valueOf(config.multiSucursal[0].text()); }
             assignProp(Principal.isFlywayActive)    { Principal.isFlywayActive = Boolean.valueOf(config.isFlywayActive[0].text()); }
             assignProp(Principal.modoKiosko)        { Principal.modoKiosko = Boolean.valueOf(config.modoKiosko[0].text()); }
+            assignProp(Principal.dropboxPath)       { Principal.dropboxPath = String.valueOf(config.dropboxPath[0].text()); }
 
             if(Principal.basculaActiva) {
                 String cmd = ""

@@ -1,5 +1,6 @@
 package omoikane.principal
 
+import omoikane.entities.Paquete
 import omoikane.formularios.ImpuestosTableModel
 import omoikane.formularios.OmJInternalFrame
 import omoikane.inventarios.Stock
@@ -213,8 +214,26 @@ public class Articulos
             def serv        = Nadesico.conectar()
 
             //TODO aquí inyectar nuevo comportamiento para obtener artículo, sus subdatos y su precio generado
-            omoikane.producto.Articulo art = getRepo().readByPrimaryKey(ID as Long)
+            omoikane.producto.Articulo art;
+            JpaTransactionManager tm = (JpaTransactionManager) Principal.applicationContext.getBean("transactionManager");
+
+            TransactionTemplate transactionTemplate = new TransactionTemplate(tm);
+            Object result = transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                public void doInTransactionWithoutResult(TransactionStatus status) {
+                    art = getRepo().findByIdComplete(ID as Long);
+                    //Inicializar hijos
+                    art.getPrecio();
+                    art.getImpuestos();
+                    art.getCodigosAlternos();
+                    art.getRenglonesPaquete();
+                    if(art.getEsPaquete()) for(Paquete paq : art.getRenglonesPaquete()) paq.getProductoContenido().getPrecio().getPrecio();
+                }
+            });
+
             PrecioOmoikaneLogic precio = art.getPrecio();
+            //Inicializo los impuestos
+            art.getImpuestos();
             //def art         = serv.getArticulo(ID,IDAlmacen)
             def lin         = serv.getLinea(art.idLinea)
             def gru         = serv.getGrupo(art.idGrupo)
@@ -265,9 +284,9 @@ public class Articulos
 
             Platform.setImplicitExit(false);
 
-            addJFXCodigosPanel(ID, formArticulo);
-            addJFXStockPanel(ID, formArticulo);
-            addJFXPaquetePanel(ID, formArticulo);
+            addJFXCodigosPanel(art, formArticulo);
+            addJFXStockPanel(art, formArticulo);
+            addJFXPaquetePanel(art, formArticulo);
 
             addJFXComprasProductoPanel(art, formArticulo);
             addJFXListasDePreciosPanel(art, formArticulo);
@@ -364,7 +383,7 @@ public class Articulos
             }
         });
     }
-    static def addJFXStockPanel(Long idArticulo,  omoikane.formularios.Articulo a) {
+    static def addJFXStockPanel(omoikane.producto.Articulo art,  omoikane.formularios.Articulo a) {
 
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Stock", panel);
@@ -374,12 +393,12 @@ public class Articulos
             public void run() {
 
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("stockLevelsView");
-                ((StockLevelsController)scene.getController()).setProducto(idArticulo);
+                ((StockLevelsController)scene.getController()).setProducto(art);
                 panel.setScene(scene);
             }
         });
     }
-    static def addJFXPaquetePanel(Long idArticulo, omoikane.formularios.Articulo a) {
+    static def addJFXPaquetePanel(omoikane.producto.Articulo art, omoikane.formularios.Articulo a) {
 
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Paquete", panel);
@@ -390,13 +409,13 @@ public class Articulos
 
 
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("paqueteView");
-                ((PaqueteController)scene.getController()).setProducto(idArticulo);
+                ((PaqueteController)scene.getController()).setProducto(art);
                 panel.setScene(scene);
             }
         });
     }
 
-    static def addJFXCodigosPanel(Long idArticulo, omoikane.formularios.Articulo a) {
+    static def addJFXCodigosPanel(omoikane.producto.Articulo art, omoikane.formularios.Articulo a) {
 
         JFXPanel panel = new JFXPanel();
         a.tabbedPane.addTab("Códigos", panel);
@@ -406,7 +425,7 @@ public class Articulos
             public void run() {
 
                 SceneOverloaded scene = (SceneOverloaded) Principal.applicationContext.getBean("codigosView");
-                ((CodigosController)scene.getController()).setProducto(idArticulo);
+                ((CodigosController)scene.getController()).setProducto(art);
                 panel.setScene(scene);
             }
         });

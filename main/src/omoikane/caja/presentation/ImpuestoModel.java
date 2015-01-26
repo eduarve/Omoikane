@@ -18,6 +18,7 @@ public class ImpuestoModel {
     private ObjectProperty<BigDecimal> impuesto;
     private String descripcion;
     private BigDecimal porcentaje;
+
     private Impuesto impuestoEntity;
 
     public ImpuestoModel() {

@@ -111,12 +111,10 @@ public class CodigosController
 
     }
 
-    public void setProducto(Long id) {
-        art = productoRepo.findByIdIncludeCodigos(id);
+    public void setProducto(Articulo art) {
         if(art != null)
             listCodigos.getItems().addAll(art.getCodigosAlternos());
-        else
-            art = productoRepo.readByPrimaryKey(id);
+
     }
 
 }

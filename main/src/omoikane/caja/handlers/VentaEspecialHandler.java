@@ -8,12 +8,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
+import omoikane.caja.business.plugins.PluginManager;
+import omoikane.caja.business.plugins.VentaEspecialPlugin;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.nadesicoiLegacy.Ventas;
-import omoikane.producto.Impuesto;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 
@@ -24,6 +24,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 /**
+ * Agrega el Plugin de Venta Especial cuando es necesario
  * Created with IntelliJ IDEA.
  * User: octavioruizcastillo
  * Date: 09/12/12
@@ -61,16 +62,19 @@ public class VentaEspecialHandler extends ICajaEventHandler {
     public void modoEspecial() {
         try {
             if(Usuarios.autentifica(Usuarios.GERENTE)) {
-                Integer idVenta       = getController().getVentaAbiertaBean().getId().intValue();
-                Integer idAutorizador = Usuarios.getIDUltimoAutorizado();
 
-                Ventas.addVentaEspecialLegacy(idVenta, idAutorizador);
                 getController().getVentaTableView().setEditable(true);
                 getController().setCapturaPaneDisable(true);
                 getController().setMainToolBarDisable(true);
                 getController().showHud("Ahora puede cambiar los precios\n[Esc] para terminar modificaciones");
                 getController().getVentaTableView().requestFocus();
                 getController().getVentaTableView().onKeyReleasedProperty().set(ventaKBHandler);
+
+                // ** Agrega plugin para registrar ventaEspecial al finalizar venta **
+                PluginManager pm = getController().getCajaLogic().getPluginManager();
+                // Revisa si el plugin ya fue agregado a ésta venta, si no, lo agrega
+                if(!pm.exists(VentaEspecialPlugin.class)) pm.registerPlugin(new VentaEspecialPlugin(getController()));
+
             } else {
                 logger.info("Acceso denegado");
                 getController().getVentaTableView().requestFocus();

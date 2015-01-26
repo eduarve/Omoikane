@@ -52,7 +52,7 @@ public class ClienteViewTest {
 
         //Principal.IDCaja = 1;
         Principal.IDAlmacen = 1;
-        Usuarios.setIDUsuarioActivo(1);
+        Usuarios.setIDUsuarioActivo(1l);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTest", 2);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTestEditable", true);
 
@@ -68,7 +68,7 @@ public class ClienteViewTest {
 
         //Principal.IDCaja = 1;
         Principal.IDAlmacen = 1;
-        Usuarios.setIDUsuarioActivo(1);
+        Usuarios.setIDUsuarioActivo(1l);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTest", 0);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTestEditable", true);
 
@@ -83,7 +83,7 @@ public class ClienteViewTest {
 
         //Principal.IDCaja = 1;
         Principal.IDAlmacen = 1;
-        Usuarios.setIDUsuarioActivo(1);
+        Usuarios.setIDUsuarioActivo(1l);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTest", 2);
         ((HashMap)applicationContext.getBean("properties")).put("ClienteViewApp.clienteTestEditable", false);
 

@@ -1,5 +1,7 @@
 package omoikane.caja.handlers;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -16,6 +18,8 @@ import omoikane.repository.VentaRepo;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.swing.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,18 +49,35 @@ public class CancelarProducto extends ICajaEventHandler {
     }
 
     public void cancelar() {
-        try {
-            if(Usuarios.autentifica(Usuarios.SUPERVISOR)) {
-                Integer selectedRow = getController().getVentaTableView().getSelectionModel().selectedIndexProperty().getValue();
-                ProductoModel quitar = getController().getVentaTableView().getSelectionModel().getSelectedItem();
-                getController().getCajaLogic().deleteRowFromVenta(selectedRow);
-                registrar(quitar);
-            } else {
-                getController().getCapturaTextField().requestFocus();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                _cancelar();
             }
-        } catch (Exception e) {
-            logger.error("Error al cancelar producto", e);
-        }
+        });
+    }
+
+    private void _cancelar() {
+        Boolean auth = Usuarios.autentifica(Usuarios.SUPERVISOR);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    if(auth) {
+                        Integer selectedRow = getController().getVentaTableView().getSelectionModel().selectedIndexProperty().getValue();
+                        ProductoModel quitar = getController().getVentaTableView().getSelectionModel().getSelectedItem();
+                        getController().getCajaLogic().deleteRowFromVenta(selectedRow);
+                        registrar(quitar);
+                    } else {
+                        getController().getCapturaTextField().requestFocus();
+                    }
+                } catch (Exception e) {
+                    logger.error("Error al cancelar producto", e);
+                }
+                return null;
+            }
+        };
+        Platform.runLater(task);
     }
 
     private void registrar(ProductoModel quitar) {

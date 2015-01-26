@@ -11,14 +11,14 @@ import groovy.sql.*
  *
  * @author Usuario
  */
-class Usuarios {
+public class Usuarios {
 	static def asignarA(serv) {
         serv.getUsuario       = getUsuario
         serv.addUsuario       = addUsuario
         serv.modUsuario       = modUsuario
     }
 
-    static def getUsuario = { ID,IDAlmacen ->
+    public static def getUsuario = { ID,IDAlmacen ->
         def salida = ""
         try {
         def db   = Db.connect()

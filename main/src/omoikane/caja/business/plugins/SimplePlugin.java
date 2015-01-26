@@ -1,6 +1,8 @@
 package omoikane.caja.business.plugins;
 
 import omoikane.caja.presentation.CajaController;
+import omoikane.caja.presentation.CajaModel;
+import omoikane.entities.LegacyVenta;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,4 +24,8 @@ public abstract class SimplePlugin implements IPlugin {
     public void setCajaController(CajaController controller) {
         this.cajaController = controller;
     }
+
+    public void handlePreSaveVentaEvent(CajaModel model) throws PluginException {}
+
+    public void handlePostSaveVentaEvent(LegacyVenta venta) {}
 }

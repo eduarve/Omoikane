@@ -98,9 +98,9 @@ public class StockLevelsController implements Initializable {
         //setProducto(idProducto);
     }
 
-    public void setProducto(Long id) {
-        producto = productoRepo.findByIdIncludeStock(id);
-        stock = producto.getStockInitializated();
+    public void setProducto(Articulo art) {
+        producto =  art;
+        stock = art.getStock();
 
         stockTienda.setNumber( stock.getEnTienda() );
         stockBodega.setNumber(stock.getEnBodega());

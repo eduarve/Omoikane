@@ -1,5 +1,6 @@
 package omoikane.caja.presentation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 public class CajaModel {
+
     private StringProperty captura;
     private ObservableList<ProductoModel> venta;
     private ObservableList<ProductoModel> productos;
@@ -27,7 +29,6 @@ public class CajaModel {
     private Pageable paginacionBusqueda;
     private ObjectProperty<BigDecimal> efectivo;
     private ObjectProperty<BigDecimal> cambio;
-    private LegacyVenta ventaEntity;
     private SimpleObjectProperty<Cliente> cliente;
 
     /**
@@ -54,7 +55,6 @@ public class CajaModel {
         setVenta(list);
         ObservableList<ProductoModel> productos = FXCollections.observableArrayList();
         setProductos(productos);
-        setVentaEntity(new LegacyVenta());
     }
 
     public StringProperty getCaptura() {
@@ -136,14 +136,6 @@ public class CajaModel {
 
     public void setCambio( BigDecimal cambio ) {
         this.efectivo.set( cambio );
-    }
-
-    public LegacyVenta getVentaEntity() {
-        return ventaEntity;
-    }
-
-    public void setVentaEntity(LegacyVenta legacyVenta) {
-        ventaEntity = legacyVenta;
     }
 
     public ObjectProperty<Cliente> getCliente() {

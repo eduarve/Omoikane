@@ -28,6 +28,7 @@
     <bean id="baseParaPrecio" class="omoikane.producto.BaseParaPrecio"></bean>
     <bean id="usuarios" class="omoikane.sistema.Usuarios"></bean>
     <bean id="cajaLogic" class="omoikane.caja.business.CajaLogicImpl"></bean>
+    <bean id="stockIssuesHandler" class="omoikane.caja.handlers.StockIssuesHandler"></bean>
     <bean id="huellasCache" class="omoikane.sistema.huellas.HuellasCache"></bean>
     <bean id="config" class="omoikane.sistema.Config"></bean>
     <bean id="productoDao" class="omoikane.caja.data.ProductosNadesicoAdapter"></bean>
@@ -40,6 +41,7 @@
     <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
     <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios"></bean>
     <bean id="departamento" class="omoikane.producto.departamento.Departamento"></bean>
+    <bean id="cajaService" class="omoikane.caja.business.service.CajaService"></bean>
 
     <bean id="cliente" class="omoikane.clientes.Cliente"></bean>
     <bean id="clienteView" class="omoikane.clientes.ClienteView"></bean>
@@ -63,6 +65,9 @@
         <hades:dao id="listaDePreciosRepo"/>
         <hades:dao id="impuestoRepo"/>
         <hades:dao id="departamentoRepo"/>
+        <hades:dao id="stockRepo"/>
+        <hades:dao id="traspasoSalienteRepo"/>
+        <hades:dao id="traspasoEntranteRepo"/>
     </hades:dao-config>
 
     <bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

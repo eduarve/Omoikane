@@ -1,5 +1,6 @@
 package omoikane.caja.presentation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +34,6 @@ public class ProductoModel {
     private ObjectProperty<BigDecimal> porcDescuentosBase;
     private StringProperty importeString;
     private Producto productoData;
-    private LegacyVentaDetalle ventaDetalleEntity;
 
     public ProductoModel() {
         id         = new SimpleLongProperty(0l);
@@ -46,7 +46,6 @@ public class ProductoModel {
         impuestos      = new SimpleListProperty<>(FXCollections.<ImpuestoModel>observableArrayList());
         descuentosBase = new SimpleObjectProperty<>(new BigDecimal(0));
         importeString = new SimpleStringProperty("");
-        ventaDetalleEntity = new LegacyVentaDetalle();
 
     }
 
@@ -257,13 +256,6 @@ public class ProductoModel {
         this.productoData = productoData;
     }
 
-    public void setVentaDetalleEntity(LegacyVentaDetalle lvd) {
-        ventaDetalleEntity = lvd;
-    }
-
-    public LegacyVentaDetalle getVentaDetalleEntity() {
-        return ventaDetalleEntity;
-    }
 
     public BigDecimal getSumaImpuestos() {
         BigDecimal sumaImpuestos = new BigDecimal(0d);

@@ -67,7 +67,7 @@ class Ventas {
         salida
     }
     @Deprecated
-    static void addVentaEspecialLegacy(Integer IDVenta, Integer IDAutorizador) {
+    static void addVentaEspecialLegacy(Integer IDVenta, Long IDAutorizador) {
         addVentaEspecial(IDVenta, IDAutorizador);
     }
     static def addVentaEspecial={IDVenta,IDAutorizador->

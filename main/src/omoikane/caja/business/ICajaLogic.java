@@ -1,5 +1,6 @@
 package omoikane.caja.business;
 
+import omoikane.caja.business.plugins.PluginManager;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.CajaModel;
 import omoikane.entities.LegacyVenta;
@@ -25,8 +26,6 @@ public interface ICajaLogic {
 
     void nuevaVenta();
 
-    LegacyVenta getVentaAbiertaBean();
-
     void deleteRowFromVenta(int row);
 
     void persistirVenta();
@@ -34,4 +33,6 @@ public interface ICajaLogic {
     LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd);
 
     void cambiarCliente(Integer idCliente);
+
+    PluginManager getPluginManager();
 }

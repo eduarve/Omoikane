@@ -5,12 +5,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import omoikane.caja.nadroCDS.BeneficiosController;
+import omoikane.caja.nadroCDS.ValidarTarjetaCDSController;
 import omoikane.compras.MVC.CompraController;
 import omoikane.compras.MVC.ComprasCRUDController;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.inventarios.StockLevelsController;
 import omoikane.inventarios.tomaInventario.ConteoInventarioCRUDController;
 import omoikane.inventarios.tomaInventario.TomaInventarioController;
+import omoikane.inventarios.traspasoEntrante.TraspasoEntranteCRUDController;
+import omoikane.inventarios.traspasoEntrante.TraspasoEntranteController;
+import omoikane.inventarios.traspasoSaliente.TraspasoSaliente;
+import omoikane.inventarios.traspasoSaliente.TraspasoSalienteCRUDController;
+import omoikane.inventarios.traspasoSaliente.TraspasoSalienteController;
 import omoikane.producto.CodigosController;
 import omoikane.producto.PaqueteController;
 import omoikane.producto.compras.ComprasProductoController;
@@ -70,6 +77,14 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    TraspasoSalienteController traspasoSalienteController() { return new TraspasoSalienteController(); }
+
+    @Bean
+    @Scope("prototype")
+    TraspasoEntranteController traspasoEntranteController() { return new TraspasoEntranteController(); }
+
+    @Bean
+    @Scope("prototype")
     CompraController compraController() {
         return new CompraController();
     }
@@ -82,9 +97,19 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
-    ComprasCRUDController comprasCRUDController() {
-        return new ComprasCRUDController();
+    TraspasoSalienteCRUDController traspasoSalienteCRUDController() {
+        return new TraspasoSalienteCRUDController();
     }
+
+    @Bean
+    @Scope("prototype")
+    TraspasoEntranteCRUDController traspasoEntranteCRUDController() {
+        return new TraspasoEntranteCRUDController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    ComprasCRUDController comprasCRUDController() { return new ComprasCRUDController(); }
 
     @Bean
     @Scope("prototype")
@@ -130,8 +155,30 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    ValidarTarjetaCDSController validarTarjetaCDSController() {
+        return new ValidarTarjetaCDSController();
+    }
+
+    @Bean
+    @Scope("prototype")
+    BeneficiosController beneficiosController() { return new BeneficiosController(); }
+
+    @Bean
+    @Scope("prototype")
     Scene codigosView() {
         return initView("/omoikane/producto/CodigosView.fxml", codigosController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene validarTarjetaCDSView() {
+        return initView("/omoikane/caja/nadroCDS/ValidarTarjetaCDSView.fxml", validarTarjetaCDSController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene beneficiosView() {
+        return initView("/omoikane/caja/NadroCDS/BeneficiosView.fxml", beneficiosController());
     }
 
     @Bean
@@ -160,6 +207,18 @@ public class SpringAnnotatedConfig {
 
     @Bean
     @Scope("prototype")
+    Scene traspasoSalienteView() {
+        return initView("/omoikane/inventarios/traspasoSaliente/TraspasoSalienteView.fxml", traspasoSalienteController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene traspasoEntranteView() {
+        return initView("/omoikane/inventarios/traspasoEntrante/TraspasoEntranteView.fxml", traspasoEntranteController());
+    }
+
+    @Bean
+    @Scope("prototype")
     Scene compraView() {
         return initView("/omoikane/compras/MVC/CompraView.fxml", compraController());
     }
@@ -168,6 +227,18 @@ public class SpringAnnotatedConfig {
     @Scope("prototype")
     Scene conteoInventarioCRUDView() {
         return initView("/omoikane/inventarios/tomaInventario/ConteoInventarioCRUDView.fxml", conteoInventarioCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene traspasoSalienteCRUDView() {
+        return initView("/omoikane/inventarios/traspasoSaliente/TraspasoSalienteCRUDView.fxml", traspasoSalienteCRUDController());
+    }
+
+    @Bean
+    @Scope("prototype")
+    Scene traspasoEntranteCRUDView() {
+        return initView("/omoikane/inventarios/traspasoEntrante/TraspasoEntranteCRUDView.fxml", traspasoEntranteCRUDController());
     }
 
     @Bean

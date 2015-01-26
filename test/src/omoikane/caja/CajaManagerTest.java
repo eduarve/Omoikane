@@ -43,7 +43,7 @@ public class CajaManagerTest {
 
         //Principal.IDCaja = 1;
         Principal.IDAlmacen = 1;
-        Usuarios.setIDUsuarioActivo( 1 );
+        Usuarios.setIDUsuarioActivo( 1l );
 
         Application.launch(CajaManager.class, (java.lang.String[]) null);
 
@@ -52,7 +52,7 @@ public class CajaManagerTest {
     public void cajaSwingTest() throws InvocationTargetException, InterruptedException {
 
         Principal.IDAlmacen = 1;
-        Usuarios.setIDUsuarioActivo( 1 );
+        Usuarios.setIDUsuarioActivo( 1l );
 
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override

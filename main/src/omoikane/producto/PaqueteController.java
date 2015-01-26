@@ -81,6 +81,7 @@ public class PaqueteController
     @FXML private Label notaCantidad;
 
     @FXML private Label notaIdProducto;
+    private Articulo producto;
 
     @FXML
     private void actionAdd() {
@@ -166,6 +167,7 @@ public class PaqueteController
             @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 Articulo producto = productoRepo.readByPrimaryKey(productoId);
+                PaqueteController.this.producto = producto;
                 producto.setEsPaquete(!producto.getEsPaquete());
                 entityManager.persist(producto);
                 paqueteCheckbox.setSelected(producto.getEsPaquete());
@@ -203,11 +205,12 @@ public class PaqueteController
 
     }
 
-    public void setProducto(Long id) {
-        this.productoId = id;
+    public void setProducto(Articulo art) {
+        this.productoId = art.getIdArticulo();
+        this.producto = art;
         llenarTabla();
 
-        Articulo producto = productoRepo.readByPrimaryKey(productoId);
+        Articulo producto = art;
         paqueteCheckbox.setSelected( producto.getEsPaquete() );
     }
 
@@ -222,6 +225,8 @@ public class PaqueteController
         tablaContenido.setItems(paquete);
         em.close();*/
 
+        // Código 2. Consulta el artículo desde la BD
+        /*
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         Object result = transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -231,7 +236,13 @@ public class PaqueteController
                 paquete = FXCollections.observableArrayList(listPaquete);
                 tablaContenido.setItems(paquete);
             }
-        });
+        }); */
+
+        // Código 3. Utiliza una referencia externa (en lugar de consultar de la BD)
+        Articulo a = this.producto;
+        List<Paquete> listPaquete = a.renglonesPaquete;
+        paquete = FXCollections.observableArrayList(listPaquete);
+        tablaContenido.setItems(paquete);
 
     }
 

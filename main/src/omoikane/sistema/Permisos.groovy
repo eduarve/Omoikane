@@ -12,90 +12,93 @@ import static omoikane.sistema.Usuarios.*;
 
 class Permisos {
 
-    static def PMA_ABRIRALMACEN      = SUPERVISOR
-    static def PMA_DETALLESALMACEN   = SUPERVISOR
-    static def PMA_MODIFICARALMACEN  = ADMINISTRADOR
-    static def PMA_ELIMINARALMACEN   = PROPIETARIO
+    static Float PMA_ABRIRALMACEN      = SUPERVISOR
+    static Float PMA_DETALLESALMACEN   = SUPERVISOR
+    static Float PMA_MODIFICARALMACEN  = ADMINISTRADOR
+    static Float PMA_ELIMINARALMACEN   = PROPIETARIO
 
-    static def PMA_ABRIRARTICULO       = CAJERO
-    static def PMA_DETALLESARTICULO    = CAPTURISTA
-    static def PMA_MODIFICARARTICULO   = CAPTURISTA
-    static def PMA_ELIMINARARTICULO    = PROPIETARIO
-    static def PMA_LISTADEPRECIOSCRUD  = GERENTE
-    static def PMA_DEPARTAMENTOCRUD    = GERENTE
+    static Float PMA_ABRIRARTICULO       = CAJERO
+    static Float PMA_DETALLESARTICULO    = CAPTURISTA
+    static Float PMA_MODIFICARARTICULO   = CAPTURISTA
+    static Float PMA_ELIMINARARTICULO    = GERENTE
+    static Float PMA_LISTADEPRECIOSCRUD  = GERENTE
+    static Float PMA_DEPARTAMENTOCRUD    = GERENTE
 
-    static def PMA_ABRIRCAJA       = SUPERVISOR
-    static def PMA_DETALLESCAJA    = SUPERVISOR
-    static def PMA_MODIFICARCAJA   = GERENTE
-    static def PMA_ELIMINARCAJA    = PROPIETARIO
+    static Float PMA_ABRIRCAJA       = SUPERVISOR
+    static Float PMA_DETALLESCAJA    = SUPERVISOR
+    static Float PMA_MODIFICARCAJA   = GERENTE
+    static Float PMA_ELIMINARCAJA    = PROPIETARIO
 
-    static def PMA_ABRIRSUCURSAL   = SUPERVISOR
+    static Float PMA_ABRIRSUCURSAL   = SUPERVISOR
 
-    static def PMA_ABRIRUSUARIO       = GERENTE
-    static def PMA_DETALLESUSUARIO    = GERENTE
-    static def PMA_MODIFICARUSUARIO   = GERENTE
-    static def PMA_ELIMINARUSUARIO    = PROPIETARIO
+    static Float PMA_ABRIRUSUARIO       = GERENTE
+    static Float PMA_DETALLESUSUARIO    = GERENTE
+    static Float PMA_MODIFICARUSUARIO   = GERENTE
+    static Float PMA_ELIMINARUSUARIO    = PROPIETARIO
 
-    static def PMA_ABRIRLINEA       = CAJERO
-    static def PMA_DETALLESLINEA    = CAJERO
-    static def PMA_MODIFICARLINEA   = SUPERVISOR
-    static def PMA_ELIMINARLINEA    = PROPIETARIO
-    static def PMA_DUAL             = PROPIETARIO
+    static Float PMA_ABRIRLINEA       = CAJERO
+    static Float PMA_DETALLESLINEA    = CAJERO
+    static Float PMA_MODIFICARLINEA   = SUPERVISOR
+    static Float PMA_ELIMINARLINEA    = PROPIETARIO
+    static Float PMA_DUAL             = PROPIETARIO
 
-    static def PMA_ABRIRGRUPO       = CAJERO
-    static def PMA_DETALLESGRUPO    = CAJERO
-    static def PMA_MODIFICARGRUPO   = SUPERVISOR
-    static def PMA_ELIMINARGRUPO    = PROPIETARIO
+    static Float PMA_ABRIRGRUPO       = CAJERO
+    static Float PMA_DETALLESGRUPO    = CAJERO
+    static Float PMA_MODIFICARGRUPO   = SUPERVISOR
+    static Float PMA_ELIMINARGRUPO    = PROPIETARIO
 
-    static def PMA_ABRIRCLIENTE       = CAJERO
-    static def PMA_DETALLESCLIENTE    = SUPERVISOR
-    static def PMA_MODIFICARCLIENTE   = SUPERVISOR
-    static def PMA_ELIMINARCLIENTE    = PROPIETARIO
+    static Float PMA_ABRIRCLIENTE       = CAJERO
+    static Float PMA_DETALLESCLIENTE    = SUPERVISOR
+    static Float PMA_MODIFICARCLIENTE   = SUPERVISOR
+    static Float PMA_ELIMINARCLIENTE    = PROPIETARIO
 
-    static def PMA_ABRIRCORTES       = SUPERVISOR
-    static def PMA_DETALLESCORTES    = SUPERVISOR
-    static def PMA_MODIFICARCORTES   = ADMINISTRADOR
-    static def PMA_ELIMINARCORTES    = PROPIETARIO
+    static Float PMA_ABRIRCORTES       = SUPERVISOR
+    static Float PMA_DETALLESCORTES    = SUPERVISOR
+    static Float PMA_MODIFICARCORTES   = ADMINISTRADOR
+    static Float PMA_ELIMINARCORTES    = PROPIETARIO
 
-    static def PMA_ABRIRVENTAS       = SUPERVISOR
-    static def PMA_DETALLESVENTAS    = SUPERVISOR
-    static def PMA_MODIFICARVENTAS   = ADMINISTRADOR
-    static def PMA_ELIMINARVENTAS    = PROPIETARIO
+    static Float PMA_ABRIRVENTAS       = SUPERVISOR
+    static Float PMA_DETALLESVENTAS    = SUPERVISOR
+    static Float PMA_MODIFICARVENTAS   = ADMINISTRADOR
+    static Float PMA_ELIMINARVENTAS    = PROPIETARIO
 
-    static def PMA_ABRIRFACTURAS    = SUPERVISOR
-    static def PMA_CREARFACTURAS    = SUPERVISOR
-    static def PMA_CANCELARFACTURAS = SUPERVISOR
+    static Float PMA_ABRIRFACTURAS    = SUPERVISOR
+    static Float PMA_CREARFACTURAS    = SUPERVISOR
+    static Float PMA_CANCELARFACTURAS = SUPERVISOR
 
-    static def PMA_ABRIRMOVALMACEN       = SUPERVISOR
-    static def PMA_DETALLESMOVALMACEN    = SUPERVISOR
-    static def PMA_MODIFICARMOVALMACEN   = SUPERVISOR
-    static def PMA_ELIMINARMOVALMACEN    = PROPIETARIO
-    static def PMA_APLICARINVENTARIO     = ADMINISTRADOR
-    static def PMA_CREARINVENTARIO       = SUPERVISOR
+    static Float PMA_ABRIRMOVALMACEN       = SUPERVISOR
+    static Float PMA_DETALLESMOVALMACEN    = SUPERVISOR
+    static Float PMA_MODIFICARMOVALMACEN   = SUPERVISOR
+    static Float PMA_ELIMINARMOVALMACEN    = PROPIETARIO
+    static Float PMA_APLICARINVENTARIO     = ADMINISTRADOR
+    static Float PMA_CREARINVENTARIO       = SUPERVISOR
 
-    static def PMA_REGISTRARCOMPRA       = SUPERVISOR
-    static def PMA_APLICARCOMPRA_A_STOCK = SUPERVISOR
+    static Float PMA_REGISTRARTRASPASO     = SUPERVISOR
+    static Float PMA_APLICARTRASPASO       = SUPERVISOR
 
-    static def PMA_TOTALVENTA            = SUPERVISOR
-    static def PMA_TOTALVENTASUCURSAL    = SUPERVISOR
-    static def PMA_LANZARCAJA            = CAJERO
-    static def PMA_ABRIRCAJAS            = SUPERVISOR //INICIAR VENTAS EN CAJA
-    static def PMA_VENTAESPECIAL         = GERENTE
-    static def PMA_MOVIMIENTOSCAJA       = SUPERVISOR
+    static Float PMA_REGISTRARCOMPRA       = SUPERVISOR
+    static Float PMA_APLICARCOMPRA_A_STOCK = SUPERVISOR
 
-    static def PMA_IMPUESTOSCRUD         = GERENTE;
+    static Float PMA_TOTALVENTA            = SUPERVISOR
+    static Float PMA_TOTALVENTASUCURSAL    = SUPERVISOR
+    static Float PMA_LANZARCAJA            = CAJERO
+    static Float PMA_ABRIRCAJAS            = SUPERVISOR //INICIAR VENTAS EN CAJA
+    static Float PMA_VENTAESPECIAL         = GERENTE
+    static Float PMA_MOVIMIENTOSCAJA       = SUPERVISOR
 
-    public static def PMA_CONFIGURACION         = SUPERVISOR;
-    public static def PMA_REPORTES              = SUPERVISOR;
-    public static def PMA_MEPRO                 = ADMINISTRADOR;
-    public static def PMA_ETIQUETAS             = CAPTURISTA;
-    public static def PMA_PROVEEDORES           = CAPTURISTA;
+    static Float PMA_IMPUESTOSCRUD         = GERENTE;
 
-    public static def PMA_ABRIRPACIENTES        = CAPTURISTA;
-    public static def PMA_CONSUMOPACIENTE       = CAJERO;
-    public static def PMA_CAJACLINICA           = CAPTURISTA;
-    public static def PMA_ARTEMISA_REPORTES     = CAPTURISTA;
-    public static def PMA_ARTEMISA_ARTICULOS    = CAPTURISTA;
+    public static Float PMA_CONFIGURACION         = SUPERVISOR;
+    public static Float PMA_REPORTES              = SUPERVISOR;
+    public static Float PMA_MEPRO                 = ADMINISTRADOR;
+    public static Float PMA_ETIQUETAS             = CAPTURISTA;
+    public static Float PMA_PROVEEDORES           = CAPTURISTA;
+
+    public static Float PMA_ABRIRPACIENTES        = CAPTURISTA;
+    public static Float PMA_CONSUMOPACIENTE       = CAJERO;
+    public static Float PMA_CAJACLINICA           = CAPTURISTA;
+    public static Float PMA_ARTEMISA_REPORTES     = CAPTURISTA;
+    public static Float PMA_ARTEMISA_ARTICULOS    = CAPTURISTA;
 }
 
 

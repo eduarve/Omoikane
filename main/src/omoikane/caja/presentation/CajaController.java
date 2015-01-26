@@ -152,7 +152,6 @@ public class CajaController
 
     public void shutdownBasculaHandler() { basculaHandler.close(); }
 
-    public LegacyVenta getVentaAbiertaBean() { return getCajaLogic().getVentaAbiertaBean(); }
 
     @FXML
     private void onCapturaKeyReleased(KeyEvent event) {
@@ -184,6 +183,8 @@ public class CajaController
 
     private void ifAnySelectedProductoThenSelect() {
         ProductoModel pm = productosTableView.getSelectionModel().getSelectedItem();
+        if(pm == null) return;
+
         LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(modelo.getCaptura().get());
         String cantidad = capturaFilter.getCantidad().toPlainString();
 
@@ -232,14 +233,14 @@ public class CajaController
 
             @Override
             protected Void call() throws Exception {
+
                 try {
                     LegacyVenta venta = cajaLogic.terminarVenta(getModel());
-                    cajaLogic.imprimirVenta(venta);
 
                     if(venta != null) JOptionPane.showMessageDialog(Herramientas.getEscritorio(), "Venta Registrada");
                 } catch (Exception e) {
                     logger.error("Error al guardar venta.", e);
-                    failed();
+                    throw e;
                 }
 
                 return null;
@@ -350,7 +351,7 @@ public class CajaController
         precioProductoColumn     .prefWidthProperty().bind( productosTableView.widthProperty().multiply(0.25d ) );
 
         //Preparar GUI
-        hideHud();
+        //hideHud();
 
         //Escribir la fecha
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy");
@@ -376,13 +377,6 @@ public class CajaController
         //Agrego bascula handler
         basculaHandler = new BasculaHandler(this, modelo);
 
-        //Coloco el cursor en el campo de captura (quiza seria mejor moverlo a un evento)
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                capturaTextField.requestFocus();
-            }
-        });
     }
 
     private class ClickHandler implements EventHandler<ActionEvent> {
@@ -409,7 +403,8 @@ public class CajaController
             if (event.getTarget() == abrirCatalogoButton)
                 new MostrarCatalogoHandler(controller).handle(event);
             if (event.getTarget() == plmButton)
-                new PlmHandler(controller).handle(event);
+                //new PlmHandler(controller).handle(event);
+                new ValidarTarjetaCDSHandler(controller).handle(event);
             if (event.getTarget() == cambiarClienteButton)
                 new MostrarCatalogoClientesHandler(controller).handle(event);
         }

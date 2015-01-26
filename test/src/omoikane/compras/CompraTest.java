@@ -27,8 +27,7 @@ import java.util.HashMap;
 @ContextConfiguration("classpath:applicationContext-test.xml")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class,
-        DbUnitTestExecutionListener.class })
+        TransactionalTestExecutionListener.class })
 
 public class CompraTest {
     final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CompraTest.class);

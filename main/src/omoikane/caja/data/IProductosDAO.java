@@ -15,6 +15,8 @@ import java.util.List;
 public interface IProductosDAO {
 
     public List<Producto> findByCodigo(String codigo);
+    //Incluye colecciones BaseParaPrecios e Impuestos
+    public List<Producto> findCompleteByCodigo(String codigo);
     public List<Producto> findByDescripcionLike(String descripcion, Pageable pagina);
 
     Producto findById(Long id);

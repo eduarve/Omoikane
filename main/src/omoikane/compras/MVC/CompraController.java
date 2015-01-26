@@ -22,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.compras.entities.Compra;
@@ -36,6 +37,7 @@ import omoikane.inventarios.Stock;
 import omoikane.producto.Articulo;
 import omoikane.repository.ProductoRepo;
 import omoikane.repository.ProveedorRepo;
+import omoikane.repository.StockRepo;
 import omoikane.sistema.Permisos;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
@@ -93,6 +95,9 @@ public class CompraController implements Initializable {
 
     @Autowired
     ProveedorRepo proveedorRepo;
+
+    @Autowired
+    StockRepo stockRepo;
 
     @FXML TableView<ItemCompraEntityWrapper> itemsTable;
     @FXML TableColumn<ItemCompraEntityWrapper, String> codigoCol;
@@ -221,10 +226,9 @@ public class CompraController implements Initializable {
             Articulo a        = itemCompraEntityWrapper.articuloProperty().get();
 
             StockIssuesLogic stockIssuesLogic = Principal.applicationContext.getBean(StockIssuesLogic.class);
-            stockIssuesLogic.setArticulo(a.getIdArticulo());
-            Articulo articulo = stockIssuesLogic.increaseStock( itemCompraEntityWrapper.cantidadProperty().get() );
+            Articulo articulo = stockIssuesLogic.increaseStock(a.getIdArticulo(), itemCompraEntityWrapper.cantidadProperty().get() );
 
-            productoRepo.save(articulo);
+            stockRepo.save(articulo.getStock());
 
             modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
             repo.save(modelo._compra);
@@ -293,6 +297,14 @@ public class CompraController implements Initializable {
         importeCol       .setCellValueFactory(new PropertyValueFactory<ItemCompraEntityWrapper, BigDecimal>("importe"));
 
         initModel();
+
+        // - Redimensionar las columnas para que la suma de sus anchos sea igual al ancho de la tabla - //
+        codigoCol        .prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.12));
+        nombreProductoCol.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.40));
+        cantidadCol      .prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.12));
+        costoCol         .prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.12));
+        importeCol       .prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.12));
+        actionCol        .prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.115));
 
         codigoTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
@@ -369,8 +381,12 @@ public class CompraController implements Initializable {
          * @param table the table to which a new person can be added.
          */
         ActionsCell(final TableView table) {
+            // -- Formato del botón -- //
+            paddedButton.setMaxHeight(17);
+            delButton.setFont(new Font("Verdana", 8));
+            paddedButton.setPadding(new javafx.geometry.Insets(1, 0, 0, 0));
 
-            paddedButton.setPadding(new javafx.geometry.Insets(3, 0, 0, 0));
+            // -- Configuración del botón y su acción -- //
             paddedButton.getChildren().add(delButton);
             final TableCell<ItemCompraEntityWrapper, Boolean> c = this;
             delButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -393,6 +409,8 @@ public class CompraController implements Initializable {
             if (!empty) {
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setGraphic(paddedButton);
+            } else {
+                setGraphic(null);
             }
         }
     }
@@ -490,8 +508,12 @@ public class CompraController implements Initializable {
          * Generación del hashmap llamado índice. Sirve para rechazar artículos repetidos
          */
         indice = new HashMap<>();
-        for(ItemCompraEntityWrapper ci : modelo.getItems()) {
-            indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
+        try {
+            for (ItemCompraEntityWrapper ci : modelo.getItems()) {
+                indice.put(ci.getBean().getArticulo().getIdArticulo(), ci.getBean().getArticulo());
+            }
+        } catch(NullPointerException npe) {
+            logger.error("Artículo mal registrado. Si el problema persiste contacta a soporte técnico.", npe);
         }
     }
 
@@ -534,6 +556,11 @@ public class CompraController implements Initializable {
             compra = new Compra();
             compra.setFecha( new Date() );
             compra = repo.saveAndFlush(compra);
+        }
+        // Inicializar items
+        compra.getItems().size();
+        for (ItemCompra itemCompra : compra.getItems()) {
+            itemCompra.getArticulo();
         }
 
         CompraEntityWrapper compraEntityWrapper = new CompraEntityWrapper(compra);

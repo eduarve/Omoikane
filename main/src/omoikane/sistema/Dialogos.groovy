@@ -28,7 +28,6 @@ class Dialogos
     static def lanzarDialogoError(parent, mensaje, detalles)
     {
         Toolkit.getDefaultToolkit().beep();
-        println "[Error: $mensaje]"
         try {
                 String msjXLineas = "";
                 int largo = 50, nLetrasLinea = 0;

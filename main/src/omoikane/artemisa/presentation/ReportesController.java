@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import jfxtras.labs.scene.control.CalendarTextField;
+import jfxtras.scene.control.CalendarTextField;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
@@ -65,7 +65,7 @@ public class ReportesController implements Initializable {
     }
 
     public void onTxGenerar(ActionEvent action) {
-        List<Transaccion> transacciones = transaccionDAO.findTransacciones(txDesde.getValue().getTime(), txHasta.getValue().getTime());
+        List<Transaccion> transacciones = transaccionDAO.findTransacciones(txDesde.calendarProperty().getValue().getTime(), txHasta.calendarProperty().getValue().getTime());
         imprimirTx(transacciones);
     }
 
@@ -102,7 +102,7 @@ public class ReportesController implements Initializable {
                                         cmp.text("Hospital Ángel").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                                 .newRow()
                                 .add(
-                                        cmp.text("Desde " + DateFormat.getDateInstance().format(txDesde.getValue().getTime()) + ", hasta " + DateFormat.getDateInstance().format(txHasta.getValue().getTime())).setStyle(titleStyle))
+                                        cmp.text("Desde " + DateFormat.getDateInstance().format(txDesde.calendarProperty().getValue().getTime()) + ", hasta " + DateFormat.getDateInstance().format(txHasta.calendarProperty().getValue().getTime())).setStyle(titleStyle))
                                 .newRow()
                                 .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))
                 .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))
@@ -125,7 +125,7 @@ public class ReportesController implements Initializable {
     }
 
     public void onCancGenerar(ActionEvent event) {
-        List<CancelacionTransaccion> cancelaciones = cancelacionTransaccionDAO.findCancelaciones(cancDesde.getValue().getTime(), cancHasta.getValue().getTime());
+        List<CancelacionTransaccion> cancelaciones = cancelacionTransaccionDAO.findCancelaciones(cancDesde.calendarProperty().getValue().getTime(), cancHasta.calendarProperty().getValue().getTime());
         imprimirCanc(cancelaciones);
     }
 
@@ -160,7 +160,7 @@ public class ReportesController implements Initializable {
                                             cmp.text("Hospital Ángel").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                                     .newRow()
                                     .add(
-                                            cmp.text("Desde "+ DateFormat.getDateInstance().format( cancDesde.getValue().getTime() ) + ", hasta " + DateFormat.getDateInstance().format( cancHasta.getValue().getTime() )).setStyle(titleStyle))
+                                            cmp.text("Desde "+ DateFormat.getDateInstance().format( cancDesde.calendarProperty().getValue().getTime() ) + ", hasta " + DateFormat.getDateInstance().format( cancHasta.calendarProperty().getValue().getTime() )).setStyle(titleStyle))
                                     .newRow()
                                     .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))
                     .pageFooter(cmp.pageXofY().setStyle(boldCenteredStyle))

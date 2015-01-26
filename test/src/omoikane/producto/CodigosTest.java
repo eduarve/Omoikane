@@ -42,7 +42,7 @@ public class CodigosTest {
         Application.launch(DummyJFXApp.class);
 
         CodigosController cc = (CodigosController) DummyJFXApp.getInstance().getController();
-        cc.setProducto(1l);
+        cc.setProducto(null);
     }
 
 }

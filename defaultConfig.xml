@@ -14,6 +14,10 @@
         puerto serial a usb  linux : /dev/ttyUSBX   windows: COMX
         X es el valor del puerto en el que se encuentra
 
+    24/01/2014
+    Nuevos nodos opcionales
+    - "dropboxPath": Señala la carpeta local que está ligada a dropbox. Para lectura y escritura de transferencias de mercancía
+
 	02/08/2014
 	Se agregan los siguientes parámetros (nodos) OPCIONALES
 	- "URLJasperserver": URL del servidor Jasper Server para mostrar reportes avanzados

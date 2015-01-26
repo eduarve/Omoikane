@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="732.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.inventarios.tomaInventario.TomaInventarioController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="732.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="omoikane.inventarios.tomaInventario.TomaInventarioController">
   <children>
     <Label text="Toma de inventario físico" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
       <font>
@@ -17,11 +17,11 @@
     </Label>
     <TableView fx:id="itemsTable" editable="false" focusTraversable="true" prefHeight="248.0" prefWidth="733.9998779296875" AnchorPane.bottomAnchor="102.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="103.0">
       <columns>
-        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" text="Código" fx:id="codigoCol" />
-        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="241.0" text="Producto" fx:id="nombreProductoCol" />
-        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Conteo" fx:id="conteoCol" />
-        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Stock Sistema" fx:id="stockDBCol" />
-        <TableColumn editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Diferencia" fx:id="diferenciaCol" />
+        <TableColumn fx:id="codigoCol" maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" text="Código" />
+        <TableColumn fx:id="nombreProductoCol" maxWidth="5000.0" minWidth="10.0" prefWidth="241.0" text="Producto" />
+        <TableColumn fx:id="conteoCol" editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Conteo" />
+        <TableColumn fx:id="stockDBCol" editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Stock Sistema" />
+        <TableColumn fx:id="diferenciaCol" editable="true" maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Diferencia" />
       </columns>
     </TableView>
     <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -30,7 +30,7 @@
         <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" />
         <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Aplicar inventario" />
         <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
-        <Button fx:id="archivarButton" defaultButton="true" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />
+        <Button fx:id="archivarButton" mnemonicParsing="false" onAction="#archivarAction" text="Archivar" />
         <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" visible="false" />
       </items>
     </ToolBar>

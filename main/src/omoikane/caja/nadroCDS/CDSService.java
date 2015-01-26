@@ -16,10 +16,10 @@ public class CDSService {
     WSCirculodelaSaludSoap servicioWeb;
 
     public void login() throws NadroCDSException {
-        String idCadena   = "";
-        String idSucursal = "";
-        String usuario    = "";
-        String pass       = "";
+        String idCadena   = "0000000201";
+        String idSucursal = "0000000001";
+        String usuario    = "FarmaMedina";
+        String pass       = "BY4K3684";
 
         servicioWeb = new WSCirculodelaSalud().getWSCirculodelaSaludSoap();
         ResponseLogin responseLogin = servicioWeb.login(usuario, pass, idCadena, idSucursal);
@@ -52,8 +52,12 @@ public class CDSService {
 
         if(beneficios == null
                 || beneficios.getResponseBonusList() == null
-                || beneficios.getResponseBonusList().size() < productos.getBonusProductList().size())
-            throw new NadroCDSException("Respuesta incorrecta por parte del WS de Nadro CDS Oro. COD-1");
+                || beneficios.getResponseBonusList().size() < productos.getBonusProductList().size()) {
+            if(beneficios != null && beneficios.getResponseBonusList().get(0).isHuboError())
+                throw new NadroCDSException(beneficios.getResponseBonusList().get(0).getMensajeError());
+            else
+                throw new NadroCDSException("Respuesta incorrecta por parte del WS de Nadro CDS Oro. COD-1");
+        }
 
         return beneficios;
     }

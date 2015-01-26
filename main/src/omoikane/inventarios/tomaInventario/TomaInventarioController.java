@@ -31,9 +31,12 @@ import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import omoikane.entities.Usuario;
 import omoikane.inventarios.Stock;
+import omoikane.inventarios.StockIssuesLogic;
+import omoikane.principal.Articulos;
 import omoikane.producto.Articulo;
 import omoikane.repository.ConteoInventarioRepo;
 import omoikane.repository.ProductoRepo;
+import omoikane.repository.StockRepo;
 import omoikane.sistema.Permisos;
 import omoikane.sistema.TextFieldTableCell;
 import omoikane.sistema.Usuarios;
@@ -110,10 +113,13 @@ public class TomaInventarioController implements Initializable {
 
     private Articulo capturaArticulo;
     private HashMap<Long, ItemConteoPropWrapper> indice;
+    private boolean persistOnChange;
+    private MyListChangeListener persistOnChangeListener;
+    private boolean persistable = true; //Por default persistable
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
         modelo.setCompletado(true);
-        Task<Void> persistTask = persistModel();
+        Task<Void> persistTask = persistModelTask();
         persistTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent workerStateEvent) {
@@ -233,18 +239,20 @@ public class TomaInventarioController implements Initializable {
         new Thread(aplicarInventarioTask).start();
     }
 
+
+    @Autowired StockIssuesLogic stockIssuesLogic;
+    @Autowired StockRepo stockRepo;
+
     @Transactional
     private void aplicarInventarioToModel() {
         if(!omoikane.sistema.Usuarios.cerrojo(Permisos.getPMA_APLICARINVENTARIO())){ logger.info("Acceso Denegado"); return; }
 
         for (ItemConteoPropWrapper itemConteoPropWrapper : modelo.getItems()) {
             Articulo a        = itemConteoPropWrapper.articuloProperty().get();
-            Articulo articulo = productoRepo.findByIdIncludeStock(a.getIdArticulo());
 
-            Stock s = articulo.getStockInitializated();
-            s.setEnTienda(itemConteoPropWrapper.conteoProperty().get());
+            Articulo articulo = stockIssuesLogic.setStock(a.getIdArticulo(), itemConteoPropWrapper.conteoProperty().get() );
+            stockRepo.save(articulo.getStock());
 
-            productoRepo.saveAndFlush(articulo);
         }
 
         modelo.setAplicado(true);
@@ -275,12 +283,20 @@ public class TomaInventarioController implements Initializable {
                         handlers,
                         handlers[0]);
         if(handler == null) return;
-        try {
-            ITerminalHandler terminal = handler;
-            terminal.importData();
-        } catch (Exception e) {
-            logger.error("Error al importar", e);
-        }
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    ITerminalHandler terminal = handler;
+                    terminal.importData();
+                } catch (Exception e) {
+                    logger.error("Error al importar", e);
+                }
+                return null;
+            }
+        };
+        Platform.runLater(task);
     }
 
     @FXML public void onExportarAction(ActionEvent actionEvent) {
@@ -293,7 +309,11 @@ public class TomaInventarioController implements Initializable {
         if(modelo.getCompletado().get()) return;
 
         BigDecimal conteo = new BigDecimal(conteoTextField.getText());
-        addItemConteo(capturaArticulo, conteo);
+        try {
+            addItemConteo(capturaArticulo, conteo);
+        } catch (Exception e) {
+            logger.error("Error en la captura", e);
+        }
 
         conteoTextField.setText("");
         codigoTextField.setText("");
@@ -307,7 +327,7 @@ public class TomaInventarioController implements Initializable {
      * @param capturaArticulo
      * @param conteo
      */
-    public void addItemConteo(Articulo capturaArticulo, BigDecimal conteo) {
+    public void addItemConteo(Articulo capturaArticulo, BigDecimal conteo) throws Exception {
         if(modelo.getCompletado().get()) return;
 
         String codigo            = capturaArticulo.getCodigo();
@@ -317,17 +337,18 @@ public class TomaInventarioController implements Initializable {
         BigDecimal costoUnitario = new BigDecimal( capturaArticulo.getBaseParaPrecio().getCosto() );
 
         if(indice.containsKey(capturaArticulo.getIdArticulo())) {
-
+            //Acumular en una partida ya existente
             ItemConteoPropWrapper itemConteoPropWrapper = indice.get(capturaArticulo.getIdArticulo());
             conteo = conteo.add( itemConteoPropWrapper.getBean().getConteo() );
             itemConteoPropWrapper.setConteo    ( conteo     );
             itemConteoPropWrapper.setDiferencia( diferencia );
-            new Thread(
+            /*new Thread(
                     persistModel()
-            ).start();
+            ).start();*/
+            persistModel();
 
         } else {
-
+            //Agregar nueva partida
             ItemConteoInventario newItemBean = new ItemConteoInventario(codigo, descripcion, conteo, costoUnitario);
             newItemBean.setArticulo  ( capturaArticulo );
             newItemBean.setStockDB   ( stockBD         );
@@ -377,12 +398,17 @@ public class TomaInventarioController implements Initializable {
 
         initModel();
 
+        // - Redimensionar las columnas para que la suma de sus anchos sea igual al ancho de la tabla - //
+        itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         codigoTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.ENTER) {
                     conteoTextField.requestFocus();
                 }
+                if(event.getCode() == KeyCode.F1)
+                    new MostrarCatalogoHandler(TomaInventarioController.this).handle();
             }
         });
 
@@ -474,7 +500,7 @@ public class TomaInventarioController implements Initializable {
         fechaLabel.textProperty().bind(Bindings.convert(modelo.getDate()));
         idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
 
-        modelo.getItems().addListener(new MyListChangeListener());
+        setPersistOnChage(true);
     }
 
     /**
@@ -505,13 +531,41 @@ public class TomaInventarioController implements Initializable {
         return conteoInventarioPropWrapper;
     }
 
+    public void setPersistOnChage(boolean persistOnChange) {
+        //Remuevo el listener actual, si es que existe
+        if( persistOnChangeListener != null )
+            modelo.getItems().removeListener(persistOnChangeListener);
+
+        //Si se activa persistOnChange
+        if(persistOnChange)
+        {
+            persistOnChangeListener = new MyListChangeListener();
+            modelo.getItems().addListener(persistOnChangeListener);
+        }
+
+        //Guardo el último valor deseado para persistOnChange
+        this.persistOnChange = persistOnChange;
+    }
+
+    public boolean isPersistOnChage() {
+        return persistOnChange;
+    }
+
+    public boolean isPersistable() {
+        return persistable;
+    }
+
+    public void setPersistable(boolean persistable) {
+        this.persistable = persistable;
+    }
+
     private class MyListChangeListener implements ListChangeListener<ItemConteoPropWrapper> {
 
         @Override
         public void onChanged(Change<? extends ItemConteoPropWrapper> change) {
             change.next();
             new Thread(
-                    persistModel()
+                    persistModelTask()
             ).start();
         }
     }
@@ -523,24 +577,31 @@ public class TomaInventarioController implements Initializable {
      * @return
      */
 
-    private Task<Void> persistModel() {
+    private Task<Void> persistModelTask() {
         Task persistTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-                transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-                    protected void doInTransactionWithoutResult(TransactionStatus status) {
-                        entityManager.merge(modelo._conteoInventario);
-                        entityManager.flush();
-                    }
-                });
-
-                itemsTable.edit(itemsTable.getSelectionModel().getSelectedIndex() + 1, itemsTable.getColumns().get(0));
+                persistModel();
                 return null;
             }
         };
         return persistTask;
+    }
+
+    public void persistModel() throws Exception {
+        if (!isPersistable()) return ;
+
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult()
+        {
+            protected void doInTransactionWithoutResult(TransactionStatus status)
+            {
+                entityManager.merge(modelo._conteoInventario);
+                entityManager.flush();
+            }
+        });
+
+        itemsTable.edit(itemsTable.getSelectionModel().getSelectedIndex() + 1, itemsTable.getColumns().get(0));
     }
 
     /**
@@ -641,7 +702,7 @@ public class TomaInventarioController implements Initializable {
                                             + "in your cell factory.");
                         }
                         commitEdit(getConverter().fromString(textField.getText()));
-                        persistModel();
+                        //persistModelTask();
 
                         TablePosition position = getTableView().getFocusModel().getFocusedCell();
                         int nextCol = position.getColumn()+1;
@@ -696,5 +757,23 @@ public class TomaInventarioController implements Initializable {
         }
     }
 
+    public class MostrarCatalogoHandler {
+        TomaInventarioController controller;
 
+        public MostrarCatalogoHandler(TomaInventarioController controller) {
+            this.controller = controller;
+        }
+
+        public void handle() {
+            String retorno = Articulos.lanzarDialogoCatalogo();
+
+            retorno = (retorno==null)?"":retorno;
+            String captura = controller.codigoTextField.getText();
+            captura = (captura==null)?"":captura;
+            controller.codigoTextField.setText( captura + retorno );
+
+            controller.mainPane.requestFocus();
+            controller.codigoTextField.requestFocus();
+        }
+    }
 }

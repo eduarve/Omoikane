@@ -3,19 +3,19 @@ package omoikane.artemisa.presentation
 import omoikane.formularios.CatalogoArticulos
 import omoikane.formularios.FrostedGlassDesktopPane;
 import omoikane.principal.Articulos;
-import omoikane.principal.Escritorio
+import omoikane.principal.Escritorio;
 import omoikane.sistema.Herramientas;
 
-import javax.swing.*
-import omoikane.sistema.Permisos
+import javax.swing.*;
+import omoikane.sistema.Permisos;
 
-import javax.swing.event.InternalFrameAdapter
-import javax.swing.event.InternalFrameEvent
-import javax.swing.event.InternalFrameListener
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 /**
@@ -54,7 +54,6 @@ public class CatalogoArticulosManager {
                     cat.setVisible(false)
                 }
             })
-
 
             //omoikane.principal.Principal.escritorio = new EscritorioArtemisa();
             //omoikane.principal.Principal.escritorio.frameEscritorio.setUndecorated(false)

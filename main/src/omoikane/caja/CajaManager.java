@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.handlers.CerrarCajaSwingHandler;
 import omoikane.caja.presentation.CajaController;
@@ -42,6 +43,7 @@ public class CajaManager extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Caja 3.0");
+            primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
 
         } catch (Exception ex) {
@@ -53,7 +55,7 @@ public class CajaManager extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(CajaManager.class.getResource("presentation/Caja.fxml"));
         AnchorPane page = (AnchorPane) fxmlLoader.load();
-        page.setStyle("-fx-background-color: transparent;");
+        page.setStyle("-fx-background-color: black;");
 
         Scene scene = new Scene(page);
         scene.setFill(javafx.scene.paint.Color.BLUE);
@@ -99,6 +101,13 @@ public class CajaManager extends Application {
         if(onDesktop) frame.setLocation(frame.getX(), frame.getY()+25);
         if(onDesktop) Herramientas.iconificable(frame);
         frame.toFront();
+        SwingUtilities.invokeLater(() -> {
+            frame.setFocusable(true);
+            frame.setRequestFocusEnabled(false);
+            fxPanel.requestFocus();
+            //frame.requestFocus();
+            //frame.requestFocusInWindow();
+        });
 
         Platform.setImplicitExit(false);
         Platform.runLater(new Runnable() {
@@ -110,7 +119,7 @@ public class CajaManager extends Application {
                     scene.setFill(null);
                     fxPanel.setScene(scene);
                     controller.setCerrarCajaSwingHandler(new CerrarCajaSwingHandler(controller, frame));
-
+                    controller.getCapturaTextField().requestFocus();
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }

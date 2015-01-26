@@ -1,7 +1,7 @@
 <project>
     <shortName>omoikane</shortName>
     <fullName>Omoikane</fullName>
-    <version>4.2.2-Win8</version>
+    <version>4.3.2-Win8</version>
     <installerFilename>${project.shortName}-${project.version}-${platform_name}-installer.${platform_exec_suffix}</installerFilename>
     <readmeFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/README.md</readmeFile>
     <licenseFile>/Users/octavioruizcastillo/AppDev/Proyectos/Omoikane/LICENSE</licenseFile>

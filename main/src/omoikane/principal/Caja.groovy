@@ -167,9 +167,9 @@ class Caja implements Serializable {
             def mov2Serv = Nadesico.conectar()
             def salida
             if(tipo=="Retiro") {
-               salida = mov2Serv.doRetiro(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text, panel.txtConcepto.text)
+               salida = mov2Serv.doRetiro(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.id, id, panel.txtImporte.text, panel.txtConcepto.text)
             } else if(tipo == "Deposito") {
-               salida = mov2Serv.doDeposito(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.ID, id, panel.txtImporte.text, panel.txtConcepto.text)
+               salida = mov2Serv.doDeposito(IDAlmacen, IDCaja, omoikane.sistema.Usuarios.usuarioActivo.id, id, panel.txtImporte.text, panel.txtConcepto.text)
             } else { throw new Exception("Estado inválido, tipo de movimiento de caja incorrecto") }
             mov2Serv.desconectar()
             Dialogos.lanzarAlerta(tipo+" confirmado")
@@ -210,7 +210,7 @@ class Caja implements Serializable {
                         def sisUsers = omoikane.sistema.Usuarios
                         def usuario = sisUsers.identificaPersona()
                         if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
-                            Caja.doMovimientoCaja(panel, "Retiro",usuario.ID)
+                            Caja.doMovimientoCaja(panel, "Retiro",usuario.id)
                         }
                         else{Dialogos.lanzarAlerta("Sin Permiso"); }
                     }
@@ -221,7 +221,7 @@ class Caja implements Serializable {
                         def sisUsers = omoikane.sistema.Usuarios
                         def usuario = sisUsers.identificaPersona()
                         if(usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR)){
-                            Caja.doMovimientoCaja(panel, "Deposito",usuario.ID)
+                            Caja.doMovimientoCaja(panel, "Deposito",usuario.id)
                         }
                         else{Dialogos.lanzarAlerta("Sin Permiso"); }
                     }
@@ -432,10 +432,10 @@ class Caja implements Serializable {
             form.btnPausar.actionPerformed = {
                 Thread.start {
                     def sisUsers = omoikane.sistema.Usuarios
-                    def idUsuario= omoikane.sistema.Usuarios.usuarioActivo.ID
+                    def idUsuario= omoikane.sistema.Usuarios.usuarioActivo.id
                     while(true) {
                         def usuario = sisUsers.identificaPersona()
-                        if(idUsuario==usuario.ID||usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR))
+                        if(idUsuario==usuario.id||usuario.cerrojo(omoikane.sistema.Usuarios.SUPERVISOR))
                         {break}
   
                     }
@@ -508,15 +508,15 @@ class Caja implements Serializable {
                         else{
                             dinero = Caja.aDoble(form.txtEfectivo.text);
                             cambio = Caja.aDoble(form.txtCambio.text)}
-                            def salida = serv.conectar().aplicarVenta(IDCaja, IDAlmacen, IDCliente, omoikane.sistema.Usuarios.usuarioActivo.ID, Caja.aDoble(form.txtSubtotal.text), Caja.aDoble(form.txtDescuento.text), Caja.aDoble(form.txtImpuesto.text), Caja.aDoble(form.txtTotal.text), detalles,dinero,cambio,form.totalOriginal)
+                            def salida = serv.conectar().aplicarVenta(IDCaja, IDAlmacen, IDCliente, omoikane.sistema.Usuarios.usuarioActivo.id, Caja.aDoble(form.txtSubtotal.text), Caja.aDoble(form.txtDescuento.text), Caja.aDoble(form.txtImpuesto.text), Caja.aDoble(form.txtTotal.text), detalles,dinero,cambio,form.totalOriginal)
 
                             if(autorizadorVentaEspecial != null) {
-                                serv.addVentaEspecial(salida.ID, autorizadorVentaEspecial.ID)
+                                serv.addVentaEspecial(salida.id, autorizadorVentaEspecial.id)
                             }
                   
                         serv.desconectar()
                         def comprobante = new Comprobantes()
-                        comprobante.ticket(IDAlmacen, salida.ID)//imprimir ticket
+                        comprobante.ticket(IDAlmacen, salida.id)//imprimir ticket
                         comprobante.imprimir() //imprimir ticket
                         Dialogos.lanzarAlerta(salida.mensaje)
                         form.dispose()
@@ -602,6 +602,11 @@ class Caja implements Serializable {
                     //def ventas= serv.sumaVentas(IDCaja, sdf.format(horas.horaAbierta), sdf.format(horas.horaCerrada))
                     def instanciaCortes = ContextoCorte.instanciar()
                     def ventas= instanciaCortes.obtenerSumaCaja(IDCaja, sdf.format(horas.horaAbierta), sdf.format(horas.horaCerrada))
+                    if(ventas == null || ventas.nVentas == null || ventas.nVentas == 0)
+                    {
+                        Dialogos.lanzarAlerta("No se realizaron ventas. Sólo se cerró la caja y no se hizo corte de caja.");
+                        return ;
+                    }
                     def form  = Cortes.lanzarVentanaDetalles()
                     def caja  = serv.getCaja(IDCaja)
                     def desde = horas.horaAbierta

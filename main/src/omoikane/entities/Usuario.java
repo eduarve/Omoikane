@@ -1,5 +1,6 @@
 package omoikane.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
@@ -30,10 +31,13 @@ public class Usuario {
     @NotEmpty(message = "¡El nombre es importante! No puede estár vacío")
     private String nombre;
 
+    @JsonIgnore
     private byte[] huella1;
 
+    @JsonIgnore
     private byte[] huella2;
 
+    @JsonIgnore
     private byte[] huella3;
 
     @Range(min = 1000, max = 99999999, message = "El nip debe ser un número de entre 4 y 8 dígitos")

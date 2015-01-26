@@ -25,8 +25,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
-import jfxtras.labs.scene.control.CalendarTextField;
+import jfxtras.scene.control.CalendarTextField;
 import omoikane.compras.entities.Compra;
 import omoikane.inventarios.tomaInventario.ConteoInventario;
 import omoikane.inventarios.tomaInventario.TomaInventarioController;
@@ -76,6 +77,7 @@ public class ComprasCRUDController
     @FXML TableColumn<Compra, Date> fechaCol;
     @FXML TableColumn<Compra, String> folioCol;
     @FXML TableColumn<Compra, String> proveedorCol;
+    TableColumn<Compra, Compra.EstadoPago> actionCol = new TableColumn<>("Estado Pago");
 
     @FXML ChoiceBox<Proveedor> proveedorChoiceBox;
     @FXML CheckBox chkEstadoPago;
@@ -125,8 +127,8 @@ public class ComprasCRUDController
                 if(!chkEstadoPago.isIndeterminate())
                     crit.add(Restrictions.eq("estadoPago", chkEstadoPago.isSelected()?Compra.EstadoPago.PAGADA:Compra.EstadoPago.IMPAGA));
                 //Si se han establecido fechas entonces se filtra
-                if(txDesde.getValue() != null && txHasta != null)
-                    crit.add(Restrictions.between("fecha", txDesde.getValue().getTime(), txHasta.getValue().getTime()));
+                if(txDesde.calendarProperty().getValue() != null && txHasta != null)
+                    crit.add(Restrictions.between("fecha", txDesde.calendarProperty().getValue().getTime(), txHasta.calendarProperty().getValue().getTime()));
 
                 // ** Ordenación **
                 crit.addOrder(Order.desc("fecha"));
@@ -169,6 +171,11 @@ public class ComprasCRUDController
         AnchorPane.setRightAnchor(view.getRoot(), 0d);
         contenido.getChildren().setAll(view.getRoot());
 
+        // - Redimensionar las columnas para que la suma de sus anchos sea igual al ancho de la tabla - //
+        fechaCol        .prefWidthProperty().bind(table.widthProperty().multiply(0.20));
+        folioCol        .prefWidthProperty().bind(table.widthProperty().multiply(0.14));
+        proveedorCol    .prefWidthProperty().bind(table.widthProperty().multiply(0.40));
+        actionCol       .prefWidthProperty().bind(table.widthProperty().multiply(0.255));
 
         compraController = (CompraController) ((SceneOverloaded)view).getController();
         btnNuevo.disableProperty().bind( compraController.archivarButton.disabledProperty().not() );
@@ -183,7 +190,6 @@ public class ComprasCRUDController
         //*************************************************************
         //Configurar celda con boton eliminar transacción. Cortesía de: https://gist.github.com/jewelsea/3081826
         //*************************************************************
-        TableColumn<Compra, Compra.EstadoPago> actionCol = new TableColumn<>("Estado Pago");
         actionCol.setSortable(false);
 
         actionCol.setCellValueFactory(new PropertyValueFactory<Compra, Compra.EstadoPago>("estadoPago"));
@@ -236,8 +242,12 @@ public class ComprasCRUDController
          * @param table the table to which a new person can be added.
          */
         ActionsCell(final TableView table) {
+            // -- Formato del botón -- //
+            paddedButton.setMaxHeight(18);
+            delButton.setFont(new Font("Verdana", 10));
+            paddedButton.setPadding(new javafx.geometry.Insets(1, 0, 0, 0));
 
-            paddedButton.setPadding(new javafx.geometry.Insets(3, 0, 0, 0));
+            // -- Configuración del botón y su acción -- //
             label.setMinWidth(70);
             hBox.getChildren().add(label);
             hBox.getChildren().add(delButton);

@@ -4,6 +4,7 @@
  */
 package omoikane.entities;
 
+import omoikane.producto.Articulo;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -65,6 +66,18 @@ public class LegacyVentaDetalle implements Serializable {
     )
     @OrderColumn
     private List<VentaDetalleImpuesto> ventaDetalleImpuestos;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "id_articulo", insertable = false, updatable = false)
+    Articulo producto;
+
+    public Articulo getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Articulo p) {
+        producto = p;
+    }
 
     public LegacyVentaDetalle() {
 

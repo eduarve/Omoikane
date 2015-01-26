@@ -4,10 +4,42 @@
     <persistence-unit name="OmoikanePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <class>omoikane.artemisa.entity.Abono</class>
+        <class>omoikane.artemisa.entity.CancelacionTransaccion</class>
+        <class>omoikane.artemisa.entity.Cargo</class>
+        <class>omoikane.artemisa.entity.Paciente</class>
+        <class>omoikane.artemisa.entity.Transaccion</class>
+        <class>omoikane.clientes.Cliente</class>
+        <class>omoikane.compras.entities.Compra</class>
+        <class>omoikane.compras.entities.ItemCompra</class>
+        <class>omoikane.entities.Caja</class>
+        <class>omoikane.entities.Cancelacion</class>
+        <class>omoikane.entities.CodigoProducto</class>
+        <class>omoikane.entities.Corte</class>
+        <class>omoikane.entities.CorteImpuesto</class>
+        <class>omoikane.entities.LegacyVenta</class>
+        <class>omoikane.entities.LegacyVentaDetalle</class>
+        <class>omoikane.entities.Paquete</class>
+        <class>omoikane.entities.Preferencia</class>
+        <class>omoikane.entities.Usuario</class>
+        <class>omoikane.entities.VentaDetalleImpuesto</class>
+        <class>omoikane.inventarios.Stock</class>
+        <class>omoikane.inventarios.tomaInventario.ConteoInventario</class>
+        <class>omoikane.inventarios.tomaInventario.ItemConteoInventario</class>
+        <class>omoikane.producto.Articulo</class>
+        <class>omoikane.producto.BaseParaPrecio</class>
+        <class>omoikane.producto.departamento.Departamento</class>
+        <class>omoikane.producto.Impuesto</class>
+        <class>omoikane.producto.ListaDePrecios</class>
+        <class>omoikane.proveedores.Proveedor</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
         <properties>
+            <property name="hibernate.archive.autodetection" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="NONE"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
 			<property name= "hibernate.use_sql_comments" value="true"/>
             <property name= "hibernate.format_sql" value="true"/>
             <property name= "hibernate.c3p0.min_size" value="1"/>
@@ -28,7 +60,9 @@
     <persistence-unit name="OmoikaneTestPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
+            <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="NONE"/>
             <property name="hibernate.show_sql" value="true"/>

@@ -6,8 +6,9 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import jfxtras.labs.scene.control.CalendarTextField?>
 <?scenebuilder-classpath-element ../../../../../lib/jfxtras-labs-2.2-r4.jar?>
+
+<?import jfxtras.scene.control.CalendarTextField?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="618.0" style="" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.compras.MVC.ComprasCRUDController">
   <children>

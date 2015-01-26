@@ -6,6 +6,8 @@ import omoikane.producto.PrecioOmoikaneLogic;
 import omoikane.producto.Producto;
 import omoikane.repository.ProductoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.synyx.hades.domain.PageRequest;
 import org.synyx.hades.domain.Pageable;
 
@@ -39,9 +41,35 @@ public class ProductosNadesicoAdapter implements IProductosDAO {
      */
     public List<Producto> findByCodigo(String codigo) {
 
+        //Busca por código primario
         ArrayList<Articulo> articulos = (ArrayList<Articulo>) productoRepo.findByCodigo( codigo );
+
+        //En caso de no encontrar código primario busca por alterno
         if(articulos.size() == 0)
             articulos = (ArrayList<Articulo>) productoRepo.findByCodigoAlterno( codigo );
+
+        return convertArticulosToProductos(articulos);
+
+    }
+
+    /**
+     * Igual que findByCodigo. Además devuelve las colecciones BaseParaPrecios e Impuestos inicializadas
+     * @param codigo
+     * @return
+     */
+    @Override
+    public List<Producto> findCompleteByCodigo(String codigo) {
+        //Busca por código primario
+        ArrayList<Articulo> articulos = (ArrayList<Articulo>) productoRepo.findCompleteByCodigo(codigo);
+
+        //En caso de no encontrar código primario busca por alterno
+        if(articulos.size() == 0)
+            articulos = (ArrayList<Articulo>) productoRepo.findCompleteByCodigoAlterno(codigo);
+
+        return convertArticulosToProductos(articulos);
+    }
+
+    private List<Producto> convertArticulosToProductos(List<Articulo> articulos) {
         ArrayList<Producto> productos = new ArrayList<>();
 
         for( Articulo articulo : articulos ) {
@@ -51,7 +79,6 @@ public class ProductosNadesicoAdapter implements IProductosDAO {
         }
 
         return productos;
-
     }
 
     @Override
@@ -67,6 +94,7 @@ public class ProductosNadesicoAdapter implements IProductosDAO {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<Producto> findByDescripcionLike(String descripcion, Pageable pagina) {
         Pageable pageable = new PageRequest(pagina.getPageNumber(), pagina.getPageSize());
         ArrayList<Articulo> articulos = (ArrayList<Articulo>) productoRepo.findByDescripcionLike( descripcion, pageable );
@@ -75,6 +103,9 @@ public class ProductosNadesicoAdapter implements IProductosDAO {
 
 
         for( Articulo a : articulos ) {
+            //Inicializar impuestos que es Lazy
+            a.getImpuestos();
+
             p = new Producto();
 
             articuloToProducto(a, p);

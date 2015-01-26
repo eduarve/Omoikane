@@ -177,7 +177,7 @@ public class Articulo implements Serializable, IProductoApreciado {
         return this.baseParaPrecio.getPreciosAlternosAsString();
     }
 
-    @OneToMany(mappedBy = "productoContenedor")
+    @OneToMany(mappedBy = "productoContenedor", fetch = FetchType.LAZY)
     public List<Paquete> renglonesPaquete;
 
     @Transactional
@@ -237,7 +237,7 @@ public class Articulo implements Serializable, IProductoApreciado {
     }
 
 
-    @OneToMany(mappedBy = "producto")
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
     private Collection<CodigoProducto> codigosAlternos;
 
     @Transactional
@@ -252,13 +252,12 @@ public class Articulo implements Serializable, IProductoApreciado {
     }
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Collection<Impuesto> impuestos;
 
     @Transactional
     public Collection<Impuesto> getImpuestos() {
         Collection<Impuesto> i = impuestos;
-        Hibernate.initialize(i);
         return i;
     }
 

@@ -32,6 +32,7 @@ public class Compra {
     private Long id;
 
     private Date fecha;
+
     private Usuario usuario;
 
     private List<ItemCompra> items;
@@ -80,7 +81,7 @@ public class Compra {
         this.fecha = fecha;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
     public Usuario getUsuario() {
         return usuario;

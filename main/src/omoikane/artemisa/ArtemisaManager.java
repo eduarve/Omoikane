@@ -33,7 +33,7 @@ public class ArtemisaManager extends Application {
         omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-artemisa.xml");
         //Usuarios.identificaPersona();
 
-        if(Usuarios.login() == false) return;
+        if(Usuarios.login().isLogged()) return;
         Application.launch(ArtemisaManager.class);
 
     }

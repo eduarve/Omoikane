@@ -23,25 +23,26 @@
     <context:component-scan base-package="omoikane.inventarios"/>
     <context:component-scan base-package="omoikane.compras.entities"/>
     <!--<context:component-scan base-package="omoikane.sistema"/>-->
-    <bean id="articulo" class="omoikane.producto.Articulo"></bean>
-    <bean id="baseParaPrecio" class="omoikane.producto.BaseParaPrecio"></bean>
+    <bean id="articulo" class="omoikane.producto.Articulo" scope="prototype"></bean>
+    <bean id="baseParaPrecio" class="omoikane.producto.BaseParaPrecio" scope="prototype"></bean>
     <bean id="usuarios" class="omoikane.sistema.Usuarios"></bean>
-    <bean id="cajaLogic" class="omoikane.caja.business.CajaLogicImpl"></bean>
+    <bean id="cajaLogic" class="omoikane.caja.business.CajaLogicImpl" scope="prototype"></bean>
+    <bean id="stockIssuesHandler" class="omoikane.caja.handlers.StockIssuesHandler"></bean>
     <bean id="huellasCache" class="omoikane.sistema.huellas.HuellasCache"></bean>
     <bean id="config" class="omoikane.sistema.Config"></bean>
     <bean id="productoDao" class="omoikane.caja.data.ProductosNadesicoAdapter"></bean>
-    <bean id="comprobantes" class="omoikane.sistema.Comprobantes"></bean>
+    <bean id="comprobantes" class="omoikane.sistema.Comprobantes" scope="prototype"></bean>
     <bean id="paqueteController" class="omoikane.producto.PaqueteController"></bean>
-    <bean id="codigoProducto" class="omoikane.entities.CodigoProducto"></bean>
+    <bean id="codigoProducto" class="omoikane.entities.CodigoProducto" scope="prototype"></bean>
     <bean id="catalogoArticulosHandler" class="omoikane.moduloreportes.CatalogoArticulosHandler"></bean>
-    <bean id="impuesto" class="omoikane.producto.Impuesto"></bean>
-    <bean id="ventaDetalleImpuesto" class="omoikane.entities.VentaDetalleImpuesto"></bean>
-    <bean id="corte" class="omoikane.entities.Corte"></bean>
-    <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto"></bean>
-    <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios"></bean>
-    <bean id="departamento" class="omoikane.producto.departamento.Departamento"></bean>
+    <bean id="impuesto" class="omoikane.producto.Impuesto" scope="prototype"></bean>
+    <bean id="ventaDetalleImpuesto" class="omoikane.entities.VentaDetalleImpuesto" scope="prototype"></bean>
+    <bean id="corte" class="omoikane.entities.Corte" scope="prototype"></bean>
+    <bean id="corteImpuesto" class="omoikane.entities.CorteImpuesto" scope="prototype"></bean>
+    <bean id="listaDePrecio" class="omoikane.producto.ListaDePrecios" scope="prototype"></bean>
+    <bean id="departamento" class="omoikane.producto.departamento.Departamento" scope="prototype"></bean>
 
-    <bean id="cliente" class="omoikane.clientes.Cliente"></bean>
+    <bean id="cliente" class="omoikane.clientes.Cliente" scope="prototype"></bean>
     <bean id="clienteView" class="omoikane.clientes.ClienteView"></bean>
 
     <bean id="/SpringAnnotatedConfig" class="omoikane.sistema.SpringAnnotatedConfig"></bean>
@@ -61,6 +62,9 @@
         <hades:dao id="listaDePreciosRepo"/>
         <hades:dao id="impuestoRepo"/>
         <hades:dao id="departamentoRepo"/>
+        <hades:dao id="stockRepo"/>
+        <hades:dao id="traspasoSalienteRepo"/>
+        <hades:dao id="traspasoEntranteRepo"/>
     </hades:dao-config>
 
     <bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

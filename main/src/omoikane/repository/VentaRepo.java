@@ -20,4 +20,7 @@ public interface VentaRepo extends GenericDao<LegacyVenta, Integer> {
     @Query("SELECT new map(V.fechaHora as dia, SUM(VD.cantidad) as cantidad, SUM(VD.total) as importe) FROM LegacyVenta as V, LegacyVentaDetalle as VD WHERE V = VD.venta AND V.fechaHora BETWEEN ?1 AND ?2 AND VD.idArticulo = ?3 GROUP BY DATE(V.fechaHora)")
     List sumVentasOfArticuloByDay(Date desde, Date hasta, Integer idArticulo);
 
+    @Query("SELECT v FROM LegacyVenta v JOIN FETCH v.items INNER JOIN FETCH v.items.producto WHERE v.id = ?1")
+    LegacyVenta readVentaComplete(Long idVenta);
+
 }

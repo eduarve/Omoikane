@@ -93,12 +93,12 @@ public class Principal {
         public static def                   toFinalizeTracker       = [:]
         public static def                   scanMan
         public static def                   tipoCorte               = ContextoCorte.TIPO_DUAL
-        final  static def                   ASEGURADO               = true
+        public final  static Boolean        ASEGURADO               = true
         final  static def                   SHOW_UNHANDLED_EXCEPTIONS = true
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.3.2";
+        public static final String          VERSION                 = "4.4.0-b2";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -110,6 +110,7 @@ public class Principal {
         public static String                configFilePath          = "config.xml";
         public static boolean               isFlywayActive          = true;
         public static boolean               modoKiosko              = false;
+        public static String                dropboxPath             = "";
 
 
     public static void main(args)
@@ -126,10 +127,8 @@ public class Principal {
 
                 logger.trace("Iniciando sistema. Versión " + VERSION);
                 configExceptions()
-                initAWT()
 
                 //Inicializa el hilo que muestra el splash
-
                 Thread.start {
                     splash = new Splash()
                     splash.iniciar()
@@ -196,6 +195,7 @@ public class Principal {
                     toFinalizeTracker.put("scanMan", "")
 
                 }
+                logger.trace("Listo");
 
             } catch(e) {
                 //Dialogos.lanzarDialogoError(null, "Al iniciar aplicación: ${e.message}", Herramientas.getStackTraceString(e))

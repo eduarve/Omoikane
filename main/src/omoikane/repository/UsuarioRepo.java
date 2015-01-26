@@ -21,7 +21,6 @@ import java.util.List;
 
 
 public interface UsuarioRepo extends GenericDao<Usuario, Long> {
-    Usuario save(Usuario usuario);
 
     @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value = "true")
     , @QueryHint(name = "org.hibernate.cacheRegion", value = "omoikane.entities.Usuario") } )
@@ -33,4 +32,5 @@ public interface UsuarioRepo extends GenericDao<Usuario, Long> {
     @Query("SELECT COUNT(*) as count FROM Usuario u")
     Long countIt();
 
+    <S extends Usuario> S save(S usuario);
 }

@@ -1,10 +1,13 @@
 package omoikane.caja.business;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.Eval;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import name.antonsmirnov.javafx.dialog.Dialog;
+import omoikane.caja.business.domain.VentaIncompleta;
 import omoikane.caja.business.plugins.DummyPlugin;
 import omoikane.caja.business.plugins.IPlugin;
 import omoikane.caja.business.plugins.PluginManager;
@@ -22,15 +25,16 @@ import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.synyx.hades.domain.PageRequest;
 import org.synyx.hades.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -47,7 +51,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-
+@Component
 public class CajaLogicImpl implements ICajaLogic {
     public static Logger logger = Logger.getLogger(CajaLogicImpl.class);
     Boolean capturaBloqueada = false;
@@ -73,6 +77,8 @@ public class CajaLogicImpl implements ICajaLogic {
 
     PluginManager pluginManager;
 
+    public PluginManager getPluginManager() { return pluginManager; }
+
     public CajaLogicImpl() {
         pluginManager = new PluginManager();
     }
@@ -88,7 +94,7 @@ public class CajaLogicImpl implements ICajaLogic {
                 LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(model.getCaptura().get());
                 model.getCaptura().set("");
 
-                addProducto(model, capturaFilter);
+                addProducto(model, capturaFilter, true);
 
             } catch(IndexOutOfBoundsException e) {
                 Dialog.showInfo("Producto no encontrado", "Producto no encontrado");
@@ -100,6 +106,7 @@ public class CajaLogicImpl implements ICajaLogic {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void buscar(CajaModel model) {
 
         Pageable pagina = model.getPaginacionBusqueda();
@@ -118,7 +125,7 @@ public class CajaLogicImpl implements ICajaLogic {
 
         for( Producto p : productos ) {
             ProductoModel productoModel = new ProductoModel();
-            productoToProductoModel(p, productoModel);
+            productoToProductoModel(getController().getModel(), p, productoModel);
             productoModel.cantidadProperty().set( new BigDecimal(1) );
 
             obsProductos.add(productoModel);
@@ -134,19 +141,18 @@ public class CajaLogicImpl implements ICajaLogic {
      * @param capturaFilter
      * @throws Exception
      */
-    private void addProducto(CajaModel model, LineaDeCapturaFilter capturaFilter) throws Exception {
+    private void addProducto(CajaModel model, LineaDeCapturaFilter capturaFilter, Boolean mustPersist) throws Exception {
         pluginManager.notify(IPlugin.TIPO_EVENTO.PreAddPartida);
         model.getProductos().clear(); // Borra resultados de la búsqueda integrada
 
-        Producto producto = productosDAO.findByCodigo(capturaFilter.getCodigo()).get(0);
+        Producto producto = productosDAO.findCompleteByCodigo(capturaFilter.getCodigo()).get(0);
         /*Articulo producto = productoRepo.findByCodigo(captura.getCodigo()).get(0);*/
 
         ProductoModel productoModel = new ProductoModel();
-        productoToProductoModel(producto, productoModel);
+        productoToProductoModel(model, producto, productoModel);
         productoModel.cantidadProperty().set( capturaFilter.getCantidad() );
         reglasDeCantidad(productoModel);
 
-        LegacyVentaDetalle lvd = null;
 
         //Agrupar o agregar
         Boolean       agrupar = false;
@@ -165,19 +171,12 @@ public class CajaLogicImpl implements ICajaLogic {
             model.getVenta().remove(productoBase);
             model.getVenta().add(0, productoModel);
 
-            lvd = productoBase.getVentaDetalleEntity();
-
         }   else {
             model.getVenta().add(0, productoModel);
 
-            lvd = new LegacyVentaDetalle();
-            lvd.setVenta(model.getVentaEntity());
         }
 
-        syncLegacyVentaDetalleWithModel(Principal.IDCaja, Principal.IDAlmacen, productoModel, lvd);
-
-        LegacyVentaDetalle l = persistirItemVenta(lvd);
-        productoModel.setVentaDetalleEntity(l);
+        if(mustPersist) persistirVenta();
         pluginManager.notify(IPlugin.TIPO_EVENTO.PostAddPartida);
 
     }
@@ -190,16 +189,32 @@ public class CajaLogicImpl implements ICajaLogic {
 
     }
 
+    /**
+     * Método especializado en persistir ventas INCOMPLETAS
+     */
     @Override
     public void persistirVenta() {
 
+        VentaIncompleta vi = new VentaIncompleta();
+
         CajaModel model = getController().getModel();
-        model.setVentaEntity(  guardarVenta(model) );
+        vi.setIdCliente((long) model.getCliente().get().getId());
+        for (ProductoModel pm : model.getVenta()) {
+            boolean add = vi.getPartidas().add(new VentaIncompleta.Partida(pm.getCantidad(), pm.codigoProperty().get()));
+        }
+
+        ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+        try {
+            mapper.writeValue(new File("venta.json"), vi);
+        } catch (IOException e) {
+            logger.error("Error al escribir venta temporal",e);
+        }
     }
 
     @Override
     public LegacyVentaDetalle persistirItemVenta(LegacyVentaDetalle lvd) {
-        return transactionalPersistItemVenta(lvd);
+        logger.error("Método descontinuado persistirItemVenta ha sido llamado.");
+        return null;
     }
 
     @Override
@@ -227,18 +242,6 @@ public class CajaLogicImpl implements ICajaLogic {
         }
     }
 
-    public LegacyVentaDetalle transactionalPersistItemVenta(final LegacyVentaDetalle lvd) {
-        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        LegacyVentaDetalle result = transactionTemplate.execute(new TransactionCallback<LegacyVentaDetalle>() {
-
-            @Override
-            public LegacyVentaDetalle doInTransaction(TransactionStatus status) {
-                return entityManager.merge(lvd);
-            }
-        });
-        return result;
-    }
-
     private void reglasDeCantidad(ProductoModel productoModel) throws Exception {
         try {
             String unidad = productoModel.getProductoData().getUnidad();
@@ -262,10 +265,10 @@ public class CajaLogicImpl implements ICajaLogic {
      * @param producto
      * @param productoModel
      */
-    private void productoToProductoModel(Producto producto, ProductoModel productoModel) {
+    private void productoToProductoModel(CajaModel model, Producto producto, ProductoModel productoModel) {
 
         //nvp: nivel de precio, puede ser el ID de la lista de precios asignada al cliente o 0 para usar el precio primario
-        Integer nvp   = getController().getModel().getCliente().get().getListaDePreciosId();
+        Integer nvp   = model.getCliente().get().getListaDePreciosId();
         PrecioOmoikaneLogic precio= producto.getPrecio(nvp);
 
         productoModel.getId()                 .set( producto.getId() );
@@ -314,6 +317,7 @@ public class CajaLogicImpl implements ICajaLogic {
         return cajaAbierta;
     }
 
+    @Autowired StockIssuesHandler stockIssuesHandler;
     @Transactional
     public LegacyVenta terminarVenta(CajaModel model) throws RuntimeException {
 
@@ -323,19 +327,34 @@ public class CajaLogicImpl implements ICajaLogic {
         BigDecimal ventaTotal = model.getTotal().get();
         if( ventaTotal.compareTo( new BigDecimal("0.10") ) > 0 ) {
             try {
-                model.getVentaEntity().setCompletada(true);
+                //Ejecutar plugins
+                pluginManager.notifyPreSaveVenta(model);
+
+                //** Persistir venta **
                 LegacyVenta venta = guardarVenta(model);
 
                 //Hace las salidas de inventario / Make inventory issues
-                new StockIssuesHandler(getController()).handle();
+                stockIssuesHandler.handle(getController());
+
+                //Imprimir venta
+                imprimirVenta(venta);
+
+                //Borrar venta retenida / incompleta
+                File f = new File("venta.json");
+                if(f.exists()) f.delete();
+
+                //Ejecutar plugins
+                pluginManager.postSaveVentaEvent(venta);
+
+                //Ejecutar plugins
+                pluginManager.notify(IPlugin.TIPO_EVENTO.PostFinishVenta);
+                //Eliminar instancias de plugins
+                pluginManager.clearPlugins();
 
                 return venta;
 
             } catch (Exception e) {
                 throw new RuntimeException("Excepción persistiendo venta o aplicando cambios al stock", e);
-            } finally {
-                pluginManager.notify(IPlugin.TIPO_EVENTO.PostFinishVenta);
-                pluginManager.clearPlugins();
             }
         }
 
@@ -345,21 +364,17 @@ public class CajaLogicImpl implements ICajaLogic {
 
     @Override
     public void nuevaVenta() {
+        pluginManager.clearPlugins(); //Depura los plugins cargados
         pluginManager.registerPlugin(new DummyPlugin(getController()));
         pluginManager.notify(IPlugin.TIPO_EVENTO.PreStartVenta);
         instanciarModeloVenta();
 
-        getController().getCapturaTextField().requestFocus();
+        Platform.runLater(() -> { getController().getCapturaTextField().requestFocus(); });
         pluginManager.notify(IPlugin.TIPO_EVENTO.PostStartVenta);
     }
 
-    @Override
-    public LegacyVenta getVentaAbiertaBean() {
-        return getController().getModel().getVentaEntity();
-    }
-
-
     private void instanciarModeloVenta() {
+        /*
         LegacyVenta ventaIncompleta = buscarVentaIncompleta();
 
         CajaModel model = new CajaModel();
@@ -373,16 +388,63 @@ public class CajaLogicImpl implements ICajaLogic {
         } else {
             cargarVentaIncompleta(ventaIncompleta);
             model.setVentaEntity( ventaIncompleta );
+        }*/
+        CajaModel model;
+        //Inicializa el modelo de la caja
+        model = instanciarNuevoModeloVenta();
+
+        //Asigna la nueva instancia del modelo al controlador que es singleton
+        getController().setModel( model );
+
+        if(buscarVentaIncompleta()) {
+            try {
+                model = cargarVentaIncompleta(model);
+            } catch (Exception e) {
+                logger.error("Problema al cargar venta incompleta, se comenzará una nueva", e);
+            }
         }
+
+
     }
 
-    private LegacyVenta buscarVentaIncompleta() {
-        Integer idCaja    = Principal.IDCaja;
-        LegacyVenta venta = ventaRepo.findByIdCajaAndCompletada(idCaja, false);
-        return venta;
+    private CajaModel instanciarNuevoModeloVenta() {
+        //Inicializa el modelo de la caja
+        CajaModel model = new CajaModel();
+        //Inicializa con el cliente 1: público en general
+        Cliente cliente = entityManager.find(Cliente.class, 1);
+        model.setCliente(cliente);
+
+        return model;
     }
 
-    private void cargarVentaIncompleta(LegacyVenta venta) {
+    private Boolean buscarVentaIncompleta() {
+        File ventaPersist = new File("venta.json");
+        //Si exíste un archivo venta.json considera que hay una venta incompleta
+        return ventaPersist.exists();
+    }
+
+    private CajaModel cargarVentaIncompleta(CajaModel model) throws Exception {
+
+        File ventaPersist = new File("venta.json");
+
+        ObjectMapper mapper = new ObjectMapper();
+        VentaIncompleta vi = mapper.readValue(ventaPersist, VentaIncompleta.class);
+
+        // ** Cargar cliente **
+        Cliente cliente = entityManager.find(Cliente.class, vi.getIdCliente().intValue());
+        model.setCliente(cliente);
+
+        // ** Cargar partidas **
+        for (VentaIncompleta.Partida partida : vi.getPartidas()) {
+            logger.trace("Partida: " + partida.getCantidad() + ": " + partida.getCodigo());
+            //Introduce una captura con el formato cantidad*código del producto
+            LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(partida.getCantidad()+"*"+partida.getCodigo().toString());
+            //Añade la captura al modelo
+            addProducto(model, capturaFilter, false);
+        }
+
+        return model;
+        /*
         cargarCliente(venta);
         for( LegacyVentaDetalle lvd : venta.getItems()) {
             ProductoModel productoModel = new ProductoModel();
@@ -390,12 +452,11 @@ public class CajaLogicImpl implements ICajaLogic {
             productoToProductoModel(productosDAO.findById(new Long(lvd.getIdArticulo())), productoModel);
             productoModel.setVentaDetalleEntity( lvd );
             getController().getModel().getVenta().add(productoModel);
-        }
+        }   */
     }
 
-    private void cargarCliente(LegacyVenta venta) {
-        if(venta.getIdCliente()==null) venta.setIdCliente(1);
-        Cliente cliente = entityManager.find(Cliente.class, venta.getIdCliente());
+    private void cargarCliente(Long id) {
+        Cliente cliente = entityManager.find(Cliente.class, id.intValue());
         getController().getModel().setCliente(cliente);
     }
 
@@ -404,23 +465,27 @@ public class CajaLogicImpl implements ICajaLogic {
         comprobantes.imprimir();
     }
 
+    /**
+     * A partir de la versión 4.4 éste método sólo es llamado al concluir una venta, por lo que
+     * marca la venta completada = true y le asigna un folio
+     * @param model
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     private LegacyVenta guardarVenta(CajaModel model) {
         Integer idCaja    = Principal.IDCaja;
         Integer idAlmacen = Principal.IDAlmacen;
-        Integer idUsuario = Usuarios.getIDUsuarioActivo();
+        Integer idUsuario = Usuarios.getIDUsuarioActivo().intValue();
         Integer idCliente = model.getCliente().get().getId();
         Double  efectivo  = model.getEfectivo().get().doubleValue();
         Double  cambio    = model.getCambio().get().doubleValue();
         Date    fechaHora = (Date) entityManager.createNativeQuery("SELECT current_timestamp").getSingleResult();
 
-        LegacyVenta venta = model.getVentaEntity();
+        Integer folio     = asignarFolio(idCaja);
+        LegacyVenta venta = new LegacyVenta();
+        venta.setCompletada(true);
+        venta.setFolio(Long.valueOf(folio));
 
-        if(model.getVentaEntity().getFolio() == null) {
-            Integer folio     = asignarFolio(idCaja);
-            venta.setCompletada(false);
-            venta.setFolio(Long.valueOf(folio));
-        }
 
         venta.setIdUsuario(idUsuario);
         venta.setIdAlmacen(idAlmacen);
@@ -437,25 +502,18 @@ public class CajaLogicImpl implements ICajaLogic {
         venta.setTotal     (model.getTotal().get().doubleValue());
 
         int i = 0;
-        List<LegacyVentaDetalle> itemsTmp = venta.getItems();
         venta.setItems(null);
 
         for (ProductoModel producto : model.getVenta()) {
             LegacyVentaDetalle lvd;
-            if(itemsTmp == null || itemsTmp.size() <= i)
-                    lvd = new LegacyVentaDetalle();
-                else
-                    lvd = itemsTmp.get(i);
+            lvd = new LegacyVentaDetalle();
 
+            //Rellena el legacyVentaDetalles con la información del modelo ProductoModel
             syncLegacyVentaDetalleWithModel(idCaja, idAlmacen, producto, lvd);
 
             venta.addItem(lvd);
             i++;
         }
-
-        //Si no se agrego ningún renglón a "venta" entonces retomamos la colección original "itemsTmp".
-        //  Nota: Agregué ésta línea para corregir un bug causado por eliminar mediante cancelación el último renglón de la venta
-        if(venta.getItems() == null) venta.setItems(itemsTmp);
 
         venta = ventaRepo.saveAndFlush(venta);
         return venta;

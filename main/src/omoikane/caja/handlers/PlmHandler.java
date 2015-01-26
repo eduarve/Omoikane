@@ -116,7 +116,7 @@ public class PlmHandler extends ICajaEventHandler {
 
             // load the home page
             webEngine.load("http://www.medicamentosplm.com/labs/a.htm");
-            browser.impl_setScale(1.5);
+            browser.setFontScale(1.5);
 
             // create the toolbar
             toolBar = new HBox();
