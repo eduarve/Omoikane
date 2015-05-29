@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
-<?import jfxtras.labs.scene.control.*?>
-<?import jfxtras.labs.scene.control.CalendarTextField?>
+<?import jfxtras.scene.control.*?>
+<?import jfxtras.scene.control.CalendarTextField?>
 <?scenebuilder-classpath-element ../../../../../lib/jfxtras-labs-2.2-r4.jar?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0000999999975" prefWidth="613.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.artemisa.presentation.ReportesController">

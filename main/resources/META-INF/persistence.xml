@@ -39,7 +39,7 @@
             <property name="hibernate.archive.autodetection" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="NONE"/>
-            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.show_sql" value="true"/>
 			<property name= "hibernate.use_sql_comments" value="true"/>
             <property name= "hibernate.format_sql" value="true"/>
             <property name= "hibernate.c3p0.min_size" value="1"/>

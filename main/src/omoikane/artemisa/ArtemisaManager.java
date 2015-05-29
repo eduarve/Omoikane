@@ -31,9 +31,8 @@ public class ArtemisaManager extends Application {
         omoikane.principal.Principal.configExceptions();
         omoikane.principal.Principal.setConfig( new omoikane.sistema.Config() );
         omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-artemisa.xml");
-        //Usuarios.identificaPersona();
 
-        if(Usuarios.login().isLogged()) return;
+        if (!Usuarios.login().isLogged()) Platform.exit();
         Application.launch(ArtemisaManager.class);
 
     }

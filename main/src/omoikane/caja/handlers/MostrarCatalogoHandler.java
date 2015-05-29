@@ -1,6 +1,10 @@
 package omoikane.caja.handlers;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import omoikane.caja.presentation.CajaController;
 import omoikane.principal.Articulos;
 import omoikane.principal.Caja;
@@ -21,21 +25,35 @@ public class MostrarCatalogoHandler extends ICajaEventHandler {
 
     @Override
     public void handle(Event event) {
-        /*
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                mostrarCatalogo();
-            }
-        });
-        */
-        Runnable r = new Runnable() {
+        /*Runnable r = new Runnable() {
             @Override
             public void run() {
                 mostrarCatalogo();
             }
         };
-        new Thread(r).start();
+        new Thread(r).start();*/
+
+        Task t = new Task() {
+            @Override
+            protected Void call() throws Exception {
+                mostrarCatalogo();
+                return null;
+            }
+        };
+
+        t.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                Platform.runLater(() -> {
+                    getController().getJInternalFrame().toFront();
+                    getController().getFxPanel().requestFocus();
+                    cajaController.getMainAnchorPane().requestFocus();
+                    getController().getCapturaTextField().requestFocus();
+                });
+            }
+        });
+
+        new Thread(t).start();
     }
 
     private void mostrarCatalogo() {
@@ -46,7 +64,7 @@ public class MostrarCatalogoHandler extends ICajaEventHandler {
         captura = (captura==null)?"":captura;
         cajaController.getModel().getCaptura().set(captura + retorno);
 
-        cajaController.getMainAnchorPane().requestFocus();
-        cajaController.getCapturaTextField().requestFocus();
+        //cajaController.getMainAnchorPane().requestFocus();
+        //cajaController.getCapturaTextField().requestFocus();
     }
 }

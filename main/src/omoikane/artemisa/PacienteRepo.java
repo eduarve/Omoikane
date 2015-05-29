@@ -6,6 +6,7 @@ import omoikane.artemisa.entity.Transaccion;
 import omoikane.proveedores.Proveedor;
 import org.synyx.hades.dao.GenericDao;
 import org.synyx.hades.dao.Query;
+import org.synyx.hades.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,11 +19,14 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface PacienteRepo extends GenericDao<Paciente, Integer> {
-    @Query("FROM Paciente p WHERE p.liquidado != 1")
+    @Query("FROM Paciente p WHERE p.liquidado != 1 ORDER BY p.nombre ASC")
     List<Paciente> findAllActive();
 
     @Query("FROM Paciente p WHERE (p.liquidado = false OR p.liquidado = ?1) AND nombre like ?2")
-    List<Paciente> findByLiquidadoAndNombreLike(Boolean activo, String like);
+    List<Paciente> findByLiquidadoAndNombreLike(Boolean activo, String like, Pageable pageable);
+
+    @Query("FROM Paciente p WHERE (p.liquidado = false OR p.liquidado = ?1) AND nombre like ?2 ORDER BY p.habitacion")
+    List<Paciente> findByLiquidadoAndNombreLikeOrdered(Boolean activo, String like, Pageable pageable);
 
     @Query("FROM Transaccion t WHERE t.paciente = ?1")
     List<Transaccion> findTransaccionesOf(Paciente paciente);

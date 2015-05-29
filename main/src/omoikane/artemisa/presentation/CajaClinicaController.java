@@ -25,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -63,6 +64,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.synyx.hades.domain.PageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -126,7 +128,7 @@ public class CajaClinicaController
     @FXML //  fx:id="panelEstadoDeCuenta"
     private AnchorPane panelEstadoDeCuenta; // Value injected by FXMLLoader
 
-
+    @FXML TextField txtBuscar;
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -187,7 +189,7 @@ public class CajaClinicaController
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                pacientesList.requestFocus();
+                txtBuscar.requestFocus();
             }
         });
     }
@@ -200,9 +202,20 @@ public class CajaClinicaController
     private void resetPacienteListData() {
         Boolean soloActivos = chkIncluirInactivos.isSelected();
         pacientesList.getSelectionModel().clearSelection();
-        List<Paciente> pacienteList = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%%");
+        List<Paciente> pacienteList = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%"+txtBuscar.getText()+"%", new PageRequest(0, 35));
         ObservableList<Paciente> pacienteObservableList = FXCollections.observableList(pacienteList);
         pacientesList.setItems(pacienteObservableList);
+    }
+
+    private TimerBusqueda timerBusqueda;
+    @FXML
+    private void onBusquedaKey(KeyEvent event) {
+        String txtBusqueda = txtBuscar.getText();
+        if ( txtBusqueda != null && !txtBusqueda.isEmpty() ) {
+            if(timerBusqueda != null && timerBusqueda.isAlive()) { timerBusqueda.cancelar(); }
+            this.timerBusqueda = new TimerBusqueda();
+            timerBusqueda.start();
+        }
     }
 
     List<Transaccion> transacciones;
@@ -429,6 +442,28 @@ public class CajaClinicaController
             BigDecimal sb = reportParameters.getValue(sumaB);
             BigDecimal sc = sa.subtract(sb);
             return "Saldo: "+ formater.format(sc.doubleValue());
+        }
+    }
+
+    class TimerBusqueda extends Thread
+    {
+        boolean busquedaActiva = true;
+
+        public void run()
+        {
+            synchronized(this)
+            {
+                busquedaActiva = true;
+                try { this.wait(500); } catch(Exception e) { logger.error("Error en el timer de búsqueda automática", e); }
+                if(busquedaActiva) {
+                    Platform.runLater(() -> { CajaClinicaController.this.resetPacienteListData(); });
+                }
+            }
+        }
+        void cancelar()
+        {
+            busquedaActiva = false;
+            try { this.notify(); } catch(Exception e) {}
         }
     }
 

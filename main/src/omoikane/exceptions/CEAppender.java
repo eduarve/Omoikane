@@ -72,7 +72,8 @@ public class CEAppender extends AppenderSkeleton {
                     synchronized (monitor) {
                         try {
                             //System.out.println(Misc.getStackTraceString(event.getThrowableInformation().getThrowable()));
-                            JFrame mainJFrame = JFrame.getFrames().length > 0 ? (JFrame) JFrame.getFrames()[0] : null;
+                            Frame frames[] = JFrame.getFrames();
+                            JFrame mainJFrame = frames.length > 1 ? (JFrame) frames[0] : null;
                             String stackTrace = "";
                             if(event.getThrowableInformation() != null && event.getThrowableInformation().getThrowable() != null)
                                 stackTrace = Misc.getStackTraceString(event.getThrowableInformation().getThrowable());

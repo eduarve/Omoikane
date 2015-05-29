@@ -19,6 +19,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +38,7 @@ import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.business.LineaDeCapturaFilter;
 import omoikane.caja.handlers.*;
 import omoikane.entities.LegacyVenta;
+import omoikane.formularios.OmJInternalFrame;
 import omoikane.principal.Principal;
 import omoikane.sistema.Dialogos;
 import omoikane.sistema.Herramientas;
@@ -146,6 +148,8 @@ public class CajaController
     public static Logger logger = Logger.getLogger(CajaController.class);
     private CerrarCajaSwingHandler cerrarCajaSwingHandler;
     private MostrarCatalogoHandler mostrarCatalogoHandler;
+    private JFXPanel fxPanel;
+    private OmJInternalFrame JInternalFrame;
 
     public Button getCerrarButton() { return cerrarButton; }
     public AnchorPane getMainAnchorPane() { return mainAnchorPane; }
@@ -377,6 +381,22 @@ public class CajaController
         //Agrego bascula handler
         basculaHandler = new BasculaHandler(this, modelo);
 
+    }
+
+    public void setFxPanel(JFXPanel fxPanel) {
+        this.fxPanel = fxPanel;
+    }
+
+    public JFXPanel getFxPanel() {
+        return fxPanel;
+    }
+
+    public void setJInternalFrame(OmJInternalFrame JInternalFrame) {
+        this.JInternalFrame = JInternalFrame;
+    }
+
+    public OmJInternalFrame getJInternalFrame() {
+        return JInternalFrame;
     }
 
     private class ClickHandler implements EventHandler<ActionEvent> {

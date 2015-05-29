@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import omoikane.artemisa.PacienteRepo;
+import org.synyx.hades.domain.PageRequest;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +41,7 @@ public class PacientesController implements Initializable {
     @FXML private Button imprimirButton; // Value injected by FXMLLoader
 
     @FXML TableView<Paciente> pacientesTable;
+    @FXML Label idLabel;
     @FXML TextField txtHabitacion;
     @FXML TextField responsableTxt;
     @FXML TextField edadTxt;
@@ -50,6 +52,7 @@ public class PacientesController implements Initializable {
     @FXML Label ingresoDateLabel;
 
     @FXML TableColumn habitacionCol;
+    @FXML TableColumn idCol;
     @FXML TableColumn nombreCol;
 
     @FXML CheckBox chkIncluirInactivos;
@@ -69,8 +72,9 @@ public class PacientesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        habitacionCol.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("habitacion"));
-        nombreCol.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("nombre"));
+        habitacionCol.setCellValueFactory(new PropertyValueFactory<Paciente, String>("habitacion"));
+        idCol.setCellValueFactory(new PropertyValueFactory<Paciente, String>("id"));
+        nombreCol.setCellValueFactory(new PropertyValueFactory<Paciente, String>("nombre"));
 
         pacientes = FXCollections.observableArrayList();
         pacientesTable.setItems(pacientes);
@@ -104,17 +108,23 @@ public class PacientesController implements Initializable {
 
     public void llenarTabla() {
         Boolean soloActivos = chkIncluirInactivos.isSelected();
-        List<Paciente> pacs = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%" + txtBuscar.getText() + "%");
+        List<Paciente> pacs = pacienteRepo.findByLiquidadoAndNombreLikeOrdered(soloActivos, "%" + txtBuscar.getText() + "%", new PageRequest(0, 35));
         pacientes.clear();
         pacientes.addAll(pacs);
     }
 
     @FXML
     public void agregarAction(ActionEvent event) {
+        /*
         Paciente paciente = new Paciente();
         selectedPaciente = paciente;
         pacientes.add(paciente);
         pacientesTable.getSelectionModel().select(paciente);
+        */
+        selectedPaciente = null;
+        pacientesTable.getSelectionModel().clearSelection();
+        borrarCampos();
+        txtNombre.requestFocus();
     }
 
     /**
@@ -145,12 +155,13 @@ public class PacientesController implements Initializable {
     }
 
     private void llenarCampos(Paciente p) {
+        idLabel.textProperty().set(p.getId().toString());
         txtNombre.textProperty().set(p.getNombre());
         txtHabitacion.textProperty().set(p.getHabitacion());
         edadTxt.textProperty().set(( p.getEdad() ));
         responsableTxt.textProperty().set( p.getResponsable() );
         anotacionTxt.textProperty().set( p.getAnotacion() );
-        ingresoDateLabel.setText("Fecha / hora de ingreso: " + DateFormat.getDateTimeInstance().format( p.getEntrada() ));
+        ingresoDateLabel.setText("Ingreso: " + DateFormat.getDateTimeInstance().format( p.getEntrada() ));
         if(p.getId() != null)
             txtId.textProperty().set(p.getId().toString());
         else

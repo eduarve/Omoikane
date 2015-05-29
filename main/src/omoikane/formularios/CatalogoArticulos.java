@@ -679,23 +679,27 @@ class ArticulosTableModel extends ScrollableTableModel {
 
     public Object getValueAt(int row,int col){
         if(col==5) {
-            BaseParaPrecio bp = new BaseParaPrecio();
-            bp.setCosto((Double) super.getValueAt(row, 7));
-            bp.setPorcentajeDescuentoLinea((Double) super.getValueAt(row, 9));
-            bp.setPorcentajeDescuentoGrupo((Double) super.getValueAt(row, 10));
-            bp.setPorcentajeDescuentoProducto((Double) super.getValueAt(row, 11));
-            bp.setPorcentajeUtilidad((Double) super.getValueAt(row, 12));
+            try {
+                BaseParaPrecio bp = new BaseParaPrecio();
+                bp.setCosto((Double) super.getValueAt(row, 7));
+                bp.setPorcentajeDescuentoLinea((Double) super.getValueAt(row, 9));
+                bp.setPorcentajeDescuentoGrupo((Double) super.getValueAt(row, 10));
+                bp.setPorcentajeDescuentoProducto((Double) super.getValueAt(row, 11));
+                bp.setPorcentajeUtilidad((Double) super.getValueAt(row, 12));
 
-            //Agrupo todos los impuestos en uno mismo, dado que la sumatoria de los impuestos es equivalente a calcular los impuestos por separado,
-            // ésta facilidad proviene de la regla en México de que un impuesto no pueda estár gravado por otro
-            Collection<Impuesto> impuestos = new ArrayList<>();
-            Impuesto impuesto = new Impuesto();
-            impuesto.setPorcentaje((BigDecimal) super.getValueAt(row, 14));
-            impuestos.add(impuesto);
+                //Agrupo todos los impuestos en uno mismo, dado que la sumatoria de los impuestos es equivalente a calcular los impuestos por separado,
+                // ésta facilidad proviene de la regla en México de que un impuesto no pueda estár gravado por otro
+                Collection<Impuesto> impuestos = new ArrayList<>();
+                Impuesto impuesto = new Impuesto();
+                impuesto.setPorcentaje((BigDecimal) super.getValueAt(row, 14));
+                impuestos.add(impuesto);
 
-            PrecioOmoikaneLogic precioOmoikaneLogic = new PrecioOmoikaneLogic(bp, impuestos);
+                PrecioOmoikaneLogic precioOmoikaneLogic = new PrecioOmoikaneLogic(bp, impuestos);
 
-            return numberFormat.format(precioOmoikaneLogic.getPrecio());
+                return numberFormat.format(precioOmoikaneLogic.getPrecio());
+            } catch(ClassCastException cce) {
+                return "ERROR";
+            }
         } else if(col == 6) {
             BigDecimal existencias = (BigDecimal) super.getValueAt(row, 13);
             String display = existencias.compareTo(BigDecimal.ZERO) <= 0 ? "N/D" : numberFormat.format(existencias);

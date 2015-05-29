@@ -6,6 +6,7 @@ import groovy.util.Eval;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.business.domain.VentaIncompleta;
 import omoikane.caja.business.plugins.DummyPlugin;
@@ -87,7 +88,7 @@ public class CajaLogicImpl implements ICajaLogic {
      * Pseudo evento gatillado cuando se intenta capturar un producto en la "línea de captura".
      * Ignora cualquier intento de captura si ya existe una en curso
      */
-    public synchronized void onCaptura(CajaModel model) {
+    public void onCaptura(CajaModel model) {
         if(!capturaBloqueada) {
             capturaBloqueada = true;
             try {
@@ -97,12 +98,19 @@ public class CajaLogicImpl implements ICajaLogic {
                 addProducto(model, capturaFilter, true);
 
             } catch(IndexOutOfBoundsException e) {
-                Dialog.showInfo("Producto no encontrado", "Producto no encontrado");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Producto no encontrado");
+                alert.setHeaderText("Producto no encontrado");
+                alert.setContentText("¡Producto no encontrado!");
+
+                alert.showAndWait();
+
                 logger.trace("Producto no encontrado");
             } catch (Exception e) {
                 logger.error("Error durante captura ('evento onCaptura')", e);
+            } finally {
+                capturaBloqueada = false;
             }
-            capturaBloqueada = false;
         }
     }
 

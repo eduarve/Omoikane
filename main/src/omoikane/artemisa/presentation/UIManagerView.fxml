@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.artemisa.presentation.UIManagerController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="omoikane.artemisa.presentation.UIManagerController">
   <children>
     <AnchorPane prefHeight="400.0000999999975" prefWidth="84.0" style="-fx-background-color: black;&#10;-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
@@ -20,7 +20,7 @@
               </font>
             </Label>
             <Separator orientation="VERTICAL" prefHeight="200.0" visible="false" VBox.vgrow="ALWAYS" />
-            <Label prefHeight="48.0" text="Phesus '13" textFill="WHITE">
+            <Label prefHeight="48.0" text="Phesus '15" textFill="WHITE" wrapText="true">
               <font>
                 <Font size="14.0" />
               </font>

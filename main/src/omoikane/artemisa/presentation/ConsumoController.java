@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 import omoikane.artemisa.PacienteRepo;
 import omoikane.artemisa.entity.Cargo;
 import omoikane.artemisa.entity.Paciente;
@@ -28,12 +29,14 @@ import omoikane.producto.Producto;
 import omoikane.repository.ProductoRepo;
 import omoikane.sistema.Permisos;
 import org.apache.log4j.Logger;
+import org.controlsfx.control.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.synyx.hades.domain.PageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -90,6 +93,18 @@ public class ConsumoController implements Initializable {
                 pacienteField.requestFocus();
             }
         });
+
+        pacienteField.setOnKeyReleased((KeyEvent k) -> {
+            if(k.getCode() == KeyCode.ENTER)
+                cantidadField.requestFocus();
+        });
+
+        cantidadField.setOnKeyReleased((KeyEvent k) -> {
+            if(k.getCode() == KeyCode.ENTER) {
+                txtBuscarProducto.requestFocus();
+            }
+        });
+
     }
 
     @FXML
@@ -104,13 +119,21 @@ public class ConsumoController implements Initializable {
                     Cargo cargo = new Cargo();
                     cargo.setCantidad(new BigDecimal(cantidadField.getText()));
                     cargo.setPaciente( paciente );
-                    cargo.setProducto(productoList.getSelectionModel().getSelectedItem());
+                    Articulo sessionlessArticulo = productoList.getSelectionModel().getSelectedItem();
+                    Articulo sessionedArticulo = productoRepo.findByIdComplete( sessionlessArticulo.getIdArticulo() );
+                    cargo.setProducto(sessionedArticulo );
+                    // TODO rehablitar
                     entityManager.persist(cargo);
 
                     resetUI();
                     CargoPrint cargoPrint = new CargoPrint(cargo);
                     cargoPrint.print();
-                    logger.info("Registrado");
+                    logger.trace("Registrado");
+                    Notifications.create()
+                            .title("Notificación")
+                            .text("Consumo de " + cargo.getCantidad() + " " + cargo.getConcepto() + " registrado")
+                            .hideAfter(Duration.seconds(4d))
+                            .showConfirm();
                 } catch(Exception e) {
                     logger.error("No registrado por causa de un error.", e);
                 }
@@ -133,19 +156,24 @@ public class ConsumoController implements Initializable {
 
     // TODO Optimizar selects, hace un select por cada artículo X_X
     private void resetUI() {
-        List pacientesActivos = pacienteRepo.findAllActive();
-        ObservableList observableList = FXCollections.observableArrayList(pacientesActivos);
-        pacienteField.setItems( observableList );
+
+        //Si no hay paciente seleccionado significa que está en estado inicial y carga los pacientes de la BD
+        if(pacienteField.getSelectionModel().getSelectedItem() == null) {
+            List pacientesActivos = pacienteRepo.findAllActive();
+            ObservableList observableList = FXCollections.observableArrayList(pacientesActivos);
+            pacienteField.setItems(observableList);
+        }
         cantidadField.setText("");
         txtBuscarProducto.setText("");
 
         fillProductosList();
-        pacienteField.getSelectionModel().clearSelection();
+        //pacienteField.getSelectionModel().clearSelection();  Comentado para mantener el paciente estático para acelerar la captura
         productoList.getSelectionModel().clearSelection();
+        cantidadField.requestFocus();
     }
 
     private void fillProductosList() {
-        List p = productoRepo.findByDescripcionLikeOrCodigoLike("%" + txtBuscarProducto.getText() + "%");
+        List p = productoRepo.findByDescripcionLikeOrCodigoLike("%" + txtBuscarProducto.getText() + "%", new PageRequest(0,15));
         ObservableList observableList1 = FXCollections.observableArrayList(p);
         productos.clear();
         productos.addAll(observableList1);
@@ -166,6 +194,7 @@ public class ConsumoController implements Initializable {
     private void onBusquedaKeyReleased(KeyEvent event) {
         if(event.getCode() == KeyCode.DOWN) { productoList.getSelectionModel().selectNext(); }
         if(event.getCode() == KeyCode.UP) { productoList.getSelectionModel().selectPrevious(); }
+        if(event.getCode() == KeyCode.ENTER) { registrarButton.fire(); event.consume(); }
     }
 
     class TimerBusqueda extends Thread

@@ -104,6 +104,7 @@ public class UIManagerController
                 AnchorPane.setRightAnchor(parent, 0d);
                 AnchorPane.setTopAnchor(parent, 0d);
                 Button dummyButton = new Button("");
+
                 contentPane.getChildren().removeAll();
                 contentPane.getChildren().addAll(parent, dummyButton);
                 contentPane.getChildren().remove(dummyButton);

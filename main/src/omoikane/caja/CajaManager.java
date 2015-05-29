@@ -101,6 +101,7 @@ public class CajaManager extends Application {
         if(onDesktop) frame.setLocation(frame.getX(), frame.getY()+25);
         if(onDesktop) Herramientas.iconificable(frame);
         frame.toFront();
+
         SwingUtilities.invokeLater(() -> {
             frame.setFocusable(true);
             frame.setRequestFocusEnabled(false);
@@ -120,6 +121,8 @@ public class CajaManager extends Application {
                     fxPanel.setScene(scene);
                     controller.setCerrarCajaSwingHandler(new CerrarCajaSwingHandler(controller, frame));
                     controller.getCapturaTextField().requestFocus();
+                    controller.setFxPanel(fxPanel);
+                    controller.setJInternalFrame(frame);
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }
