@@ -11,6 +11,7 @@ package omoikane.inventarios.traspasoEntrante;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.synyx.hades.domain.Order;
 import org.synyx.hades.domain.Sort;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,6 +52,8 @@ public class TraspasoEntranteCRUDController
     TraspasoEntranteRepo traspasoSalienteRepo;
 
     TraspasoEntranteController traspasoEntranteController;
+    private JInternalFrame jInternalFrame;
+    private JFXPanel fxPanel;
 
     @FXML
     public void onNuevoClic() {
@@ -79,6 +83,7 @@ public class TraspasoEntranteCRUDController
         lista.setItems(FXCollections.observableArrayList(traspasoEntranteList));
 
         traspasoEntranteController = (TraspasoEntranteController) ((SceneOverloaded)view).getController();
+        traspasoEntranteController.setParent(this);
         btnNuevo.disableProperty().bind( traspasoEntranteController.aplicarInventarioButton.disabledProperty().not() );
 
         lista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TraspasoEntrante>() {
@@ -89,4 +94,19 @@ public class TraspasoEntranteCRUDController
         });
     }
 
+    public JInternalFrame getJInternalFrame() {
+        return jInternalFrame;
+    }
+
+    public JFXPanel getFXPanel() {
+        return fxPanel;
+    }
+
+    public void setFxPanel(JFXPanel fxPanel) {
+        this.fxPanel = fxPanel;
+    }
+
+    public void setjInternalFrame(JInternalFrame jInternalFrame) {
+        this.jInternalFrame = jInternalFrame;
+    }
 }

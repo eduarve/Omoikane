@@ -8,6 +8,7 @@ import omoikane.etiquetas.ImpresionEtiquetasModel;
 import omoikane.principal.Principal;
 import omoikane.sistema.Herramientas;
 import omoikane.sistema.Permisos;
+import omoikane.sistema.SceneOverloaded;
 import org.springframework.context.ApplicationContext;
 
 import javax.swing.*;
@@ -23,27 +24,25 @@ import java.io.IOException;
  */
 public class ConteoInventarioManager {
 
-    ImpresionEtiquetasController controller;
-    ImpresionEtiquetasModel model;
     private JInternalFrame frame;
 
-    private Scene initTomaInventarioCRUD() throws IOException {
+    private SceneOverloaded initTomaInventarioCRUD() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("conteoInventarioCRUDView");
+        SceneOverloaded scene = (SceneOverloaded)context.getBean("conteoInventarioCRUDView");
 
         return scene;
     }
-
-    private Scene initTomaInventario() throws IOException {
+    /*
+    private SceneOverloaded initTomaInventario() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("tomaInventarioView");
+        SceneOverloaded scene = (SceneOverloaded)context.getBean("tomaInventarioView");
 
         return scene;
-    }
+    }*/
 
     public JInternalFrame startJFXTomaInventario() {
         JInternalFrame frame = null;
@@ -72,9 +71,12 @@ public class ConteoInventarioManager {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Scene scene = null;
+                SceneOverloaded scene = null;
                 try {
                     scene = initTomaInventarioCRUD();
+                    ((ConteoInventarioCRUDController)scene.getController()).setJInternalFrame(frame);
+                    ((ConteoInventarioCRUDController)scene.getController()).setFXPanel(fxPanel);
+
                     //scene.setFill(null);
                     fxPanel.setScene(scene);
                 } catch (IOException e) {

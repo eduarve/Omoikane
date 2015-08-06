@@ -92,8 +92,8 @@ public class PaqueteController
 
         Paquete renglonPaquete = new Paquete();
         renglonPaquete.setCantidad( cantidad );
-        renglonPaquete.setProductoContenedor(productoRepo.readByPrimaryKey( productoContenedorId ));
-        renglonPaquete.setProductoContenido(productoRepo.readByPrimaryKey( contenidoExists ? productoContenidoId : null ));
+        renglonPaquete.setProductoContenedor(productoRepo.findByIdComplete( productoContenedorId ));
+        renglonPaquete.setProductoContenido(productoRepo.findByIdComplete( contenidoExists ? productoContenidoId : null ));
 
         if(validar(renglonPaquete)) {
             tablaContenido.getItems().add(renglonPaquete);

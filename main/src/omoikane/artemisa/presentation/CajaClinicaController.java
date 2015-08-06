@@ -202,7 +202,7 @@ public class CajaClinicaController
     private void resetPacienteListData() {
         Boolean soloActivos = chkIncluirInactivos.isSelected();
         pacientesList.getSelectionModel().clearSelection();
-        List<Paciente> pacienteList = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%"+txtBuscar.getText()+"%", new PageRequest(0, 35));
+        List<Paciente> pacienteList = pacienteRepo.findByLiquidadoAndNombreLike(soloActivos, "%"+txtBuscar.getText()+"%", new PageRequest(0, 10000));
         ObservableList<Paciente> pacienteObservableList = FXCollections.observableList(pacienteList);
         pacientesList.setItems(pacienteObservableList);
     }

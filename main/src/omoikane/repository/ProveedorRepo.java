@@ -15,9 +15,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface ProveedorRepo extends GenericDao<Proveedor, Long> {
-    @Query("FROM Proveedor p WHERE p.activo = 1")
+    @Query("FROM Proveedor p WHERE p.activo = 1 ORDER BY p.nombre ASC")
     List<Proveedor> findAllActive();
 
-    @Query("FROM Proveedor p WHERE (p.activo = true OR p.activo = ?1) AND nombre like ?2")
+    @Query("FROM Proveedor p WHERE (p.activo = true OR p.activo = ?1) AND nombre like ?2 ORDER BY p.nombre ASC")
     List<Proveedor> findByActivoAndNombreLike(Boolean activo, String like);
 }

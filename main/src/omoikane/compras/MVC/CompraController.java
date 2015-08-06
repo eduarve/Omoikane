@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -27,42 +28,23 @@ import javafx.util.Callback;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.compras.entities.Compra;
 import omoikane.compras.entities.ItemCompra;
-import omoikane.inventarios.StockIssuesLogic;
 import omoikane.principal.Articulos;
-import omoikane.principal.Principal;
 import omoikane.proveedores.Proveedor;
-import omoikane.repository.CompraRepo;
 import omoikane.entities.Usuario;
-import omoikane.inventarios.Stock;
 import omoikane.producto.Articulo;
-import omoikane.repository.ProductoRepo;
+import omoikane.repository.CompraRepo;
 import omoikane.repository.ProveedorRepo;
-import omoikane.repository.StockRepo;
-import omoikane.sistema.Permisos;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.transaction.TransactionManager;
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -81,23 +63,14 @@ public class CompraController implements Initializable {
     @Autowired
     EhCacheManagerFactoryBean cacheManager;
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
-    EntityManager entityManager;
-
     @Autowired
-    PlatformTransactionManager transactionManager;
-
-    @Autowired
-    CompraRepo repo;
-
-    @Autowired
-    ProductoRepo productoRepo;
+    CompraSaveLogic logic;
 
     @Autowired
     ProveedorRepo proveedorRepo;
 
     @Autowired
-    StockRepo stockRepo;
+    CompraRepo repo;
 
     @FXML TableView<ItemCompraEntityWrapper> itemsTable;
     @FXML TableColumn<ItemCompraEntityWrapper, String> codigoCol;
@@ -124,6 +97,7 @@ public class CompraController implements Initializable {
 
     private Articulo capturaArticulo;
     private HashMap<Long, Articulo> indice;
+    private ComprasCRUDController parent;
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
         //Mini validación
@@ -135,17 +109,31 @@ public class CompraController implements Initializable {
                 .addYesButton(new EventHandler() {
                     @Override
                     public void handle(Event event) {
-
-                        modelo.setCompletado(true);
-                        Task<Void> persistTask = persistModel();
+                        modelo.setCompletado(true); //Compra tentativamente completada, se revierte el estátus si ocurre una excepción
+                        mainPane.setDisable(true);
+                        Task<Void> persistTask = new Task<Void>() {
+                            @Override
+                            protected Void call() throws Exception {
+                                logic.concluir(modelo);
+                                return null;
+                            }
+                        };
                         persistTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                             @Override
                             public void handle(WorkerStateEvent workerStateEvent) {
-                                logger.info("Captura de compra archivada");
-                                            }
+                                itemsTable.edit(itemsTable.getSelectionModel().getSelectedIndex() + 1, itemsTable.getColumns().get(0));
+                                logger.info("Captura de compra archivada y aplicada");
+                                mainPane.setDisable(false);
+                            }
                         });
+                        persistTask.setOnFailed((workerStateEvent) -> {
+                                Throwable t = workerStateEvent.getSource().getException();
+                                logger.error(t.getMessage(), t);
+                                modelo.setCompletado(false);
+                                mainPane.setDisable(false);
+                            }
+                        );
                         new Thread(persistTask).start();
-                        handleAplicarInventario();
                     }
                 })
                 .addNoButton(new EventHandler() {
@@ -173,69 +161,6 @@ public class CompraController implements Initializable {
 
     }
 
-    private void handleAplicarInventario() {
-
-        mainPane.setDisable(true);
-        Task aplicarInventarioTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                aplicarInventarioToModel();
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-        };
-        aplicarInventarioTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent workerStateEvent) {
-                if(!modelo.getCompletado().get()) archivarButton.fire();
-                mainPane.setDisable(false);
-                logger.info("Compra aplicada a las existencias correctamente.");
-            }
-        });
-        aplicarInventarioTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent workerStateEvent) {
-                Throwable t = workerStateEvent.getSource().getException();
-                logger.error(t.getMessage(), t);
-                mainPane.setDisable(false);
-            }
-        });
-        new Thread(aplicarInventarioTask).start();
-    }
-
-    /**
-     * Tuve que utilizar un transactionTemplate en éste método debido a que es llamado por otro método de la misma clase.
-     * Debido a una limitación inherente de los proxys usados por Spring no es posible llamar a través de un proxy a un
-     * método de la misma clase sin usar trucos enredados, por esa misma razón no utilicé la anotación @Transactional,
-     * sin embargo, los métodos de la clase StockIssuesLogic si utilizan @Transactional y les es propagada la sesión.
-     */
-    public void aplicarInventarioToModel() {
-
-        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-
-            // the code in this method executes in a transactional context
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                _aplicatInventarioToModel();
-            }
-        });
-
-    }
-
-    private void _aplicatInventarioToModel() {
-        for (ItemCompraEntityWrapper itemCompraEntityWrapper : modelo.getItems()) {
-            Articulo a        = itemCompraEntityWrapper.articuloProperty().get();
-
-            StockIssuesLogic stockIssuesLogic = Principal.applicationContext.getBean(StockIssuesLogic.class);
-            Articulo articulo = stockIssuesLogic.increaseStock(a.getIdArticulo(), itemCompraEntityWrapper.cantidadProperty().get() );
-
-            stockRepo.save(articulo.getStock());
-
-            modelo.setUsuario( new Usuario( new Long(Usuarios.getIDUsuarioActivo() ) ) );
-            repo.save(modelo._compra);
-
-        }
-    }
-
     @FXML public void onAgregarAction(ActionEvent actionEvent) {
         if(capturaArticulo == null) return ;
         if(modelo.getCompletado().get()) return;
@@ -245,7 +170,6 @@ public class CompraController implements Initializable {
             codigoTextField.requestFocus();
             return;
         }
-
         addItem(capturaArticulo, new BigDecimal(cantidadTextField.getText()), new BigDecimal(costoTextField.getText()));
 
         costoTextField.setText("");
@@ -370,6 +294,22 @@ public class CompraController implements Initializable {
 
     }
 
+    public JFXPanel getFXPanel() {
+        return getParent().getFXPanel();
+    }
+
+    public ComprasCRUDController getParent() {
+        return parent;
+    }
+
+    public JInternalFrame getJInternalFrame() {
+        return getParent().getJInternalFrame();
+    }
+
+    public void setParent(ComprasCRUDController parent) {
+        this.parent = parent;
+    }
+
     private class ActionsCell extends TableCell<ItemCompraEntityWrapper, Boolean> {
         // a button for adding a new person.
         final Button delButton       = new Button("Borrar");
@@ -423,7 +363,7 @@ public class CompraController implements Initializable {
                 Articulo resultado = null;
                 if(codigo.isEmpty()) return null;
 
-                resultado = getArticulo(codigo);
+                resultado = logic.getArticulo(codigo);
 
                 final Articulo finalResultado = resultado;
                 Platform.runLater(new Runnable() {
@@ -443,14 +383,6 @@ public class CompraController implements Initializable {
             }
         };
         return findArticuloTask;
-    }
-
-    public Articulo getArticulo(String codigo) {
-        Articulo resultado = null;
-        List<Articulo> resultados = productoRepo.findByCodigo(codigo);
-        if(resultados == null || resultados.isEmpty()) resultados = productoRepo.findByCodigoAlterno(codigo);
-        if(resultados != null && !resultados.isEmpty()) resultado = productoRepo.findByIdIncludeStock(resultados.get(0).getIdArticulo());
-        return resultado;
     }
 
     public void initModel() {
@@ -487,7 +419,7 @@ public class CompraController implements Initializable {
         archivarButton.disableProperty().bind(modelo.getCompletado());
         descartarButton.disableProperty().bind(modelo.getCompletado());
         fechaLabel.textProperty().bind(Bindings.convert(modelo.getDate()));
-        idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
+        //idLabel.textProperty().bind(Bindings.convert(modelo.getId()));
         lblProveedor.textProperty().bind(modelo.nombreProveedorProperty());
         txtFolioOrigen.setText( compra != null ? compra.getFolioOrigen() : "" );
         txtFolioOrigen.textProperty().set( modelo.getFolioOrigen().get() );
@@ -540,14 +472,21 @@ public class CompraController implements Initializable {
     }
 
     /**
+     * Versión 4.4
+     *      No se ofrece el mecanismo para persistir compras mientras se capturan (por bugs),
+     *      por lo tanto cada vez que se inicia una compra se crea el modelo o se rescata una compra ya completada
+     *      si el objeto Compra es provisto
+     * Anterior a 4.4
      * Éste método inicializa el modelo del formulario, de una de las siguientes 3 maneras:
      * - Si le es dado un bean lo carga
      * - Si le es dado un bean nulo busca el último inventario incompleto y lo carga
      * - Si le es dado un bean nulo y no existe un inventario incompleto crea uno nuevo
      * */
-    @Transactional
+    // Versión 4.4 @Transactional
     private CompraEntityWrapper loadOrCreateModel(Compra compra) {
 
+        //Código anterior a 4.4 para persistir compra mientras se edita
+        /*
         if(compra != null)
             compra = repo.find(compra.getId());
         if(compra == null)
@@ -561,6 +500,15 @@ public class CompraController implements Initializable {
         compra.getItems().size();
         for (ItemCompra itemCompra : compra.getItems()) {
             itemCompra.getArticulo();
+        }
+        */
+        if(compra != null) {
+            compra = repo.find(compra.getId());
+        } else {
+            compra = new Compra();
+            //El usuario se establece al momento de comenzar la captura
+            compra.setUsuario(new Usuario(new Long(Usuarios.getIDUsuarioActivo())));
+            //La fecha se establece al momento de guardarse
         }
 
         CompraEntityWrapper compraEntityWrapper = new CompraEntityWrapper(compra);
@@ -585,18 +533,19 @@ public class CompraController implements Initializable {
         }
     }
 
-
     /**
-     * Ésta función almacena todo el modelo de esta vista.
-     * Nota: Éste método utiliza Spring e Hibernate directamente, TransactionTemplate para la transacción
-     * y entityManager para persistir a diferencia del método deleteModel. Simplemente por experimentación.
+     * A partir de la versión 4.4 se experimenta guardando únicamente una vez la compra con una única sesión al terminar
+     *     por lo que este método queda vacío al no contar con un mecanismo para persistir la compra mientras se captura
      * @return
      */
 
     private Task<Void> persistModel() {
+
         Task persistTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                //Código anterior a 4.4
+                /*
                 TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
                 transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 
@@ -606,7 +555,7 @@ public class CompraController implements Initializable {
                         itemsTable.edit(itemsTable.getSelectionModel().getSelectedIndex() + 1, itemsTable.getColumns().get(0));
                     }
                 });
-
+                */
 
                 return null;
             }
@@ -616,15 +565,18 @@ public class CompraController implements Initializable {
 
     /**
      * Elimina el modelo de la presentación.
-     * Nota: Utiliza Hades/Spring DAO para la eliminación a diferencia del método persistModel, claramente
-     * el código es más simple y legible.
-     * @return
+     * A partir de la versión 4.4 queda vacío ya que no se ofrece un mecanismo que persista la venta mientra se edita,
+     * tampoco hay un mecanismo para eliminar una compra ya capturada
      */
     private Task<Void> deleteModel() {
         Task deleteTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                /* Código anterior a 4.4 */
+                /*
                 repo.delete(modelo._compra);
+                repo.flush();
+                */
                 return null;
             }
         };
@@ -639,15 +591,38 @@ public class CompraController implements Initializable {
         }
 
         public void handle() {
+            Task<String> t = new Task() {
+                @Override
+                protected String call() throws Exception {
+                    return mostrarCatalogo();
+                }
+            };
+
+            t.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent workerStateEvent) {
+                    Platform.runLater(() -> {
+
+                        String retorno = t.getValue();
+                        retorno = (retorno == null) ? "" : retorno;
+                        String captura = controller.codigoTextField.getText();
+                        captura = (captura == null) ? "" : captura;
+                        controller.codigoTextField.setText(captura + retorno);
+
+                        controller.getJInternalFrame().toFront();
+                        controller.getFXPanel().requestFocus();
+                        controller.mainPane.requestFocus();
+                        controller.codigoTextField.requestFocus();
+                    });
+                }
+            });
+
+            new Thread(t).start();
+        }
+
+        private String mostrarCatalogo() {
             String retorno = Articulos.lanzarDialogoCatalogo();
-
-            retorno = (retorno==null)?"":retorno;
-            String captura = controller.codigoTextField.getText();
-            captura = (captura==null)?"":captura;
-            controller.codigoTextField.setText( captura + retorno );
-
-            controller.mainPane.requestFocus();
-            controller.codigoTextField.requestFocus();
+            return retorno;
         }
     }
 

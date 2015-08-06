@@ -22,6 +22,9 @@
     <context:component-scan base-package="omoikane.entities"/>
     <context:component-scan base-package="omoikane.inventarios"/>
     <context:component-scan base-package="omoikane.compras.entities"/>
+    <context:component-scan base-package="omoikane.compras.MVC"/>
+    <context:component-scan base-package="omoikane.inventarios.traspasoEntrante"/>
+    <context:component-scan base-package="omoikane.inventarios.traspasoSaliente"/>
     <!--<context:component-scan base-package="omoikane.sistema"/>-->
     <bean id="articulo" class="omoikane.producto.Articulo" scope="prototype"></bean>
     <bean id="baseParaPrecio" class="omoikane.producto.BaseParaPrecio" scope="prototype"></bean>

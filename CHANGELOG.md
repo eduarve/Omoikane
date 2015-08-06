@@ -1,3 +1,39 @@
+## Versión 4.4.0 b13 (2015-08-05)
+- Agregué un nuevo método "getCostoNeto" a la lógico de precios, obtiene el costo con impuestos
+- Ahora los traspasos salientes muestran el costo neto (con impuestos) en lugar del costo bruto
+- Corregí bug que permitía borrar partidas en traspasos
+- Mejoré la plantilla de traspasos salientes, agregando espacio para las firmas y corrigiendo el formato de los números
+
+## Versión 4.4.0 b12 (2015-08-04)
+- Corregí bug que mostraba el total de un traspaso de mercancía en base al precio al público en lugar del costo
+- Corregí un bug, no se marcaban las compras como completadas
+
+## Versión 4.4.0 b11 (2015-07-26)
+- Los reportes básicos ahora apuntan a la configuración general del sistema y no a su propia clase
+que leía directo del archivo y no trabajaba en conjunto con el proxy de sucursales
+
+## Versión 4.4.0 b10 (2015-07-25)
+- Quité la persistencia durante la edición de Compras, ahora toda la compra se guarda una 
+única ocasión y se agregan stocks todo en una misma sesión
+- Corregí los reportes básicos que quedaban pendientes: costeo por grupos y líneas y artículos por línea
+- Corregí un bug que ocasionaba que no se pudieran agregar códigos alternos, siempre 
+marcaba "código repetido"
+
+## Versión 4.4.0 b9 (2015-07-15)
+- Cambié el límite de pacientes listados simultáneamente para artemisa de 35 a 10 000
+- Agregué un flush forzado a cada operación de compras
+- Quité Cascade en la relación Many-to-Many Articulos-Impuestos
+
+## Versión 4.4.0 b8 (2015-07-12)
+- Se corrige el bug que no permitía generar etiquetas debido a un lazy initialization exception de impuestos.
+
+## Versión 4.4.0 b7
+- Se corrige el enfoque después de buscar productos mediante el catálogo (F1) en inventarios y compras, el enfoque se perdía ralentizando la captura
+- Se agrega el acceso a traspasos entrantes y salientes
+
+## Versión 4.4.0 b6 (2015-07-06)
+- Se corrige la relación VentaDetalles - VentaDetallesImpuesto. Ahora VDI tiene una clave primaria compuesta por el ID de VentaDetalles y el ID del impuesto.
+
 ## Versión 4.3.0 (2014-08-02)
 
 - Se agrega reporte remoto de excepciones mediante airbrake

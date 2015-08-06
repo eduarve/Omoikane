@@ -3,11 +3,13 @@ package omoikane.compras;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import omoikane.compras.MVC.ComprasCRUDController;
 import omoikane.etiquetas.ImpresionEtiquetasController;
 import omoikane.etiquetas.ImpresionEtiquetasModel;
 import omoikane.principal.Principal;
 import omoikane.sistema.Herramientas;
 import omoikane.sistema.Permisos;
+import omoikane.sistema.SceneOverloaded;
 import org.springframework.context.ApplicationContext;
 
 import javax.swing.*;
@@ -25,21 +27,21 @@ public class CompraManager {
 
     private JInternalFrame frame;
 
-    private Scene initCompra() throws IOException {
+    private SceneOverloaded initCompra() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("compraView");
+        SceneOverloaded scene = (SceneOverloaded)context.getBean("compraView");
 
         return scene;
     }
 
 
-    private Scene initComprasCRUD() throws IOException {
+    private SceneOverloaded initComprasCRUD() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("comprasCRUDView");
+        SceneOverloaded scene = (SceneOverloaded)context.getBean("comprasCRUDView");
 
         return scene;
     }
@@ -71,9 +73,11 @@ public class CompraManager {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Scene scene = null;
+                SceneOverloaded scene = null;
                 try {
                     scene = initComprasCRUD();
+                    ((ComprasCRUDController)scene.getController()).setFXPanel(fxPanel);
+                    ((ComprasCRUDController)scene.getController()).setJInternalFrame(frame);
                     //scene.setFill(null);
                     fxPanel.setScene(scene);
                 } catch (IOException e) {

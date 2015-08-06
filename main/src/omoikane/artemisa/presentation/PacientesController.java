@@ -108,7 +108,7 @@ public class PacientesController implements Initializable {
 
     public void llenarTabla() {
         Boolean soloActivos = chkIncluirInactivos.isSelected();
-        List<Paciente> pacs = pacienteRepo.findByLiquidadoAndNombreLikeOrdered(soloActivos, "%" + txtBuscar.getText() + "%", new PageRequest(0, 35));
+        List<Paciente> pacs = pacienteRepo.findByLiquidadoAndNombreLikeOrdered(soloActivos, "%" + txtBuscar.getText() + "%", new PageRequest(0, 10000));
         pacientes.clear();
         pacientes.addAll(pacs);
     }

@@ -116,7 +116,7 @@ class MenuPrincipal {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnMovAlmacen.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnDetallesVentas.requestFocusInWindow() }
             }
-            menuPrincipal.btnReportesAvanzados.keyReleased = {
+            menuPrincipal.btnTraspasos.keyReleased = {
                 if(it.keyCode==it.VK_UP)   { menuPrincipal.btnTomaInventarios.requestFocusInWindow() }
                 if(it.keyCode==it.VK_DOWN) { menuPrincipal.btnCortes.requestFocusInWindow() }
             }

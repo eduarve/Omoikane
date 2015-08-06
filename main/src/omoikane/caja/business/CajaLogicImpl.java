@@ -546,6 +546,7 @@ public class CajaLogicImpl implements ICajaLogic {
             vdi.setPorcentaje(im.getPorcentaje());
             vdi.setTotal(im.getImpuesto());
             vdi.setImpuestoId(im.getImpuestoEntity().getId());
+            vdi.setLegacyVentaDetalle(lvd);
             vdis.add(vdi);
         }
         lvd.setVentaDetalleImpuestos( vdis );

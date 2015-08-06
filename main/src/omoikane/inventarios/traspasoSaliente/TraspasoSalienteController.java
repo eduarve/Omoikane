@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -24,23 +25,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.BigDecimalStringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import name.antonsmirnov.javafx.dialog.Dialog;
-import net.sf.dynamicreports.report.builder.VariableBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.constant.Calculation;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
-import omoikane.compras.MVC.ItemCompraEntityWrapper;
 import omoikane.entities.Usuario;
-import omoikane.inventarios.Stock;
 import omoikane.inventarios.StockIssuesLogic;
 import omoikane.principal.Articulos;
 import omoikane.principal.Principal;
@@ -134,6 +129,7 @@ public class TraspasoSalienteController implements Initializable {
     private boolean persistOnChange;
     private MyListChangeListener persistOnChangeListener;
     private boolean persistable = true; //Por default persistable
+    private TraspasoSalienteCRUDController parent;
 
     // -------------------------------------------------
     /**
@@ -229,9 +225,9 @@ public class TraspasoSalienteController implements Initializable {
 
             TextColumnBuilder<BigDecimal> cantidadCol = col.column("Cantidad", "cantidad", type.bigDecimalType());
             TextColumnBuilder<BigDecimal> existenciaCol = col.column("Stock Sistema", "existencia", type.bigDecimalType());
-            TextColumnBuilder<BigDecimal> costoUnitarioCol = col.column("Costo U.", "costoUnitario", type.bigDecimalType()).setPattern("#,###.##");
-            TextColumnBuilder<BigDecimal> precioUnitarioCol = col.column("Precio U.", "precioUnitario", type.bigDecimalType()).setPattern("#,###.##");
-            TextColumnBuilder<BigDecimal> importeCol = col.column("Importe", "importe", type.bigDecimalType()).setPattern("#,###.##");
+            TextColumnBuilder<BigDecimal> costoUnitarioCol = col.column("Costo U.", "costoUnitario", type.bigDecimalType());
+            TextColumnBuilder<BigDecimal> precioUnitarioCol = col.column("Precio U.", "precioUnitario", type.bigDecimalType());
+            TextColumnBuilder<BigDecimal> importeCol = col.column("Importe", "importe", type.bigDecimalType());
 
             report()
                     .columns(
@@ -241,7 +237,7 @@ public class TraspasoSalienteController implements Initializable {
                             existenciaCol.setMinColumns(2),
                             costoUnitarioCol.setMinColumns(2),
                             precioUnitarioCol.setMinColumns(2),
-                            importeCol.setMinColumns(3).setPattern("#,###.##")
+                            importeCol.setMinColumns(3)
 
                     )
                     .setColumnTitleStyle(columnTitleStyle)
@@ -263,6 +259,16 @@ public class TraspasoSalienteController implements Initializable {
                     )
                     .subtotalsAtSummary(sbt.sum(importeCol))
                     .addSummary(cmp.verticalList(
+                            cmp.verticalGap(30),
+                            cmp.horizontalList(
+                                    cmp.horizontalGap(20),
+                                    cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Recibió").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                    cmp.horizontalGap(20),
+                                    cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Revisó").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                    cmp.horizontalGap(20),
+                                    cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Entregó").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                    cmp.horizontalGap(20)
+                            ),
                             cmp.verticalGap(20),
                             cmp.line(),
                             cmp.text("Notas").setStyle(boldStyle),
@@ -283,7 +289,13 @@ public class TraspasoSalienteController implements Initializable {
      */
     // -------------------------------------------------
     private void handleAplicarInventario() {
+        //Deshabilito el panel principal
         mainPane.setDisable(true);
+        //Genero un UID para ésta transacción
+        String uidString = RandomStringUtils.randomAlphanumeric(8);
+        modelo.setUid(uidString);
+
+        //Genero una tarea para ejecutar la transacción en otro hilo.
         Task aplicarInventarioTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -327,10 +339,8 @@ public class TraspasoSalienteController implements Initializable {
             productoRepo.saveAndFlush(articulo);
         }
 
-        String uidString = RandomStringUtils.randomAlphanumeric(8);
         modelo.setAplicado(true);
         modelo.setUsuario(new Usuario(new Long(Usuarios.getIDUsuarioActivo())));
-        modelo.setUid(uidString);
         repo.saveAndFlush(modelo._traspasoSaliente);
 
         // --------// Exportación automática de traspaso //--------
@@ -437,7 +447,7 @@ public class TraspasoSalienteController implements Initializable {
         String codigo            = capturaArticulo.getCodigo();
         String descripcion       = capturaArticulo.getDescripcion();
         BigDecimal stockBD       = capturaArticulo.getStockInitializated().getEnTienda();
-        BigDecimal ultimoCosto   = new BigDecimal( capturaArticulo.getBaseParaPrecio().getCosto() );
+        BigDecimal ultimoCosto   = capturaArticulo.getPrecio().getCostoNeto();
         BigDecimal precioPublico = capturaArticulo.getPrecio().getPrecio();
 
         if(indice.containsKey(capturaArticulo.getIdArticulo())) {
@@ -568,15 +578,32 @@ public class TraspasoSalienteController implements Initializable {
         //*************************************************************
     }
 
+    public JInternalFrame getJInternalFrame() {
+        return getParent().getJInternalFrame();
+    }
+
+    public TraspasoSalienteCRUDController getParent() {
+        return parent;
+    }
+
+    public void setParent(TraspasoSalienteCRUDController parent) {
+        this.parent = parent;
+    }
+
+    public JFXPanel getFXPanel() {
+        return getParent().getFXPanel();
+    }
+
     private class ActionsCell extends TableCell<ItemTraspasoPropWrapper, Boolean> {
         // a button for adding a new person.
         final Button delButton       = new Button("Borrar");
+
         // pads and centers the add button in the cell.
         final StackPane paddedButton = new StackPane();
 
         /**
          * ActionsCell constructor
-         * @param table the table to which a new person can be added.
+         * @param table
          */
         ActionsCell(final TableView table) {
             // -- Formato del botón -- //
@@ -589,6 +616,9 @@ public class TraspasoSalienteController implements Initializable {
             final TableCell<ItemTraspasoPropWrapper, Boolean> c = this;
             delButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent actionEvent) {
+                    //Si la captura ya fue completada, no se puede borrar partidas
+                    if(modelo.getCompletado().get()) return;
+
                     TableRow tableRow = c.getTableRow();
                     ItemTraspasoPropWrapper item= (ItemTraspasoPropWrapper) tableRow.getTableView().getItems().get(tableRow.getIndex());
                     for(int i = 0; i < modelo.getBean().getItems().size(); i++) {
@@ -947,24 +977,45 @@ public class TraspasoSalienteController implements Initializable {
     }
 
     public class MostrarCatalogoHandler {
-        TraspasoSalienteController controller;
+            TraspasoSalienteController controller;
 
-        public MostrarCatalogoHandler(TraspasoSalienteController controller) {
-            this.controller = controller;
+            public MostrarCatalogoHandler(TraspasoSalienteController controller) {
+                this.controller = controller;
+            }
+
+            public void handle() {
+                Task<String> t = new Task() {
+                    @Override
+                    protected String call() throws Exception {
+                        return mostrarCatalogo();
+                    }
+                };
+
+                t.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent workerStateEvent) {
+                        Platform.runLater(() -> {
+
+                            String retorno = t.getValue();
+                            retorno = (retorno == null) ? "" : retorno;
+                            String captura = controller.codigoTextField.getText();
+                            captura = (captura == null) ? "" : captura;
+                            controller.codigoTextField.setText(captura + retorno);
+
+                            controller.getJInternalFrame().toFront();
+                            controller.getFXPanel().requestFocus();
+                            controller.mainPane.requestFocus();
+                            controller.codigoTextField.requestFocus();
+                        });
+                    }
+                });
+
+                new Thread(t).start();
+            }
+
+            private String mostrarCatalogo() {
+                String retorno = Articulos.lanzarDialogoCatalogo();
+                return retorno;
+            }
         }
-
-        public void handle() {
-            String retorno = Articulos.lanzarDialogoCatalogo();
-
-            retorno = (retorno==null)?"":retorno;
-            String captura = controller.codigoTextField.getText();
-            captura = (captura==null)?"":captura;
-            controller.codigoTextField.setText( captura + retorno );
-
-            controller.mainPane.requestFocus();
-            controller.codigoTextField.requestFocus();
-        }
-    }
-
-
 }

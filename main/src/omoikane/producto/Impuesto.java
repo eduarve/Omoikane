@@ -17,7 +17,6 @@ public class Impuesto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column
     private Long id;
 

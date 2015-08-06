@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -116,6 +117,7 @@ public class TomaInventarioController implements Initializable {
     private boolean persistOnChange;
     private MyListChangeListener persistOnChangeListener;
     private boolean persistable = true; //Por default persistable
+    private ConteoInventarioCRUDController parent;
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
         modelo.setCompletado(true);
@@ -559,6 +561,22 @@ public class TomaInventarioController implements Initializable {
         this.persistable = persistable;
     }
 
+    public JInternalFrame getJInternalFrame() {
+        return getParent().getJInternalFrame();
+    }
+
+    public void setParent(ConteoInventarioCRUDController parent) {
+        this.parent = parent;
+    }
+
+    public ConteoInventarioCRUDController getParent() {
+        return parent;
+    }
+
+    public JFXPanel getFXPanel() {
+        return getParent().getFXPanel();
+    }
+
     private class MyListChangeListener implements ListChangeListener<ItemConteoPropWrapper> {
 
         @Override
@@ -765,15 +783,38 @@ public class TomaInventarioController implements Initializable {
         }
 
         public void handle() {
+            Task<String> t = new Task() {
+                @Override
+                protected String call() throws Exception {
+                    return mostrarCatalogo();
+                }
+            };
+
+            t.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent workerStateEvent) {
+                    Platform.runLater(() -> {
+
+                        String retorno = t.getValue();
+                        retorno = (retorno == null) ? "" : retorno;
+                        String captura = controller.codigoTextField.getText();
+                        captura = (captura == null) ? "" : captura;
+                        controller.codigoTextField.setText(captura + retorno);
+
+                        controller.getJInternalFrame().toFront();
+                        controller.getFXPanel().requestFocus();
+                        controller.mainPane.requestFocus();
+                        controller.codigoTextField.requestFocus();
+                    });
+                }
+            });
+
+            new Thread(t).start();
+        }
+
+        private String mostrarCatalogo() {
             String retorno = Articulos.lanzarDialogoCatalogo();
-
-            retorno = (retorno==null)?"":retorno;
-            String captura = controller.codigoTextField.getText();
-            captura = (captura==null)?"":captura;
-            controller.codigoTextField.setText( captura + retorno );
-
-            controller.mainPane.requestFocus();
-            controller.codigoTextField.requestFocus();
+            return retorno;
         }
     }
 }

@@ -119,7 +119,7 @@ public class ItemTraspasoEntrante {
     @Transient
     @JsonIgnore
     public BigDecimal getImporte() {
-        BigDecimal importe = getCantidad().multiply(getPrecioPublico(), MathContext.DECIMAL128);
+        BigDecimal importe = getCantidad().multiply(getCostoUnitario(), MathContext.DECIMAL128);
         importe.setScale(2, RoundingMode.HALF_EVEN);
 
         return importe;

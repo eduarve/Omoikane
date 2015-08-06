@@ -98,7 +98,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.4.0-b6";
+        public static final String          VERSION                 = "4.4.0-b13";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -254,16 +254,13 @@ public class Principal {
     static void disconnectedBehavior() {
         splash.detener();
 
-        String[] options = [ "Abrir catálogo para emergencias", "Abrir configuración", "Cerrar aplicación" ];
+        String[] options = [ "Abrir configuración", "Cerrar aplicación" ];
         int decision = JOptionPane.showOptionDialog(null, "Servidor caído ¿Que hacer?", "Servidor caído",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
 
         switch(decision) {
             case 0:
-                iniciarSistemaOffline()
-                break;
-            case 1:
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override
                     public void run() {
@@ -280,7 +277,7 @@ public class Principal {
                 });
 
                 break;
-            case 2:
+            case 1:
                 System.exit(0);
                 break;
         }

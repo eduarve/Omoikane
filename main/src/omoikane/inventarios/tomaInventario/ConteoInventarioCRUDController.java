@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.synyx.hades.domain.Order;
 import org.synyx.hades.domain.Sort;
+
+import javax.swing.*;
 
 
 public class ConteoInventarioCRUDController
@@ -52,6 +55,8 @@ public class ConteoInventarioCRUDController
     ConteoInventarioRepo conteoInventarioRepo;
 
     TomaInventarioController tomaInventarioController;
+    private javax.swing.JInternalFrame JInternalFrame;
+    private JFXPanel FXPanel;
 
     @FXML
     public void onNuevoClic() {
@@ -81,6 +86,7 @@ public class ConteoInventarioCRUDController
         lista.setItems(FXCollections.observableArrayList( conteoInventarioList ));
 
         tomaInventarioController = (TomaInventarioController) ((SceneOverloaded)view).getController();
+        tomaInventarioController.setParent(this);
         btnNuevo.disableProperty().bind( tomaInventarioController.archivarButton.disabledProperty().not() );
 
         lista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ConteoInventario>() {
@@ -91,4 +97,19 @@ public class ConteoInventarioCRUDController
         });
     }
 
+    public void setJInternalFrame(JInternalFrame JInternalFrame) {
+        this.JInternalFrame = JInternalFrame;
+    }
+
+    public JInternalFrame getJInternalFrame() {
+        return JInternalFrame;
+    }
+
+    public void setFXPanel(JFXPanel FXPanel) {
+        this.FXPanel = FXPanel;
+    }
+
+    public JFXPanel getFXPanel() {
+        return FXPanel;
+    }
 }

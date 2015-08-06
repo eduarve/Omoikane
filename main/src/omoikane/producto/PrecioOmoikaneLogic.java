@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class PrecioOmoikaneLogic implements IPrecio {
 
+    //Véase a baseParaPrecios como el modelo, sólo almacena datos
     BaseParaPrecio baseParaPrecio;
     Collection<Impuesto> impuestos;
 
@@ -172,5 +173,25 @@ public class PrecioOmoikaneLogic implements IPrecio {
 
     public double getFactorUtilidad() {
         return baseParaPrecio.getPorcentajeUtilidad();
+    }
+
+    /**
+     * Retorna el costo con impuestos.
+     * No es parte de la formula, se usa con fines informativos.
+     */
+    public BigDecimal getCostoNeto() {
+        //Genera un mock de BPP con cero utilidad y descuentos
+        BaseParaPrecio bpp = new BaseParaPrecio();
+        bpp.setCosto( getCosto().doubleValue() );
+        bpp.setPorcentajeDescuentoGrupo( 0d );
+        bpp.setPorcentajeDescuentoLinea( 0d );
+        bpp.setPorcentajeDescuentoProducto( 0d );
+        bpp.setPorcentajeUtilidad( 0d );
+
+        //Genera un nuevo POL utilizando el mock que acabo de crear y los mismos impuestos sin modificar
+        PrecioOmoikaneLogic pol = new PrecioOmoikaneLogic(bpp, impuestos);
+
+        //Obtengo un precio basado en el costo + impuestos, con cero utilidad y descuentos.
+        return pol.getPrecio();
     }
 }

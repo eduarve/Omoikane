@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -64,6 +65,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.peer.ComponentPeer;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -133,6 +135,7 @@ public class TraspasoEntranteController implements Initializable {
     private boolean persistOnChange;
     private MyListChangeListener persistOnChangeListener;
     private boolean persistable = true; //Por default persistable
+    private TraspasoEntranteCRUDController parent;
 
     // -------------------------------------------------
     /**
@@ -212,6 +215,10 @@ public class TraspasoEntranteController implements Initializable {
                 //mapa.put("importe", itemTraspasoEntrante.getImporte());
                 model.add(mapa);
             }
+
+            String uid = this.uid.textProperty().get();
+            uid = uid == null || uid.isEmpty() ? "VACIO" : uid;
+
             StyleBuilder boldStyle         = stl.style().bold();
 
             StyleBuilder rightStyle        = stl.style().setHorizontalAlignment(HorizontalAlignment.RIGHT);
@@ -255,17 +262,28 @@ public class TraspasoEntranteController implements Initializable {
                                 ),
                                 cmp.verticalList().add(
                                     cmp.text(fechaLabel.textProperty().get()).setHorizontalAlignment(HorizontalAlignment.RIGHT),
-                                    cmp.text("UID: " + uid.textProperty().get()).setHorizontalAlignment(HorizontalAlignment.RIGHT),
-                                    bcode.code128(uid.textProperty().get()) .setHeight(30).setStyle(rightStyle)
+                                    cmp.text("UID: " + uid).setHorizontalAlignment(HorizontalAlignment.RIGHT),
+                                    bcode.code128(uid) .setHeight(30).setStyle(rightStyle)
                                 )
                             )
                     )
                     //.subtotalsAtSummary(sbt.sum(importeCol))
-                    .addSummary(cmp.verticalList(
-                            cmp.verticalGap(20),
-                            cmp.line(),
-                            cmp.text("Notas").setStyle(boldStyle),
-                            cmp.text(notasTextArea.getText())
+                    .addSummary(
+                            cmp.verticalList(
+                                cmp.verticalGap(30),
+                                    cmp.horizontalList(
+                                            cmp.horizontalGap(20),
+                                            cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Recibió").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                            cmp.horizontalGap(20),
+                                            cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Revisó").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                            cmp.horizontalGap(20),
+                                            cmp.verticalList( cmp.verticalGap(10), cmp.line(), cmp.text("Entregó").setHorizontalAlignment(HorizontalAlignment.CENTER) ),
+                                            cmp.horizontalGap(20)
+                                    ),
+                                cmp.verticalGap(20),
+                                cmp.line(),
+                                cmp.text("Notas").setStyle(boldStyle),
+                                cmp.text(notasTextArea.getText())
                     ))
                     .pageFooter(
                             cmp.pageXofY().setStyle(boldCenteredStyle)
@@ -645,6 +663,22 @@ public class TraspasoEntranteController implements Initializable {
         //*************************************************************
     }
 
+    public JInternalFrame getJInternalFrame() {
+        return getParent().getJInternalFrame();
+    }
+
+    public TraspasoEntranteCRUDController getParent() {
+        return parent;
+    }
+
+    public JFXPanel getFXPanel() {
+        return getParent().getFXPanel();
+    }
+
+    public void setParent(TraspasoEntranteCRUDController parent) {
+        this.parent = parent;
+    }
+
     private class ActionsCell extends TableCell<ItemTraspasoPropWrapper, Boolean> {
         // a button for adding a new person.
         final Button delButton       = new Button("Borrar");
@@ -666,6 +700,9 @@ public class TraspasoEntranteController implements Initializable {
             final TableCell<ItemTraspasoPropWrapper, Boolean> c = this;
             delButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent actionEvent) {
+                    //Si la captura ya fue completada, no se puede borrar partidas
+                    if(modelo.getCompletado().get()) return;
+
                     TableRow tableRow = c.getTableRow();
                     ItemTraspasoPropWrapper item= (ItemTraspasoPropWrapper) tableRow.getTableView().getItems().get(tableRow.getIndex());
                     for(int i = 0; i < modelo.getBean().getItems().size(); i++) {
@@ -1027,24 +1064,47 @@ public class TraspasoEntranteController implements Initializable {
     }
 
     public class MostrarCatalogoHandler {
-        TraspasoEntranteController controller;
+    TraspasoEntranteController controller;
 
-        public MostrarCatalogoHandler(TraspasoEntranteController controller) {
-            this.controller = controller;
-        }
-
-        public void handle() {
-            String retorno = Articulos.lanzarDialogoCatalogo();
-
-            retorno = (retorno==null)?"":retorno;
-            String captura = controller.codigoTextField.getText();
-            captura = (captura==null)?"":captura;
-            controller.codigoTextField.setText( captura + retorno );
-
-            controller.mainPane.requestFocus();
-            controller.codigoTextField.requestFocus();
-        }
+    public MostrarCatalogoHandler(TraspasoEntranteController controller) {
+        this.controller = controller;
     }
+
+    public void handle() {
+        Task<String> t = new Task() {
+            @Override
+            protected String call() throws Exception {
+                return mostrarCatalogo();
+            }
+        };
+
+        t.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent workerStateEvent) {
+                Platform.runLater(() -> {
+
+                    String retorno = t.getValue();
+                    retorno = (retorno == null) ? "" : retorno;
+                    String captura = controller.codigoTextField.getText();
+                    captura = (captura == null) ? "" : captura;
+                    controller.codigoTextField.setText(captura + retorno);
+
+                    controller.getJInternalFrame().toFront();
+                    controller.getFXPanel().requestFocus();
+                    controller.mainPane.requestFocus();
+                    controller.codigoTextField.requestFocus();
+                });
+            }
+        });
+
+        new Thread(t).start();
+    }
+
+    private String mostrarCatalogo() {
+        String retorno = Articulos.lanzarDialogoCatalogo();
+        return retorno;
+    }
+}
 
 
 }

@@ -21,12 +21,15 @@ import omoikane.caja.CajaManager;
 import omoikane.configuracion.ConfiguratorAppManager;
 import omoikane.etiquetas.ImpresionEtiquetasManager;
 import omoikane.inventarios.tomaInventario.ConteoInventarioManager;
+import omoikane.inventarios.traspasoEntrante.TraspasoEntranteManager;
+import omoikane.inventarios.traspasoSaliente.TraspasoSalienteManager;
 import omoikane.mepro.Mepro;
 import omoikane.moduloreportes.MenuOmoikane;
 import omoikane.proveedores.ProveedoresManager;
 import omoikane.reportes.JasperServerReportsManager;
 import omoikane.sistema.Herramientas;
 import omoikane.sistema.StopWatch;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -100,7 +103,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         btnTomaInventarios = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnCajas = new javax.swing.JButton();
-        btnReportesAvanzados = new javax.swing.JButton();
+        btnTraspasos = new javax.swing.JButton();
 
         setIconifiable(true);
         setTitle("Menú Principal");
@@ -208,12 +211,12 @@ public class MenuPrincipal extends OmJInternalFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 30, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 40, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 480, 30, 40));
@@ -355,16 +358,16 @@ public class MenuPrincipal extends OmJInternalFrame {
         });
         getContentPane().add(btnCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 110, 170, 70));
 
-        btnReportesAvanzados.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnReportesAvanzados.setText("<html>Reportes Avanzados</html>");
-        btnReportesAvanzados.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnReportesAvanzados.setIconTextGap(-5);
-        btnReportesAvanzados.addActionListener(new java.awt.event.ActionListener() {
+        btnTraspasos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnTraspasos.setText("<html>Traspasos</html>");
+        btnTraspasos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTraspasos.setIconTextGap(-5);
+        btnTraspasos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportesAvanzadosActionPerformed(evt);
+                btnTraspasosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReportesAvanzados, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 410, 170, 70));
+        getContentPane().add(btnTraspasos, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 410, 170, 70));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -470,11 +473,26 @@ public class MenuPrincipal extends OmJInternalFrame {
         omoikane.principal.Caja.lanzarCatalogo();
     }//GEN-LAST:event_btnCajasActionPerformed
 
-    private void btnReportesAvanzadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesAvanzadosActionPerformed
-        javax.swing.JOptionPane.showMessageDialog(this, "Acceso denegado");
+    private void btnTraspasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesAvanzadosActionPerformed
+        String[] options = { "Traspasos entrantes", "Traspasos salientes" };
+        int decision = JOptionPane.showOptionDialog(null, "¿Que tipo de traspaso?", "Destino de la mercancía",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
 
-        //JasperServerReportsManager rm = new JasperServerReportsManager();
-        //JInternalFrame frame = rm.startJFXReports();
+        JInternalFrame iFrame;
+        switch(decision) {
+            case 0:
+                TraspasoEntranteManager tem = new TraspasoEntranteManager();
+                iFrame = tem.startJFXTraspasoEntrante();
+
+                break;
+            case 1:
+                TraspasoSalienteManager tsm = new TraspasoSalienteManager();
+                iFrame = tsm.startJFXTraspasoSaliente();
+
+                break;
+        }
+
     }//GEN-LAST:event_btnReportesAvanzadosActionPerformed
 
 
@@ -510,7 +528,7 @@ public class MenuPrincipal extends OmJInternalFrame {
     private javax.swing.JButton btnPreferencias;
     private javax.swing.JButton btnProveedores;
     public javax.swing.JButton btnReportes;
-    public javax.swing.JButton btnReportesAvanzados;
+    public javax.swing.JButton btnTraspasos;
     private javax.swing.JButton btnTomaInventarios;
     private javax.swing.JButton btnUsuarios;
     private javax.swing.JButton btnVender;

@@ -252,7 +252,7 @@ public class Articulo implements Serializable, IProductoApreciado {
     }
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Impuesto> impuestos;
 
     @Transactional
@@ -265,6 +265,11 @@ public class Articulo implements Serializable, IProductoApreciado {
         this.impuestos = impuestos;
     }
 
+    @PostUpdate
+    public void onPostUpdate() {
+
+        System.out.println("breakpoint");
+    }
 
     @Override
     public boolean equals(Object object) {

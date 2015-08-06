@@ -2,12 +2,16 @@ package omoikane.entities;
 
 import omoikane.producto.Articulo;
 import omoikane.producto.Producto;
+import org.hibernate.Hibernate;
+import org.hibernate.LazyInitializationException;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -95,15 +99,21 @@ public class Paquete {
         return getProductoContenido().getDescripcion();
     }
     @Transient
+    @Transactional
     public BigDecimal getPrecio() {
+        Articulo art = getProductoContenido();
         return getProductoContenido().getPrecio().getPrecio();
     }
     @Transient
     public String getPrecioString() {
-        BigDecimal precio = getPrecio();
-        NumberFormat nb = NumberFormat.getCurrencyInstance();
-        nb.setMinimumFractionDigits(2);
-        nb.setMaximumFractionDigits(2);
-        return nb.format(precio.doubleValue());
+        try {
+            BigDecimal precio = getPrecio();
+            NumberFormat nb = NumberFormat.getCurrencyInstance();
+            nb.setMinimumFractionDigits(2);
+            nb.setMaximumFractionDigits(2);
+            return nb.format(precio.doubleValue());
+        } catch(LazyInitializationException lie) {
+            return "Paquete no activo";
+        }
     }
 }

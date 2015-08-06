@@ -58,13 +58,14 @@ public class LegacyVentaDetalle implements Serializable {
     @Column(name = "id_linea")
     private Integer idLinea;
 
-    @ElementCollection()
+    /*@ElementCollection()
     @LazyCollection(LazyCollectionOption.FALSE)
     @CollectionTable(
             name="ventas_detalles_impuestos",
             joinColumns=@JoinColumn(name="id_renglon")
-    )
-    @OrderColumn
+    ) */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "legacyVentaDetalle", targetEntity = VentaDetalleImpuesto.class)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<VentaDetalleImpuesto> ventaDetalleImpuestos;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)

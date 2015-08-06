@@ -14,6 +14,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -57,6 +58,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.swing.*;
 import javax.transaction.TransactionManager;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -104,6 +106,8 @@ public class ComprasCRUDController
     JpaTransactionManager transactionManager;
 
     CompraController compraController;
+    private javax.swing.JInternalFrame JInternalFrame;
+    private JFXPanel fxPanel;
 
     @FXML
     public void onNuevoClic() {
@@ -178,6 +182,7 @@ public class ComprasCRUDController
         actionCol       .prefWidthProperty().bind(table.widthProperty().multiply(0.255));
 
         compraController = (CompraController) ((SceneOverloaded)view).getController();
+        compraController.setParent(this);
         btnNuevo.disableProperty().bind( compraController.archivarButton.disabledProperty().not() );
 
         table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Compra>() {
@@ -227,6 +232,22 @@ public class ComprasCRUDController
 
         // ** Cargar modelo **
         onRecargar();
+    }
+
+    public JInternalFrame getJInternalFrame() {
+        return JInternalFrame;
+    }
+
+    public void setJInternalFrame(JInternalFrame JInternalFrame) {
+        this.JInternalFrame = JInternalFrame;
+    }
+
+    public JFXPanel getFXPanel() {
+        return fxPanel;
+    }
+
+    public void setFXPanel(JFXPanel fxPanel) {
+        this.fxPanel = fxPanel;
     }
 
     private class ActionsCell extends TableCell<Compra, Compra.EstadoPago> {

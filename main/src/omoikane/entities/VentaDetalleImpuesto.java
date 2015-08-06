@@ -1,10 +1,9 @@
 package omoikane.entities;
 
 import omoikane.entities.LegacyVentaDetalle;
+import omoikane.producto.VentaDetalleImpustoId;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -14,7 +13,8 @@ import java.math.BigDecimal;
  * Time: 13:08
  * To change this template use File | Settings | File Templates.
  */
-@Embeddable
+@Entity(name = "ventas_detalles_impuestos")
+@IdClass(VentaDetalleImpustoId.class)
 public class VentaDetalleImpuesto {
 
     @Column
@@ -25,8 +25,16 @@ public class VentaDetalleImpuesto {
     private BigDecimal porcentaje;
     @Column
     private BigDecimal total;
-    @Column
+    @Id
     private Long impuestoId;
+    /*@Id
+    @Column(name = "id_renglon")
+    private Long renglonId;*/
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "id_renglon")
+    private LegacyVentaDetalle legacyVentaDetalle;
 
     public void setBase(BigDecimal base) {
         this.base = base;
@@ -67,5 +75,20 @@ public class VentaDetalleImpuesto {
     public void setImpuestoId(Long impuestoId) {
         this.impuestoId = impuestoId;
     }
+    /*
+    public Long getRenglonId() {
+        return renglonId;
+    }
 
+    public void setRenglonId(Long renglonId) {
+        this.renglonId = renglonId;
+    }*/
+
+    public LegacyVentaDetalle getLegacyVentaDetalle() {
+        return legacyVentaDetalle;
+    }
+
+    public void setLegacyVentaDetalle(LegacyVentaDetalle legacyVentaDetalle) {
+        this.legacyVentaDetalle = legacyVentaDetalle;
+    }
 }

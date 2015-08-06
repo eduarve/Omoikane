@@ -112,8 +112,11 @@ public class CodigosController
     }
 
     public void setProducto(Articulo art) {
-        if(art != null)
+        if(art != null) {
             listCodigos.getItems().addAll(art.getCodigosAlternos());
+            this.art = art;
+
+        }
 
     }
 

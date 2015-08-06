@@ -8,6 +8,7 @@ import omoikane.etiquetas.ImpresionEtiquetasModel;
 import omoikane.principal.Principal;
 import omoikane.sistema.Herramientas;
 import omoikane.sistema.Permisos;
+import omoikane.sistema.SceneOverloaded;
 import org.springframework.context.ApplicationContext;
 
 import javax.swing.*;
@@ -27,32 +28,32 @@ public class TraspasoEntranteManager {
     ImpresionEtiquetasModel model;
     private JInternalFrame frame;
 
-    private Scene initTomaInventarioCRUD() throws IOException {
+    private SceneOverloaded initTraspasoEntranteCRUD() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("conteoInventarioCRUDView");
+        SceneOverloaded scene = (SceneOverloaded)context.getBean("traspasoEntranteCRUDView");
 
         return scene;
     }
 
-    private Scene initTomaInventario() throws IOException {
+    private Scene traspasoEntranteInventario() throws IOException {
         Platform.setImplicitExit(false);
         ApplicationContext context = Principal.applicationContext;
 
-        Scene scene = (Scene)context.getBean("tomaInventarioView");
+        Scene scene = (Scene)context.getBean("traspasoEntranteView");
 
         return scene;
     }
 
-    public JInternalFrame startJFXTomaInventario() {
+    public JInternalFrame startJFXTraspasoEntrante() {
         JInternalFrame frame = null;
-        if(omoikane.sistema.Usuarios.cerrojo(Permisos.getPMA_CREARINVENTARIO())) frame = _startJFXTomaInventario();
+        if(omoikane.sistema.Usuarios.cerrojo(Permisos.getPMA_CREARINVENTARIO())) frame = _startJFXTraspasoEntrante();
         return frame;
     }
 
-    private JInternalFrame _startJFXTomaInventario() {
-        frame = new JInternalFrame("Toma de inventarios");
+    private JInternalFrame _startJFXTraspasoEntrante() {
+        frame = new JInternalFrame("Traspaso entrante");
         final JFXPanel fxPanel = new JFXPanel();
 
         frame.setClosable(true);
@@ -72,9 +73,11 @@ public class TraspasoEntranteManager {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Scene scene = null;
+                SceneOverloaded scene = null;
                 try {
-                    scene = initTomaInventarioCRUD();
+                    scene = initTraspasoEntranteCRUD();
+                    ((TraspasoEntranteCRUDController)scene.getController()).setFxPanel(fxPanel);
+                    ((TraspasoEntranteCRUDController)scene.getController()).setjInternalFrame(frame);
                     //scene.setFill(null);
                     fxPanel.setScene(scene);
                 } catch (IOException e) {

@@ -46,7 +46,6 @@ public class Compra {
     @PrePersist
     public void prePersist() {
         setFecha(new Date());
-        setCompletado(false);
     }
 
     @Transactional
@@ -56,7 +55,7 @@ public class Compra {
 
     public void setItems(List<ItemCompra> items) { this.items = items; }
 
-    private Boolean completado;
+    private Boolean completado = false;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +68,7 @@ public class Compra {
     }
 
     public Compra() {
+        setCompletado(false);
         items = new ArrayList<>();
     }
 

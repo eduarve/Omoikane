@@ -14,6 +14,7 @@ import omoikane.principal.Principal;
 import omoikane.producto.*;
 import omoikane.repository.ProductoRepo;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -91,6 +92,9 @@ public class ImpresionEtiquetasController implements Initializable {
 
             // Si encontró cualquier artículo por código principal o alterno toma el primero
             Articulo articulo = articulos.get(0);
+
+            // Inicializa los impuestos
+            articulo = productoRepo.findByIdComplete(articulo.getIdArticulo());
 
             Long cantidad = articuloModel.getCantidad();
             int i= 0;

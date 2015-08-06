@@ -11,13 +11,13 @@ package omoikane.inventarios.traspasoSaliente;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import omoikane.repository.ConteoInventarioRepo;
 import omoikane.repository.TraspasoSalienteRepo;
 import omoikane.sistema.SceneOverloaded;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.synyx.hades.domain.Order;
 import org.synyx.hades.domain.Sort;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,6 +51,8 @@ public class TraspasoSalienteCRUDController
     TraspasoSalienteRepo traspasoSalienteRepo;
 
     TraspasoSalienteController traspasoSalienteController;
+    private javax.swing.JInternalFrame jInternalFrame;
+    private JFXPanel fxPanel;
 
     @FXML
     public void onNuevoClic() {
@@ -79,6 +82,7 @@ public class TraspasoSalienteCRUDController
         lista.setItems(FXCollections.observableArrayList(traspasoSalienteList));
 
         traspasoSalienteController = (TraspasoSalienteController) ((SceneOverloaded)view).getController();
+        traspasoSalienteController.setParent(this);
         btnNuevo.disableProperty().bind( traspasoSalienteController.aplicarInventarioButton.disabledProperty().not() );
 
         lista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TraspasoSaliente>() {
@@ -89,4 +93,23 @@ public class TraspasoSalienteCRUDController
         });
     }
 
+    public JInternalFrame getJInternalFrame() {
+        return jInternalFrame;
+    }
+
+    public void setJInternalFrame(JInternalFrame jInternalFrame) {
+        this.jInternalFrame = jInternalFrame;
+    }
+
+    public JFXPanel getFXPanel() {
+        return fxPanel;
+    }
+
+    public JFXPanel getFxPanel() {
+        return fxPanel;
+    }
+
+    public void setFxPanel(JFXPanel fxPanel) {
+        this.fxPanel = fxPanel;
+    }
 }

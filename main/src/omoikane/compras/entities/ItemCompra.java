@@ -62,6 +62,7 @@ public class ItemCompra {
     }
 
     @ManyToOne(fetch = FetchType.EAGER,optional = false)
+    @JoinColumn(name = "articulo_id_articulo", insertable = false, updatable = false)
     @NotNull
     public Articulo getArticulo() {
         return articulo;
