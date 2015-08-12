@@ -1,3 +1,10 @@
+## Versión 4.4.0 rc1 (2015-08-11)
+- Optimización del tiempo de apertura de la ventana de detalles/modificar artículo. 4x más rápida, 3 consultas que realizaban una conexión cada una fueron sustituidas por una que utiliza una
+conexión del pool 
+
+## Versión 4.4.0 b14 (2015-08-10)
+- Se corrige bug que permitía inyectar código SQL en el catálogo de artículos y generaba un error buscando productos con apóstrofes, comillas simples, acentos sin letra.
+
 ## Versión 4.4.0 b13 (2015-08-05)
 - Agregué un nuevo método "getCostoNeto" a la lógico de precios, obtiene el costo con impuestos
 - Ahora los traspasos salientes muestran el costo neto (con impuestos) en lugar del costo bruto

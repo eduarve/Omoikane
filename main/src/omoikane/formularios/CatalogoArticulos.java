@@ -22,12 +22,14 @@ import java.awt.image.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import com.google.common.base.Stopwatch;
 import com.jhlabs.image.*;
 import omoikane.principal.Principal;
 import omoikane.producto.BaseParaPrecio;
 import omoikane.producto.Impuesto;
 import omoikane.producto.PrecioOmoikaneLogic;
 import omoikane.sistema.*;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -184,7 +186,11 @@ public class CatalogoArticulos extends OmJInternalFrame {
 
         txtQuery = query;
 
+        Stopwatch timer = new Stopwatch().start();
+        /** Ejecuto la consulta del catálogo **/
         modelo.setQuery(query);
+        /** /fin ejecución de consulta de catálogo **/
+        System.out.println("Catálogo de artículos fetch time: "+ timer.stop());
         //Selecciona la primera fila luego de una búsqueda
         //jTable1.getSelectionModel().setSelectionInterval(0,0);
 
@@ -481,8 +487,10 @@ public class CatalogoArticulos extends OmJInternalFrame {
         
         //Lanzar la ventana de detalles:
         if(IDArticulo != -1) {
+            Stopwatch timer = new Stopwatch().start();
             JInternalFrame wnd = (JInternalFrame)omoikane.principal.Articulos.lanzarDetallesArticulo(this, IDArticulo);
             wnd.addInternalFrameListener(iframeAdapter);
+            System.out.println("Tiempo de lanzamiento de detalles de artículo: " + timer.stop());
         }
 }//GEN-LAST:event_btnDetallesActionPerformed
 
@@ -595,6 +603,7 @@ public class CatalogoArticulos extends OmJInternalFrame {
         boolean xLineas = getBuscarLineas();
         boolean xGrupos = getBuscarGrupos();
         String busqueda = this.txtBusqueda.getText();
+        busqueda = StringEscapeUtils.escapeSql(busqueda);
 
         if(busqueda==null) { xCodDes = xLineas = xGrupos = false; }
 

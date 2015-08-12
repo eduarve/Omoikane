@@ -1,5 +1,6 @@
 package omoikane.principal
 
+import com.google.common.base.Stopwatch
 import omoikane.entities.Paquete
 import omoikane.formularios.ImpuestosTableModel
 import omoikane.formularios.OmJInternalFrame
@@ -26,7 +27,8 @@ import org.springframework.transaction.support.TransactionTemplate
 
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
-import javax.persistence.EntityTransaction;
+import javax.persistence.EntityTransaction
+import javax.persistence.Query;
 import javax.swing.*
 import javax.swing.table.DefaultTableModel
 import java.awt.event.WindowListener;
@@ -48,12 +50,12 @@ public class Articulos
 {
     static def IDAlmacen = Principal.IDAlmacen
     static def escritorio = omoikane.principal.Principal.escritorio
+    public static Logger logger = Logger.getLogger(Articulos.class);
 
     static def getArticulo(where) { new Articulo(where) }
 
     static ProductoRepo productoRepo;
 
-    public static final Logger logger = Logger.getLogger(Articulos.class);
 
     static ProductoRepo getRepo() {
         if(productoRepo == null)
@@ -64,8 +66,12 @@ public class Articulos
 
     static JpaTransactionManager getTransactionManager() {
         return omoikane.principal.Principal.applicationContext.getBean(JpaTransactionManager.class);
-
     }
+
+    static EntityManager getEntityManager() {
+            EntityManagerFactory emf = omoikane.principal.Principal.applicationContext.getBean(EntityManagerFactory.class);
+            return emf.createEntityManager();
+        }
 
     static OmJInternalFrame getCatalogoFrameInstance()
     {
@@ -80,6 +86,7 @@ public class Articulos
 
             try { cat.setSelected(true) } catch(Exception e) { Dialogos.lanzarDialogoError(null, "Error al iniciar formulario catálogo de artículos", Herramientas.getStackTraceString(e)) }
             cat.txtBusqueda.requestFocus()
+            logger.trace("Tiempo de apertra de catálogo: "+timer.stop());
 
             return cat
         }else{Dialogos.lanzarAlerta("Acceso Denegado")}
@@ -202,6 +209,7 @@ public class Articulos
     static def lanzarDetallesArticulo(JInternalFrame parent, ID)
     {
         if(cerrojo(PMA_DETALLESARTICULO)){
+
             omoikane.formularios.Articulo formArticulo = new omoikane.formularios.Articulo()
             onCloseFocus(parent, formArticulo);
 
@@ -211,7 +219,6 @@ public class Articulos
             Herramientas.panelFormulario(formArticulo)
             formArticulo.toFront()
             try { formArticulo.setSelected(true)
-            def serv        = Nadesico.conectar()
 
             //TODO aquí inyectar nuevo comportamiento para obtener artículo, sus subdatos y su precio generado
             omoikane.producto.Articulo art;
@@ -222,6 +229,7 @@ public class Articulos
                 @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
                     art = getRepo().findByIdComplete(ID as Long);
+
                     //Inicializar hijos
                     art.getPrecio();
                     art.getImpuestos();
@@ -234,11 +242,14 @@ public class Articulos
             PrecioOmoikaneLogic precio = art.getPrecio();
             //Inicializo los impuestos
             art.getImpuestos();
-            //def art         = serv.getArticulo(ID,IDAlmacen)
-            def lin         = serv.getLinea(art.idLinea)
-            def gru         = serv.getGrupo(art.idGrupo)
-            def notas       = serv.getAnotacion(IDAlmacen,ID)
-            serv.desconectar()
+
+            // -- Cargar desde la BD el nombre del grupo, línea y las notas (anotación)
+            Query q = getEntityManager().createNativeQuery("SELECT an.texto, l.descripcion, g.descripcion FROM articulos a JOIN lineas l ON a.id_linea = l.id_linea JOIN grupos g ON a.id_grupo = g.id_grupo JOIN anotaciones an ON an.id_articulo = a.id_articulo WHERE a.id_articulo = " + art.idArticulo);
+            List rs = q.getResultList();
+            def lin = ["id": art.getIdLinea(), "descripcion": rs.get(0)[1]];
+            def gru = ["id": art.getIdLinea(), "descripcion": rs.get(0)[2]];
+            def notas = rs.get(0)[0];
+
             formArticulo.setTxtIDArticulo    art.idArticulo           as String
             formArticulo.setTxtCodigo        art.codigo
             formArticulo.setTxtIDLinea       art.idLinea              as String

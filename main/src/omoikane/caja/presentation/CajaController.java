@@ -422,9 +422,12 @@ public class CajaController
                 getCerrarCajaSwingHandler().handle(event);
             if (event.getTarget() == abrirCatalogoButton)
                 new MostrarCatalogoHandler(controller).handle(event);
+            /* Handler del botón PLM. Desactivado por ser impráctico.
+            También hay un ejemplo de cómo invocar al handler de Nadro CDS (incompleto)
             if (event.getTarget() == plmButton)
                 //new PlmHandler(controller).handle(event);
-                new ValidarTarjetaCDSHandler(controller).handle(event);
+                //new ValidarTarjetaCDSHandler(controller).handle(event);
+                */
             if (event.getTarget() == cambiarClienteButton)
                 new MostrarCatalogoClientesHandler(controller).handle(event);
         }

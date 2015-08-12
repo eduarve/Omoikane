@@ -24,7 +24,7 @@
         <Button id="fontX3" fx:id="abrirCajonButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="117.0" text="Abrir Cajón [F6]" textAlignment="CENTER" wrapText="true" />
         <Button id="fontX3" fx:id="btnCancelarProducto" mnemonicParsing="false" prefHeight="56.0" prefWidth="152.0" text="Cancelar Artículo [F7]" textAlignment="CENTER" wrapText="true" />
         <Button id="fontX3" fx:id="cerrarButton" maxWidth="80.0" mnemonicParsing="false" prefHeight="56.0" text="Cerrar [F8]" textAlignment="CENTER" wrapText="true" />
-        <Button id="fontX3" fx:id="plmButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="80.0" text="PLM [Alt+P]" textAlignment="CENTER" wrapText="true" />
+        <!--<Button id="fontX3" fx:id="plmButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="80.0" text="PLM [Alt+P]" textAlignment="CENTER" wrapText="true" />-->
         <Button id="fontX3" fx:id="cancelarVentaButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="135.0" text="Cancelar Venta [F12]" textAlignment="CENTER" visible="true" wrapText="true" />
         <Button id="fontX3" fx:id="pausarButton" mnemonicParsing="false" prefWidth="70.0" text="Pausar [Pause]" visible="false" />
       </items>

@@ -86,8 +86,9 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
                 new CancelarProducto(cc).handle(event);
             if (keyCode.equals(KeyCode.F12))
                 new CancelarVenta(cc).handle(event);
+            /* Handler para el botón PLM. Lo quité por falta de uso
             if (new KeyCodeCombination(KeyCode.P, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
-                new PlmHandler(cc).handle(event);
+                new PlmHandler(cc).handle(event); */
             if (new KeyCodeCombination(KeyCode.C, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
                 new MostrarCatalogoClientesHandler(cc).handle(event);
         }
