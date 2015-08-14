@@ -75,6 +75,7 @@ public class CajaManager extends Application {
 
     public JInternalFrame startJFXCaja() {
         JInternalFrame frame = null;
+        if(Principal.IDCaja < 0) { logger.info("Equipo no habilitado para caja"); return null; }
         if(!omoikane.sistema.Usuarios.cerrojo((Object) Permisos.getPMA_LANZARCAJA())) return null;
         abrirCaja();
         return null;
