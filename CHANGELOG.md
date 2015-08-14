@@ -1,3 +1,13 @@
+## Versión 4.4.0 rc2 (2015-08-14)
+- #121 Agregué perfil de cancelación y auto-cancelación, supervisor y gerente ya no pueden auto-cancelar
+- Agregué campo de folio al formato impreso de los traspasos
+- Arreglé la búsqueda de caja que había quedado dañada por la actualización de java
+- #118 Arreglé el panel de etiquetas, que por actualización de java no mostraba correctamente las celdas
+- #120 Las cancelaciones no eran navegables por teclado por actualización de java
+- #117 No funcionaba switcheo de cambio de cliente desde java 7u40
+- Detalles de artículo no abría cuando no había anotaciones
+- Grupo y línea mostraban la línea en detalles de artículo
+
 ## Versión 4.4.0 rc1 (2015-08-11)
 - Optimización del tiempo de apertura de la ventana de detalles/modificar artículo. 4x más rápida, 3 consultas que realizaban una conexión cada una fueron sustituidas por una que utiliza una
 conexión del pool 
