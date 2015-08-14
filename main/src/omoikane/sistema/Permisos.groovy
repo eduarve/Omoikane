@@ -28,6 +28,8 @@ class Permisos {
     static Float PMA_DETALLESCAJA    = SUPERVISOR
     static Float PMA_MODIFICARCAJA   = GERENTE
     static Float PMA_ELIMINARCAJA    = PROPIETARIO
+    public static Float PMA_CANCELACION     = SUPERVISOR
+    public static Float PMA_AUTO_CANCELACION= ADMINISTRADOR
 
     static Float PMA_ABRIRSUCURSAL   = SUPERVISOR
 

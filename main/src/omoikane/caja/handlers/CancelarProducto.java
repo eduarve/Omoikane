@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import omoikane.caja.business.Security;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.entities.Cancelacion;
@@ -15,6 +16,7 @@ import omoikane.principal.Principal;
 import omoikane.producto.Articulo;
 import omoikane.repository.CancelacionRepo;
 import omoikane.repository.VentaRepo;
+import omoikane.sistema.Permisos;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +60,14 @@ public class CancelarProducto extends ICajaEventHandler {
     }
 
     private void _cancelar() {
-        Boolean auth = Usuarios.autentifica(Usuarios.SUPERVISOR);
+        Boolean auth = Security.cancelacion();
+
+        final Boolean finalAuth = auth;
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
-                    if(auth) {
+                    if(finalAuth) {
                         Integer selectedRow = getController().getVentaTableView().getSelectionModel().selectedIndexProperty().getValue();
                         ProductoModel quitar = getController().getVentaTableView().getSelectionModel().getSelectedItem();
                         getController().getCajaLogic().deleteRowFromVenta(selectedRow);
@@ -114,6 +118,8 @@ public class CancelarProducto extends ICajaEventHandler {
             if(event.getCode() == KeyCode.ENTER) {
                 CancelarProducto.this.cancelar();
                 CancelarProducto.this.modoNormal();
+
+                event.consume();
             }
             if(event.getCode() == KeyCode.ESCAPE) {
                 CancelarProducto.this.modoNormal();

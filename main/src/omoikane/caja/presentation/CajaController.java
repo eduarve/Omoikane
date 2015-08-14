@@ -33,7 +33,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import jfxtras.labs.scene.control.BigDecimalField;
+import javafx.util.converter.BigDecimalStringConverter;
 import omoikane.caja.business.ICajaLogic;
 import omoikane.caja.business.LineaDeCapturaFilter;
 import omoikane.caja.handlers.*;
@@ -81,7 +81,7 @@ public class CajaController
     private Label descuentoLabel;
 
     @FXML
-    private BigDecimalField efectivoTextField;
+    private TextField efectivoTextField;
 
     @FXML
     private Label fechaLabel;
@@ -159,19 +159,31 @@ public class CajaController
 
     @FXML
     private void onCapturaKeyReleased(KeyEvent event) {
-        if ( (modelo.getCaptura().get() != null && !modelo.getCaptura().get().isEmpty()) && event.getCode() == KeyCode.ENTER ) {
-
-            ifAnySelectedProductoThenSelect();
-            getCajaLogic().onCaptura(modelo);
-
-        } else if ( event.getCode() == KeyCode.ESCAPE ) {
+        if ( event.getCode() == KeyCode.ESCAPE ) {
             modelo.getCaptura().set("");
         } else if( event.getCode() == KeyCode.ADD ) {
             event.consume();
             basculaHandler.pesar();
         }
-
     }
+
+    /** Acciones específicas de captura de artículo del campo de captura **/
+    @FXML
+    void onCapturaAction(ActionEvent event) {
+        if ( (modelo.getCaptura().get() != null && !modelo.getCaptura().get().isEmpty()) ) {
+            ifAnySelectedProductoThenSelect();
+            getCajaLogic().onCaptura(modelo);
+        } else if ( (modelo.getCaptura().get() != null && getModel().getVenta().size() > 0 && modelo.getCaptura().get().isEmpty()) ) {
+            //El campo de captura está vacío pero la venta ya tiene elementos
+            efectivoTextField.requestFocus(); //Pasar el enfoque al campo cambio
+        }
+    }
+
+    @FXML void onEfectivoTxtAction(ActionEvent event) { getCambioTextField().requestFocus(); }
+
+    @FXML void onCambioTxtAction(ActionEvent event)  { getBtnCobrar().requestFocus(); }
+
+    @FXML void onCobrarKey(KeyEvent event) { if(event.getCode()==KeyCode.ENTER) getBtnCobrar().fire(); }
 
     public TableColumn getPrecioVentaColumn() {
         return precioVentaColumn;
@@ -312,8 +324,7 @@ public class CajaController
 
     @FXML
     private void onCapturaKeyTyped(KeyEvent event) {
-        if ( modelo.getCaptura().get() != null
-                && !modelo.getCaptura().get().isEmpty() ) {
+        if ( modelo.getCaptura().get() != null ) {
             if(timerBusqueda != null && timerBusqueda.isAlive()) { timerBusqueda.cancelar(); }
             this.timerBusqueda = new TimerBusqueda(this);
             timerBusqueda.start();
@@ -470,8 +481,12 @@ public class CajaController
         getCambioTextField().textProperty().bind(
                 new Number2StringBinding(modelo.getCambio(), NumberFormat.getCurrencyInstance())
         );
-        getEfectivoTextField().numberProperty().bindBidirectional(modelo.getEfectivo());
+        //Binding del campo Efectivo de tipo BigDecimal
+        TextFormatter<BigDecimal> formatter = new TextFormatter<>(new BigDecimalStringConverter());
+        formatter.valueProperty().bindBidirectional(modelo.getEfectivo());
+        getEfectivoTextField().setTextFormatter(formatter);
 
+        //Binding de etiqueta del nombre de cliente
         txtCliente.textProperty().bind(
                 new ClienteToStringBinding(modelo.getCliente())
         );
@@ -545,11 +560,11 @@ public class CajaController
         this.cambioTextField = cambioTextField;
     }
 
-    public BigDecimalField getEfectivoTextField() {
+    public TextField getEfectivoTextField() {
         return efectivoTextField;
     }
 
-    public void setEfectivoTextField(BigDecimalField efectivoTextField) {
+    public void setEfectivoTextField(TextField efectivoTextField) {
         this.efectivoTextField = efectivoTextField;
     }
 
@@ -580,6 +595,9 @@ public class CajaController
                 if(busquedaActiva && cc.modelo != null) {
                     getModel().setPaginacionBusqueda(new PageRequest(0,10));
                     cc.getCajaLogic().buscar(cc.getModel());
+                    //Si no hay ningún resultado seleccionado, selecciona el primero
+                    if(productosTableView.getSelectionModel().isEmpty() && productosTableView.getItems().size()>0)
+                        productosTableView.getSelectionModel().select(0);
                 }
             }
         }

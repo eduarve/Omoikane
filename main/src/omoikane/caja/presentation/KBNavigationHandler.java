@@ -44,13 +44,15 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
         private void enterKeyNavigationRules(KeyCode keyCode, Control control, Event event) {
             if (keyCode.equals(KeyCode.ENTER) && control.getId() != null)
                 switch (control.getId()) {
+                    /*  Este caso especial se maneja desde CajaController.onCapturaKeyReleased
                     case "capturaTextField":
+
                         String text = cc.getCapturaTextField().getText();
                         if (cc.getModel().getVenta().size() > 0 && (text == null || text.equals(""))) {
                             //cc.getBtnEfectivo().requestFocus();
                             cc.getEfectivoTextField().requestFocus();
                         }
-                        break;
+                        break;*/
                     case "btnEfectivo":
                     case "btnCheque":
                     case "btnTarjeta":
@@ -59,16 +61,16 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
                         cc.getEfectivoTextField().requestFocus();
 
                         break;
-                    case "efectivoTextField":
+                    /*case "efectivoTextField":
                     case "efectivoBigDecimalField":
                         cc.getCambioTextField().requestFocus();
-                        break;
-                    case "cambioTextField":
+                        break;*/
+                    /*case "cambioTextField":
                         cc.getBtnCobrar().requestFocus();
-                        break;
-                    case "btnCobrar":
+                        break;*/
+                    /*case "btnCobrar":
                         cc.getBtnCobrar().fire();
-                        break;
+                        break;*/
                 }
             if (keyCode.equals(KeyCode.F1))
                 new MostrarCatalogoHandler(cc).handle(event);
@@ -89,7 +91,9 @@ public class KBNavigationHandler implements EventHandler<KeyEvent> {
             /* Handler para el botón PLM. Lo quité por falta de uso
             if (new KeyCodeCombination(KeyCode.P, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
                 new PlmHandler(cc).handle(event); */
-            if (new KeyCodeCombination(KeyCode.C, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event))
+            if (new KeyCodeCombination(KeyCode.C, KeyCodeCombination.ALT_DOWN).match((KeyEvent) event)) {
+                event.consume();
                 new MostrarCatalogoClientesHandler(cc).handle(event);
+            }
         }
     }

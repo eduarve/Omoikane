@@ -9,12 +9,14 @@ import javafx.collections.ObservableList;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.producto.Articulo;
 import omoikane.repository.ProductoRepo;
+import org.apache.commons.collections.Closure;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.synyx.hades.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -72,7 +74,9 @@ public class ImpresionEtiquetasModel {
         }
         */
         this.codigo.set(codigo) ;
+        codigoListener.run();
     }
+
 
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,5 +87,10 @@ public class ImpresionEtiquetasModel {
         if (!codigo.get().equals(impresionEtiquetasModel.getCodigo())) return false;
 
         return true;
+    }
+
+    private Runnable codigoListener;
+    public void addCodigoListener(Runnable p0) {
+        this.codigoListener = p0;
     }
 }

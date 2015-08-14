@@ -252,7 +252,7 @@ public class TraspasoSalienteController implements Initializable {
                                 ),
                                 cmp.verticalList().add(
                                     cmp.text(fechaLabel.textProperty().get()).setHorizontalAlignment(HorizontalAlignment.RIGHT),
-                                    cmp.text("UID: " + uid.textProperty().get()).setHorizontalAlignment(HorizontalAlignment.RIGHT),
+                                    cmp.text("Folio: " + idLabel.textProperty().get()).setHorizontalAlignment(HorizontalAlignment.RIGHT),
                                     bcode.code128(uid.textProperty().get()) .setHeight(30).setStyle(rightStyle)
                                 )
                             )

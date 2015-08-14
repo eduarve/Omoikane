@@ -244,10 +244,10 @@ public class Articulos
             art.getImpuestos();
 
             // -- Cargar desde la BD el nombre del grupo, línea y las notas (anotación)
-            Query q = getEntityManager().createNativeQuery("SELECT an.texto, l.descripcion, g.descripcion FROM articulos a JOIN lineas l ON a.id_linea = l.id_linea JOIN grupos g ON a.id_grupo = g.id_grupo JOIN anotaciones an ON an.id_articulo = a.id_articulo WHERE a.id_articulo = " + art.idArticulo);
+            Query q = getEntityManager().createNativeQuery("SELECT an.texto as texto, l.descripcion as linea, g.descripcion as grupo FROM articulos a JOIN lineas l ON a.id_linea = l.id_linea JOIN grupos g ON a.id_grupo = g.id_grupo LEFT JOIN anotaciones an ON an.id_articulo = a.id_articulo WHERE a.id_articulo = " + art.idArticulo);
             List rs = q.getResultList();
             def lin = ["id": art.getIdLinea(), "descripcion": rs.get(0)[1]];
-            def gru = ["id": art.getIdLinea(), "descripcion": rs.get(0)[2]];
+            def gru = ["id": art.getIdGrupo(), "descripcion": rs.get(0)[2]];
             def notas = rs.get(0)[0];
 
             formArticulo.setTxtIDArticulo    art.idArticulo           as String

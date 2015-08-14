@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
+import omoikane.caja.business.Security;
 import omoikane.caja.presentation.CajaController;
 import omoikane.caja.presentation.ProductoModel;
 import omoikane.entities.Cancelacion;
@@ -52,7 +53,7 @@ public class CancelarVenta extends ICajaEventHandler {
     }
 
     private void cancelarVentaConAutorizacion() {
-        Boolean auth = Usuarios.autentifica(Usuarios.SUPERVISOR);
+        Boolean auth = Security.cancelacion();
         Platform.runLater(cancelarVenta(auth));
     }
 

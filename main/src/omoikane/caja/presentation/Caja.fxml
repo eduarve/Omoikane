@@ -10,8 +10,6 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import jfxtras.labs.scene.control.*?>
-<?import jfxtras.labs.scene.control.BigDecimalField?>
 <?scenebuilder-stylesheet Caja.css?>
 
 <AnchorPane id="AnchorPane" fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="1.0" prefHeight="572.9998847412135" prefWidth="1023.99977792969" scaleX="1.0" scaleY="1.0" xmlns:fx="http://javafx.com/fxml" fx:controller="omoikane.caja.presentation.CajaController">
@@ -68,11 +66,6 @@
               </font>
             </Label>
             <Line endX="100.0" startX="-100.0" AnchorPane.bottomAnchor="46.5" AnchorPane.rightAnchor="13.5" />
-            <Button fx:id="btnCobrar" mnemonicParsing="false" onAction="#onTerminarVentaClicked" prefHeight="98.0" prefWidth="121.0" text="Cobrar" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="14.0">
-              <font>
-                <Font size="17.0" fx:id="x3" />
-              </font>
-            </Button>
             <Label font="$x1" prefWidth="97.0" text="Impuestos:" AnchorPane.bottomAnchor="57.0" AnchorPane.rightAnchor="118.0" />
             <Label fx:id="impuestosLabel" alignment="CENTER_RIGHT" font="$x1" prefWidth="97.0" text="0.00" AnchorPane.bottomAnchor="57.0" AnchorPane.rightAnchor="14.0" />
             <Label font="$x1" prefWidth="104.0" text="Descuento:" AnchorPane.bottomAnchor="73.0" AnchorPane.rightAnchor="111.0" />
@@ -80,8 +73,6 @@
             <Label font="$x1" prefWidth="104.0" text="Subtotal:" AnchorPane.bottomAnchor="89.0" AnchorPane.rightAnchor="111.0" />
             <Label fx:id="subtotalLabel" alignment="CENTER_RIGHT" font="$x1" prefWidth="97.0" text="226.75" AnchorPane.bottomAnchor="89.0" AnchorPane.rightAnchor="14.0" />
             <Label font="$x1" layoutX="14.0" text="Cambio" AnchorPane.bottomAnchor="125.0" />
-            <TextField fx:id="cambioTextField" editable="false" prefHeight="27.0" prefWidth="201.0" style="-fx-font-size: 16&#10;" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="14.0" />
-            <BigDecimalField fx:id="efectivoTextField" prefHeight="27.0" prefWidth="201.0001220703125" style="-fx-font-size: 16" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="14.0" />
             <Label font="$x1" layoutX="13.0" text="Efectivo" AnchorPane.bottomAnchor="166.0" />
             <ToggleButton fx:id="btnVale" disable="true" focusTraversable="false" minHeight="27.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="73.0" text="Vale" visible="false" AnchorPane.bottomAnchor="198.0" AnchorPane.leftAnchor="233.0" AnchorPane.rightAnchor="78.0">
               <font>
@@ -95,13 +86,20 @@
             <ToggleButton fx:id="btnTarjeta" disable="true" focusTraversable="false" font="$x2" minHeight="27.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="64.0" text="Tarjeta" toggleGroup="$formaPagoGroup" visible="false" AnchorPane.bottomAnchor="198.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="151.0" />
             <ToggleButton fx:id="btnEfectivo" disable="true" focusTraversable="false" font="$x1" mnemonicParsing="false" prefWidth="201.0" selected="true" text="Efectivo" toggleGroup="$formaPagoGroup" visible="false" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="14.0" />
             <Label font="$x1" prefHeight="43.0" prefWidth="121.0" text="Forma de Pago" textOverrun="ELLIPSIS" visible="false" wrapText="true" AnchorPane.bottomAnchor="203.0" AnchorPane.leftAnchor="14.0" />
+            <TextField fx:id="capturaTextField" onKeyPressed="#onCapturaKeyPressed" onKeyReleased="#onCapturaKeyReleased" onKeyTyped="#onCapturaKeyTyped" onAction="#onCapturaAction" prefWidth="249.0" style="-fx-font-size: 16&#10;" AnchorPane.leftAnchor="121.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.0" />
             <TableView fx:id="productosTableView" onMouseClicked="#onBusquedaIntegradaClicked" prefHeight="243.0" prefWidth="359.5" style="-fx-font-size: 17;&#10;" AnchorPane.bottomAnchor="206.0" AnchorPane.leftAnchor="10.5" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="56.0">
               <columns>
                 <TableColumn prefWidth="225.0" text="Descripcion" fx:id="descripcionProductoColumn" />
                 <TableColumn prefWidth="75.0" style="" text="Precio" fx:id="precioProductoColumn" />
               </columns>
             </TableView>
-            <TextField fx:id="capturaTextField" onKeyPressed="#onCapturaKeyPressed" onKeyReleased="#onCapturaKeyReleased" onKeyTyped="#onCapturaKeyTyped" prefWidth="249.0" style="-fx-font-size: 16&#10;" AnchorPane.leftAnchor="121.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.0" />
+              <TextField fx:id="efectivoTextField" prefHeight="27.0" prefWidth="201.0001220703125" onAction="#onEfectivoTxtAction" style="-fx-font-size: 16" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="14.0" />
+              <TextField fx:id="cambioTextField" onAction="#onCambioTxtAction" editable="false" prefHeight="27.0" prefWidth="201.0" style="-fx-font-size: 16&#10;" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="14.0" />
+              <Button fx:id="btnCobrar" onKeyPressed="#onCobrarKey" mnemonicParsing="false" onAction="#onTerminarVentaClicked" prefHeight="98.0" prefWidth="121.0" text="Cobrar" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="14.0">
+                <font>
+                  <Font size="17.0" fx:id="x3" />
+                </font>
+              </Button>
             <Label font="$x3" prefHeight="24.0" text="Captura [F3]:" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="17.0" />
             <Rectangle fx:id="hudRectangle" arcHeight="11.0" arcWidth="11.0" disable="false" fill="BLACK" focusTraversable="true" height="220.0" mouseTransparent="false" opacity="0.82" pickOnBounds="true" stroke="BLACK" strokeType="INSIDE" visible="false" width="331.5" AnchorPane.leftAnchor="24.5" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="130.0">
               <effect>

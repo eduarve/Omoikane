@@ -7,8 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import omoikane.etiquetas.presentation.EditableTableCell;
+import javafx.util.converter.DefaultStringConverter;
 import omoikane.etiquetas.presentation.NumericEditableTableCell;
 import omoikane.principal.Principal;
 import omoikane.producto.*;
@@ -31,8 +32,6 @@ import java.util.*;
 public class ImpresionEtiquetasController implements Initializable {
 
     public static Logger logger = Logger.getLogger(ImpresionEtiquetasController.class);
-
-    private ImpresionEtiquetasModel model;
 
     private ProductoRepo productoRepo;
 
@@ -61,9 +60,32 @@ public class ImpresionEtiquetasController implements Initializable {
 
     @FXML
     private void actionAdd() {
+        addPartida();
+    }
+
+    private void addPartida() {
         ImpresionEtiquetasModel impresionEtiquetasModel = new ImpresionEtiquetasModel(productoRepo);
-        lastModel = impresionEtiquetasModel;
         tablaContenido.getItems().add(impresionEtiquetasModel);
+        impresionEtiquetasModel.addCodigoListener(() ->
+        {
+            String productoDescripcion = findProducto(impresionEtiquetasModel.getCodigo());
+            impresionEtiquetasModel.setProducto( productoDescripcion );
+        });
+    }
+
+    private String findProducto(String codigo) {
+        // Primero busca artículos por código principal
+        List<Articulo> articulos = productoRepo.findByCodigo(codigo);
+
+        // Si no encuentra artículos por código principal entonces busca por código alterno
+        if(articulos.isEmpty())
+            articulos = productoRepo.findByCodigoAlterno(codigo);
+
+        if (articulos.isEmpty()) {
+            return "Producto no encontrado";
+        } else  {
+            return articulos.get(0).getDescripcion();
+        }
     }
 
     @FXML
@@ -129,8 +151,6 @@ public class ImpresionEtiquetasController implements Initializable {
         productoRepo = (ProductoRepo)applicationContext.getBean("productoRepo");
     }
 
-    private ImpresionEtiquetasModel lastModel;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //To change body of implemented methods use File | Settings | File Templates.
@@ -138,14 +158,14 @@ public class ImpresionEtiquetasController implements Initializable {
         assert removeButton != null : "fx:id=\"removeButton\" was not injected: check your FXML file 'ImpressionEtiquetasView.fxml'.";
         assert tablaContenido != null : "fx:id=\"contenidoTable\" was not injected: check your FXML file 'ImpressionEtiquetasView.fxml'.";
         assert tipoEtiqueta != null : "fx:id=\"tipoEtiqueta\" was not injected: check your FXML file 'ImpressionEtiquetasView.fxml'.";
-        final ImpresionEtiquetasModel model = new ImpresionEtiquetasModel(productoRepo);
-        lastModel = model;
-        setModel(model);
+        configColumns();
+        addPartida();
 
         Callback<TableColumn<ImpresionEtiquetasModel,String>, TableCell<ImpresionEtiquetasModel,String>> editableFactory = new Callback<TableColumn<ImpresionEtiquetasModel,String>, TableCell<ImpresionEtiquetasModel,String>>() {
             @Override
             public TableCell call(TableColumn p) {
-                return new EditableTableCell(lastModel, productoRepo);
+                //return new EditableTableCell(iem, productoRepo);
+                return new TextFieldTableCell<>(new DefaultStringConverter());
             }
         };
 
@@ -189,12 +209,12 @@ public class ImpresionEtiquetasController implements Initializable {
         articulos = FXCollections.observableArrayList();
         tablaContenido.setItems(articulos);
 
+
 //        Articulo producto = productoRepo.readByPrimaryKey(productoId);
 
     }
 
-    public void setModel(final ImpresionEtiquetasModel model) {
-        this.model = model;
+    public void configColumns() {
 
         codigoCol.setCellValueFactory(
                 new PropertyValueFactory<ImpresionEtiquetasModel, String>("codigo")

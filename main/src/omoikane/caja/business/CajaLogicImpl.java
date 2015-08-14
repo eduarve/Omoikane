@@ -6,7 +6,11 @@ import groovy.util.Eval;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyEvent;
 import name.antonsmirnov.javafx.dialog.Dialog;
 import omoikane.caja.business.domain.VentaIncompleta;
 import omoikane.caja.business.plugins.DummyPlugin;
@@ -22,6 +26,7 @@ import omoikane.producto.*;
 import omoikane.repository.CajaRepo;
 import omoikane.repository.VentaRepo;
 import omoikane.sistema.Comprobantes;
+import omoikane.sistema.Herramientas;
 import omoikane.sistema.Usuarios;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,7 @@ import org.synyx.hades.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -98,11 +104,11 @@ public class CajaLogicImpl implements ICajaLogic {
                 addProducto(model, capturaFilter, true);
 
             } catch(IndexOutOfBoundsException e) {
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Producto no encontrado");
                 alert.setHeaderText("Producto no encontrado");
                 alert.setContentText("¡Producto no encontrado!");
-
                 alert.showAndWait();
 
                 logger.trace("Producto no encontrado");
@@ -114,7 +120,7 @@ public class CajaLogicImpl implements ICajaLogic {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true)
     public void buscar(CajaModel model) {
 
         Pageable pagina = model.getPaginacionBusqueda();
@@ -122,9 +128,13 @@ public class CajaLogicImpl implements ICajaLogic {
 
         LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(model.getCaptura().get());
         String descripcion = capturaFilter.getCodigo();
+        //Las búsquedas vacías retornan 0 resultados
         if(descripcion.isEmpty()) { obsProductos.clear(); return; }
 
         ArrayList<Producto> productos = (ArrayList<Producto>) productosDAO.findByDescripcionLike( "%"+descripcion+"%", pagina);
+
+        //Si no hay resultados, deja en blanco la tabla de productos encontrados
+        //if(productos.size() == 0) obsProductos.clear();
 
         if (pagina.getPageNumber()==0 )
             obsProductos.clear();
@@ -185,6 +195,9 @@ public class CajaLogicImpl implements ICajaLogic {
         }
 
         if(mustPersist) persistirVenta();
+        //Si la venta tiene tiene al menos una partida, seleccionar la primera
+        if(model.getVenta().size()>=0)
+            getController().getVentaTableView().getSelectionModel().select(0);
         pluginManager.notify(IPlugin.TIPO_EVENTO.PostAddPartida);
 
     }
