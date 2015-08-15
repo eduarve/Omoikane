@@ -28,7 +28,7 @@
         <Button fx:id="importarButton" mnemonicParsing="false" onAction="#onImportarAction" text="Importar desde terminal" />
         <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" />
         <Button fx:id="aplicarInventarioButton" mnemonicParsing="false" onAction="#onAplicarInventarioAction" text="Aplicar y archivar" />
-        <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
+        <Button fx:id="descartarButton" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
         <Button mnemonicParsing="false" onAction="#onExportarAction" text="Exportar a terminales" visible="false" />
       </items>
     </ToolBar>

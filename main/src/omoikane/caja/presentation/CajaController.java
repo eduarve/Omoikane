@@ -230,7 +230,12 @@ public class CajaController
     @FXML
     private void onCapturaKeyPressed(KeyEvent event) {
         SelectionModel selectionModel = productosTableView.getSelectionModel();
-        if( event.getCode() == KeyCode.DOWN ) {
+        //Si se oprime un flecha (arriba, abajo) y no hay ningún resultado seleccionado, selecciona el primero
+
+        if(( event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.UP ) &&productosTableView.getSelectionModel().isEmpty() && productosTableView.getItems().size()>0)
+            productosTableView.getSelectionModel().select(0);
+
+        else if( event.getCode() == KeyCode.DOWN ) {
             selectionModel.selectNext();
             ifBuscarMasSelected();
             scroll();
@@ -595,9 +600,6 @@ public class CajaController
                 if(busquedaActiva && cc.modelo != null) {
                     getModel().setPaginacionBusqueda(new PageRequest(0,10));
                     cc.getCajaLogic().buscar(cc.getModel());
-                    //Si no hay ningún resultado seleccionado, selecciona el primero
-                    if(productosTableView.getSelectionModel().isEmpty() && productosTableView.getItems().size()>0)
-                        productosTableView.getSelectionModel().select(0);
                 }
             }
         }

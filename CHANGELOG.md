@@ -1,3 +1,9 @@
+## Versión 4.4.0 rc3 (2015-08-15)
+- #125 Desactivé la tecla ESC para descartar: inventarios, compras y traspasos
+- #124 Arreglé bug que impedía visualizar movimientos de almacén
+- Arreglé bug que insertaba el resultado de la búsqueda rápida en la venta, en lugar del contenido del campo de captura
+- Mejoré plantilla de impresión del listado de movimientos de almacén
+
 ## Versión 4.4.0 rc2 (2015-08-14)
 - #121 Agregué perfil de cancelación y auto-cancelación, supervisor y gerente ya no pueden auto-cancelar
 - Agregué campo de folio al formato impreso de los traspasos
@@ -256,7 +262,7 @@ de Omoikane y por ahora está implementada externamente con SymmetricDS.
 - Mejoras en manejo de mensajes de error (tomadas de facturatron). El
 mensaje default de error es el de la catarina y ahora el stacktrace se
 muestra completo (incluyendo causas).
-- Incluyo un ejemplo de caceso a datos usando MePro. La herramienta
+- Incluyo un ejemplo de acceso a datos usando MePro. La herramienta
 para extender funcionalidad dinámicamente en tiempo de ejecución.
 - Tiempo de arranque reducido, gracias a la eliminación de las
 revisiones que hacía hibernate al comenzar la aplicación

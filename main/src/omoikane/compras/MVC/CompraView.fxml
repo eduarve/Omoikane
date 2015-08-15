@@ -26,7 +26,7 @@
     </TableView>
     <ToolBar minHeight="18.0" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="655.9998779296875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <Button fx:id="descartarButton" cancelButton="true" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
+        <Button fx:id="descartarButton" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
         <Button fx:id="archivarButton" mnemonicParsing="false" onAction="#archivarAction" text="Archivar y aplicar" />
         <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" visible="false" />
       </items>

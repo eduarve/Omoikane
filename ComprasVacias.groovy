@@ -26,23 +26,22 @@ EntityManager em = emf.createEntityManager();
 
 List articulos = (List) em.createNativeQuery("""
     SELECT 
-        a.codigo, 
-        a.descripcion as producto, 
-        l.descripcion as linea  
+    		c.id as id, 
+    		c.fecha as fecha, 
+    		c.folioOrigen as folio, 
+    		p.nombre as proveedor 
     FROM 
-        articulos a 
-        JOIN lineas l ON a.id_linea = l.id_linea
-        LEFT JOIN articulos_Impuesto ai ON ai.articulos_id_articulo = a.id_articulo
-    WHERE            
-        isnull(ai.impuestos_id)
-    ORDER BY
-        a.descripcion ASC 
+    		Compra c 
+    		LEFT JOIN Compra_items ci ON c.id = ci.compra_id 
+    		JOIN Proveedor p ON p.id = c.proveedor_id 
+	WHERE isnull(ci.compra_id) 
+	ORDER BY c.fecha DESC; 
         """).getResultList();
 
 def arts = [];
 
 articulos.each { a ->
-    arts << ["codigo": a[0], "descripcion": a[1], "linea": a[2] as String];
+    arts << ["id": a[0] as String, "fecha": a[1] as String, "folio": a[2] as String, "proveedor": a[3] as String];
 }
 
 TextColumnBuilder cargoColumn, abonoColumn;
@@ -68,9 +67,10 @@ try {
             .setPageFormat(PageType.LETTER, PageOrientation.PORTRAIT)
             .setPageMargin(DynamicReports.margin().setRight(25).setLeft(25).setTop(25).setBottom(10))
             .columns(
-            col.column("Línea"      , "linea", type.stringType()).setWidth(2).setStyle(colStyle),
-            col.column("Código"     , "codigo", type.stringType()).setWidth(1).setHorizontalAlignment(LEFT).setStyle(colStyle),
-            col.column("Descripción", "descripcion", type.stringType()).setWidth(4).setStyle(colStyle)            
+            col.column("ID"      , "id", type.stringType()).setWidth(1).setStyle(colStyle),
+            col.column("Fecha"     , "fecha", type.stringType()).setWidth(2).setHorizontalAlignment(LEFT).setStyle(colStyle),
+            col.column("Folio", "folio", type.stringType()).setWidth(1).setStyle(colStyle),
+            col.column("Proveedor", "proveedor", type.stringType()).setWidth(4).setStyle(colStyle)            
     )
             .setColumnTitleStyle(columnTitleStyle)
             .highlightDetailEvenRows()
@@ -78,10 +78,9 @@ try {
             cmp.horizontalList()
                     .add(
                     cmp.text("Super Farmacias Medina").setStyle(titleStyle).setHorizontalAlignment(LEFT),
-                    cmp.text("Productos sin impuestos").setStyle(titleStyle).setHorizontalAlignment(RIGHT))
+                    cmp.text("Compras vacías").setStyle(titleStyle).setHorizontalAlignment(RIGHT))
                     .newRow()
                     .add(
-                    cmp.text("Todo el catálogo").setStyle(subTitleStyle).setHorizontalAlignment(LEFT),
                     cmp.text(Calendar.getInstance().getTime()).setStyle(subTitleStyle).setHorizontalAlignment(RIGHT))
                     .newRow()
                     .add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)))

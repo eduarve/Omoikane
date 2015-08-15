@@ -7,7 +7,7 @@ import omoikane.principal.*
 //* Éste script está diseñado para generar un corte de caja previo a la sesión actual sin cerrar la caja
 //**
 
-EstrategiaDual ed = new EstrategiaDual();
+EstrategiaEstandar ed = new EstrategiaEstandar();
 
 NumberFormat mf = NumberFormat.getCurrencyInstance();
 NumberFormat nf = NumberFormat.getNumberInstance();
@@ -18,8 +18,8 @@ SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy @ hh:mm:ss a ");
 Calendar         fecha= Calendar.getInstance()
 
-horas = ["horaAbierta":"2014-09-12 07:30:00", "horaCerrada":"2014-09-12 23:59:59"];
-def IDCaja = 1;
+horas = ["horaAbierta":"2015-08-07 6:00:00", "horaCerrada":"2015-08-07 23:59:59"];
+def IDCaja = 3;
 def idAlmacen = 1;
 def cortar = true;
 
