@@ -1,3 +1,14 @@
+## Versión 4.4.0 (2015-08-22)
+- Resolví bug que permitía agregar códigos repetidos como alternos, ésto ocasionaba un problema al cobrar productos con códigos repetidos.
+ En primera instancia multiplicaba los impuestos por la cantidad de códigos repetidos al hacer una venta, pero al intentar cobrar identificaba el problema y
+  generaba una excepción, una solución era cerrando y abriendo la venta, así se corregía la cantidad y el problema, generando una venta correcta.
+  El error sólo sucedía al pasar a la venta el código repetido, si el mismo producto tenía un código no-repetido entonces no se generaba
+- Control de excepción en catálogo de artículos en la columna de stock
+- Cambio del atributo folioOrigen de camel-case a snake-case: folio_origen (tabla Compra)
+### Segundo build
+- Agrandé horizontalmente la tabla de compras en ficha de Artículo
+- Agregué la capacidad de establecer una fecha de pago para una compra
+
 ## Versión 4.4.0 rc3 (2015-08-15)
 - #125 Desactivé la tecla ESC para descartar: inventarios, compras y traspasos
 - #124 Arreglé bug que impedía visualizar movimientos de almacén
