@@ -9,6 +9,6 @@ alter table TraspasoEntrante change column notas notas longtext;
 rename table Compra to compra;
 rename table Compra_items to compra_items;
 
--- Estandarizado de los nombres de columnas de compra y compra_items a snake_case
+-- Estandarizado de los nombres de cojlumnas de compra y compra_items a snake_case
 alter table compra change column estadoPago estado_pago int(11);
 alter table compra_items change column costoUnitario costo_unitario decimal(19,2);

@@ -72,7 +72,7 @@ public class ItemCompra {
         this.articulo = articulo;
     }
 
-    @Column
+    @Column(name = "costo_unitario")
     public BigDecimal getCostoUnitario() {
         return costoUnitario;
     }

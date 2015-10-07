@@ -95,7 +95,9 @@ WHERE
 					<subreportParameterExpression><![CDATA[$F{lineas_id_linea}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["articulosL.jrxml"]]></subreportExpression>
+				<subreportExpression>
+                    <![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport($P{SUBREPORT_DIR} + "articulosL.jrxml")]]>
+                </subreportExpression>
 			</subreport>
 		</band>
 	</detail>

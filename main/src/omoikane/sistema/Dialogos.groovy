@@ -8,7 +8,8 @@
 
 package omoikane.sistema
 
-import omoikane.formularios.*
+ import javafx.scene.control.Alert
+ import omoikane.formularios.*
 
  import java.awt.Toolkit;
 
@@ -60,4 +61,5 @@ class Dialogos
         alerta.setMensaje(mensaje)
         alerta.setVisible(true)
     }
+
 }

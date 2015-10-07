@@ -98,7 +98,7 @@ public class Principal {
         public static Logger                logger                  = Logger.getLogger(Principal.class);
         public static ApplicationContext    applicationContext;
         public static final Boolean         DEBUG                   = false
-        public static final String          VERSION                 = "4.4.0-rc3";
+        public static final String          VERSION                 = "4.4.1";
         public static  Boolean              HA                      = false; //Características de alta disponibilidad
         public static def                   authType                = AuthContext.AuthType.NIP;
         public static String                nombreImpresora
@@ -134,7 +134,7 @@ public class Principal {
                     splash.iniciar()
                 }
 
-                Locale.setDefault(Locale.US);
+                Locale.setDefault(new Locale("es", "MX"));
 
                 shutdownHandler = new ShutdownHandler()
                 Runtime.getRuntime().addShutdownHook(shutdownHandler);
@@ -370,7 +370,7 @@ public class Principal {
         //Detectar si Flyway o esquema BD no inicializado
         if(flyway.info().current() == null) {
             splash.detener();
-            String[] options = [ "Instalación nueva", "Actualización", "Cancelar" ];
+            String[] options = [ "Instalación nueva (desde 0)", "Actualización", "Cancelar" ];
             int decision = JOptionPane.showOptionDialog(null, "El esquema de la BD no ha sido inicializado. ¿Que tipo de instalación es esta?", "Inicializar BD",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, options, options[2]);

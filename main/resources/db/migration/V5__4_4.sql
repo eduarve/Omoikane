@@ -12,7 +12,7 @@
    KEY `FK802122261D916F4` (`id_usuario`),
    KEY `completadoIndex` (`completado`),
    CONSTRAINT `FK802122261D916F4` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
- ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci
+ ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE `TraspasoSaliente_items` (
   `TraspasoSaliente_id` bigint(20) NOT NULL,

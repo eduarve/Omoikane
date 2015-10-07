@@ -186,11 +186,10 @@ public class CatalogoArticulos extends OmJInternalFrame {
 
         txtQuery = query;
 
-        Stopwatch timer = new Stopwatch().start();
         /** Ejecuto la consulta del catálogo **/
         modelo.setQuery(query);
         /** /fin ejecución de consulta de catálogo **/
-        System.out.println("Catálogo de artículos fetch time: "+ timer.stop());
+
         //Selecciona la primera fila luego de una búsqueda
         //jTable1.getSelectionModel().setSelectionInterval(0,0);
 
@@ -603,6 +602,8 @@ public class CatalogoArticulos extends OmJInternalFrame {
         boolean xLineas = getBuscarLineas();
         boolean xGrupos = getBuscarGrupos();
         String busqueda = this.txtBusqueda.getText();
+
+		//Limpia la cadena de búsqueda
         busqueda = StringEscapeUtils.escapeSql(busqueda);
 
         if(busqueda==null) { xCodDes = xLineas = xGrupos = false; }
@@ -707,12 +708,16 @@ class ArticulosTableModel extends ScrollableTableModel {
 
                 return numberFormat.format(precioOmoikaneLogic.getPrecio());
             } catch(ClassCastException cce) {
-                return "ERROR";
+                return "ERROR(1)";
             }
         } else if(col == 6) {
-            BigDecimal existencias = (BigDecimal) super.getValueAt(row, 13);
-            String display = existencias.compareTo(BigDecimal.ZERO) <= 0 ? "N/D" : numberFormat.format(existencias);
-            return display;
+            try {
+                BigDecimal existencias = (BigDecimal) super.getValueAt(row, 13);
+                String display = existencias.compareTo(BigDecimal.ZERO) <= 0 ? "N/D" : numberFormat.format(existencias);
+                return display;
+            } catch(Exception e) {
+                return "ERROR(2)";
+            }
         } else {
             return super.getValueAt(row,col);
         }

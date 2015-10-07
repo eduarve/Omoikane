@@ -101,10 +101,17 @@ public class CancelarProducto extends ICajaEventHandler {
     }
 
     public void modoNormal() {
+
+        Platform.runLater(() -> _modoNormal());
+    }
+
+    private void _modoNormal() {
         getController().setCapturaPaneDisable(false);
         getController().setMainToolBarDisable(false);
         getController().hideHud();
         getController().getVentaTableView().onKeyReleasedProperty().set(null);
+        getController().getJInternalFrame().toFront();
+        getController().getFxPanel().requestFocus();
         getController().getMainAnchorPane().requestFocus();
         getController().getCapturaTextField().requestFocus();
     }

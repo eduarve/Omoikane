@@ -19,10 +19,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -36,7 +38,9 @@ import omoikane.proveedores.Proveedor;
 import omoikane.repository.CompraRepo;
 import omoikane.repository.ConteoInventarioRepo;
 import omoikane.repository.ProveedorRepo;
+import omoikane.sistema.Permisos;
 import omoikane.sistema.SceneOverloaded;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -62,9 +66,10 @@ import javax.swing.*;
 import javax.transaction.TransactionManager;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 
 public class ComprasCRUDController
@@ -104,6 +109,8 @@ public class ComprasCRUDController
 
     @Autowired
     JpaTransactionManager transactionManager;
+
+    public static Logger logger = Logger.getLogger(ComprasCRUDController.class);
 
     CompraController compraController;
     private javax.swing.JInternalFrame JInternalFrame;
@@ -252,7 +259,7 @@ public class ComprasCRUDController
 
     private class ActionsCell extends TableCell<Compra, Compra.EstadoPago> {
         // a button for adding a new person.
-        final Button delButton       = new Button("---");
+        final Button pagarButton       = new Button("---");
         final Label label = new Label("-");
         // pads and centers the add button in the cell.
         final StackPane paddedButton = new StackPane();
@@ -265,18 +272,21 @@ public class ComprasCRUDController
         ActionsCell(final TableView table) {
             // -- Formato del botón -- //
             paddedButton.setMaxHeight(18);
-            delButton.setFont(new Font("Verdana", 10));
+            pagarButton.setFont(new Font("Verdana", 10));
             paddedButton.setPadding(new javafx.geometry.Insets(1, 0, 0, 0));
 
             // -- Configuración del botón y su acción -- //
             label.setMinWidth(70);
             hBox.getChildren().add(label);
-            hBox.getChildren().add(delButton);
+            hBox.getChildren().add(pagarButton);
             paddedButton.getChildren().add(hBox);
             final TableCell<Compra, Compra.EstadoPago> c = this;
 
-            delButton.setOnAction(new EventHandler<ActionEvent>() {
+            pagarButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent actionEvent) {
+                    //Verifico el permiso para realizar ésta acción
+                    if(!omoikane.sistema.Usuarios.cerrojo(Permisos.PMA_MARCAR_COMPRA_PAGADA)){ logger.info("Acceso Denegado"); return; }
+
                     //Inicialización de variables auxiliares
                     final TableRow tableRow = c.getTableRow();
                     final Integer idx = tableRow.getIndex();
@@ -288,6 +298,17 @@ public class ComprasCRUDController
                             ? Compra.EstadoPago.PAGADA
                             : Compra.EstadoPago.IMPAGA;
                     compra.setEstadoPago(nuevoEstadoPago);
+
+                    //Si ha sido marcada PAGADA, entonces se solicitará la fecha de pago
+                    if(nuevoEstadoPago == Compra.EstadoPago.PAGADA) {
+                        Optional<Date> fechaOpt = pedirFecha();
+                        //Si no se da una fecha, no se marcará como pagada ésta compra
+                        try {
+                            compra.setFechaPago(fechaOpt.get());
+                        } catch(NoSuchElementException nsee) {
+                            return ;
+                        }
+                    }
 
                     compraRepo.saveAndFlush(compra);
 
@@ -306,28 +327,91 @@ public class ComprasCRUDController
                     });
 
                 }
+
             });
+        }
+
+        /**
+         * Solicita al usuario que especifique una fecha de pago
+         * @return
+         */
+        private Optional<Date> pedirFecha() {
+            //Crea el diálogo para pedir fecha de pago
+            Dialog<Date> dialog = new Dialog<>();
+            dialog.setTitle("Compra pagada");
+            dialog.setHeaderText("Fecha de pago de compra");
+
+            // Set the button types.
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CANCEL);
+
+            // Crea el datepicker para poder seleccionar una fecha
+            DatePicker dp = new DatePicker();
+
+            // Crea el layout del dialogo
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            // Establece el valor de date picker como el valor de retorno del diálogo
+            dialog.setResultConverter(button -> {
+                LocalDate localdate = dp.getValue();
+                if(localdate == null) return null;
+                Date date = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                return date;
+            });
+
+            // Une todas las partes
+            grid.add(new Label("¿En que fecha se realizó el pago de esta compra?"), 0, 0);
+            grid.add(dp, 0, 1);
+            dialog.getDialogPane().setContent(grid);
+
+            return dialog.showAndWait();
         }
 
         /** places an add button in the row only if the row is not empty. */
         @Override protected void updateItem(Compra.EstadoPago item, boolean empty) {
+            //Accede al objeto que es representado por la fila que posee a esta celda
+            Compra compra = (Compra) this.getTableRow().getItem();
+            //Null-safe, para celdas sin domino no hay contenido en esta celda
+            if(compra == null) return;
+            //Actualizo el valor interno del modelo de la tabla
             super.updateItem(item, empty);
+
             item = item == null ? Compra.EstadoPago.IMPAGA : item;
             switch(item) {
                 case PAGADA:
-                    delButton.setText("Marcar impaga");
-                    label.setTextFill(Color.GREEN);
+                    renderPagada(compra);
                     break;
                 case IMPAGA:
-                    delButton.setText("Marcar pagada");
-                    label.setTextFill(Color.RED);
+                    renderImpaga();
                     break;
             }
-            label.setText(String.valueOf(item));
+
             if (!empty) {
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setGraphic(paddedButton);
             }
+        }
+
+        //Pone el display de la celda en el formato PAGADA
+        private void renderPagada(Compra parent) {
+            //Inicializo un formateador de fecha del tipo día / mes / año
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            pagarButton.setText("Marcar impaga");
+            if(parent.getFechaPago() == null)
+                    label.setText("Pagada, falta fecha");
+                else
+                    label.setText("Pagada el "+sdf.format( parent.getFechaPago() ));
+            label.setTextFill(Color.GREEN);
+        }
+
+        //Pone el display de la celda en el formato IMPAGA
+        private void renderImpaga() {
+            pagarButton.setText("Marcar pagada");
+            label.setText("Impaga");
+            label.setTextFill(Color.RED);
         }
     }
 }

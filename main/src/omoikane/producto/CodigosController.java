@@ -2,6 +2,7 @@
 package omoikane.producto;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -10,9 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import omoikane.caja.data.IProductosDAO;
+import omoikane.caja.data.ProductosNadesicoAdapter;
 import omoikane.entities.CodigoProducto;
 import omoikane.repository.ProductoRepo;
 import omoikane.sistema.Dialogos;
+import omoikane.sistema.DialogosFX;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +59,9 @@ public class CodigosController
     @Autowired
     JpaTransactionManager transactionManager;
 
+    @Autowired
+    IProductosDAO productosDao;
+
     public static final Logger logger = Logger.getLogger(CodigosController.class);
 
 
@@ -72,13 +79,20 @@ public class CodigosController
         cp.setCodigo(txtCodigoNuevo.getText());
         cp.setProducto(art);
 
-        if(!cerrojo(getPMA_MODIFICARARTICULO())){ Dialogos.lanzarAlerta("Acceso Denegado"); return; }
+        if(!cerrojo(getPMA_MODIFICARARTICULO())){ DialogosFX.lanzarAlertaFX("Acceso Denegado"); return; }
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         Object result = transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
-                entityManager.persist(cp);
-                listCodigos.getItems().add(cp);
+                //Validar que el código no se encuentre en uso
+                List<Producto> productos = productosDao.findByCodigo(cp.getCodigo());
+                if(productos.size() == 0) {
+                    entityManager.persist(cp);
+                    listCodigos.getItems().add(cp);
+                } else {
+
+                    DialogosFX.lanzarAlertaFX("Código en uso en el producto: " + productos.get(0).getDescripcion());
+                }
             }
         });
     }

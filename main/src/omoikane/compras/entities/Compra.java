@@ -23,6 +23,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
+@Table(name = "compra")
 public class Compra {
 
     public enum EstadoPago {
@@ -43,6 +44,8 @@ public class Compra {
 
     private EstadoPago estadoPago = EstadoPago.IMPAGA;
 
+    private Date fechaPago;
+
     @PrePersist
     public void prePersist() {
         setFecha(new Date());
@@ -50,6 +53,7 @@ public class Compra {
 
     @Transactional
     @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "compra_items")
     @OrderColumn
     public List<ItemCompra> getItems() { return items; }
 
@@ -110,7 +114,7 @@ public class Compra {
         this.completado = completado;
     }
 
-    @Column
+    @Column(name = "folio_origen")
     public String getFolioOrigen() {
         return folioOrigen;
     }
@@ -119,7 +123,7 @@ public class Compra {
         this.folioOrigen = folioOrigen;
     }
 
-    @Column
+    @Column(name= "estado_pago")
     public EstadoPago getEstadoPago() {
         if(estadoPago==null) estadoPago = EstadoPago.IMPAGA;
         return estadoPago;
@@ -127,6 +131,15 @@ public class Compra {
 
     public void setEstadoPago(EstadoPago e) {
         estadoPago = e;
+    }
+
+    @Column(name = "fecha_pago")
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
     public String toString() {

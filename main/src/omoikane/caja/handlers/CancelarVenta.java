@@ -70,12 +70,15 @@ public class CancelarVenta extends ICajaEventHandler {
                         if(f.exists()) f.delete();
 
                         getController().getCajaLogic().nuevaVenta();
-                        getController().getMainAnchorPane().requestFocus();
-                        getController().getCapturaTextField().requestFocus();
-                    } else {
-                        getController().getMainAnchorPane().requestFocus();
-                        getController().getCapturaTextField().requestFocus();
                     }
+
+                    //Agenda la recuperación el enfoque en el campo de captura
+                    Platform.runLater(() -> {
+                        getController().getJInternalFrame().toFront();
+                        getController().getFxPanel().requestFocus();
+                        getController().getMainAnchorPane().requestFocus();
+                        getController().getCapturaTextField().requestFocus();
+                    });
                 } catch (Exception e) {
                     logger.error("Error al cancelar venta", e);
                 }

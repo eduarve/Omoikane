@@ -42,11 +42,16 @@ public class LineaDeCapturaFilter {
         ArrayList<String> partes       = new ArrayList( Arrays.asList(partesDeLaCaptura) );
 
         if(partes.size() > 1) {
-            codigo = partes.remove( partes.size() -1);
-            for(String parte : partes) {
-                final BigDecimal cant = new BigDecimal(parte);
-                cant.setScale(2, BigDecimal.ROUND_HALF_UP);
-                cantidad = cantidad.multiply(cant);
+            try {
+                codigo = partes.remove(partes.size() - 1);
+                for (String parte : partes) {
+                    final BigDecimal cant = new BigDecimal(parte);
+                    cant.setScale(2, BigDecimal.ROUND_HALF_UP);
+                    cantidad = cantidad.multiply(cant);
+                }
+            } catch (NumberFormatException nfe) {
+                //No es posible aplicar el filtro porque no sigue el formato de multiplicidad
+                codigo = captura;
             }
         } else {
             codigo   = captura;

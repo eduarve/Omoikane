@@ -75,8 +75,8 @@ public class ComprasProductoController
         itemsComprados = new BigDecimal(0);
 
         Query query = entityManager.createNativeQuery(
-                "SELECT c.fecha, c.folioOrigen, p.nombre, ci.cantidad, ci.costoUnitario, ci.cantidad*ci.costoUnitario " +
-                "FROM Proveedor p JOIN Compra c ON p.id = c.proveedor_id JOIN Compra_items ci ON ci.Compra_id = c.id " +
+                "SELECT c.fecha, c.folio_origen, p.nombre, ci.cantidad, ci.costo_unitario, ci.cantidad*ci.costo_unitario " +
+                "FROM Proveedor p JOIN compra c ON p.id = c.proveedor_id JOIN compra_items ci ON ci.Compra_id = c.id " +
                 "WHERE ci.articulo_id_articulo = ? ORDER BY c.fecha DESC LIMIT 5;");
         query.setParameter(1, art.getIdArticulo());
         List<Object[]> comprasPorItem = query.getResultList();
@@ -100,7 +100,7 @@ public class ComprasProductoController
         final NumberFormat nb = NumberFormat.getNumberInstance();
         nb.setMaximumFractionDigits(2);
         nb.setMinimumFractionDigits(2);
-        SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance(DateFormat.SHORT);
+        SimpleDateFormat sdf = (SimpleDateFormat) new SimpleDateFormat("dd/MM/yyyy");
 
         //Declaración de variables y asignación de valores
         Label labelFecha       = new Label(sdf.format( row.get(0) ));

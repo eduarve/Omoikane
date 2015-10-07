@@ -80,6 +80,7 @@ class Permisos {
 
     static Float PMA_REGISTRARCOMPRA       = SUPERVISOR
     static Float PMA_APLICARCOMPRA_A_STOCK = SUPERVISOR
+    public static Float PMA_MARCAR_COMPRA_PAGADA  = ADMINISTRADOR
 
     static Float PMA_TOTALVENTA            = SUPERVISOR
     static Float PMA_TOTALVENTASUCURSAL    = SUPERVISOR
@@ -101,6 +102,8 @@ class Permisos {
     public static Float PMA_CAJACLINICA           = CAPTURISTA;
     public static Float PMA_ARTEMISA_REPORTES     = CAPTURISTA;
     public static Float PMA_ARTEMISA_ARTICULOS    = CAPTURISTA;
+
+
 }
 
 

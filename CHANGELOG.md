@@ -1,3 +1,18 @@
+## Versión 4.4.1 (2015-10-07)
+- Corregí el reporte de artículos por grupos
+- Corregí el reporte de artículos por líneas
+- Corregí la migración 5 (v 4_4) a la que le faltaba una coma en un statement
+- Añadí un try-catch a la línea de captura de caja
+- Corrección de bug que no devuelve el enfoque luego de cancelaciones al campo de captura. Moví a Platform.runLater el 
+código para recuperar el enfoque luego de una cancelación parcial o completa,en lugar de intentarlo en el mismo evento 
+en el que se termina la cancelación
+- Reduje la duración del timer del buscador integrado en caja de 1000ms a 500ms
+- Agregué la capacidad de marcar la fecha de pago de las compras, está protegida por el permiso PMA_MARCAR_COMPRA_PAGADA
+- Cambié la localización de US a "es-MX"
+- Agregué una validación a los códigos alternos para verificar que no haya códigos repetidos
+- Optimicé (un poco) la apariencia y funcionamiento de la pestaña "Compras" dentro de la ventana "Detalles de artículo"
+- Mejoré el formato de impresión del catálogo de artículos
+
 ## Versión 4.4.0 (2015-08-22)
 - Resolví bug que permitía agregar códigos repetidos como alternos, ésto ocasionaba un problema al cobrar productos con códigos repetidos.
  En primera instancia multiplicaba los impuestos por la cantidad de códigos repetidos al hacer una venta, pero al intentar cobrar identificaba el problema y

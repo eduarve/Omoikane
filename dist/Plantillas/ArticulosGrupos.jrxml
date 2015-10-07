@@ -36,7 +36,7 @@ WHERE
 				<textElement textAlignment="Center">
 					<font size="26" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Reporte Articulos por Grupo]]></text>
+				<text><![CDATA[Reporte Artículos por Grupo]]></text>
 			</staticText>
 		</band>
 	</title>

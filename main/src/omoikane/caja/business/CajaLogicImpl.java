@@ -126,6 +126,7 @@ public class CajaLogicImpl implements ICajaLogic {
         Pageable pagina = model.getPaginacionBusqueda();
         ObservableList<ProductoModel> obsProductos = model.getProductos();
 
+        // Filtra la captura antes de ejecutar la búsqueda
         LineaDeCapturaFilter capturaFilter = new LineaDeCapturaFilter(model.getCaptura().get());
         String descripcion = capturaFilter.getCodigo();
         //Las búsquedas vacías retornan 0 resultados
