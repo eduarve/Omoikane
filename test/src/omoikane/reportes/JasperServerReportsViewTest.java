@@ -46,7 +46,7 @@ import static omoikane.reportes.JasperServerReportsController.*;
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })    */
 
-@Ignore('No esta en uso y no es testeable desde el servidor CI')
+@Ignore("No esta en uso y no es testeable desde el servidor CI")
 public class JasperServerReportsViewTest {
     final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JasperServerReportsController.class);
 
