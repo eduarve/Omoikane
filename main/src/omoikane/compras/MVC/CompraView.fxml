@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="813.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="omoikane.compras.MVC.CompraController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="813.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="omoikane.compras.MVC.CompraController">
   <children>
     <Label text="Compra" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="42.0">
       <font>
@@ -28,6 +28,7 @@
       <items>
         <Button fx:id="descartarButton" mnemonicParsing="false" onAction="#onEliminarAction" text="Descartar" />
         <Button fx:id="archivarButton" mnemonicParsing="false" onAction="#archivarAction" text="Archivar y aplicar" />
+            <Button fx:id="importarButton" mnemonicParsing="false" onAction="#onImportar" prefHeight="27.0" prefWidth="143.0" text="Importar XML" />
         <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#onImprimir" text="Imprimir" visible="false" />
       </items>
     </ToolBar>

@@ -399,7 +399,7 @@ public class MenuPrincipal extends OmJInternalFrame {
         StopWatch timer = new StopWatch().start();
         //omoikane.principal.Caja.lanzar(); //Caja antigua
 
-        CajaManager manager = new CajaManager();
+        CajaManager manager = CajaManager.getInstance();
         JInternalFrame internalFrame = manager.startJFXCaja();
         omoikane.principal.Principal.getEscritorio().getPanelEscritorio().setSelectedFrame(internalFrame);
 

@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,9 +33,27 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class CajaManager extends Application {
-    CajaModel model;
     CajaController controller;
+
+    //Only one counter per instance
+    private boolean cajaInstanciada = false;
+
     static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CajaManager.class);
+
+    // ** Singleton **
+    private static CajaManager instance;
+    private CajaManager() {}
+    public static CajaManager getInstance() {
+        if(instance == null) {
+            instance = new CajaManager();
+            return instance;
+        }
+        return instance;
+    }
+    public static void deleteInstance() {
+        instance = null;
+    }
+    // END singleton
 
     @Override
     public void start(Stage primaryStage) {
@@ -75,9 +94,12 @@ public class CajaManager extends Application {
 
     public JInternalFrame startJFXCaja() {
         JInternalFrame frame = null;
+        //Solo puede haber una instancia de la ventana de caja
+        if(cajaInstanciada) return null;
         if(Principal.IDCaja < 0) { logger.info("Equipo no habilitado para caja"); return null; }
         if(!omoikane.sistema.Usuarios.cerrojo((Object) Permisos.getPMA_LANZARCAJA())) return null;
         abrirCaja();
+        cajaInstanciada = true;
         return null;
 
     }

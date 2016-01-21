@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import name.antonsmirnov.javafx.dialog.Dialog;
+import omoikane.compras.ImportadorXML;
 import omoikane.compras.entities.Compra;
 import omoikane.compras.entities.ItemCompra;
 import omoikane.principal.Articulos;
@@ -92,12 +93,27 @@ public class CompraController implements Initializable {
     @FXML Button descartarButton;
     @FXML Button archivarButton;
     @FXML Button imprimirButton;
+    @FXML Button importarButton;
     @FXML AnchorPane mainPane;
     @FXML Label subtotalLabel;
 
     private Articulo capturaArticulo;
     private HashMap<Long, Articulo> indice;
     private ComprasCRUDController parent;
+
+    public AnchorPane getMainPane() { return mainPane; }
+
+    public CompraEntityWrapper getModel() { return modelo; }
+
+    public CompraSaveLogic getLogic() { return logic; }
+
+    public void setModelo(CompraEntityWrapper modelo) {
+        this.modelo = modelo;
+    }
+
+    public CompraController() {
+        indice = new HashMap<>();
+    }
 
     @FXML public void archivarAction(ActionEvent actionEvent) {
         //Mini validación
@@ -161,12 +177,21 @@ public class CompraController implements Initializable {
 
     }
 
+    @FXML public void onImportar(ActionEvent actionEvent) {
+        importar();
+    }
+
+    private void importar() {
+        ImportadorXML importadorXML = new ImportadorXML(this);
+        importadorXML.importDialog();
+    }
+
     @FXML public void onAgregarAction(ActionEvent actionEvent) {
         if(capturaArticulo == null) return ;
         if(modelo.getCompletado().get()) return;
 
         if(indice.containsKey(capturaArticulo.getIdArticulo())) {
-            logger.info("Artículo ya agregado al conteo. No se puede volver a agregar.");
+            logger.info("Artículo ya agregado. No se puede volver a agregar.");
             codigoTextField.requestFocus();
             return;
         }
@@ -355,6 +380,11 @@ public class CompraController implements Initializable {
         }
     }
 
+    /**
+     * Método encargado de manejar la GUI al buscar un artículo.
+     * El artículo es buscado mediante CompraSaveLogic.getArticulo
+     * @return
+     */
     private Task<Void> findArticulo() {
         Task findArticuloTask = new Task<Void>() {
             @Override
@@ -625,6 +655,7 @@ public class CompraController implements Initializable {
             return retorno;
         }
     }
+
 
 }
 

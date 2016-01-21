@@ -22,6 +22,7 @@
     <context:component-scan base-package="omoikane.entities"/>
     <context:component-scan base-package="omoikane.inventarios"/>
     <context:component-scan base-package="omoikane.compras.entities"/>
+    <context:component-scan base-package="omoikane.compras.MVC"/>
     <context:component-scan base-package="omoikane.clientes"></context:component-scan>
     <!--<context:component-scan base-package="omoikane.sistema"/>-->
     <bean id="articulo" class="omoikane.producto.Articulo"></bean>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" serie="KM" folio="6759757" fecha="2014-12-07T23:04:01" formaDePago="Pago en una sola exhibicion" subTotal="12938.37" total="13484.42" tipoDeComprobante="ingreso" metodoDePago="TRANSFERENCIA" LugarExpedicion="PUEBLA, PUEBLA" NumCtaPago="3702" noCertificado="00001000000301138326" certificado="MIIEYTCCA0mgAwIBAgIUMDAwMDEwMDAwMDAzMDExMzgzMjYwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzEwMjUxNDU2MzFaFw0xNzEwMjUxNDU2MzFaMIGtMRwwGgYDVQQDExNOQURSTyBTIEEgUCBJIERFIENWMRwwGgYDVQQpExNOQURSTyBTIEEgUCBJIERFIENWMRwwGgYDVQQKExNOQURSTyBTIEEgUCBJIERFIENWMSUwIwYDVQQtExxOQUQ5MDEwMjNHUkEgLyBMT0xBNzMxMjE2SUw5MR4wHAYDVQQFExUgLyBMT0xBNzMxMjE2SERGUFJEMDgxCjAIBgNVBAsTAUEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKZAd/0A1L2TwRNEJKb2Y8Xehclj0zELTADh/gDBWKvZ9ywM3BIspXqOgOLWJyH5lNIsR8sm5RIlVmG8y+hgwGtPcmNSSQntgLF9DLri907n/jE8sC7g1esk+ZdQjJCUTwVg67gnOY03YTWP0iL88jqD86vGIJBUWiVLefBNp0CvAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBBQUAA4IBAQDJLaoAC44/x2I7nBiD+YRhgOZDa03Wsr20cnBO4fD2q9gJCLLXDCvCVxhweXAZ8Psb/GwUZLiy7yUk55NDHFSNkuvNdEmSDTFuEX6zm7FZ+pHxz4CrEpwfCORIQINO4MxRSIlf2QxZULiyjZOCoxYb9N011hjanLz+2g08P4vsYZ8ylg/qb3mQ+7Qlalrm8PaVr1DZ9nU330ymngufCzN6AhKG4aivfZvpRTz6gtcu8BsF+kjqF94cp4In4nb7/MiuPSSm7IUc89XWcFZwG11jjoPlNrULxisWFkrCf0SJfdoBPqI5uBDtwKx7YCN3mCeYaMHdnqnwWFVUdX/FzO6F" sello="TqrlFcrP0jPuAzZtIo0HsDJ5nJzoRyGifOMshYUIvPO+C1qfRIVyeq8OFhr15ZiEEL6oGMH7sX1Ah48UAJBMHQcEGOxoANzWQYvKLCQ1NjA2s08v03sTlC8vgj7lUsPM0uz3Gss3A7ekVcMNSp+WeZEKtbjo2oP2bfE5Uh7cmEw=" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <cfdi:Emisor rfc="NAD901023GRA" nombre="NADRO, S.A.P.I. DE C.V.">
+    <cfdi:DomicilioFiscal calle="Vasco de Quiroga" noExterior="3100" colonia="Centro de Ciudad Santa Fe" referencia="KM6759757" municipio="Álvaro Obregón" estado="D.F." pais="México" codigoPostal="01210" />
+    <cfdi:ExpedidoEn calle="CALLE A" noExterior="7" colonia="PARQUE INDUSTRIAL 5 DE MAYO" municipio="PUEBLA" estado="PUEBLA" pais="MÉXICO" codigoPostal="72019" />
+    <cfdi:RegimenFiscal Regimen="REGIMEN GENERAL DE LEY PERSONAS MORALES" />
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="MEGN560328MQ0" nombre="MEDINA GARCIA NAHUM.">
+    <cfdi:Domicilio calle="VALDEZ 601" colonia="CENTRO" localidad="TLAPACOYAN" estado="VERACRUZ" pais="México" codigoPostal="93650" />
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501088505003" descripcion="ALIN 8 MG SOL INY 1X2 ML 251" valorUnitario="32.44" importe="97.32" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501318645080" descripcion="CANESTEN VAG CRA 20 G 143" valorUnitario="77.21" importe="231.63" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501059238305" descripcion="NESTLE SVELTY FIGURA 0 FRESA 225 GR" valorUnitario="27.91" importe="83.73" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7502221181641" descripcion="DESOD BRUT CLASSIC ST 65 G 214" valorUnitario="20.41" importe="61.23" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="7501108765578" descripcion="DIMACOL INF TRIPLE-AC SOL 150 ML" valorUnitario="85.83" importe="85.83" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="7501298212210" descripcion="DOLONEUROBIONRET100/1MGTAB20 404" valorUnitario="316.42" importe="316.42" />
+    <cfdi:Concepto cantidad="2" unidad="PZA" noIdentificacion="7501065052506" descripcion="EYE-MO OJOS ROJOS 0.50MG SOL15ML" valorUnitario="23.95" importe="47.90" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501089810137" descripcion="HER-KLIN NOVO 2000 SH 100 ML" valorUnitario="121.47" importe="364.41" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="7503007704573" descripcion="HIDRASEC 10 MG SB 18" valorUnitario="108.40" importe="108.40" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501289511261" descripcion="HIPOGLOS PLUS POM TB 60G" valorUnitario="67.93" importe="203.79" />
+    <cfdi:Concepto cantidad="5" unidad="PZA" noIdentificacion="7501022101209" descripcion="JBN AZUFRE GRISI 100 G 120" valorUnitario="23.98" importe="119.90" />
+    <cfdi:Concepto cantidad="5" unidad="PZA" noIdentificacion="7891038301800" descripcion="JBN DOVE BABY 75 G 393" valorUnitario="10.03" importe="50.15" />
+    <cfdi:Concepto cantidad="5" unidad="PZA" noIdentificacion="7501022105191" descripcion="JBN GRISI NEUTRO 100G 120" valorUnitario="7.36" importe="36.80" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="7501007501031" descripcion="JBN JOHNSONS BABY NEUTRO 75G" valorUnitario="8.30" importe="24.90" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="7501088605857" descripcion="NATURALAG SOL 15 ML 101671" valorUnitario="65.35" importe="65.35" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="736085132069" descripcion="NAZIL OFTENO GTS 15 ML 286" valorUnitario="35.40" importe="35.40" />
+    <cfdi:Concepto cantidad="1" unidad="PZA" noIdentificacion="8430308413516" descripcion="PEMIX GRANULADO 1MG SB30" valorUnitario="222.74" importe="222.74" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="650240019920" descripcion="POMADA-CAMPANA C/TEPEZCOH 75G" valorUnitario="26.67" importe="80.01" />
+    <cfdi:Concepto cantidad="12" unidad="PZA" noIdentificacion="7501065628145" descripcion="POMADA-CAMPANA GDE 35 G 177" valorUnitario="10.98" importe="131.76" />
+    <cfdi:Concepto cantidad="2" unidad="PZA" noIdentificacion="7501032918392" descripcion="REPEL OFF NO GRASO CRA 200G 039" valorUnitario="49.71" importe="99.42" />
+    <cfdi:Concepto cantidad="3" unidad="PZA" noIdentificacion="75005689" descripcion="RESPICIL AD F A 5ML" valorUnitario="39.62" importe="118.86" />
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosTrasladados="546.05">
+    <cfdi:Traslados>
+      <cfdi:Traslado impuesto="IVA" tasa="0.00" importe="0.00" />
+      <cfdi:Traslado impuesto="IVA" tasa="16.00" importe="546.05" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital version="1.0" UUID="f8bf7530-4d01-4a02-bcfa-178955748145" FechaTimbrado="2014-12-07T23:13:05" selloCFD="TqrlFcrP0jPuAzZtIo0HsDJ5nJzoRyGifOMshYUIvPO+C1qfRIVyeq8OFhr15ZiEEL6oGMH7sX1Ah48UAJBMHQcEGOxoANzWQYvKLCQ1NjA2s08v03sTlC8vgj7lUsPM0uz3Gss3A7ekVcMNSp+WeZEKtbjo2oP2bfE5Uh7cmEw=" noCertificadoSAT="00001000000301251152" selloSAT="UWXVZP3ldORIFNp28Q7gnLm6Nkk9OM4Zz1OxnbIK2R+j/Z943anLqyyGnSFv2VOGvgb2pETt37oEhtbVYQ+nTdrmjlW/0BbVhlTGJ/90aHUDQ60sPONOv5kGBfY70TRny0QWiyCTZOmNp+WPMbaGRNGawgNM5dNvjZo0O/axpNc=" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" />
+  </cfdi:Complemento>
+</cfdi:Comprobante>

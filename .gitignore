@@ -3,10 +3,10 @@ out/**
 archive/**
 symmetric-client/**
 .gradle/**
+delete_build/**
 config.xml
 *.config.xml
 cache/**
-build/**
 Omoikane.iml
 Omoikane.iws
 Omoikane.ipr

@@ -38,6 +38,38 @@ class ComMan implements SerialPortEventListener {
     }
 
     public def readWeight(command, miniDriver) {
+        def rawWeight = _readWeight(command, miniDriver);
+        def weight;
+
+        //Si existe una máscara la aplica, si no, aplica una máscara default
+        if(miniDriver.mask == null)
+            miniDriver.mask = /[ ]{0,6}([0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
+
+        weight = maskWeight(rawWeight, miniDriver.mask);
+
+        return weight;
+    }
+
+    /**
+     * Extraé los digitos del peso de la cadena proveniente de una báscula.
+     * La expresión regular para extraer sólo los digitos del peso debe incluir el named group "peso".
+     * La sintáxis phyton del named group sería "(?P<peso>___expresión del group___)", mientras que para groovy
+     * sería: "(?<peso>___expresión del group___)", es decir sin la letra "P".
+     * @param rawWeight Cadena devuelta por la báscula
+     * @param mask Expresión regular
+     * @return
+     */
+    public def maskWeight(rawWeight, mask) {
+        def matcher = rawWeight =~ mask;
+        if(matcher.matches()) {
+            def weight = matcher.group("peso");
+            return weight;
+        }
+        println("No se pudo aplicar máscara a lectura de la báscula"); // TODO Mover esto a un logger
+        return rawWeight;
+    }
+
+    private def _readWeight(command, miniDriver) {
 
         try {
         this.miniDriver = miniDriver
@@ -71,11 +103,9 @@ class ComMan implements SerialPortEventListener {
             if (m_iStatusScale == SCALE_READY) {
                 println "buffer->"+buffer
                 
-                def retorno = (buffer =~ /[ ]{0,6}([0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/)
-                
+                def retorno = buffer;
 
-                println "2->"+retorno
-                return retorno[0][1]
+                return retorno;
             } else {
                 m_iStatusScale = SCALE_READY;
                 return "0.0"

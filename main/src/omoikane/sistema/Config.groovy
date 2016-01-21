@@ -78,6 +78,7 @@ public class Config {
             if(Principal.basculaActiva) {
                 String cmd = ""
                 String.valueOf(config.bascula.@weightCommand[0]).split(",").each { cmd += (it as Integer) as char }
+                String mask = config.bascula?.@mask[0];
                 Principal.driverBascula       = [
                         port: String.valueOf(config.bascula.@port[0]),
                         baud: Integer.valueOf(config.bascula.@baud[0]),
@@ -85,6 +86,7 @@ public class Config {
                         stopBits: String.valueOf(config.bascula.@stopBits[0]),
                         parity:   String.valueOf(config.bascula.@parity[0]),
                         stopChar: String.valueOf(config.bascula.@stopChar[0]),
+                        mask: mask,
 
                         weightCommand: cmd
                 ];

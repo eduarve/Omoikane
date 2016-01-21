@@ -60,7 +60,7 @@ public class CajaManagerTest {
                 omoikane.principal.Principal.setConfig(new omoikane.sistema.Config());
                 omoikane.principal.Principal.applicationContext = new ClassPathXmlApplicationContext("applicationContext-test.xml");
 
-                CajaManager manager = new CajaManager();
+                CajaManager manager = CajaManager.getInstance();
                 JInternalFrame frame = manager._startJFXCaja(false);
                 JFrame jFrame = new JFrame("Caja");
                 JDesktopPane jDesktopPane = new JDesktopPane();
