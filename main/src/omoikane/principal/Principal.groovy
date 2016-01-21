@@ -37,7 +37,6 @@ import omoikane.sistema.huellas.HuellasCache
 import omoikane.sistema.seguridad.AuthContext
 import phesus.configuratron.ConfiguratorApp
 import phesus.configuratron.model.TipoImpresora
-import sun.awt.CGraphicsEnvironment
 
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
