@@ -41,18 +41,26 @@ import gnu.io.*
     }
 
     public def readWeight(command, miniDriver) {
-        def rawWeight = _readWeight(command, miniDriver);
-        def weight;
+        try {
+            def rawWeight = _readWeight(command, miniDriver);
+            def weight;
 
-        //Si existe una máscara la aplica, si no, aplica una máscara default
-        if(!miniDriver.mask != null && miniDriver.mask.isEmpty()) { myMask = Pattern.compile(maskString); }
-        if(miniDriver.mask == null)
-            myMask = /[ ]{0,6}(?<peso>[0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
+            //Si existe una máscara la aplica, si no, aplica una máscara default
+            if (!miniDriver.mask != null && !miniDriver.mask.isEmpty()) {
+                myMask = Pattern.compile(miniDriver.mask);
+            }
+            if (myMask == null)
+                myMask = /[ ]{0,6}(?<peso>[0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
 
 
-        weight = maskWeight(rawWeight, myMask);
+            weight = maskWeight(rawWeight, myMask);
 
-        return weight;
+            return weight;
+        } catch (Exception e) {
+            close();
+            e.printStackTrace();
+            return "0.860517";
+        }
     }
 
     /**

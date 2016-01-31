@@ -5,6 +5,7 @@ import javafx.application.Application;
 import omoikane.principal.Principal;
 import omoikane.producto.DummyJFXApp;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

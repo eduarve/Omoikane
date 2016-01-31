@@ -3,7 +3,9 @@ package omoikane.sistema;
 import org.junit.Before;
 import org.junit.Test
 import omoikane.principal.Principal
-import omoikane.sistema.huellas.ContextoFPSDK.SDK;
+import omoikane.sistema.huellas.ContextoFPSDK.SDK
+
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,6 +30,18 @@ public class ConfigTest extends GroovyTestCase {
             assert Principal.sdkFingerprint == SDK.ONETOUCH
         } else {
             assert Principal.sdkFingerprint == SDK.GRIAULE
+        }
+    }
+
+    @Test
+    public void testMaskBascula() {
+        config.defineAtributos();
+        if(Principal.basculaActiva) {
+            //Configuración de prueba basada en básculas CAS PDS en modo ECR-2
+            String patternStringTest = /[\+\-]{1,1}[ ]*(?<peso>\d+[.]{1,1}\d+)/;
+            assert Principal.driverBascula.mask.equals(patternStringTest);
+        } else {
+            assertTrue("Báscula desactivada en config, no se puede testear en estas condiciones!.", Principal.basculaActiva);
         }
     }
 }

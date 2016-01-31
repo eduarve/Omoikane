@@ -15,7 +15,9 @@ import groovy.inspect.swingui.*
  import omoikane.sistema.seguridad.AuthContext
  import phesus.configuratron.model.TipoImpresora
 
-public class Config {
+ import java.util.regex.Pattern
+
+ public class Config {
     def    prefs
     Config config
     
@@ -78,14 +80,14 @@ public class Config {
             if(Principal.basculaActiva) {
                 String cmd = ""
                 String.valueOf(config.bascula.@weightCommand[0]).split(",").each { cmd += (it as Integer) as char }
-                String mask = config.bascula?.@mask[0];
+                String mask = config.bascula?.mask[0].text().trim();
                 Principal.driverBascula       = [
                         port: String.valueOf(config.bascula.@port[0]),
                         baud: Integer.valueOf(config.bascula.@baud[0]),
                         bits: String.valueOf(config.bascula.@bits[0]),
                         stopBits: String.valueOf(config.bascula.@stopBits[0]),
                         parity:   String.valueOf(config.bascula.@parity[0]),
-                        stopChar: String.valueOf(config.bascula.@stopChar[0]),
+                        stopChar: Integer.valueOf(config.bascula.@stopChar[0]) as char,
                         mask: mask,
 
                         weightCommand: cmd

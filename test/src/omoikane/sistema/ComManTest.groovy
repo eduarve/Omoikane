@@ -18,4 +18,5 @@ public class ComManTest {
         assertEquals("00140000", weight);
 
     }
+
 }
