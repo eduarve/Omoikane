@@ -9,7 +9,9 @@ package omoikane.sistema
 
 import gnu.io.*
 
-class ComMan implements SerialPortEventListener {
+ import java.util.regex.Pattern
+
+ class ComMan implements SerialPortEventListener {
 
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort serialScale;
@@ -27,8 +29,9 @@ class ComMan implements SerialPortEventListener {
     private int m_iStatusScale;
     def buffer = "", tempBuffer = ""
     def miniDriver = [:]
+    Pattern myMask
 
-    /** Creates a new instance of ScaleComm */
+     /** Creates a new instance of ScaleComm */
     public def ComMan(String sPortPrinter) {
         m_sPortScale = sPortPrinter;
         m_out = null;
@@ -42,10 +45,12 @@ class ComMan implements SerialPortEventListener {
         def weight;
 
         //Si existe una máscara la aplica, si no, aplica una máscara default
+        if(!miniDriver.mask != null && miniDriver.mask.isEmpty()) { myMask = Pattern.compile(maskString); }
         if(miniDriver.mask == null)
-            miniDriver.mask = /[ ]{0,6}(?<peso>[0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
+            myMask = /[ ]{0,6}(?<peso>[0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
 
-        weight = maskWeight(rawWeight, miniDriver.mask);
+
+        weight = maskWeight(rawWeight, myMask);
 
         return weight;
     }
@@ -61,7 +66,7 @@ class ComMan implements SerialPortEventListener {
      */
     public def maskWeight(rawWeight, mask) {
         def matcher = rawWeight =~ mask;
-        if(matcher.matches()) {
+        if(matcher.find()) {
             def weight = matcher.group("peso");
             return weight;
         }
@@ -87,6 +92,7 @@ class ComMan implements SerialPortEventListener {
             buffer = ""
             write(command.getBytes()); // $
             flush();
+            m_iStatusScale = SCALE_READING;
 
             int waits = 0;
             try {
@@ -173,69 +179,6 @@ class ComMan implements SerialPortEventListener {
 
     public void serialEvent(SerialPortEvent e) {
 
-        /*
-        // Determine type of event.
-        switch (e.getEventType()) {
-            case SerialPortEvent.BI:
-            case SerialPortEvent.OE:
-            case SerialPortEvent.FE:
-            case SerialPortEvent.PE:
-            case SerialPortEvent.CD:
-            case SerialPortEvent.CTS:
-            case SerialPortEvent.DSR:
-            case SerialPortEvent.RI:
-            case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
-                break;
-            case SerialPortEvent.DATA_AVAILABLE:
-                synchronized(this) {
-                try {
-                    tempBuffer = ""
-                    println "borrando buffer"
-
-                    for (int i = 0; i < 13; i++) {
-                        for(int j = 0; m_in.available() == 0 && j < 10; j++) {
-                            try { wait(100); println "esperando en el evento..." } catch (InterruptedException exc) { }
-                        }
-                        //println "$i .. "
-                        //println "Dat Disponible"
-                        int b = m_in.read();
-                        //println "leído: $b"
-                        println "leído [$i] -> $b "
-                        
-                        //if (b == ((miniDriver.stopChar[0] as int) as char)) { // CR ASCII
-                        //    // Fin de lectura
-                        //    synchronized (this) {
-                        //        m_iStatusScale = SCALE_READY;
-                        //        println "scale ready"
-                        //        buffer = tempBuffer
-                        //        notifyAll();
-                        //    }
-                        //
-                        //} else {
-                        //    synchronized(this) {
-                        //    tempBuffer += (b as char)
-                        //
-                        //    }
-                        //}
-                        
-                        //*******synchronized(this) {
-                            tempBuffer += (b as char)
-                        //*******}
-                    }
-
-                    println ("dat dispo: ${m_in.available()}")
-                    m_in.read()
-                    println "asignando tempbuffer a buffer"
-                    buffer = tempBuffer
-
-                } catch (IOException eIO) { Dialogos.error("Excepción al pesar${eIO.getMessage()}", eIO) }
-                }
-
-                break;
-
-        } 
-        */
-        //if(e.getEventType() == SerialPortEvent.
         int data;
         def in7 = m_in
 
@@ -256,8 +199,7 @@ class ComMan implements SerialPortEventListener {
                 buffer += data as char;
                 println "se agregó una letra a la recolección"
             }
-            //println "se llamará al handler de la cadena completa del escáner"
-            //println new String(buffer,0,len)
+
             println "terminó la llamada al handler"
         }
         catch ( Exception ex2 )
