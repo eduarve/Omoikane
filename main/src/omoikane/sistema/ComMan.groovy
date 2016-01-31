@@ -43,7 +43,7 @@ class ComMan implements SerialPortEventListener {
 
         //Si existe una máscara la aplica, si no, aplica una máscara default
         if(miniDriver.mask == null)
-            miniDriver.mask = /[ ]{0,6}([0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
+            miniDriver.mask = /[ ]{0,6}(?<peso>[0-9]*?.[0-9]*?)[^0-9\.]([A-Z0-9]*)/;
 
         weight = maskWeight(rawWeight, miniDriver.mask);
 
@@ -54,7 +54,7 @@ class ComMan implements SerialPortEventListener {
      * Extraé los digitos del peso de la cadena proveniente de una báscula.
      * La expresión regular para extraer sólo los digitos del peso debe incluir el named group "peso".
      * La sintáxis phyton del named group sería "(?P<peso>___expresión del group___)", mientras que para groovy
-     * sería: "(?<peso>___expresión del group___)", es decir sin la letra "P".
+     * sería: "(?<peso>___expresión del group___)", es decir sin la letra "P". Por ejemplo: (?<peso>.*)
      * @param rawWeight Cadena devuelta por la báscula
      * @param mask Expresión regular
      * @return
@@ -90,7 +90,7 @@ class ComMan implements SerialPortEventListener {
 
             int waits = 0;
             try {
-                while(buffer.size() < 13) {
+                while(m_iStatusScale == SCALE_READING) {
                     waits++;
                     wait(100);
                     println "esperando en método pesar (${buffer.size()})"
@@ -241,13 +241,14 @@ class ComMan implements SerialPortEventListener {
 
         try
         {
+            m_iStatusScale = SCALE_READING;
             println "comienza try de recopilar letras del puerto serial"
             int len = 0;
             while ( ( data = in7.read()) > -1 )
             {
                 println "comienza while de recopilar letras del puerto serial"
                 //println "a "+data
-                if ( data == (13 as char) ) {
+                if ( data as char == (miniDriver.stopChar as char) ) {
                     println "salto de línea, termina la recolección de letras del puerto serial"
                     break;
                 }
@@ -266,6 +267,9 @@ class ComMan implements SerialPortEventListener {
             ex2.printStackTrace();
             Dialogos.error("Error al leer desde el puerto serial", ex2)
             //System.exit(-1);
+        } finally {
+            println("Llamada a finally para poner SCALE_READY");
+            m_iStatusScale = SCALE_READY;
         }
     }
 
